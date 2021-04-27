@@ -1,0 +1,11 @@
+composer require laravel/ui
+php artisan ui vue --auth
+
+npm install
+npm run dev
+
+php artisan make:controller EventsController
+php artisan make:model -m Event
+
+php artisan migrate
+php artisan migrate:fresh
