@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use \App\Models\Event;
 use Illuminate\Http\Request;
 
 class EventsController extends Controller
@@ -9,6 +10,46 @@ class EventsController extends Controller
     public function __construct()
     {
     	$this->middleware('auth');
+    }
+    public function index()
+    {
+        // Select events authored by authenticated user
+        $events = Event::whereIn('user_id', auth()->user())
+            ->orderByRaw('YEAR(`date`) DESC, MONTH(`date`) ASC, DATE ASC')
+            ->get();
+
+        return view('events.index', compact('events'));
+    }
+    public function show(Event $event)
+    {
+        return view('events.show',compact('event'));
+    }
+    public function edit(Event $event)
+    {
+        return view('events.edit',compact('event'));
+    }
+    public function update(Event $event)
+    {
+        $data = request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'objective' => 'required',
+            'date' => 'required|date',
+            'start_time' => 'date_format:H:i',
+            'end_time' => 'date_format:H:i|after:start_time',
+            'venue' => 'required',
+            'activity_type' => 'required',
+            'beneficiaries' => 'required',
+            'sponsors' => 'required',
+            'budget' => '',
+        ]);
+        $event->update($data);
+        return redirect("/e/{$event->id}");
+    }
+    public function destroy(Event $event)
+    {
+        $event->delete($event);
+        return redirect("/e");
     }
     public function create()
     {
@@ -28,10 +69,6 @@ class EventsController extends Controller
     		'beneficiaries' => 'required',
     		'sponsors' => 'required',
     		'budget' => '',
-    		'poster' => '',
-    		'poster_caption' => '',
-    		'evidence' => '',
-    		'evidence_caption' => '',
     	]);
     	auth()->user()->events()->create([
     		'title' => $data['title'],

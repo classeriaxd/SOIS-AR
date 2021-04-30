@@ -71,6 +71,11 @@
                             </li>
                         @endguest
                     </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>

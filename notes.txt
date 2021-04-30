@@ -9,3 +9,11 @@ php artisan make:model -m Event
 
 php artisan migrate
 php artisan migrate:fresh
+
+
+
+
+
+
+notes:
+https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller
