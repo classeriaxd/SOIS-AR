@@ -22,4 +22,10 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/e/create', [App\Http\Controllers\EventsController::class, 'create']);
+Route::get('/e', [App\Http\Controllers\EventsController::class, 'index']);
 Route::post('/e', [App\Http\Controllers\EventsController::class, 'store']);
+Route::get('/e/{event}', [App\Http\Controllers\EventsController::class, 'show']);
+Route::get('/e/{event}/edit', [App\Http\Controllers\EventsController::class, 'edit']);
+Route::patch('/e/{event}', [App\Http\Controllers\EventsController::class, 'update']);
+Route::delete('/e/{event}', [App\Http\Controllers\EventsController::class, 'destroy'])->name('event.destroy');
+

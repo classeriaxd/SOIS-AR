@@ -25,7 +25,7 @@
                             <a href="/e/create">
                                 <button class="btn btn-primary mr-2">Add Event</button>
                             </a>
-                            <a href="#">
+                            <a href="/e">
                                 <button class="btn btn-primary mr-2">View Events</button>
                             </a>
                             <a href="#">
