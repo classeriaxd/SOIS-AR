@@ -22,30 +22,24 @@
 	                @enderror
 	            </div>
 	            <div class="form-group row">
-	                <label for="description" class="col-md-4 col-form-label">Description</label>
-	                <input id="description" 
-	                type="text" 
-	                class="form-control @error('description') is-invalid @enderror" 
-	                name="description" 
-	                value="{{ old('description') ?? $event->description }}" autocomplete="description">
-	                @error('description')
-	                    <span class="invalid-feedback" role="alert">
-	                        <strong>{{ $message }}</strong>
-	                    </span>
-	                @enderror
+	            	<label for="description" class="col-md-4 col-form-label">Description</label>    
+	            	<textarea id="description" class="form-control @error('description') is-invalid @enderror" 
+	            	name="description" 
+	            	autocomplete="description">{{ old('description') ?? $event->description }}</textarea>
+	            	@error('description')
+	            	    <span class="invalid-feedback" role="alert">
+	            	        <strong>{{ $message }}</strong>
+	            	    </span>
+	            	@enderror
 	            </div>
 	            <div class="form-group row">
-	                <label for="objective" class="col-md-4 col-form-label">Objective</label>
-	                <input id="objective" 
-	                type="text" 
-	                class="form-control @error('objective') is-invalid @enderror" 
-	                name="objective" 
-	                value="{{ old('objective') ?? $event->objective }}" autocomplete="objective">
-	                @error('objective')
-	                    <span class="invalid-feedback" role="alert">
-	                        <strong>{{ $message }}</strong>
-	                    </span>
-	                @enderror
+	            	<label for="objective" class="col-md-4 col-form-label">Objective</label>
+	            	<textarea id="objective" class="form-control @error('objective') is-invalid @enderror" name="objective"autocomplete="objective">{{ old('objective') ?? $event->objective }}</textarea>
+	            	@error('objective')
+	            	    <span class="invalid-feedback" role="alert">
+	            	        <strong>{{ $message }}</strong>
+	            	    </span>
+	            	@enderror
 	            </div>
 	            {{-- TODO: Add option for multiple dates --}}
 	            <div class="form-group row">

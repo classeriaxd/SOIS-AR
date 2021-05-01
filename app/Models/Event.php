@@ -14,4 +14,8 @@ class Event extends Model
     {
     	return $this->belongsTo(User::class);
     }
+    public function eventImages()
+    {
+    	return $this->hasMany(EventImage::class, 'event_id');
+    }
 }
