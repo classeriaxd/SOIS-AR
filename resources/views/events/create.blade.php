@@ -2,13 +2,11 @@
 
 @section('content')
 <div class="container">
-    <form action="/e" enctype="multipart/form-data" method="POST">
+    <form action="/e" enctype="multipart/form-data" method="POST" id="eventForm">
         @csrf
         <div class="row">
             <div class="col-8 offset-2">
-                <div class="row">
-                    <h2>Add New Event</h2>
-                </div>
+                <h2 class="text-center">Add New Event</h2>
                 <div class="form-group row">
                     <label for="title" class="col-md-4 col-form-label">Title</label>
                     <input id="title" 
@@ -23,12 +21,10 @@
                     @enderror
                 </div>
                 <div class="form-group row">
-                    <label for="description" class="col-md-4 col-form-label">Description</label>
-                    <input id="description" 
-                    type="text" 
-                    class="form-control @error('description') is-invalid @enderror" 
+                    <label for="description" class="col-md-4 col-form-label">Description</label>    
+                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" 
                     name="description" 
-                    value="{{ old('description') }}" autocomplete="description">
+                    autocomplete="description">{{ old('description') }}</textarea>
                     @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -37,11 +33,7 @@
                 </div>
                 <div class="form-group row">
                     <label for="objective" class="col-md-4 col-form-label">Objective</label>
-                    <input id="objective" 
-                    type="text" 
-                    class="form-control @error('objective') is-invalid @enderror" 
-                    name="objective" 
-                    value="{{ old('objective') }}" autocomplete="objective">
+                    <textarea id="objective" class="form-control @error('objective') is-invalid @enderror" name="objective"autocomplete="objective">{{ old('objective') }}</textarea>
                     @error('objective')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -153,56 +145,17 @@
                         </span>
                     @enderror
                 </div>
-                <hr>
-                <div class="row">  
-                    <label for="poster" class="col-md-4 col-form-label">Poster</label>
-                    <input type="file" class="form-control-file @error('poster') is-invalid @enderror" id="poster" name="poster">
-                    @error('poster')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group row">
-                    <label for="poster_caption" class="col-md-4 col-form-label">Poster Caption</label>
-                    <input id="poster_caption" 
-                    type="text" 
-                    class="form-control @error('poster_caption') is-invalid @enderror" 
-                    name="poster_caption" 
-                    value="{{ old('poster_caption') }}" autocomplete="poster_caption">
-                    @error('poster_caption')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="row">  
-                    <label for="evidence" class="col-md-4 col-form-label">Evidence</label>
-                    <input type="file" class="form-control-file @error('evidence') is-invalid @enderror" id="evidence" name="evidence">
-                    @error('evidence')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group row">
-                    <label for="evidence_caption" class="col-md-4 col-form-label">Caption</label>
-                    <input id="evidence_caption" 
-                    type="text" 
-                    class="form-control @error('evidence_caption') is-invalid @enderror" 
-                    name="evidence_caption" 
-                    value="{{ old('evidence_caption') }}" autocomplete="evidence_caption">
-                    @error('evidence_caption')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
                 <div class="row pt-4">
                     <button class="btn btn-primary">Add Event</button>
                 </div>
             </div>
         </div>
     </form>
+    <hr>
+    <div class="row justify-content-center">
+        <a href="/home">
+            <button class="btn btn-secondary">Go back</button>
+        </a>
+    </div>
 </div>
 @endsection

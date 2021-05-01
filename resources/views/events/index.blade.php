@@ -82,5 +82,11 @@ endforeach;
             </div>
         </div>
     </div>
+    <hr>
+    <div class="row justify-content-center">
+        <a href="/home">
+            <button class="btn btn-secondary">Go back</button>
+        </a>
+    </div>
 </div>
 @endsection

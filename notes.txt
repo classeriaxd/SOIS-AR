@@ -10,10 +10,8 @@ php artisan make:model -m Event
 php artisan migrate
 php artisan migrate:fresh
 
+php artisan storage:link
 
-
-
-
-
+composer require intervention/image
 notes:
 https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller

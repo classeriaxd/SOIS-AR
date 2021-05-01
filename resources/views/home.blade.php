@@ -29,7 +29,7 @@
                                 <button class="btn btn-primary mr-2">View Events</button>
                             </a>
                             <a href="#">
-                                <button class="btn btn-primary">Year Summary</button>
+                                <button class="btn btn-outline-primary">Year Summary</button>
                             </a>
                         </div>
                     </div>
@@ -49,9 +49,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Event 1</button>
-                                            <button class="btn btn-primary m-1">Event 2</button>
-                                            <button class="btn btn-primary m-1">Event 3</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
                                         </div>
                                     </div>
                                 </div>
@@ -63,9 +63,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Event 1</button>
-                                            <button class="btn btn-primary m-1">Event 2</button>
-                                            <button class="btn btn-primary m-1">Event 3</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
                                         </div>
                                     </div>
                                 </div>
@@ -77,9 +77,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Event 1</button>
-                                            <button class="btn btn-primary m-1">Event 2</button>
-                                            <button class="btn btn-primary m-1">Event 3</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
                                         </div>
                                     </div>
                                 </div>
@@ -93,9 +93,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Event 1</button>
-                                            <button class="btn btn-primary m-1">Event 2</button>
-                                            <button class="btn btn-primary m-1">Event 3</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
+                                            <button class="btn btn-primary m-1">Sample</button>
                                         </div>
                                     </div>
                                 </div>

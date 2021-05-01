@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use \App\Models\User;
 use \App\Models\Event;
+use \App\Models\EventImage;
+
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class EventsController extends Controller
 {
@@ -22,7 +26,8 @@ class EventsController extends Controller
     }
     public function show(Event $event)
     {
-        return view('events.show',compact('event'));
+        $eventImages = EventImage::where('event_id', $event->id)->get();
+        return view('events.show',compact('event', 'eventImages'));
     }
     public function edit(Event $event)
     {
@@ -69,8 +74,13 @@ class EventsController extends Controller
     		'beneficiaries' => 'required',
     		'sponsors' => 'required',
     		'budget' => '',
+            'poster' => 'image|file|max:2048',
+            'poster_caption' => '',
+            'evidence' => 'image|file|max:2048',
+            'evidence_caption' => '',
     	]);
-    	auth()->user()->events()->create([
+
+    	$event_id = auth()->user()->events()->create([
     		'title' => $data['title'],
     		'description' => $data['description'],
     		'objective' => $data['objective'],
@@ -82,19 +92,9 @@ class EventsController extends Controller
     		'beneficiaries' => $data['beneficiaries'],
     		'sponsors' => $data['sponsors'],
     		'budget' => $data['budget'],
-    	]);
-    	return redirect('home');
-    	//dd($data);
-    	// $imagePath = request('image')->store('uploads', 'public');
+    	])->id;
 
-     //    $image = Image::make(public_path("storage/{$imagePath}"))->fit(1200, 1200);
-     //    $image->save();
+    	return redirect('/e/'.$event_id);
 
-    	// auth()->user()->posts()->create([
-    	// 	'caption' => $data['caption'],
-    	// 	'image' => $imagePath,
-    	// ]);
-    	// return redirect('/profile/'.auth()->user()->id);
-    	// dd(request()->all());
     }
 }
