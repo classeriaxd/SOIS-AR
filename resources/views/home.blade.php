@@ -28,8 +28,8 @@
                             <a href="/e">
                                 <button class="btn btn-primary mr-2">View Events</button>
                             </a>
-                            <a href="#">
-                                <button class="btn btn-outline-primary">Year Summary</button>
+                            <a href="/e/reports">
+                                <button class="btn btn-primary">Year Summary</button>
                             </a>
                         </div>
                     </div>
