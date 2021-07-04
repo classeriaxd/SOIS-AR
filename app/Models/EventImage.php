@@ -9,6 +9,7 @@ class EventImage extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $primaryKey = 'event_id';
 
     public function event()
     {

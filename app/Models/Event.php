@@ -9,11 +9,8 @@ class Event extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $primaryKey = 'event_id';
     
-    public function user()
-    {
-    	return $this->belongsTo(User::class);
-    }
     public function eventImages()
     {
     	return $this->hasMany(EventImage::class, 'event_id');
