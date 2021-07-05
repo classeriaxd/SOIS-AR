@@ -15,12 +15,15 @@ class CreateEventImagesTable extends Migration
     {
         Schema::create('event_images', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('event_id');
+            $table->foreignId('event_id');
             $table->unsignedTinyInteger('image_type');
             $table->string('image');
             $table->text('caption')->nullable();
-
+            $table->string('slug')->unique();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('event_id')->references('event_id')->on('events');
         });
     }
 
@@ -32,5 +35,6 @@ class CreateEventImagesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('event_images');
+        $table->dropForeign('event_id');
     }
 }

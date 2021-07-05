@@ -66,7 +66,7 @@ foreach ($events as $event):
     $monthEnd = false;
     endif;//Current Month End
 @endphp
-                                            <a href="/e/{{ $event->id }}">
+                                            <a href="/e/{{ $event->slug }}">
                                                 <button class="btn btn-primary m-1">{{$event->title}}</button>
                                             </a>
 @php

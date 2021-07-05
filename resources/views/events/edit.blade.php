@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-	<form action="/e/{{ $event->id }}" enctype="multipart/form-data" method="POST">
+	<form action="/e/{{ $event->slug }}" enctype="multipart/form-data" method="POST">
 	    @csrf
 	    @method('PATCH')
 	    <div class="row">
@@ -14,7 +14,7 @@
 	                type="text" 
 	                class="form-control @error('title') is-invalid @enderror" 
 	                name="title" 
-	                value="{{ old('title') ?? $event->title }}" autocomplete="title" autofocus>
+	                value="{{ old('title') ?? $event->title }}" autofocus>
 	                @error('title')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -24,8 +24,7 @@
 	            <div class="form-group row">
 	            	<label for="description" class="col-md-4 col-form-label">Description</label>    
 	            	<textarea id="description" class="form-control @error('description') is-invalid @enderror" 
-	            	name="description" 
-	            	autocomplete="description">{{ old('description') ?? $event->description }}</textarea>
+	            	name="description">{{ old('description') ?? $event->description }}</textarea>
 	            	@error('description')
 	            	    <span class="invalid-feedback" role="alert">
 	            	        <strong>{{ $message }}</strong>
@@ -34,7 +33,7 @@
 	            </div>
 	            <div class="form-group row">
 	            	<label for="objective" class="col-md-4 col-form-label">Objective</label>
-	            	<textarea id="objective" class="form-control @error('objective') is-invalid @enderror" name="objective"autocomplete="objective">{{ old('objective') ?? $event->objective }}</textarea>
+	            	<textarea id="objective" class="form-control @error('objective') is-invalid @enderror" name="objective">{{ old('objective') ?? $event->objective }}</textarea>
 	            	@error('objective')
 	            	    <span class="invalid-feedback" role="alert">
 	            	        <strong>{{ $message }}</strong>
@@ -61,7 +60,7 @@
 	                type="time" 
 	                class="form-control @error('start_time') is-invalid @enderror" 
 	                name="start_time" 
-	                value="{{ old('start_time') ?? date("H:m",strtotime($event->start_time)) }}" autocomplete="start_time">
+	                value="{{ date("H:i",strtotime($event->start_time)) }}">
 	                @error('start_time')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -74,7 +73,7 @@
 	                type="time" 
 	                class="form-control @error('end_time') is-invalid @enderror" 
 	                name="end_time" 
-	                value="{{ old('end_time') ?? date("H:m",strtotime($event->end_time)) }}" autocomplete="end_time">
+	                value="{{ date("H:i",strtotime($event->end_time)) }}" >
 	                @error('end_time')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -87,7 +86,7 @@
 	                type="text" 
 	                class="form-control @error('venue') is-invalid @enderror" 
 	                name="venue" 
-	                value="{{ old('venue') ?? $event->venue }}" autocomplete="venue">
+	                value="{{ old('venue') ?? $event->venue }}">
 	                @error('venue')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -100,7 +99,7 @@
 	                type="text" 
 	                class="form-control @error('activity_type') is-invalid @enderror" 
 	                name="activity_type" 
-	                value="{{ old('activity_type') ?? $event->activity_type }}" autocomplete="activity_type">
+	                value="{{ old('activity_type') ?? $event->activity_type }}">
 	                @error('activity_type')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -113,7 +112,7 @@
 	                type="text" 
 	                class="form-control @error('beneficiaries') is-invalid @enderror" 
 	                name="beneficiaries" 
-	                value="{{ old('beneficiaries') ?? $event->beneficiaries }}" autocomplete="beneficiaries">
+	                value="{{ old('beneficiaries') ?? $event->beneficiaries }}">
 	                @error('beneficiaries')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -126,7 +125,7 @@
 	                type="text" 
 	                class="form-control @error('sponsors') is-invalid @enderror" 
 	                name="sponsors" 
-	                value="{{ old('sponsors') ?? $event->sponsors }}" autocomplete="sponsors">
+	                value="{{ old('sponsors') ?? $event->sponsors }}">
 	                @error('sponsors')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>
@@ -139,7 +138,7 @@
 	                type="text" 
 	                class="form-control @error('budget') is-invalid @enderror" 
 	                name="budget" 
-	                value="{{ old('budget') ?? $event->budget }}" autocomplete="budget">
+	                value="{{ old('budget') ?? $event->budget }}">
 	                @error('budget')
 	                    <span class="invalid-feedback" role="alert">
 	                        <strong>{{ $message }}</strong>

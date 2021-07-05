@@ -11,7 +11,7 @@
 @foreach($eventImages as $eventImage)
     @if($eventImage->image_type == 0)
 	    		<div class="col-md-3">
-	    			<a href="/e/{{$event->id}}/images/{{$eventImage->id}}">
+	    			<a href="/e/{{$event->slug}}/images/{{$eventImage->slug}}">
 						<div class="card text-center w-20 h-100" style="border-color:black;">
 							<img src="/storage/{{$eventImage->image}}" class="card-img-top w-100" style="width:400px;">
 							<div class="card-body">
@@ -29,7 +29,7 @@
 @foreach($eventImages as $eventImage)
     @if($eventImage->image_type == 1)
 		    	<div class="col-md-3">
-		    		<a href="/e/{{$event->id}}/images/{{$eventImage->id}}">
+		    		<a href="/e/{{$event->slug}}/images/{{$eventImage->slug}}">
 						<div class="card text-center w-20 h-100" style="border-color:black;">
 							<img src="/storage/{{$eventImage->image}}" class="card-img-top w-100" style="width:400px;">
 							<div class="card-body">

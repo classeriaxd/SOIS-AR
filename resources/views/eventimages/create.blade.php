@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <form action="/e/{{$event->id}}/images" enctype="multipart/form-data" method="POST" id="eventForm">
+    <form action="/e/{{$event->slug}}/images" enctype="multipart/form-data" method="POST" id="eventForm">
         @csrf
         <div class="row">
             <div class="col-8 offset-2">
