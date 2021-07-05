@@ -12,11 +12,6 @@ use Illuminate\Http\Request;
 
 class EventReportsController extends Controller
 {
-    public function __construct()
-    {
-    	$this->middleware('auth');
-    }
-
     public function index()
     {
     	return view('eventreports.index');
