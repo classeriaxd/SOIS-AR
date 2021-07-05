@@ -34,13 +34,13 @@ Route::post('/e', [App\Http\Controllers\EventsController::class, 'store'])->midd
 
 
 
+Route::get('/e/{event_slug}/images/{eventImage_slug}/edit', [App\Http\Controllers\EventImagesController::class, 'edit'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'eventImage_slug' => '^[a-zA-Z0-9-_]{2,255}$',])->middleware('auth');
+Route::get('/e/{event_slug}/images/create', [App\Http\Controllers\EventImagesController::class, 'create'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');
+Route::get('/e/{event_slug}/images/{eventImage_slug}', [App\Http\Controllers\EventImagesController::class, 'show'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');
+Route::patch('/e/{event_slug}/images/{eventImage_slug}', [App\Http\Controllers\EventImagesController::class, 'update'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'eventImage_slug' => '^[a-zA-Z0-9-_]{2,255}$',])->middleware('auth');
+Route::delete('/e/{event_slug}/images/{eventImage_slug}', [App\Http\Controllers\EventImagesController::class, 'destroy'])->name('eventImage.destroy')->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'eventImage_slug' => '^[a-zA-Z0-9-_]{2,255}$',])->middleware('auth');
+Route::get('/e/{event_slug}/images', [App\Http\Controllers\EventImagesController::class, 'index'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');
+Route::post('/e/{event_slug}/images', [App\Http\Controllers\EventImagesController::class, 'store'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');
 
-Route::get('/e/{event}/images/add', [App\Http\Controllers\EventImagesController::class, 'create']);
-Route::get('/e/{event}/images', [App\Http\Controllers\EventImagesController::class, 'index']);
-Route::post('/e/{event}/images', [App\Http\Controllers\EventImagesController::class, 'store']);
-Route::get('/e/{event}/images/{eventImage}', [App\Http\Controllers\EventImagesController::class, 'show']);
-Route::get('/e/{event}/images/{eventImage}/edit', [App\Http\Controllers\EventImagesController::class, 'edit']);
-Route::patch('/e/{event}/images/{eventImage}', [App\Http\Controllers\EventImagesController::class, 'update']);
-Route::delete('/e/{event}/images/{eventImage}', [App\Http\Controllers\EventImagesController::class, 'destroy'])->name('eventImage.destroy');
 
 

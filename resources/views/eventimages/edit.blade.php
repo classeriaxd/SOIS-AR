@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <form action="/e/{{$event->id}}/images/{{$eventImage->id}}" enctype="multipart/form-data" method="POST" id="imageDetails_form">
+    <form action="/e/{{$event->slug}}/images/{{$eventImage->slug}}" enctype="multipart/form-data" method="POST" id="imageDetails_form">
         @csrf
         @method('PATCH')
     	<div class="row justify-content-center">
@@ -71,7 +71,7 @@
         	    </div>	 
             	<hr>
             	<div class="row justify-content-center pt-1">
-            		<a href="/e/{{$event->id}}/images/{{$eventImage->id}}">
+            		<a href="/e/{{$event->slug}}/images/{{$eventImage->slug}}">
             			<button class="btn btn-secondary">Go back</button>
             		</a>
             	</div>

@@ -28,6 +28,7 @@ class CreateEventsTable extends Migration
             $table->integer('budget')->nullable();
             $table->string('slug')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

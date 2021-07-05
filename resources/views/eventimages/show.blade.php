@@ -37,10 +37,10 @@
                             <div class="display-5">Options</div>
                         </div>
                         <div class="card-body d-flex align-items-center justify-content-center">
-                            <a href="/e/{{$event->id}}/images/{{$eventImage->id}}/edit">
+                            <a href="/e/{{$event->slug}}/images/{{$eventImage->slug}}/edit">
                                 <button class="btn btn-primary mr-3">Edit</button>
                             </a>
-                            <form action="{{route('eventImage.destroy', [$event->id, $eventImage->id])}}" method="POST">
+                            <form action="{{route('eventImage.destroy', [$event->slug, $eventImage->slug])}}" method="POST">
                                 @method('DELETE')
                                 @csrf
                                 <button class="btn btn-danger">Delete Image</button>
@@ -51,7 +51,7 @@
         	</div>	 
         	<hr>
         	<div class="row justify-content-center pt-1">
-        		<a href="/e/{{$event->id}}/images">
+        		<a href="/e/{{$event->slug}}/images">
         			<button class="btn btn-secondary">Go back</button>
         		</a>
         	</div>

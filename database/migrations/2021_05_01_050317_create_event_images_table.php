@@ -19,7 +19,9 @@ class CreateEventImagesTable extends Migration
             $table->unsignedTinyInteger('image_type');
             $table->string('image');
             $table->text('caption')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('event_id')->references('event_id')->on('events');
         });
