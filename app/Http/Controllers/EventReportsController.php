@@ -8,8 +8,6 @@ use \App\Models\EventImage;
 
 use Illuminate\Http\Request;
 
-
-
 class EventReportsController extends Controller
 {
     public function index()
