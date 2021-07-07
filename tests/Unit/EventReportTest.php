@@ -259,7 +259,7 @@ class EventReportTest extends TestCase
         $response->assertSessionHasErrors([
            'budget' => 'The budget must be a number.',
         ]);
-    }*/
+    }
     public function test_creates_an_event_with_some_mandatory_fields_not_filled_out()
     {
         // TC-CREATE-AR-15
@@ -287,4 +287,61 @@ class EventReportTest extends TestCase
            'objective' => 'The objective field is required.',
         ]);
     }
+    public function test_view_an_event_with_known_url()
+    {
+        // TC-VIEW-AR-2
+        // Test User
+        $user = User::factory()->create();
+        // Test Data
+        $test_data = [
+            '_token' => csrf_token(),
+            'title' => 'Sample Event',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'objective' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'date' => '2021-01-01',
+            'start_time' => '08:00',
+            'end_time' => '15:00',
+            'venue' => 'Sample Venue',
+            'activity_type' => 'Sample Activity Type',
+            'beneficiaries' => 'Sample Beneficiaries',
+            'sponsors' => 'Sample Sponsors',
+            'budget' => '1000',];
+        // Create Event Report
+        $this->actingAs($user)->call('POST', '/e', $test_data);
+        // Get Event Report URL slug
+        $test_data_slug = Str::replace(' ', '-', $test_data['title']).'-'.Carbon::createFromFormat('Y-m-d', $test_data['date'])->format('Y');
+        
+        // Get Response
+        $response = $this->actingAs($user)->call('GET', '/e/'.$test_data_slug);
+        $response->assertOk();
+    }*/
+    public function test_view_an_event_with_unknown_url()
+    {
+        // TC-VIEW-AR-2
+        // Test User
+        $user = User::factory()->create();
+        // Test Data
+        $test_data = [
+            '_token' => csrf_token(),
+            'title' => 'Sample Event',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'objective' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'date' => '2021-01-01',
+            'start_time' => '08:00',
+            'end_time' => '15:00',
+            'venue' => 'Sample Venue',
+            'activity_type' => 'Sample Activity Type',
+            'beneficiaries' => 'Sample Beneficiaries',
+            'sponsors' => 'Sample Sponsors',
+            'budget' => '1000',];
+        // Create Event Report
+        $this->actingAs($user)->call('POST', '/e', $test_data);
+        // Get Event Report URL slug
+        $test_data_slug = 'unknown-event-2021';
+        
+        // Get Response
+        $response = $this->actingAs($user)->call('GET', '/e/'.$test_data_slug);
+        $response->assertOk();
+    }
+
 }
