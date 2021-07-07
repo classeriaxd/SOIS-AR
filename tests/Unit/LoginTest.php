@@ -3,21 +3,21 @@
 namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-use Illuminate\Support\Facades\Hash;
 use \App\Models\User;
 
 class LoginTest extends TestCase
 {
     /**
      * Unit Test for Login Module
-     */
+    */ 
     use RefreshDatabase;
-
+/*
     public function test_user_logs_in_with_correct_credentials()
     {
-        // TEST: User logs-in with correct credentials 
+        // TC-LOGIN-1
         // Test Data 
         $email = 'test@email.com';
         $password = 'test@email.com';
@@ -35,10 +35,9 @@ class LoginTest extends TestCase
         $response2 = $this->actingAs($user)->get('/home');
         $response2->assertOk();
     }
-
     public function test_user_logs_in_with_incorrect_password()
     {
-        // TEST: User logs-in with incorrect password
+        // TC-LOGIN-2
         // Test Data 
         $email = 'test@email.com';
         $password = 'test@email.com';
@@ -58,10 +57,9 @@ class LoginTest extends TestCase
             'email' => 'These credentials do not match our records.'
         ]);
     }
-
     public function test_user_logs_in_with_incorrect_credentials()
     {
-        // TEST: User logs-in with incorrect credentials
+        // TC-LOGIN-3
         // Test Data 
         $email = 'test@email.com';
         $password = 'test@email.com';
@@ -82,10 +80,9 @@ class LoginTest extends TestCase
             'email' => 'These credentials do not match our records.'
         ]);
     }
-
     public function test_user_logs_in_with_no_credentials()
     {
-        // TEST: User logs-in with no credentials
+        // TC-LOGIN-4
         // Test Data 
         $email = '';
         $password = '';
@@ -102,6 +99,5 @@ class LoginTest extends TestCase
            'password' => 'The password field is required.'
         ]);
     }
-
-
+*/
 }
