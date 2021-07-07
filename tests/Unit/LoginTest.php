@@ -14,7 +14,7 @@ class LoginTest extends TestCase
      * Unit Test for Login Module
     */ 
     use RefreshDatabase;
-/*
+
     public function test_user_logs_in_with_correct_credentials()
     {
         // TC-LOGIN-1
@@ -26,14 +26,14 @@ class LoginTest extends TestCase
         $user = User::factory()->create(['email' => $email, 'password' => Hash::make($password)]);
 
         // Login 
-        $response = $this->call('POST', '/login',[
+        $this->call('POST', '/login',[
             '_token' => csrf_token(),
             'email' => $email,
             'password' => $password,]);
 
         // Get Response 
-        $response2 = $this->actingAs($user)->get('/home');
-        $response2->assertOk();
+        $response = $this->actingAs($user)->get('/home');
+        $response->assertOk();
     }
     public function test_user_logs_in_with_incorrect_password()
     {
@@ -99,5 +99,5 @@ class LoginTest extends TestCase
            'password' => 'The password field is required.'
         ]);
     }
-*/
+
 }
