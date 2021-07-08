@@ -124,11 +124,11 @@ class EventsController extends Controller
     		'sponsors' => $data['sponsors'],
     		'budget' => $data['budget'],
             'slug' => Str::replace(' ', '-', $data['title']).'-'.Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y'),
-    	])->id;
+    	])->event_id;
         
-        $event_slug = Event::where('event_id', $event_id)->value('slug')
-        
-        return redirect('/e/'.$event_slug);
+        $event_slug = Event::where('event_id', $event_id)->value('slug');
+
+        return redirect()->route('event.show',['event_slug' => $event_slug,]);
         
     	
     }
