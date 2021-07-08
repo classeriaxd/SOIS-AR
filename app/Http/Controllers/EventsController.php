@@ -24,14 +24,20 @@ class EventsController extends Controller
     }
     public function show($event_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        $eventImages = EventImage::where('event_id', $event->event_id)->get();
-        return view('events.show',compact('event', 'eventImages'));
+        if($event = Event::where('slug', $event_slug)->first())
+        {
+            $eventImages = EventImage::where('event_id', $event->event_id)->get();
+            return view('events.show',compact('event', 'eventImages'));
+        }
+        else
+            abort(404);
     }
     public function edit($event_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        return view('events.edit',compact('event'));
+        if($event = Event::where('slug', $event_slug)->first())
+            return view('events.edit',compact('event'));
+        else
+            abort(404);
     }
     public function update($event_slug)
     {
@@ -75,9 +81,13 @@ class EventsController extends Controller
     }
     public function destroy($event_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        if ($event->delete())
-            return redirect()->route('event.index');
+        if ($event = Event::where('slug', $event_slug)->first())
+        {
+            if ($event->delete())
+                return redirect()->route('event.index');
+            else
+               abort(404); 
+        }
         else
             abort(404);
     }
@@ -115,7 +125,11 @@ class EventsController extends Controller
     		'budget' => $data['budget'],
             'slug' => Str::replace(' ', '-', $data['title']).'-'.Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y'),
     	])->id;
-        $event_slug = Event::where('event_id', $event_id)->value('slug');
-    	return redirect('/e/'.$event_slug);
+        
+        if($event_slug = Event::where('event_id', $event_id)->value('slug'))
+        {
+            return redirect('/e/'.$event_slug);
+        }
+    	
     }
 }
