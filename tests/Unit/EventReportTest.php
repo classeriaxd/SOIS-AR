@@ -309,7 +309,7 @@ class EventReportTest extends TestCase
         $test_data_slug = Str::replace(' ', '-', $test_data['title']).'-'.Carbon::createFromFormat('Y-m-d', $test_data['date'])->format('Y');
         // Create Event Report
         $response1 = $this->actingAs($user)->call('POST', '/e', $test_data);
-        $response1->assertOk();
+        $response1->assertRedirect('/e/'.$test_data_slug);
         // Get Response
         $response2 = $this->actingAs($user)->call('GET', '/e/'.$test_data_slug);
         $response2->assertOk();
@@ -350,7 +350,7 @@ class EventReportTest extends TestCase
         
         // Create Event Report and Get Response
         $response1 = $this->actingAs($user)->call('POST', '/e', $test_data);
-        $response1->assertOk();
+        $response1->assertRedirect('/e/'.$test_data_slug);
         
         // Access /edit thru the created Event Report
         $response2 = $this->actingAs($user)->call('GET', '/e/'.$test_data_slug.'/edit');
