@@ -126,10 +126,10 @@ class EventsController extends Controller
             'slug' => Str::replace(' ', '-', $data['title']).'-'.Carbon::createFromFormat('Y-m-d', $data['date'])->format('Y'),
     	])->id;
         
-        if($event_slug = Event::where('event_id', $event_id)->value('slug'))
-        {
-            return redirect('/e/'.$event_slug);
-        }
+        $event_slug = Event::where('event_id', $event_id)->value('slug')
+        
+        return redirect('/e/'.$event_slug);
+        
     	
     }
 }
