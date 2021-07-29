@@ -15,6 +15,13 @@
                     </button>
                 </div>
             </div>
+            <div>
+                <div class="text-center">
+                    <a href="/pdf">
+                        <button class="btn-primary btn">PDF</button>
+                    </a>
+                </div>
+            </div>
             <div class="pb-2">
                 <div class="card">
                     <div class="card-header text-center align-middle">
