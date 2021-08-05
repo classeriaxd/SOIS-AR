@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 use Carbon\Carbon;
 
+use Barryvdh\DomPDF\Facade;
+use PDF;
+
 class EventReportsController extends Controller
 {
     public function index()
@@ -17,26 +20,8 @@ class EventReportsController extends Controller
     	return view('eventreports.index');
     }
 
-    public function pdf($data)
-    {
-        // instantiate and use the dompdf class
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml('hello world');
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('letter', 'landscape');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser
-        $dompdf->stream();
-    }
-
     public function show()
     {
-        $dompdf = new Dompdf();
-        
     	if(request('first'))
     	{
     		$start_date = date('Y').'-01-01';
@@ -76,8 +61,8 @@ class EventReportsController extends Controller
 
         $start = Carbon::parse($start_date)->format('F Y');
         $end = Carbon::parse($end_date)->format('F Y');
-        $dompdf->loadView('eventreports.pdf', compact('events', 'start', 'end'));
-        //return $pdf->download($data['lastName'].$data['firstName'].'-'.$type[0].'-'.'Document.pdf');
-    	//return view('eventreports.show', compact('events', 'start_date', 'end_date'));
+        $dompdf = PDF::loadView('eventreports.pdf', compact('events', 'start', 'end'));
+        //return $dompdf->download("tite".'Document.pdf');
+        return $dompdf->stream();
     }
 }

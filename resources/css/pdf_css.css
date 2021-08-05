@@ -1,0 +1,29 @@
+.page
+{
+    /*background-image: url('images/cs_logo.png');*/
+}
+
+.page-break
+{
+    page-break-after: always;
+}
+
+.intro-title-block
+{
+    text-align: center;
+}
+
+.intro-desc-block
+{
+    text-align: center;
+}
+
+.event-desc-block
+{
+    text-align: center;
+}
+
+.event-img-block
+{
+    text-align: center;
+}
