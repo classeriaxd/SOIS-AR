@@ -61,8 +61,17 @@ class EventReportsController extends Controller
 
         $start = Carbon::parse($start_date)->format('F Y');
         $end = Carbon::parse($end_date)->format('F Y');
-        $dompdf = PDF::loadView('eventreports.pdf', compact('events', 'start', 'end'));
-        //return $dompdf->download("tite".'Document.pdf');
+
+        //normal view
+        //$view = true;
+        //return view('eventreports.pdf', compact('events', 'start', 'end', 'view'));
+
+        //dompdf views
+        $view = false;
+        $dompdf = PDF::loadView('eventreports.pdf', compact('events', 'start', 'end', 'view'));  
         return $dompdf->stream();
+
+        //download
+        //return $dompdf->download("yeet".'Document.pdf');
     }
 }
