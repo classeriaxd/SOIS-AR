@@ -44,11 +44,17 @@ class EventReportsController extends Controller
     	}
         else if(request('custom'))
         {
-            $start_date = strftime("%G-%m-%d",strtotime(request('start_date')));
-            $end_date = strftime("%G-%m-%d",strtotime(request('end_date')));
+            $data = request()->validate([
+                'start_date' => 'date',
+                'end_date' => 'date|after:start_date',
+                ]);
+            $start_date = Carbon::parse($data['start_date']);
+            $end_date = Carbon::parse($data['end_date']);
         }
         else
+        {
             return view('eventreports.index');
+        }
         
         // Get all Events within $start_date and $end_date, 
         // then grabs all of their child Event Images
