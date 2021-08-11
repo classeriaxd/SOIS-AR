@@ -19,7 +19,8 @@ class EventsController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
+        $events = Event::orderByRaw('YEAR(`date`) DESC, MONTH(`date`) ASC, DATE ASC')
+        ->get();
         return view('events.index', compact('events'));
     }
     public function show($event_slug)

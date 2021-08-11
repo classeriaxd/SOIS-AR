@@ -1,0 +1,71 @@
+.page
+{
+    /*background-image: url('images/cs_logo.png');*/
+}
+
+.page-break
+{
+    page-break-after: always;
+}
+
+.intro-title-block
+{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.event-title-block .block-title
+{
+    vertical-align: middle;
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.event-desc-block .block-desc
+{
+    vertical-align: middle;
+    text-align: center;
+    font-size: 48px;
+}
+
+.event-info-block
+{
+    font-size: 24px;
+    text-align: center;
+}
+.event-info-block .block-title
+{
+    font-weight: bold;
+}
+
+.event-img-block
+{
+    font-size: 24px;
+    text-align: center;
+}
+.event-img-block .block-title
+{
+   font-weight: bold;
+}
+
+.event-img-block .info-block .block-title
+{
+   font-weight: bold;
+}
+
+
+.event-img-block .img-block
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.event-img-block .img-block .block-img
+{
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 300px;
+    max-height: 300px;
+}

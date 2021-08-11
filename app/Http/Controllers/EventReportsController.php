@@ -8,6 +8,11 @@ use \App\Models\EventImage;
 
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+
+use Barryvdh\DomPDF\Facade;
+use PDF;
+
 class EventReportsController extends Controller
 {
     public function index()
@@ -39,11 +44,17 @@ class EventReportsController extends Controller
     	}
         else if(request('custom'))
         {
-            $start_date = strftime("%G-%m-%d",strtotime(request('start_date')));
-            $end_date = strftime("%G-%m-%d",strtotime(request('end_date')));
+            $data = request()->validate([
+                'start_date' => 'date',
+                'end_date' => 'date|after:start_date',
+                ]);
+            $start_date = Carbon::parse($data['start_date']);
+            $end_date = Carbon::parse($data['end_date']);
         }
         else
+        {
             return view('eventreports.index');
+        }
         
         // Get all Events within $start_date and $end_date, 
         // then grabs all of their child Event Images
@@ -53,6 +64,20 @@ class EventReportsController extends Controller
             ->whereBetween('date', [$start_date, $end_date])
     		->orderBy('date', 'ASC')
     		->get();
-    	return view('eventreports.show', compact('events', 'start_date', 'end_date'));
+
+        $start = Carbon::parse($start_date)->format('F Y');
+        $end = Carbon::parse($end_date)->format('F Y');
+
+        //normal view
+        //$view = true;
+        //return view('eventreports.pdf', compact('events', 'start', 'end', 'view'));
+
+        //dompdf views
+        $view = false;
+        $dompdf = PDF::loadView('eventreports.pdf', compact('events', 'start', 'end', 'view'));  
+        return $dompdf->stream();
+
+        //download
+        //return $dompdf->download("yeet".'Document.pdf');
     }
 }
