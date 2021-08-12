@@ -15,6 +15,7 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id('event_id');
+            $table->foreignId('organization_id');
             $table->string('title');
             $table->text('description');
             $table->text('objective');
@@ -29,6 +30,8 @@ class CreateEventsTable extends Migration
             $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('organization_id')->references('organization_id')->on('organizations');
         });
     }
 
@@ -40,5 +43,6 @@ class CreateEventsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('events');
+        $table->dropForeign('organization_id');
     }
 }
