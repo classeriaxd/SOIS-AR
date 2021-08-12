@@ -15,8 +15,11 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id('course_id');
+            $table->foreignId('organization_id');
             $table->string('course_name');
             $table->string('course_acronym');
+
+            $table->foreign('organization_id')->references('organization_id')->on('organizations');
         });
     }
 
@@ -28,5 +31,6 @@ class CreateCoursesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('courses');
+        $table->dropForeign('organization_id');
     }
 }

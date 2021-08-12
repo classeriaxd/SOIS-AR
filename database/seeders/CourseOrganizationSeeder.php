@@ -60,6 +60,6 @@ class CourseOrganizationSeeder extends Seeder
                 'course_id' => '10',
             ],
         ];
-        DB::table('courses_organizations')->insert($data);
+        DB::table('course_organization')->insert($data);
     }
 }

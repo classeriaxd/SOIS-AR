@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCoursesOrganizationsTable extends Migration
+class CreateCourseOrganizationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCoursesOrganizationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('courses_organizations', function (Blueprint $table) {
+        Schema::create('course_organization', function (Blueprint $table) {
             $table->foreignId('organization_id');
             $table->foreignId('course_id');
 

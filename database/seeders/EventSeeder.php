@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Event;
 use App\Models\EventImage;
+use App\Models\Organization;
 
 class EventSeeder extends Seeder
 {
@@ -15,9 +16,16 @@ class EventSeeder extends Seeder
      */
     public function run()
     {
-        Event::factory()
-            ->has(EventImage::factory()->count(4))
-            ->count(50)
-            ->create();
+        $orgs = Organization::all();
+
+        foreach($orgs as $org)
+        {
+            Event::factory()
+                ->for($org)
+                ->has(EventImage::factory()->count(4))
+                ->count(20)
+                ->create();
+        }
+        
     }
 }
