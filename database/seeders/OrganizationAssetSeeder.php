@@ -17,45 +17,61 @@ class OrganizationAssetSeeder extends Seeder
         $data = [
             [
                 'organization_id' => '1',
-                'image' => 'organizational_assets/aeces.jpg',
+                'image' => 'organization_assets/aeces.jpg',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'organization_id' => '2',
-                'image' => 'organizational_assets/cs.png',
+                'image' => 'organization_assets/cs.png',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'organization_id' => '3',
-                'image' => 'organizational_assets/jma.png',
+                'image' => 'organization_assets/jma.png',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'organization_id' => '4',
-                'image' => 'organizational_assets/jpia.jpg',
+                'image' => 'organization_assets/jpia.jpg',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'organization_id' => '5',
-                'image' => 'organizational_assets/jpmap.png',
+                'image' => 'organization_assets/jpmap.png',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'organization_id' => '6',
-                'image' => 'organizational_assets/jpsme.jpg',
+                'image' => 'organization_assets/jpsme.jpg',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
                         [
                 'organization_id' => '7',
-                'image' => 'organizational_assets/mentors.jpg',
+                'image' => 'organization_assets/mentors.jpg',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
                 'organization_id' => '8',
-                'image' => 'organizational_assets/pasoa.png',
+                'image' => 'organization_assets/pasoa.png',
                 'type' => '1',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ],
         ];
-        DB::table('roles')->insert($data);
+        DB::table('organization_assets')->insert($data);
     }
 }

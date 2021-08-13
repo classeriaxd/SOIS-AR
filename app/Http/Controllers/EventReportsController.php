@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use \App\Models\User;
 use \App\Models\Event;
 use \App\Models\EventImage;
+use \App\Models\Organization;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 
@@ -68,6 +70,14 @@ class EventReportsController extends Controller
         $start = Carbon::parse($start_date)->format('F Y');
         $end = Carbon::parse($end_date)->format('F Y');
 
+        // Fetch organization assets
+        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)
+            ->first();
+        $organization_logo = OrganizationAsset::where('organization_id', $organization->organization_id)
+            ->where('type', '1')
+            ->select('image')
+            ->first();
+        dd($organization_logo);
         //normal view
         //$view = true;
         //return view('eventreports.pdf', compact('events', 'start', 'end', 'view'));
