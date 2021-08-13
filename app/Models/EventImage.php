@@ -11,9 +11,10 @@ class EventImage extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
     protected $primaryKey = 'event_id';
+    protected $table = 'event_images';
 
     public function event()
     {
-    	return $this->belongsTo(Event::class);
+    	return $this->belongsTo(Event::class, 'event_id');
     }
 }

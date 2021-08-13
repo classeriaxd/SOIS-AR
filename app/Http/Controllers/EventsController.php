@@ -8,6 +8,7 @@ use \App\Models\EventImage;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 use \App\Rules\EventTitle;
 
@@ -113,6 +114,7 @@ class EventsController extends Controller
     	]);
         
     	$event_id = Event::create([
+            'organization_id' => Auth::user()->course->organization_id,
     		'title' => $data['title'],
     		'description' => $data['description'],
     		'objective' => $data['objective'],
