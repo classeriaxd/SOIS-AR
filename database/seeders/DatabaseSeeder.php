@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             UserPositionSeeder::class,
             
             OrganizationAssetSeeder::class,
-            //EventSeeder::class,
+            EventSeeder::class,
         ]);
     }
 }

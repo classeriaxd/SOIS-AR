@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Organization extends Model
+class OrganizationAsset extends Model
 {
     protected $guarded = [];
     protected $primaryKey = 'organization_asset_id';
