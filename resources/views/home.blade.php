@@ -38,6 +38,23 @@
             <div class="pb-2">
                 <div class="card">
                     <div class="card-header text-center align-middle">
+                        <div class="display-5">Meeting Notices</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <a href="/n/create">
+                                <button class="btn btn-primary mr-2">Add Meeting Notices</button>
+                            </a>
+                            <a href="/n">
+                                <button class="btn btn-primary mr-2">View Meeting Notices</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pb-2">
+                <div class="card">
+                    <div class="card-header text-center align-middle">
                         <div class="display-5">Event Quick View</div>
                     </div>
                     <div class="card-body">
