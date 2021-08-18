@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="text-center">
-            <h2 class="display-2">All Events</h2>
+            <h2 class="display-2">{{$orgAcronym}} Events</h2>
         </div>
         <div class="col-md-10">
             <div class="accordion" id="eventAccordion">
@@ -20,7 +20,7 @@
                         </div>
                         <div id="{{'collapse'.$year}}" class="{{($open)?'collapse show':'collapse'}}" aria-labelledby="{{'heading'.$year}}" data-parent="#eventAccordion">
                             <div class="card-body">
-                            <table class="table-striped w-100">
+                            <table class="table-striped table-hover w-100">
                                 <thead class="bg-dark text-white text-center">
                                     <th scope="col" colspan="3">Events</th>
                                 </thead>

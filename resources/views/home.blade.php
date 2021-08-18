@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="pb-2">
+{{--             <div class="pb-2">
                 <div class="card">
                     <div class="card-header text-center align-middle">
                         <div class="display-5">Meeting Notices</div>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-            </div>    
+            </div>  --}}   
             
         </div>
 
