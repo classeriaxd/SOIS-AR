@@ -51,78 +51,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="pb-2">
-                <div class="card">
-                    <div class="card-header text-center align-middle">
-                        <div class="display-5">Event Quick View</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center pb-2">
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header text-center align-middle">
-                                        <div class="display-6">January</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header text-center align-middle">
-                                        <div class="display-6">February</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header text-center align-middle">
-                                        <div class="display-6">March</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>               
-                        </div>
-                        <div class="row justify-content-center pb-2">
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header text-center align-middle">
-                                        <div class="display-6">January</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex flex-column">
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                            <button class="btn btn-primary m-1">Sample</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>              
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
+            </div>    
             
         </div>
 
