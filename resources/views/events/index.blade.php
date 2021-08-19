@@ -10,7 +10,7 @@
             <div class="accordion" id="eventAccordion">
                 @php $open = true; @endphp
                 @foreach ($events as $year => $yearEvent)
-                    <div class="card">
+                    <div class="card w-100">
                         <div class="card-header" id="{{'heading'.$year}}">
                             <h2 class="mb-0 text-center">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="{{'#collapse'.$year}}" aria-expanded="{{($open)?'true':'false'}}" aria-controls="{{'collapse'.$year}}">
@@ -53,6 +53,23 @@
     </div>
 
     <hr>
+    <div class="row justify-content-center">
+        <div class="card">
+            <div class="card-header text-center align-middle">
+                <div class="display-5">Navigation</div>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <a href="/e/create">
+                        <button class="btn btn-primary mr-2">Add Event</button>
+                    </a>
+                    <a href="/e/reports">
+                        <button class="btn btn-primary">Year Summary</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <a href="/home">
             <button class="btn btn-secondary">Go back</button>
