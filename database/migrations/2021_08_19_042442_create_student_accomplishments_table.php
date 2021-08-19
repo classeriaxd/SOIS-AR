@@ -14,7 +14,8 @@ class CreateStudentAccomplishmentsTable extends Migration
     public function up()
     {
         Schema::create('student_accomplishments', function (Blueprint $table) {
-            $table->id('student_accomplishments_id');
+            $table->id('student_accomplishment_id');
+            $table->foreignId('user_id');
             $table->foreignId('organization_id');
             $table->string('title');
             $table->text('description');
@@ -23,6 +24,7 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
+            $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
 
         });
@@ -36,6 +38,7 @@ class CreateStudentAccomplishmentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('student_accomplishments');
+        $table->dropForeign('user_id');
         $table->dropForeign('organization_id');
     }
 }

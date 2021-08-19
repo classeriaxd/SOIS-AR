@@ -15,11 +15,11 @@ class CreateStudentAccomplishmentFilesTable extends Migration
     {
         Schema::create('student_accomplishment_files', function (Blueprint $table) {
             $table->id('student_accomplishment_file_id');
-            $table->foreignId('student_accomplishments_id');
+            $table->foreignId('student_accomplishment_id');
             $table->string('file');
             $table->timestamps();
 
-            $table->foreign('student_accomplishments_id')->references('student_accomplishments_id')->on('student_accomplishments')->onDelete('cascade');
+            $table->foreign('student_accomplishment_id')->references('student_accomplishment_id')->on('student_accomplishments')->onDelete('cascade');
         });
     }
 

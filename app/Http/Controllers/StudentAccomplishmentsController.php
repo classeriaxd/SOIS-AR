@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\TemporaryFile;
+use App\Models\StudentAccomplishment;
+use App\Models\StudentAccomplishmentFile;
 
 class StudentAccomplishmentsController extends Controller
 {
@@ -26,8 +28,58 @@ class StudentAccomplishmentsController extends Controller
             'evidence2' => 'nullable|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
             'evidence3' => 'nullable|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
         ]);
-        dd($data);
+        $accomplishment_id = StudentAccomplishment::create([
+            'user_id' => Auth::user()->user_id,
+            'organization_id' => Auth::user()->course->organization_id,
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'status' => 0,
+            'remarks' => 'PENDING',
+        ])->student_accomplishment_id;
 
+        $temp_path = '/public/uploads/tmp/';
+        $final_path = '/public/uploads/student_accomplishments/';
+
+        if($data['evidence1'] ?? false)
+        {
+            $file = TemporaryFile::where('folder', $data['evidence1'])->value('filename');
+
+            Storage::move($temp_path . $data['evidence1'] . '/' . $file, $final_path . $file);
+            Storage::deleteDirectory($temp_path . $data['evidence1'], true);
+            sleep(0.5);
+            Storage::deleteDirectory($temp_path . $data['evidence1']);
+            StudentAccomplishmentFile::create([
+                'student_accomplishment_id' => $accomplishment_id,
+                'file' => '/student_accomplishments/' . $file, 
+            ]);
+        }
+        if($data['evidence2'] ?? false)
+        {
+            $file = TemporaryFile::where('folder', $data['evidence2'])->value('filename');
+
+            Storage::move($temp_path . $data['evidence2'] . '/' . $file, $final_path . $file);
+            Storage::deleteDirectory($temp_path . $data['evidence2'], true);
+            sleep(0.5);
+            Storage::deleteDirectory($temp_path . $data['evidence2']);
+            StudentAccomplishmentFile::create([
+                'student_accomplishment_id' => $accomplishment_id,
+                'file' => '/student_accomplishments/' . $file, 
+            ]);
+        }
+        if($data['evidence3'] ?? false)
+        {
+            $file = TemporaryFile::where('folder', $data['evidence3'])->value('filename');
+
+            Storage::move($temp_path . $data['evidence3'] . '/' . $file, $final_path . $file);
+            Storage::deleteDirectory($temp_path . $data['evidence3'], true);
+            sleep(0.5);
+            Storage::deleteDirectory($temp_path . $data['evidence3']);
+            StudentAccomplishmentFile::create([
+                'student_accomplishment_id' => $accomplishment_id,
+                'file' => '/student_accomplishments/' . $file, 
+            ]);
+        }
+        return view('home');
     }
     public function upload(Request $request)
     {
