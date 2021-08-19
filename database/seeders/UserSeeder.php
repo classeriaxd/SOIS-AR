@@ -203,6 +203,23 @@ class UserSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
             'status' => 0,       
         ],
+            ['user_id' => '12',
+            'course_id' => '1',
+            'role_id' => '2', 
+            'email' => 'bsa-member@email.com', 
+            'password' => Hash::make('bsa-member@email.com'),
+            'student_number' => '2018-00012-TG-O', 
+            'first_name' => 'BSA John',
+            'middle_name' => 'Fitzgerald',
+            'last_name' => 'Kennedy',
+            'gender' => '1',
+            'date_of_birth' => '2000-01-01',
+            'mobile_number' => '+639123456710',
+            'address' => 'Lower Bicutan, Taguig City',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'status' => 0,       
+        ],
         ];
 
         DB::table('users')->insert($data);
