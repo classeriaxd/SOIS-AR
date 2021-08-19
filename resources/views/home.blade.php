@@ -44,7 +44,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row justify-content-center">
-                            <a href="#">
+                            <a href="/s/accomplishments/create">
                                 <button class="btn btn-primary mr-2">Upload Accomplishment</button>
                             </a>
                             <a href="#">
