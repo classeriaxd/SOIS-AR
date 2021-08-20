@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div>
+            <div id="login_alert">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     @if (session('status'))
                         {{ session('status') }}
@@ -15,10 +15,11 @@
                     </button>
                 </div>
             </div>
+        @position_title('Officer')
             <div class="pb-2">
                 <div class="card">
                     <div class="card-header text-center align-middle">
-                        <div class="display-5">General Options</div>
+                        <div class="display-5">Welcome Officer</div>
                     </div>
                     <div class="card-body">
                         <div class="row justify-content-center">
@@ -35,24 +36,22 @@
                     </div>
                 </div>
             </div>
-{{--             <div class="pb-2">
+        @elseposition_title('Member')
+            <div class="pb-2">
                 <div class="card">
                     <div class="card-header text-center align-middle">
-                        <div class="display-5">Meeting Notices</div>
+                        <div class="display-5">Welcome Member</div>
                     </div>
                     <div class="card-body">
                         <div class="row justify-content-center">
-                            <a href="/n/create">
-                                <button class="btn btn-primary mr-2">Add Meeting Notices</button>
-                            </a>
-                            <a href="/n">
-                                <button class="btn btn-primary mr-2">View Meeting Notices</button>
+                            <a href="/s/accomplishments">
+                                <button class="btn btn-primary">My Accomplishments <span class="badge badge-pill badge-success">{{$approvedAccomplishmentCount}}</span><span class="badge badge-pill badge-warning">{{$pendingAccomplishmentCount}}</span><span class="badge badge-pill badge-danger">{{$disapprovedAccomplishmentCount}}</span></button>
                             </a>
                         </div>
                     </div>
                 </div>
-            </div>  --}}   
-            
+            </div>
+        @endposition_title
         </div>
 
     </div>
