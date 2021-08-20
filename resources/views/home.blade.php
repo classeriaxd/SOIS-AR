@@ -55,6 +55,23 @@
             <div class="pb-2">
                 <div class="card">
                     <div class="card-header text-center align-middle">
+                        <div class="display-5">Organization Documents</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <a href="/o/documents/create">
+                                <button class="btn btn-primary mr-2">Add Organization Documents</button>
+                            </a>
+                            <a href="o/documents">
+                                <button class="btn btn-primary mr-2">View Organization Documents</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pb-2">
+                <div class="card">
+                    <div class="card-header text-center align-middle">
                         <div class="display-5">Event Quick View</div>
                     </div>
                     <div class="card-body">

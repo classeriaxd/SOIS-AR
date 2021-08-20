@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             //CourseOrganizationSeeder::class,
             PositionTitleSeeder::class,
             UserPositionSeeder::class,
+            OrganizationDocumentTypeSeeder::class,
             
             //EventSeeder::class,
         ]);

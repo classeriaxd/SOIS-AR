@@ -50,3 +50,6 @@ Route::delete('/n/{notice_uuid}', [App\Http\Controllers\MeetingNoticesController
 Route::get('/n', [App\Http\Controllers\MeetingNoticesController::class, 'index'])->name('meetingnotices.index')->middleware('auth');
 Route::get('/n/create', [App\Http\Controllers\MeetingNoticesController::class, 'create'])->middleware('auth');
 Route::post('/n', [App\Http\Controllers\MeetingNoticesController::class, 'store'])->middleware('auth');
+
+Route::get('/o/documents/create', [App\Http\Controllers\DocumentManagementController::class, 'create'])->middleware('auth');
+Route::post('/o/documents', [App\Http\Controllers\DocumentManagementController::class, 'store'])->middleware('auth');
