@@ -17,6 +17,7 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->id('student_accomplishment_id');
             $table->foreignId('user_id');
             $table->foreignId('organization_id');
+            $table->string('accomplishment_uuid')->unique();
             $table->string('title');
             $table->text('description');
             $table->unsignedTinyInteger('status');
