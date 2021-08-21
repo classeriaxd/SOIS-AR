@@ -45,11 +45,14 @@ class StudentAccomplishmentsController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|string',
+            'description' => 'required|string',
             'evidence1' => 'required|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
             'evidence2' => 'nullable|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
             'evidence3' => 'nullable|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
+            'caption1' => 'nullable|string',
+            'caption2' => 'nullable|string',
+            'caption3' => 'nullable|string',
         ]);
 
         $accomplishment_uuid = StudentAccomplishment::create([
@@ -68,9 +71,10 @@ class StudentAccomplishmentsController extends Controller
             $final_path = '/public/uploads/student_accomplishments/';
             $db_path = '/uploads/student_accomplishments/';
             $accomplishment_id = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)->value('student_accomplishment_id');
-
+            
             if($data['evidence1'] ?? false)
             {
+                $caption = ($data['caption1'])?$data['caption1']:NULL;
                 $file = TemporaryFile::where('folder', $data['evidence1'])->value('filename');
 
                 Storage::move($temp_path . $data['evidence1'] . '/' . $file, $final_path . $file);
@@ -80,11 +84,13 @@ class StudentAccomplishmentsController extends Controller
                 StudentAccomplishmentFile::create([
                     'student_accomplishment_id' => $accomplishment_id,
                     'file' =>  $db_path . $file, 
+                    'caption' => $caption,
                 ]);
             }
 
             if($data['evidence2'] ?? false)
             {
+                $caption = ($data['caption2'])?$data['caption2']:NULL;
                 $file = TemporaryFile::where('folder', $data['evidence2'])->value('filename');
 
                 Storage::move($temp_path . $data['evidence2'] . '/' . $file, $final_path . $file);
@@ -93,12 +99,14 @@ class StudentAccomplishmentsController extends Controller
                 Storage::deleteDirectory($temp_path . $data['evidence2']);
                 StudentAccomplishmentFile::create([
                     'student_accomplishment_id' => $accomplishment_id,
-                    'file' => $db_path . $file, 
+                    'file' => $db_path . $file,
+                    'caption' => $caption, 
                 ]);
             }
 
             if($data['evidence3'] ?? false)
             {
+                $caption = ($data['caption3'])?$data['caption3']:NULL;
                 $file = TemporaryFile::where('folder', $data['evidence3'])->value('filename');
 
                 Storage::move($temp_path . $data['evidence3'] . '/' . $file, $final_path . $file);
@@ -108,6 +116,7 @@ class StudentAccomplishmentsController extends Controller
                 StudentAccomplishmentFile::create([
                     'student_accomplishment_id' => $accomplishment_id,
                     'file' => $db_path . $file, 
+                    'caption' => $caption,
                 ]);
             }
             return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
@@ -120,14 +129,25 @@ class StudentAccomplishmentsController extends Controller
         if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
             ->first())
         {
-            $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->pluck('file');
+            $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
+                ->get();
             return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles'));
         }
         else
             abort(404);
     }
-    // FilePond
-    // Upload Functions
+    /*
+     * Send Notifications
+     */
+
+    public function sendNotification($user_id, $organization_id)
+    {
+
+    }
+    /*
+    /* FilePond 
+    /* Upload Functions
+     */
     public function upload(Request $request)
     {
         if ($request->hasFile('evidence1'))

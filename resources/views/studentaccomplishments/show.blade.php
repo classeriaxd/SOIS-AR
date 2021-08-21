@@ -18,7 +18,10 @@
                             
                             @foreach($accomplishmentFiles as $file)
                             <div class="row justify-content-center mb-2">
-                                <img src="{{'/storage/'.$file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                            </div>
+                            <div class="row justify-content-center">
+                                <p class="text-center">{{$file->caption}}</p>
                             </div>
                             @endforeach
                             
@@ -30,7 +33,11 @@
                             
                             @foreach($accomplishmentFiles as $file)
                             <div class="row justify-content-center mb-2">
-                                <img src="{{'/storage/'.$file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <br>
+                            </div>
+                            <div class="row justify-content-center">
+                                <p class="text-center">{{$file->caption}}</p>
                             </div>
                             @endforeach
 
@@ -45,7 +52,11 @@
                             
                             @foreach($accomplishmentFiles as $file)
                             <div class="row justify-content-center mb-2">
-                                <img src="{{'/storage/'.$file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <br>
+                            </div>
+                            <div class="row justify-content-center">
+                                <p class="text-center">{{$file->caption}}</p>
                             </div>
                             @endforeach
                             
