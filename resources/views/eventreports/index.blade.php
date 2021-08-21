@@ -97,7 +97,7 @@
         	</div>
             
             <div class="row justify-content-center mt-2">
-                <a href="/e">
+                <a href="/home">
                     <button class="btn btn-secondary">Go back</button>
                 </a>
             </div>

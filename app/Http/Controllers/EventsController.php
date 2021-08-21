@@ -20,9 +20,23 @@ class EventsController extends Controller
 {
     public function index()
     {
-        $events = Event::orderByRaw('YEAR(`date`) DESC, MONTH(`date`) ASC, DATE ASC')
-        ->get();
-        return view('events.index', compact('events'));
+        $allEventYears = Event::selectRaw('YEAR(`date`) as year')
+            ->where('organization_id', Auth::user()->course->organization_id,)
+            ->groupBy('year')
+            ->orderBy('year', 'DESC')
+            ->get();
+        $orgAcronym = Auth::user()->course->organization->organization_acronym;
+        $events = array();
+        foreach($allEventYears as $year) 
+        {
+            $yearEvents = Event::whereRaw('YEAR(`date`) = ?', $year->year)
+                ->where('organization_id', Auth::user()->course->organization_id,)
+                ->orderByRaw('MONTH(`date`) ASC, DATE ASC')
+                ->get();
+            $events[$year->year] = $yearEvents; 
+        }
+
+        return view('events.index', compact('events', 'orgAcronym'));
     }
     public function show($event_slug)
     {

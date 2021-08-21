@@ -14,11 +14,11 @@ class CreateUsersPositionTitlesTable extends Migration
     public function up()
     {
         Schema::create('users_position_titles', function (Blueprint $table) {
-            $table->foreignId('position_title_id');
-            $table->foreignId('user_id');
+            $table->foreignId('position_title_position_title_id');
+            $table->foreignId('user_user_id');
 
-            $table->foreign('position_title_id')->references('position_title_id')->on('position_titles');
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('position_title_position_title_id')->references('position_title_id')->on('position_titles');
+            $table->foreign('user_user_id')->references('user_id')->on('users');
         });
     }
 

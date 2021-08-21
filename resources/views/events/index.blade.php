@@ -3,90 +3,78 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-
-@php
-$currentYear = 0; $currentMonth = 0; $yearStart = 1; $monthStart = 1; $monthEnd = true;
-foreach ($events as $event):
-    $eventDate = strtotime($event->date); $eventMonth = date('m', $eventDate); $eventYear = date('Y', $eventDate);
-    if ($currentYear != $eventYear):
-        $currentYear = $eventYear;
-        if (($monthEnd) == false):
-            $monthEnd = true;
-            $monthStart = 1;
-@endphp
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-@php            
-        endif;
-        if ($yearStart != 1):
-@endphp
+        <div class="text-center">
+            <h2 class="display-2">{{$orgAcronym}} Events</h2>
+        </div>
+        <div class="col-md-10">
+            <div class="accordion" id="eventAccordion">
+                @php $open = true; @endphp
+                @foreach ($events as $year => $yearEvent)
+                    <div class="card w-100">
+                        <div class="card-header" id="{{'heading'.$year}}">
+                            <h2 class="mb-0 text-center">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="{{'#collapse'.$year}}" aria-expanded="{{($open)?'true':'false'}}" aria-controls="{{'collapse'.$year}}">
+                            {{$year}}
+                            </button>
+                            </h2>
                         </div>
-                    </div>
-                </div>
-            </div>
-@php
-        else:
-            $yearStart--;
-        endif;
-@endphp
-            <div class="pb-2">
-                <div class="card">
-                    <div class="card-header text-center align-middle">
-                        <div class="display-5">{{ $currentYear }}</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-@php
-    endif;
-    if ($currentMonth != $eventMonth):
-        $currentMonth = $eventMonth;
-        if ($monthStart != 1):
-@endphp
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-@php
-        else:
-            $monthStart--;
-        endif;
-@endphp
-                            <div class="col-md-4 pb-2">
-                                <div class="card">
-                                    <div class="card-header text-center align-middle">
-                                        <div class="display-6">{{date('F', mktime(0,0,0,$eventMonth+1,0,0))}}</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex flex-column align-items-center">
-
-@php
-    $monthEnd = false;
-    endif;//Current Month End
-@endphp
+                        <div id="{{'collapse'.$year}}" class="{{($open)?'collapse show':'collapse'}}" aria-labelledby="{{'heading'.$year}}" data-parent="#eventAccordion">
+                            <div class="card-body">
+                            <table class="table-striped table-hover w-100">
+                                <thead class="bg-dark text-white text-center">
+                                    <th scope="col" colspan="3">Events</th>
+                                </thead>
+                                <tbody>
+                                    @foreach($yearEvent as $event)
+                                    <tr>
+                                        <td>
+                                            {{$event->title}}
+                                        </td>
+                                        <td>
+                                            {{date_format(date_create($event->date), 'F d, Y')
+                                            }}
+                                        </td>
+                                        <td class="text-right">
                                             <a href="/e/{{ $event->slug }}">
-                                                <button class="btn btn-primary m-1" id="{{'btn-event-'.$event->slug}}">{{$event->title}}</button>
+                                                <button class="btn btn-primary m-1" id="{{'btn-event-'.$event->slug}}">Go to Event</button>
                                             </a>
-@php
-endforeach;
-@endphp
-                                        </div>
-                                    </div>
-                                </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach 
+                                </tbody>                    
+                            </table>
                             </div>
                         </div>
                     </div>
+                @php $open = false; @endphp
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="row justify-content-center">
+        <div class="card">
+            <div class="card-header text-center align-middle">
+                <div class="display-5">Navigation</div>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <a href="/e/create">
+                        <button class="btn btn-primary mr-2">Add Event</button>
+                    </a>
+                    <a href="/e/reports">
+                        <button class="btn btn-primary">Year Summary</button>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <hr>
     <div class="row justify-content-center">
         <a href="/home">
             <button class="btn btn-secondary">Go back</button>
         </a>
     </div>
+
 </div>
 @endsection
