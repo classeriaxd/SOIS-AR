@@ -17,8 +17,8 @@ class CreateNotificationsTable extends Migration
             $table->id('notification_id');
             $table->foreignId('user_id');
             $table->string('title');
-            $table->text('description');
-            $table->string('link');
+            $table->text('description')->nullable();
+            $table->string('link')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');

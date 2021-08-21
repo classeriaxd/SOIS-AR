@@ -27,7 +27,7 @@
                             </a>
                             @endforeach
                             @else
-                            <p class="text-center">No accomplishment found.</p>
+                            <p class="text-center">No submissions found!</p>
                             @endif
                         </div>
                     </div>

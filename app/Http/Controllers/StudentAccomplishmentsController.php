@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\TemporaryFile;
+use App\Models\PositionTitle;
 use App\Models\StudentAccomplishment;
 use App\Models\StudentAccomplishmentFile;
+use App\Models\User;
+use App\Models\Notification;
 // Student Accomplishment Status
 // 0 - PENDING | 1 - APPROVED | 2 - DISAPPROVED
 class StudentAccomplishmentsController extends Controller
@@ -20,8 +23,10 @@ class StudentAccomplishmentsController extends Controller
         if (Auth::check() && $user_id = Auth::user()->user_id) 
         {
             $userPositionTitles = Auth::user()->positionTitles;
-            $orgCurrentPosition = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
-
+            // Array because of Laravel Collection, maybe revise this sometime?
+            $orgCurrentPositionArray = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
+            $orgCurrentPosition = $orgCurrentPositionArray[0];
+            $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
             $approvedAccomplishments = StudentAccomplishment::where('status', 1)
                 ->where('user_id', $user_id)
                 ->select('accomplishment_uuid','title')
@@ -43,7 +48,7 @@ class StudentAccomplishmentsController extends Controller
             // Organization President
             else if($orgCurrentPosition == 'President') {}
             // Other Documentation Officers
-            else
+            else if(in_array($orgCurrentPosition, $document_officers))
             {
                 $accomplishmentSubmissions = DB::table('student_accomplishments')
                     ->join('users','users.user_id','=','student_accomplishments.user_id')
@@ -56,6 +61,8 @@ class StudentAccomplishmentsController extends Controller
                     ->get();
                 return view('studentaccomplishments.index', compact('approvedAccomplishments', 'pendingAccomplishments', 'disapprovedAccomplishments', 'accomplishmentSubmissions',));
             }
+            else
+                abort(404);
         }
         else
             abort(404);
@@ -143,6 +150,8 @@ class StudentAccomplishmentsController extends Controller
                     'caption' => $caption,
                 ]);
             }
+
+            $this->sendNotificationToOfficers(Auth::user()->user_id, Auth::user()->course->organization_id, $accomplishment_uuid);
             return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
         }
         else
@@ -160,16 +169,46 @@ class StudentAccomplishmentsController extends Controller
         else
             abort(404);
     }
+
     /*
-     * Send Notifications
+     * Send Notification to Officers
      */
-
-    public function sendNotification($user_id, $organization_id)
+    public function sendNotificationToOfficers($sender_id, $reciever_organization_id, $accomplishment_uuid)
     {
+        $valid_positions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
+        $recieving_positions = PositionTitle::where('organization_id', $reciever_organization_id)
+            ->whereIn('position_title', $valid_positions)
+            ->pluck('position_title_id');
+        $recieving_users = array();
+        foreach($recieving_positions as $reciever)
+        {
+            $recieving_user_id = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
+            if ($recieving_user_id != NULL) 
+                array_push($recieving_users,$recieving_user_id);
+        }
 
+        if (count($recieving_users) > 0)
+        {
+            foreach($recieving_users as $reciever)
+            {
+                if ($reciever != NULL)
+                {
+                    $sender = User::where('user_id', $sender_id)->value('first_name');
+                    $notification_title = "New Student Accomplishment Submission";
+                    $notification_description = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
+                    $notification_link = route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+                    Notification::create([
+                        'user_id' => $reciever,
+                        'title' => $notification_title,
+                        'description' => $notification_description,
+                        'link' => $notification_link,
+                    ]);
+                }
+            }
+        }
     }
-    /*
-    /* FilePond 
+
+    /* FilePond JS
     /* Upload Functions
      */
     public function upload(Request $request)

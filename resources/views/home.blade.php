@@ -67,8 +67,8 @@
                     <div class="card-body">
                         <div class="row justify-content-center">
                             <a href="/s/accomplishments">
-                                <button class="btn btn-primary">My Accomplishments <span class="badge badge-pill badge-success">{{$approvedAccomplishmentCount}}</span><span class="badge badge-pill badge-warning">{{$pendingAccomplishmentCount}}</span><span class="badge badge-pill badge-danger">{{$disapprovedAccomplishmentCount}}</span></button>
-                            </a>       
+                                <button class="btn btn-primary">My Accomplishments <span class="badge badge-pill badge-success">{{$approvedAccomplishmentCount ?? "0"}}</span> <span class="badge badge-pill badge-warning">{{$pendingAccomplishmentCount ?? "0"}}</span> <span class="badge badge-pill badge-danger">{{$disapprovedAccomplishmentCount ?? "0"}}</span></button>
+                            </a>
                         </div>
                     </div>
                 </div>
