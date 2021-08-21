@@ -36,6 +36,23 @@
                     </div>
                 </div>
             </div>
+            <div class="pb-2">
+                <div class="card">
+                    <div class="card-header text-center align-middle">
+                        <div class="display-5">Organization Documents</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <a href="/o/documents/create">
+                                <button class="btn btn-primary mr-2">Add Organization Documents</button>
+                            </a>
+                            <a href="o/documents">
+                                <button class="btn btn-primary mr-2">View Organization Documents</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @elseposition_title('Member')
             <div class="pb-2">
                 <div class="card">
@@ -46,14 +63,13 @@
                         <div class="row justify-content-center">
                             <a href="/s/accomplishments">
                                 <button class="btn btn-primary">My Accomplishments <span class="badge badge-pill badge-success">{{$approvedAccomplishmentCount}}</span><span class="badge badge-pill badge-warning">{{$pendingAccomplishmentCount}}</span><span class="badge badge-pill badge-danger">{{$disapprovedAccomplishmentCount}}</span></button>
-                            </a>
+                            </a>       
                         </div>
                     </div>
                 </div>
             </div>
         @endposition_title
         </div>
-
     </div>
 </div>
 @endsection

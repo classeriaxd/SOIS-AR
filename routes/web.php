@@ -34,8 +34,6 @@ Route::get('/e/{event_slug}', [App\Http\Controllers\EventsController::class, 'sh
 Route::get('/e', [App\Http\Controllers\EventsController::class, 'index'])->name('event.index')->middleware('auth');
 Route::post('/e', [App\Http\Controllers\EventsController::class, 'store'])->middleware('auth');
 
-
-
 Route::get('/e/{event_slug}/images/{eventImage_slug}/edit', [App\Http\Controllers\EventImagesController::class, 'edit'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'eventImage_slug' => '^[a-zA-Z0-9-_]{2,255}$',])->middleware('auth');
 Route::get('/e/{event_slug}/images/create', [App\Http\Controllers\EventImagesController::class, 'create'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');
 Route::get('/e/{event_slug}/images/{eventImage_slug}', [App\Http\Controllers\EventImagesController::class, 'show'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');
@@ -52,11 +50,13 @@ Route::get('/n', [App\Http\Controllers\MeetingNoticesController::class, 'index']
 Route::get('/n/create', [App\Http\Controllers\MeetingNoticesController::class, 'create'])->middleware('auth');
 Route::post('/n', [App\Http\Controllers\MeetingNoticesController::class, 'store'])->middleware('auth');
 
+Route::get('/o/documents/create', [App\Http\Controllers\DocumentManagementController::class, 'create'])->middleware('auth');
+Route::post('/o/documents', [App\Http\Controllers\DocumentManagementController::class, 'store'])->middleware('auth');
+
 Route::delete('/s/accomplishments/upload/revert', [App\Http\Controllers\StudentAccomplishmentsController::class, 'undoUpload'])->middleware('auth');
 Route::get('/s/accomplishment/{accomplishment_uuid}', [App\Http\Controllers\StudentAccomplishmentsController::class, 'show'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.show');
 Route::get('/s/accomplishments/create', [App\Http\Controllers\StudentAccomplishmentsController::class, 'create'])->middleware('auth');
 Route::post('/s/accomplishments/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload'])->middleware('auth');
 Route::get('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->middleware('auth');
 Route::post('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store'])->middleware('auth');
-
 
