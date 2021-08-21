@@ -14,7 +14,7 @@
                             </button>
                         </a>
                     </div>
-                    @role('Officer')
+                    @position_title('Officer')
                     <div class="card mb-1">
                         <h5 class="card-header card-title text-center bg-primary text-white">Student Accomplishment Submissions</h5>
                         <div class="card-body">
@@ -22,7 +22,7 @@
                             @foreach($accomplishmentSubmissions as $accomplishment)
                             <a href="/s/accomplishment/{{$accomplishment->accomplishment_uuid}}">
                                 <div class="row justify-content-center text-white bg-info rounded border border-dark mb-1">
-                                    <p class="font-weight-bold my-auto">{{$accomplishment->user . ' - ' . $accomplishment->title}}</p>
+                                    <p class="font-weight-bold my-auto">{{$accomplishment->student_name . ' - ' . $accomplishment->title}}</p>
                                 </div>
                             </a>
                             @endforeach
@@ -31,7 +31,8 @@
                             @endif
                         </div>
                     </div>
-                    @endrole
+                    <hr>
+                    @endposition_title
         			<div class="card mb-1">
                         <h5 class="card-header card-title text-center bg-primary text-white">My Accomplishments</h5>
                         <div class="card-body">

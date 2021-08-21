@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\TemporaryFile;
 use App\Models\StudentAccomplishment;
@@ -19,6 +19,9 @@ class StudentAccomplishmentsController extends Controller
     {
         if (Auth::check() && $user_id = Auth::user()->user_id) 
         {
+            $userPositionTitles = Auth::user()->positionTitles;
+            $orgCurrentPosition = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
+
             $approvedAccomplishments = StudentAccomplishment::where('status', 1)
                 ->where('user_id', $user_id)
                 ->select('accomplishment_uuid','title')
@@ -31,7 +34,28 @@ class StudentAccomplishmentsController extends Controller
                 ->where('user_id', $user_id)
                 ->select('accomplishment_uuid','title')
                 ->get();
-            return view('studentaccomplishments.index', compact('approvedAccomplishments', 'pendingAccomplishments', 'disapprovedAccomplishments'));
+
+            // Organization Member
+            if ($orgCurrentPosition == 'Member')
+            {
+                return view('studentaccomplishments.index', compact('approvedAccomplishments', 'pendingAccomplishments', 'disapprovedAccomplishments'));
+            }
+            // Organization President
+            else if($orgCurrentPosition == 'President') {}
+            // Other Documentation Officers
+            else
+            {
+                $accomplishmentSubmissions = DB::table('student_accomplishments')
+                    ->join('users','users.user_id','=','student_accomplishments.user_id')
+                    ->where('student_accomplishments.organization_id', Auth::user()->course->organization_id)
+                    ->where('student_accomplishments.status', 0)
+                    ->select(
+                        DB::raw('CONCAT(users.last_name, ", ", users.first_name, " ", SUBSTRING(users.middle_name,1,1), ".") as student_name'), 
+                        'student_accomplishments.accomplishment_uuid as accomplishment_uuid', 
+                        'student_accomplishments.title as title')
+                    ->get();
+                return view('studentaccomplishments.index', compact('approvedAccomplishments', 'pendingAccomplishments', 'disapprovedAccomplishments', 'accomplishmentSubmissions',));
+            }
         }
         else
             abort(404);
