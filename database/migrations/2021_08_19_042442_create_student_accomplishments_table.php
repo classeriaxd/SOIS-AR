@@ -20,6 +20,7 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->string('accomplishment_uuid')->unique();
             $table->string('title');
             $table->text('description');
+            // Status: 0 - PENDING | 1 - APPROVED | 2 - DISAPPROVED
             $table->unsignedTinyInteger('status');
             $table->text('remarks');
             $table->softDeletes();
