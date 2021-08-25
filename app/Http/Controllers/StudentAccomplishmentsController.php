@@ -72,12 +72,12 @@ class StudentAccomplishmentsController extends Controller
         $filePondJS = true;
     	return view('studentaccomplishments.create', compact('filePondJS',));
     }
-
     public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
+            'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
             'evidence1' => 'required|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
             'evidence2' => 'nullable|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
             'evidence3' => 'nullable|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
@@ -92,8 +92,7 @@ class StudentAccomplishmentsController extends Controller
             'accomplishment_uuid' => Str::uuid(),
             'title' => $data['title'],
             'description' => $data['description'],
-            'status' => 0,
-            'remarks' => 'PENDING',
+            'date_awarded' => $data['date_awarded'],
         ])->accomplishment_uuid;
 
         if ($accomplishment_uuid) 
@@ -171,6 +170,151 @@ class StudentAccomplishmentsController extends Controller
     }
 
     /*
+     * Documentation Officer Review
+     */
+    public function initialReview($accomplishment_uuid)
+    {
+        if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
+            ->first())
+        {
+            if($accomplishment->status == 0)
+            {
+                $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
+                    ->get();
+                $student = User::where('user_id', $accomplishment->user_id)
+                    ->select(DB::raw('CONCAT(last_name, ", ", first_name, " ", SUBSTRING(middle_name,1,1), ".") as name'), 'email', 'student_number')
+                    ->first();
+                return view('studentaccomplishments.initialReview', compact('accomplishment', 'accomplishmentFiles', 'student'));
+            }
+            else
+                return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+
+        }
+        else
+            abort(404);
+    }
+    public function getSubmissionDecision($accomplishment_uuid)
+    {
+        if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
+            ->first())
+        {
+            if ($accomplishment->status != 0)
+            {
+                return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+            }
+
+            if(request()->has('decline'))
+            {
+
+                $data = request()->validate([
+                    'remarks' => 'required|string',
+                ]);
+                $accomplishment_data = [
+                    'remarks' => $data['remarks'],
+                    'status' => 2,
+                    'reviewed_by' => Auth::user()->user_id,
+                ];
+                $accomplishment->update($accomplishment_data);
+                return redirect()->route('student_accomplishment.index');
+            }
+            else if(request()->has('success'))
+            {
+                return redirect()->action(
+                    [StudentAccomplishmentsController::class, 'finalReview'], ['accomplishment_uuid' => $accomplishment_uuid]
+                );
+            }
+                
+        }
+        else
+            abort(404);     
+    }
+    public function finalReview($accomplishment_uuid)
+    {
+        if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
+            ->first())
+        {
+            if($accomplishment->status == 0)
+            {
+                $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
+                    ->get();
+                $student = User::where('user_id', $accomplishment->user_id)
+                    ->select(DB::raw('CONCAT(last_name, ", ", first_name, " ", SUBSTRING(middle_name,1,1), ".") as name'), 'email', 'student_number')
+                    ->first();
+                return view('studentaccomplishments.finalReview', compact('accomplishment', 'accomplishmentFiles', 'student'));
+            }
+            else
+                return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+
+        }
+        else
+            abort(404);
+    }
+    public function approveSubmission($accomplishment_uuid)
+    {
+        if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
+            ->first())
+        {
+            if ($accomplishment->status != 0)
+            {
+                return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+            }
+
+            if(request()->has('decline'))
+            {
+                $data = request()->validate([
+                    'remarks' => 'required|string',
+                ]);
+                $accomplishment_data = [
+                    'remarks' => $data['remarks'],
+                    'status' => 2,
+                    'reviewed_by' => Auth::user()->user_id,
+                ];
+                $accomplishment->update($accomplishment_data);
+                return redirect()->route('student_accomplishment.index');
+            }
+            else if(request()->has('success'))
+            {
+                $accomplishmentCount = $accomplishment->accomplishmentFiles->count();
+                if($accomplishmentCount == 1)
+                {
+                    $data = request()->validate([
+                        'remarks' => 'required|string',
+                        'title' => 'required|string',
+                        'description' => 'required|string',
+                        'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
+                        'evidence1' => 'required',
+                    ]);
+                }
+                else if ($accomplishmentCount == 2)
+                {
+                    $data = request()->validate([
+                        'remarks' => 'required|string',
+                        'title' => 'required|string',
+                        'description' => 'required|string',
+                        'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
+                        'evidence1' => 'required_without:evidence2',
+                        'evidence2' => 'required_without:evidence1',
+                    ]);
+                }
+                else if ($accomplishmentCount == 3)
+                {
+                    $data = request()->validate([
+                        'remarks' => 'required|string',
+                        'title' => 'required|string',
+                        'description' => 'required|string',
+                        'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
+                        'evidence1' => 'required_without_all:evidence2,evidence3',
+                        'evidence2' => 'required_without_all:evidence1,evidence3',
+                        'evidence3' => 'required_without_all:evidence1,evidence2',
+                    ]);
+                }
+                
+            }
+        }
+        else
+            abort(404);
+    }
+    /*
      * Send Notification to Officers
      */
     public function sendNotificationToOfficers($sender_id, $reciever_organization_id, $accomplishment_uuid)
@@ -196,7 +340,7 @@ class StudentAccomplishmentsController extends Controller
                     $sender = User::where('user_id', $sender_id)->value('first_name');
                     $notification_title = "New Student Accomplishment Submission";
                     $notification_description = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
-                    $notification_link = route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+                    $notification_link = route('student_accomplishment.review',['accomplishment_uuid' => $accomplishment_uuid,]);
                     Notification::create([
                         'user_id' => $reciever,
                         'title' => $notification_title,

@@ -20,7 +20,7 @@
                         <div class="card-body">
                             @if($accomplishmentSubmissions->count()>0)
                             @foreach($accomplishmentSubmissions as $accomplishment)
-                            <a href="/s/accomplishment/{{$accomplishment->accomplishment_uuid}}">
+                            <a href="/s/accomplishment/{{$accomplishment->accomplishment_uuid}}/review">
                                 <div class="row justify-content-center text-white bg-info rounded border border-dark mb-1">
                                     <p class="font-weight-bold my-auto">{{$accomplishment->student_name . ' - ' . $accomplishment->title}}</p>
                                 </div>

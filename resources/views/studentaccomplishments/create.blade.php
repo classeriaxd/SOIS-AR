@@ -34,6 +34,15 @@
                     @enderror
                 </div>
                 <div class="form-group row">
+                    <label for="date_awarded" class="col-md-4 col-form-label">Date Awarded</label>    
+                    <input type="date" class="form-control" name="date_awarded" min="1992-01-01" max="{{date('Y-m-d')}}">
+                    @error('date_awarded')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group row">
                     <label for="evidences" class="col-md-4 col-form-label">Evidences</label>
                 </div>
                 <input type="file" 
