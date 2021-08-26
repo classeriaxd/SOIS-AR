@@ -149,8 +149,8 @@ class StudentAccomplishmentsController extends Controller
                     'caption' => $caption,
                 ]);
             }
-
-            $this->sendNotificationToOfficers(Auth::user()->user_id, Auth::user()->course->organization_id, $accomplishment_uuid);
+            $sender = User::where('user_id', Auth::user()->user_id)->value('first_name');
+            $this->sendNotificationToOfficers($sender, Auth::user()->course->organization_id, $accomplishment_uuid);
             return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
         }
         else
@@ -162,6 +162,7 @@ class StudentAccomplishmentsController extends Controller
             ->first())
         {
             $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
+                ->orderBy('updated_at', 'DESC')
                 ->get();
             return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles'));
         }
@@ -174,12 +175,16 @@ class StudentAccomplishmentsController extends Controller
      */
     public function initialReview($accomplishment_uuid)
     {
+        /*
+         * Show Initial Review Page
+         */
         if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
             ->first())
         {
             if($accomplishment->status == 0)
             {
                 $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
+                    ->orderBy('updated_at', 'DESC')
                     ->get();
                 $student = User::where('user_id', $accomplishment->user_id)
                     ->select(DB::raw('CONCAT(last_name, ", ", first_name, " ", SUBSTRING(middle_name,1,1), ".") as name'), 'email', 'student_number')
@@ -193,28 +198,21 @@ class StudentAccomplishmentsController extends Controller
         else
             abort(404);
     }
+
     public function getSubmissionDecision($accomplishment_uuid)
     {
+        /*
+         * Get POST Request from initialReview
+         */
         if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
             ->first())
         {
-            if ($accomplishment->status != 0)
-            {
-                return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
-            }
-
             if(request()->has('decline'))
             {
-
                 $data = request()->validate([
                     'remarks' => 'required|string',
                 ]);
-                $accomplishment_data = [
-                    'remarks' => $data['remarks'],
-                    'status' => 2,
-                    'reviewed_by' => Auth::user()->user_id,
-                ];
-                $accomplishment->update($accomplishment_data);
+                $this->declineSubmission($accomplishment, $data['remarks']);
                 return redirect()->route('student_accomplishment.index');
             }
             else if(request()->has('success'))
@@ -230,12 +228,16 @@ class StudentAccomplishmentsController extends Controller
     }
     public function finalReview($accomplishment_uuid)
     {
+        /*
+         * Show Final Review Page
+         */
         if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
             ->first())
         {
             if($accomplishment->status == 0)
             {
                 $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
+                    ->orderBy('updated_at', 'DESC')
                     ->get();
                 $student = User::where('user_id', $accomplishment->user_id)
                     ->select(DB::raw('CONCAT(last_name, ", ", first_name, " ", SUBSTRING(middle_name,1,1), ".") as name'), 'email', 'student_number')
@@ -249,8 +251,26 @@ class StudentAccomplishmentsController extends Controller
         else
             abort(404);
     }
+    public function declineSubmission(StudentAccomplishment $accomplishment, $remarks)
+    {
+        /*
+         * Decline a Student Accomplishment Submission
+         * Get action redirect from getSubmissionDecision and approveDecision
+         */
+        $accomplishment_data = [
+            'remarks' => $remarks,
+            'status' => 2,
+            'reviewed_by' => Auth::user()->user_id,
+        ];
+        $accomplishment->update($accomplishment_data);
+        $this->sendNotificationToMember($accomplishment->user_id, 'declined', $accomplishment->accomplishment_uuid);
+
+    }
     public function approveSubmission($accomplishment_uuid)
     {
+        /*
+         * Get POST Request from finalReview
+         */
         if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
             ->first())
         {
@@ -264,17 +284,15 @@ class StudentAccomplishmentsController extends Controller
                 $data = request()->validate([
                     'remarks' => 'required|string',
                 ]);
-                $accomplishment_data = [
-                    'remarks' => $data['remarks'],
-                    'status' => 2,
-                    'reviewed_by' => Auth::user()->user_id,
-                ];
-                $accomplishment->update($accomplishment_data);
+                $this->declineSubmission($accomplishment, $data['remarks']);
                 return redirect()->route('student_accomplishment.index');
             }
             else if(request()->has('success'))
             {
                 $accomplishmentCount = $accomplishment->accomplishmentFiles->count();
+                $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('student_accomplishment_file_id')
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
                 if($accomplishmentCount == 1)
                 {
                     $data = request()->validate([
@@ -295,6 +313,23 @@ class StudentAccomplishmentsController extends Controller
                         'evidence1' => 'required_without:evidence2',
                         'evidence2' => 'required_without:evidence1',
                     ]);
+                    if (!(isset($data['evidence1'])))
+                    {
+                        foreach ($accomplishmentFiles as $file)
+                        {
+                            $file->delete();
+                            break;
+                        }
+                    }
+                    $accomplishmentFiles = $accomplishmentFiles->skip(1);
+                    if (!(isset($data['evidence2'])))
+                    {
+                        foreach ($accomplishmentFiles as $file)
+                        {
+                            $file->delete();
+                            break;
+                        }
+                    }
                 }
                 else if ($accomplishmentCount == 3)
                 {
@@ -307,8 +342,45 @@ class StudentAccomplishmentsController extends Controller
                         'evidence2' => 'required_without_all:evidence1,evidence3',
                         'evidence3' => 'required_without_all:evidence1,evidence2',
                     ]);
+                    if (!(isset($data['evidence1'])))
+                    {
+                        foreach ($accomplishmentFiles as $file)
+                        {
+                            $file->delete();
+                            break;
+                        }
+                    }
+                    $accomplishmentFiles = $accomplishmentFiles->skip(1);
+                    if (!(isset($data['evidence2'])))
+                    {
+                        foreach ($accomplishmentFiles as $file)
+                        {
+                            $file->delete();
+                            break;
+                        }
+                    }
+                    $accomplishmentFiles = $accomplishmentFiles->skip(1);
+                    if (!(isset($data['evidence3'])))
+                    {
+                        foreach ($accomplishmentFiles as $file)
+                        {
+                            $file->delete();
+                            break;
+                        }
+                    }
                 }
-                
+
+                $accomplishment_data = [
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'date_awarded' => $data['date_awarded'],
+                    'remarks' => $data['remarks'],
+                    'status' => 1,
+                    'reviewed_by' => Auth::user()->user_id,
+                ];
+                $accomplishment->update($accomplishment_data);
+                $this->sendNotificationToMember($accomplishment->user_id, 'approved', $accomplishment->accomplishment_uuid);
+                return redirect()->route('student_accomplishment.index');
             }
         }
         else
@@ -317,7 +389,7 @@ class StudentAccomplishmentsController extends Controller
     /*
      * Send Notification to Officers
      */
-    public function sendNotificationToOfficers($sender_id, $reciever_organization_id, $accomplishment_uuid)
+    public function sendNotificationToOfficers($sender, $reciever_organization_id, $accomplishment_uuid)
     {
         $valid_positions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
         $recieving_positions = PositionTitle::where('organization_id', $reciever_organization_id)
@@ -337,7 +409,6 @@ class StudentAccomplishmentsController extends Controller
             {
                 if ($reciever != NULL)
                 {
-                    $sender = User::where('user_id', $sender_id)->value('first_name');
                     $notification_title = "New Student Accomplishment Submission";
                     $notification_description = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
                     $notification_link = route('student_accomplishment.review',['accomplishment_uuid' => $accomplishment_uuid,]);
@@ -348,6 +419,39 @@ class StudentAccomplishmentsController extends Controller
                         'link' => $notification_link,
                     ]);
                 }
+            }
+        }
+    }
+    /*
+     * Send Notification to Member
+     */
+    public function sendNotificationToMember($reciever_id, $status, $accomplishment_uuid)
+    {
+        if ($reciever_id != NULL)
+        {
+            if ($status == 'approved')
+            {
+                $notification_title = "Submission Approved";
+                $notification_description = 'Your Accomplishment Submission has been approved. Cheers!';
+                $notification_link = route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+                Notification::create([
+                    'user_id' => $reciever_id,
+                    'title' => $notification_title,
+                    'description' => $notification_description,
+                    'link' => $notification_link,
+                ]);
+            }
+            else if ($status == 'declined')
+            {
+                $notification_title = "Submission Declined";
+                $notification_description = 'Your Accomplishment Submission has been declined.';
+                $notification_link = route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+                Notification::create([
+                    'user_id' => $reciever_id,
+                    'title' => $notification_title,
+                    'description' => $notification_description,
+                    'link' => $notification_link,
+                ]);
             }
         }
     }

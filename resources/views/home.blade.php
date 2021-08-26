@@ -106,6 +106,43 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <div class="card">
+                    <div class="card-header card-title bg-primary text-center text-white font-weight-bold">Notifications <span class="badge badge-pill badge-light">{{$notifications->count() ?? 0}}</span></div>
+                    <div class="card-body">
+                        @if($notifications->count() > 0)
+                        <table class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i = 1;@endphp
+                                @foreach($notifications as $notification)
+                                <tr>
+                                    <td>{{$i}}</td>
+                                    <td>{{$notification->title}}</td>
+                                    <td>{{$notification->description}}</td>
+                                    <td>
+                                        <a href="{{$notification->link}}">
+                                            <button class="btn btn-primary">Visit</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @php $i += 1;@endphp
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @else
+                        <p class="text-center">No notification found.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>  
         @endposition_title
         </div>
     </div>

@@ -19,6 +19,7 @@ class CreateStudentAccomplishmentFilesTable extends Migration
             $table->string('file');
             $table->text('caption')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('student_accomplishment_id')->references('student_accomplishment_id')->on('student_accomplishments')->onDelete('cascade');
         });
