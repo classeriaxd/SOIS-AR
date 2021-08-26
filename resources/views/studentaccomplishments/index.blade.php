@@ -14,8 +14,26 @@
                             </button>
                         </a>
                     </div>
-                    <br>
-        			<div class="card">
+                    @position_title('Officer')
+                    <div class="card mb-1">
+                        <h5 class="card-header card-title text-center bg-primary text-white">Student Accomplishment Submissions</h5>
+                        <div class="card-body">
+                            @if($accomplishmentSubmissions->count()>0)
+                            @foreach($accomplishmentSubmissions as $accomplishment)
+                            <a href="/s/accomplishment/{{$accomplishment->accomplishment_uuid}}/review">
+                                <div class="row justify-content-center text-white bg-info rounded border border-dark mb-1">
+                                    <p class="font-weight-bold my-auto">{{$accomplishment->student_name . ' - ' . $accomplishment->title}}</p>
+                                </div>
+                            </a>
+                            @endforeach
+                            @else
+                            <p class="text-center">No submissions found!</p>
+                            @endif
+                        </div>
+                    </div>
+                    <hr>
+                    @endposition_title
+        			<div class="card mb-1">
                         <h5 class="card-header card-title text-center bg-primary text-white">My Accomplishments</h5>
                         <div class="card-body">
                             @if($approvedAccomplishments->count()>0)
@@ -31,8 +49,7 @@
                             @endif
                         </div>
         			</div>
-                    <br>
-                    <div class="card">
+                    <div class="card mb-1">
                         <h5 class="card-header card-title text-center bg-primary text-white">Pending Accomplishments</h5>
                         <div class="card-body">
                             @if($pendingAccomplishments->count()>0)
@@ -48,7 +65,6 @@
                             @endif
                         </div>
                     </div>
-                    <br>
                     <div class="card">
                         <h5 class="card-header card-title text-center bg-primary text-white">Disapproved Accomplishments</h5>
                         <div class="card-body">
@@ -65,7 +81,6 @@
                             @endif
                         </div>
                     </div>
-                    
         		</div>
         	</div>
         	<hr>

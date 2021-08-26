@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\StudentAccomplishment;
+use App\Models\Notification;
 
 class HomeController extends Controller
 {
@@ -28,13 +29,41 @@ class HomeController extends Controller
     {
         if (Auth::check() && $user_id = Auth::user()->user_id) 
         {
-            $accomplishments = StudentAccomplishment::where('user_id', $user_id)
-                ->pluck('status');
-            $approvedAccomplishmentCount = count($accomplishments->where('status', 1));
-            $pendingAccomplishmentCount = count($accomplishments->where('status', 0));
-            $disapprovedAccomplishmentCount = count($accomplishments->where('status', 2));
+            $userPositionTitles = Auth::user()->positionTitles;
+            // Array because of Laravel Collection, maybe revise this sometime?
+            $orgCurrentPositionArray = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
+            $orgCurrentPosition = $orgCurrentPositionArray[0];
+            $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
+            $notifications = Notification::where('user_id', $user_id)
+                ->whereRaw('created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY')
+                ->get();
+            if ($orgCurrentPosition == 'Member')
+            {
+                $accomplishments = StudentAccomplishment::where('user_id', $user_id)
+                    ->pluck('status') ?? false;
+                $accomplishments = ($accomplishments) ? array_count_values($accomplishments->toArray()) : NULL;
+                $approvedAccomplishmentCount = $accomplishments[1] ?? 0;
+                $pendingAccomplishmentCount = $accomplishments[0] ?? 0;
+                $disapprovedAccomplishmentCount = $accomplishments[2] ?? 0;
 
-            return view('home', compact('approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount'));
+                return view('home', compact('approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount', 'notifications'));
+
+            }
+
+            // Organization President
+            else if($orgCurrentPosition == 'President') {}
+
+            // Other Documentation Officers
+            else if(in_array($orgCurrentPosition, $document_officers))
+            {
+                $submissionCount = StudentAccomplishment::where('status', 0)
+                    ->where('organization_id', Auth::user()->course->organization_id)
+                    ->count();
+                return view('home', compact('submissionCount','notifications'));
+            }
+
+            else
+                abort(404);
         }
         else
             abort(404);

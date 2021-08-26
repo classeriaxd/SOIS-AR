@@ -16,41 +16,79 @@
                 </div>
             </div>
         @position_title('Officer')
-            <div class="pb-2">
-                <div class="card">
-                    <div class="card-header text-center align-middle">
-                        <div class="display-5">Welcome Officer</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <a href="/e/create">
-                                <button class="btn btn-primary mr-2">Add Event</button>
-                            </a>
-                            <a href="/e">
-                                <button class="btn btn-primary mr-2">View Events</button>
-                            </a>
-                            <a href="/e/reports">
-                                <button class="btn btn-primary">Year Summary</button>
-                            </a>
-                        </div>
+            <div class="card mb-2">
+                <div class="card-header text-center align-middle">
+                    <div class="display-5">Welcome Officer</div>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <a href="/e/create">
+                            <button class="btn btn-primary mr-2">Add Event</button>
+                        </a>
+                        <a href="/e">
+                            <button class="btn btn-primary mr-2">View Events</button>
+                        </a>
+                        <a href="/e/reports">
+                            <button class="btn btn-primary">Year Summary</button>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="pb-2">
-                <div class="card">
-                    <div class="card-header text-center align-middle">
-                        <div class="display-5">Organization Documents</div>
+
+            <div class="card mb-2">
+                <div class="card-header text-center align-middle">
+                    <div class="display-5">Organization Documents</div>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center mb-2">
+                        <a href="/o/documents/create">
+                            <button class="btn btn-primary mr-2 disabled">Add Organization Documents</button>
+                        </a>
+                        <a href="o/documents">
+                            <button class="btn btn-primary mr-2 disabled">View Organization Documents</button>
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <a href="/o/documents/create">
-                                <button class="btn btn-primary mr-2">Add Organization Documents</button>
-                            </a>
-                            <a href="o/documents">
-                                <button class="btn btn-primary mr-2">View Organization Documents</button>
-                            </a>
-                        </div>
+                    <div class="row justify-content-center">
+                        <a href="/s/accomplishments">
+                            <button class="btn btn-primary">Accomplishment Submissions<span class="badge badge-pill badge-light">{{$submissionCount ?? "0"}}</button>
+                        </a>
                     </div>
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-header card-title bg-primary text-center text-white font-weight-bold">Notifications <span class="badge badge-pill badge-light">{{$notifications->count() ?? 0}}</span></div>
+                <div class="card-body">
+                    @if($notifications->count() > 0)
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php $i = 1;@endphp
+                            @foreach($notifications as $notification)
+                            <tr>
+                                <td>{{$i}}</td>
+                                <td>{{$notification->title}}</td>
+                                <td>{{$notification->description}}</td>
+                                <td>
+                                    <a href="{{$notification->link}}">
+                                        <button class="btn btn-primary">Visit</button>
+                                    </a>
+                                </td>
+                            </tr>
+                            @php $i += 1;@endphp
+                            @endforeach
+                        </tbody>
+                    </table>
+                    @else
+                    <p class="text-center">No notification found.</p>
+                    @endif
                 </div>
             </div>
         @elseposition_title('Member')
@@ -62,12 +100,49 @@
                     <div class="card-body">
                         <div class="row justify-content-center">
                             <a href="/s/accomplishments">
-                                <button class="btn btn-primary">My Accomplishments <span class="badge badge-pill badge-success">{{$approvedAccomplishmentCount}}</span><span class="badge badge-pill badge-warning">{{$pendingAccomplishmentCount}}</span><span class="badge badge-pill badge-danger">{{$disapprovedAccomplishmentCount}}</span></button>
-                            </a>       
+                                <button class="btn btn-primary">My Accomplishments <span class="badge badge-pill badge-success">{{$approvedAccomplishmentCount ?? "0"}}</span> <span class="badge badge-pill badge-warning">{{$pendingAccomplishmentCount ?? "0"}}</span> <span class="badge badge-pill badge-danger">{{$disapprovedAccomplishmentCount ?? "0"}}</span></button>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+            <div>
+                <div class="card">
+                    <div class="card-header card-title bg-primary text-center text-white font-weight-bold">Notifications <span class="badge badge-pill badge-light">{{$notifications->count() ?? 0}}</span></div>
+                    <div class="card-body">
+                        @if($notifications->count() > 0)
+                        <table class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i = 1;@endphp
+                                @foreach($notifications as $notification)
+                                <tr>
+                                    <td>{{$i}}</td>
+                                    <td>{{$notification->title}}</td>
+                                    <td>{{$notification->description}}</td>
+                                    <td>
+                                        <a href="{{$notification->link}}">
+                                            <button class="btn btn-primary">Visit</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @php $i += 1;@endphp
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @else
+                        <p class="text-center">No notification found.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>  
         @endposition_title
         </div>
     </div>

@@ -32,29 +32,33 @@ class AppServiceProvider extends ServiceProvider
             $allowedOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation', 'President'];
             $isAuth = false;
             $positionExists = false;
-            if (Auth::check() && $position_title == 'Member')
+            if (Auth::check()) 
             {
-                $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
-                foreach($user_position_titles as $title)
+                if ($position_title == 'Member')
                 {
-                    if($position_title == $title)
+                    $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
+                    foreach($user_position_titles as $title)
                     {
-                        $positionExists = true;
+                        if($position_title == $title)
+                        {
+                            $positionExists = true;
+                        }
+                    }
+                }
+                else if ($position_title == 'Officer')
+                {
+                    $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
+                    foreach($user_position_titles as $title)
+                    {
+                        if(in_array($title, $allowedOfficers, true))
+                        {
+                            $positionExists = true;
+                        }
                     }
                 }
             }
-            else if (Auth::check() && $position_title == 'Officer')
-            {
-                $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
-                foreach($user_position_titles as $title)
-                {
-                    if(in_array($title, $allowedOfficers, true))
-                    {
-                        $positionExists = true;
-                    }
-                }
-            }
-            if ( Auth::check() && ($positionExists) )
+
+            if ( $positionExists )
                 $isAuth = true;
         return $isAuth;
         });

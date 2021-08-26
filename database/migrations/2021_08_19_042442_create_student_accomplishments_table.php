@@ -20,13 +20,17 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->string('accomplishment_uuid')->unique();
             $table->string('title');
             $table->text('description');
-            $table->unsignedTinyInteger('status');
-            $table->text('remarks');
+            $table->date('date_awarded');
+            // Status: 0 - PENDING | 1 - APPROVED | 2 - DISAPPROVED
+            $table->unsignedTinyInteger('status')->default(0);
+            $table->foreignId('reviewed_by')->nullable()->default(NULL);
+            $table->text('remarks')->nullable()->default(NULL);
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
+            $table->foreign('reviewed_by')->references('user_id')->on('users');
 
         });
     }
@@ -41,5 +45,6 @@ class CreateStudentAccomplishmentsTable extends Migration
         Schema::dropIfExists('student_accomplishments');
         $table->dropForeign('user_id');
         $table->dropForeign('organization_id');
+        $table->dropForeign('reviewed_by');
     }
 }

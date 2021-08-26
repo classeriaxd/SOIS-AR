@@ -12,6 +12,10 @@ class StudentAccomplishment extends Model
 
     public function accomplishmentFiles()
     {
-        return $this->hasMany(StudentAccomplishmentFile::class, 'student_accomplishments_id');
+        return $this->hasMany(StudentAccomplishmentFile::class, 'student_accomplishment_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

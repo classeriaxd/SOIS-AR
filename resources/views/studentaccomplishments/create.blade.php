@@ -34,6 +34,15 @@
                     @enderror
                 </div>
                 <div class="form-group row">
+                    <label for="date_awarded" class="col-md-4 col-form-label">Date Awarded</label>    
+                    <input type="date" class="form-control" name="date_awarded" min="1992-01-01" max="{{date('Y-m-d')}}">
+                    @error('date_awarded')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group row">
                     <label for="evidences" class="col-md-4 col-form-label">Evidences</label>
                 </div>
                 <input type="file" 
@@ -47,6 +56,20 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+                <div class="form-group row">
+                    <label for="caption1" class="col-md-4 col-form-label">Caption</label>
+                    <input id="caption1" 
+                    type="text" 
+                    class="form-control @error('caption1') is-invalid @enderror" 
+                    name="caption1" 
+                    value="{{ old('caption1') }}" 
+                    required>
+                    @error('caption1')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
                 <input type="file" 
                         class="filepond @error('evidence2') is-invalid @enderror"
                         name="evidence2" 
@@ -57,6 +80,20 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+                <div class="form-group row">
+                    <label for="caption2" class="col-md-4 col-form-label">Caption</label>
+                    <input id="caption2" 
+                    type="text" 
+                    class="form-control @error('caption2') is-invalid @enderror" 
+                    name="caption2" 
+                    value="{{ old('caption2') }}" 
+                    required>
+                    @error('caption2')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
                 <input type="file" 
                         class="filepond @error('evidence3') is-invalid @enderror"
                         name="evidence3" 
@@ -67,6 +104,20 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+                <div class="form-group row">
+                    <label for="caption3" class="col-md-4 col-form-label">Caption</label>
+                    <input id="caption3" 
+                    type="text" 
+                    class="form-control @error('caption3') is-invalid @enderror" 
+                    name="caption3" 
+                    value="{{ old('caption3') }}" 
+                    required>
+                    @error('caption3')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
                 <div class="text-center">
                     <small>Images are only allowed. Max size is 3MB. Up to 3 Files can be uploaded.</small>
                 </div> 

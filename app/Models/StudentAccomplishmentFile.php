@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+ 
 class StudentAccomplishmentFile extends Model
 {
+    use SoftDeletes;
 
     protected $table = 'student_accomplishment_files';
     protected $primaryKey = 'student_accomplishment_file_id';

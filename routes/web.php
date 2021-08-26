@@ -54,9 +54,15 @@ Route::get('/o/documents/create', [App\Http\Controllers\DocumentManagementContro
 Route::post('/o/documents', [App\Http\Controllers\DocumentManagementController::class, 'store'])->middleware('auth');
 
 Route::delete('/s/accomplishments/upload/revert', [App\Http\Controllers\StudentAccomplishmentsController::class, 'undoUpload'])->middleware('auth');
+Route::get('/s/accomplishment/{accomplishment_uuid}/final', [App\Http\Controllers\StudentAccomplishmentsController::class, 'finalReview'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.finalReview');
+Route::post('/s/accomplishment/{accomplishment_uuid}/final', [App\Http\Controllers\StudentAccomplishmentsController::class, 'approveSubmission'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.approveSubmission');
+Route::get('/s/accomplishment/{accomplishment_uuid}/review', [App\Http\Controllers\StudentAccomplishmentsController::class, 'initialReview'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.review');
+
+Route::post('/s/accomplishment/{accomplishment_uuid}', [App\Http\Controllers\StudentAccomplishmentsController::class, 'getSubmissionDecision'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.submissionDecision');
+
 Route::get('/s/accomplishment/{accomplishment_uuid}', [App\Http\Controllers\StudentAccomplishmentsController::class, 'show'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.show');
 Route::get('/s/accomplishments/create', [App\Http\Controllers\StudentAccomplishmentsController::class, 'create'])->middleware('auth');
 Route::post('/s/accomplishments/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload'])->middleware('auth');
-Route::get('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->middleware('auth');
+Route::get('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->middleware('auth')->name('student_accomplishment.index');
 Route::post('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store'])->middleware('auth');
 

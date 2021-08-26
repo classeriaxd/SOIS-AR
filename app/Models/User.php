@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(PositionTitle::class, 'users_position_titles');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 }
