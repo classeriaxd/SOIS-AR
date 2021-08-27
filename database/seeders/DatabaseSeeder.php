@@ -22,8 +22,9 @@ class DatabaseSeeder extends Seeder
             PositionTitleSeeder::class,
             UserPositionSeeder::class,
             OrganizationDocumentTypeSeeder::class,
-            
             OrganizationAssetSeeder::class,
+            EventCategorySeeder::class,
+            EventRoleSeeder::class,
             //EventSeeder::class,
         ]);
     }

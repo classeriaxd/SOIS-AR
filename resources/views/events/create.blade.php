@@ -6,14 +6,15 @@
         @csrf
         <div class="row">
             <div class="col-8 offset-2">
-                <h2 class="text-center">Add New Event</h2>
+                <h2 class="text-center">New Event Report</h2>
                 <div class="form-group row">
                     <label for="title" class="col-md-4 col-form-label">Title</label>
                     <input id="title" 
                     type="text" 
                     class="form-control @error('title') is-invalid @enderror" 
-                    name="title" 
-                    value="{{ old('title') }}" autocomplete="title" autofocus>
+                    name="title"
+                    placeholder="Event Title" 
+                    value="{{ old('title') }}" autofocus required>
                     @error('title')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -22,9 +23,11 @@
                 </div>
                 <div class="form-group row">
                     <label for="description" class="col-md-4 col-form-label">Description</label>    
-                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" 
-                    name="description" 
-                    autocomplete="description">{{ old('description') }}</textarea>
+                    <textarea id="description" 
+                    class="form-control @error('description') is-invalid @enderror" 
+                    name="description"
+                    placeholder="Description" 
+                    required>{{ old('description')}}</textarea>
                     @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -33,60 +36,85 @@
                 </div>
                 <div class="form-group row">
                     <label for="objective" class="col-md-4 col-form-label">Objective</label>
-                    <textarea id="objective" class="form-control @error('objective') is-invalid @enderror" name="objective"autocomplete="objective">{{ old('objective') }}</textarea>
+                    <textarea id="objective" 
+                    class="form-control @error('objective') is-invalid @enderror" name="objective" 
+                    placeholder="Objective" 
+                    required>{{ old('objective') }}</textarea>
                     @error('objective')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
-                {{-- TODO: Add option for multiple dates --}}
                 <div class="form-group row">
-                    <label for="date" class="col-md-4 col-form-label">Event Date</label>
-                    <input id="date" 
-                    type="date" 
-                    class="form-control @error('date') is-invalid @enderror" 
-                    name="date" 
-                    value="{{ old('date') }}" autocomplete="date">
-                    @error('date')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    <div class="col">
+                        <label for="start_date" class="col-md-4 form-label">Start Date</label>
+                        <input id="start_date" 
+                        type="date" 
+                        class="form-control @error('start_date') is-invalid @enderror" 
+                        name="start_date" 
+                        value="{{ old('start_date') }}" 
+                        min="1992-01-01" 
+                        max="{{date('Y-m-d')}}"
+                        required>
+                        @error('start_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col">
+                        <label for="end_date" class="col-md-4 form-label">End Date</label>
+                        <input id="end_date" 
+                        type="date" 
+                        class="form-control @error('end_date') is-invalid @enderror" 
+                        name="end_date" 
+                        value="{{ old('end_date') }}"
+                        min="1992-01-01" 
+                        max="{{date('Y-m-d')}}">
+                        @error('end_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>  
                 </div>
-                <div class="form-group row">
-                    <label for="start_time" class="col-md-4 col-form-label">Start Time</label>
-                    <input id="start_time" 
-                    type="time" 
-                    class="form-control @error('start_time') is-invalid @enderror" 
-                    name="start_time" 
-                    value="{{ old('start_time') }}" autocomplete="start_time">
-                    @error('start_time')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group row">
-                    <label for="end_time" class="col-md-4 col-form-label">End Time</label>
-                    <input id="end_time" 
-                    type="time" 
-                    class="form-control @error('end_time') is-invalid @enderror" 
-                    name="end_time" 
-                    value="{{ old('end_time') }}" autocomplete="end_time">
-                    @error('end_time')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="start_time" class="col-md-4 col-form-label">Start Time</label>
+                        <input id="start_time" 
+                        type="time" 
+                        class="form-control @error('start_time') is-invalid @enderror" 
+                        name="start_time" 
+                        value="{{ old('start_time') }}">
+                        @error('start_time')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col form-group">
+                        <label for="end_time" class="col-md-4 col-form-label">End Time</label>
+                        <input id="end_time" 
+                        type="time" 
+                        class="form-control @error('end_time') is-invalid @enderror" 
+                        name="end_time" 
+                        value="{{ old('end_time') }}">
+                        @error('end_time')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                 </div>
                 <div class="form-group row">
                     <label for="venue" class="col-md-4 col-form-label">Venue</label>
                     <input id="venue" 
                     type="text" 
                     class="form-control @error('venue') is-invalid @enderror" 
-                    name="venue" 
-                    value="{{ old('venue') }}" autocomplete="venue">
+                    name="venue"
+                    placeholder="Venue ex. (Zoom or Facebook Live)"  
+                    value="{{ old('venue') }}">
                     @error('venue')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -99,7 +127,8 @@
                     type="text" 
                     class="form-control @error('activity_type') is-invalid @enderror" 
                     name="activity_type" 
-                    value="{{ old('activity_type') }}" autocomplete="activity_type">
+                    placeholder="Type of Activity ex. (Student Development-Intellectual)" 
+                    value="{{ old('activity_type') }}">
                     @error('activity_type')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -112,7 +141,8 @@
                     type="text" 
                     class="form-control @error('beneficiaries') is-invalid @enderror" 
                     name="beneficiaries" 
-                    value="{{ old('beneficiaries') }}" autocomplete="beneficiaries">
+                    placeholder="Beneficiaries ex. (Students of PUP-Taguig Branch)" 
+                    value="{{ old('beneficiaries') }}">
                     @error('beneficiaries')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -125,7 +155,8 @@
                     type="text" 
                     class="form-control @error('sponsors') is-invalid @enderror" 
                     name="sponsors" 
-                    value="{{ old('sponsors') }}" autocomplete="sponsors">
+                    placeholder="Sponsors" 
+                    value="{{ old('sponsors') }}">
                     @error('sponsors')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -138,13 +169,56 @@
                     type="text" 
                     class="form-control @error('budget') is-invalid @enderror" 
                     name="budget" 
-                    value="{{ old('budget') }}" autocomplete="budget">
+                    placeholder="Budget" 
+                    value="{{ old('budget') }}">
                     @error('budget')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
+                <hr>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="radioEventRoleGroup" class="form-label">What was the Organization's Role in this Event?</label></div>
+                    <div class="col" id="radioEventRoleGroup">
+                        @foreach($event_roles as $role)
+                        <div class="form-check">
+                            <input type="radio" id="{{$role->event_role}}" name="event_role" class="form-check-input" value="{{$role->event_role_id}}">
+                            <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @error('event_role')
+                <div class="row">
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                </div>
+                @enderror
+                <hr>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="radioEventCategoryGroup" class="form-label">Event Category</label>
+                    </div>
+                    <div class="col" id="radioEventCategoryGroup">
+                        @foreach($event_categories as $category)
+                        <div class="form-check">
+                            <input type="radio" id="{{$category->category}}" name="event_category" class="form-check-input" value="{{$category->event_category_id}}">
+                            <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @error('event_category')
+                <div class="row">
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                </div>
+                @enderror
+                <hr>
                 <div class="row pt-4">
                     <button class="btn btn-primary">Add Event</button>
                 </div>
