@@ -5,6 +5,7 @@
 	<div class="row justify-content-center">
         <div class="col-md-10">
     		<h2 class="display-2 text-center">{{ $event->title }}</h2>
+            <h4 class="text-center"><span class="badge badge-{{$event->category_color}}">{{$event->event_category}}</span>  <span class="badge badge-{{$event->role_color}}">{{$event->event_role}}</span></h4>
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-5">
         			<div class="card">
@@ -14,8 +15,17 @@
         				<div class="card-body">
         					<h3 class="card-title">Title: {{ $event->title }}</h3>
         					<p class="card-text">
-        						Date: {{ strftime("%B %e, %Y",strtotime($event->date))." — ".strftime("%I:%M %p",strtotime($event->start_time))."-".strftime("%I:%M %p",strtotime($event->end_time))}}
+        						Date: 
+                                @if($event->start_date == $event->end_date){{date_format(date_create($event->start_date), 'F d, Y')}}
+                                @else{{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
+                                @endif
         					</p>
+                            <p class="card-text">
+                                Time:
+                                @if($event->start_time == $event->end_time){{date_format(date_create($event->start_time), 'h:i A')}}
+                                @else{{date_format(date_create($event->start_time), 'h:i A') . ' - ' . date_format(date_create($event->end_time), 'h:i A')}}
+                                @endif
+                            </p>
         					<p class="card-text">
         						Venue: {{ $event->venue }}
         					</p>
@@ -49,20 +59,30 @@
         				<div class="card-body">
                             <h3 class="card-title text-center">Posters</h3>
                             <div class="row flex-row flex-nowrap pb-2 pl-1" style="overflow-x:auto;">
+@if($eventImages->where('image_type', 0)->count() > 0)
+
 @foreach($eventImages as $eventImage)
     @if($eventImage->image_type == 0)
                                 <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
     @endif
 @endforeach
+@else
+                                <p class="text-center">No Image found. :(</p>
+@endif
                             </div>
                             <hr>
                             <h3 class="card-title text-center">Evidences</h3>
                             <div class="row flex-row flex-nowrap pb-2 pl-1" style="overflow-x:auto;">
+@if($eventImages->where('image_type', 1)->count() > 0)
+
 @foreach($eventImages as $eventImage)
     @if($eventImage->image_type == 1)
                                 <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
     @endif
-@endforeach        
+@endforeach
+@else
+                                <p class="text-center">No Image found. :(</p>
+@endif        
                             </div>                  
                         </div>
         				<div class="card-header text-center align-middle">

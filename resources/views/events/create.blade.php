@@ -79,7 +79,7 @@
                         @enderror
                     </div>  
                 </div>
-                <div class="row">
+                <div class="form-group row">
                     <div class="col form-group">
                         <label for="start_time" class="col-md-4 col-form-label">Start Time</label>
                         <input id="start_time" 

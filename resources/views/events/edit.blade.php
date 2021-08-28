@@ -7,7 +7,7 @@
 	    @method('PATCH')
 	    <div class="row">
 	        <div class="col-8 offset-2">
-	            <h2 class="display-3 text-center">Event</h2>
+	            <h2 class="display-3 text-center">Edit Event</h2>
 	            <div class="form-group row">
 	                <label for="title" class="col-md-4 col-form-label">Title</label>
 	                <input id="title" 
@@ -40,45 +40,66 @@
 	            	    </span>
 	            	@enderror
 	            </div>
-	            {{-- TODO: Add option for multiple dates --}}
 	            <div class="form-group row">
-	                <label for="date" class="col-md-4 col-form-label">Event Date</label>
-	                <input id="date" 
-	                type="date" 
-	                class="form-control @error('date') is-invalid @enderror" 
-	                name="date" 
-	                value="{{ old('date') ?? $event->date }}" autocomplete="date">
-	                @error('date')
-	                    <span class="invalid-feedback" role="alert">
-	                        <strong>{{ $message }}</strong>
-	                    </span>
-	                @enderror
+	                <div class="col">
+	                    <label for="start_date" class="col-md-4 form-label">Start Date</label>
+	                    <input id="start_date" 
+	                    type="date" 
+	                    class="form-control @error('start_date') is-invalid @enderror" 
+	                    name="start_date" 
+	                    value="{{ old('start_date') ?? $event->start_date }}" 
+	                    min="1992-01-01" 
+	                    max="{{date('Y-m-d')}}"
+	                    required>
+	                    @error('start_date')
+	                        <span class="invalid-feedback" role="alert">
+	                            <strong>{{ $message }}</strong>
+	                        </span>
+	                    @enderror
+	                </div>
+	                <div class="col">
+	                    <label for="end_date" class="col-md-4 form-label">End Date</label>
+	                    <input id="end_date" 
+	                    type="date" 
+	                    class="form-control @error('end_date') is-invalid @enderror" 
+	                    name="end_date" 
+	                    value="{{ old('end_date') ?? $event->end_date }}"
+	                    min="1992-01-01" 
+	                    max="{{date('Y-m-d')}}">
+	                    @error('end_date')
+	                        <span class="invalid-feedback" role="alert">
+	                            <strong>{{ $message }}</strong>
+	                        </span>
+	                    @enderror
+	                </div>  
 	            </div>
 	            <div class="form-group row">
-	                <label for="start_time" class="col-md-4 col-form-label">Start Time</label>
-	                <input id="start_time" 
-	                type="time" 
-	                class="form-control @error('start_time') is-invalid @enderror" 
-	                name="start_time" 
-	                value="{{ date("H:i",strtotime($event->start_time)) }}">
-	                @error('start_time')
-	                    <span class="invalid-feedback" role="alert">
-	                        <strong>{{ $message }}</strong>
-	                    </span>
-	                @enderror
-	            </div>
-	            <div class="form-group row">
-	                <label for="end_time" class="col-md-4 col-form-label">End Time</label>
-	                <input id="end_time" 
-	                type="time" 
-	                class="form-control @error('end_time') is-invalid @enderror" 
-	                name="end_time" 
-	                value="{{ date("H:i",strtotime($event->end_time)) }}" >
-	                @error('end_time')
-	                    <span class="invalid-feedback" role="alert">
-	                        <strong>{{ $message }}</strong>
-	                    </span>
-	                @enderror
+	                <div class="col form-group">
+	                    <label for="start_time" class="col-md-4 col-form-label">Start Time</label>
+	                    <input id="start_time" 
+	                    type="time" 
+	                    class="form-control @error('start_time') is-invalid @enderror" 
+	                    name="start_time" 
+	                    value="{{ date("H:i",strtotime($event->start_time)) }}">
+	                    @error('start_time')
+	                        <span class="invalid-feedback" role="alert">
+	                            <strong>{{ $message }}</strong>
+	                        </span>
+	                    @enderror
+	                </div>
+	                <div class="col form-group">
+	                    <label for="end_time" class="col-md-4 col-form-label">End Time</label>
+	                    <input id="end_time" 
+	                    type="time" 
+	                    class="form-control @error('end_time') is-invalid @enderror" 
+	                    name="end_time" 
+	                    value="{{ date("H:i",strtotime($event->end_time)) }}">
+	                    @error('end_time')
+	                        <span class="invalid-feedback" role="alert">
+	                            <strong>{{ $message }}</strong>
+	                        </span>
+	                    @enderror
+	                </div>
 	            </div>
 	            <div class="form-group row">
 	                <label for="venue" class="col-md-4 col-form-label">Venue</label>
@@ -145,6 +166,49 @@
 	                    </span>
 	                @enderror
 	            </div>
+	            <hr>
+	            <div class="form-group row">
+	                <div class="col">
+	                    <label for="radioEventRoleGroup" class="form-label">What was the Organization's Role in this Event?</label></div>
+	                <div class="col" id="radioEventRoleGroup">
+	                    @foreach($event_roles as $role)
+	                    <div class="form-check">
+	                        <input type="radio" id="{{$role->event_role}}" name="event_role" class="form-check-input" value="{{$role->event_role_id}}" @if($event->event_role_id  == $role->event_role_id) checked @endif>
+	                        <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+	                    </div>
+	                    @endforeach
+	                </div>
+	            </div>
+	            @error('event_role')
+	            <div class="row">
+	                <span class="invalid-feedback" role="alert">
+	                    <strong>{{ $message }}</strong>
+	                </span>
+	            </div>
+	            @enderror
+	            <hr>
+	            <div class="form-group row">
+	                <div class="col">
+	                    <label for="radioEventCategoryGroup" class="form-label">Event Category</label>
+	                </div>
+	                <div class="col" id="radioEventCategoryGroup">
+	                    @foreach($event_categories as $category)
+	                    <div class="form-check">
+	                        <input type="radio" id="{{$category->category}}" name="event_category" class="form-check-input" value="{{$category->event_category_id}}" 
+	                        @if($event->event_category_id  == $category->event_category_id) checked @endif>
+	                        <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+	                    </div>
+	                    @endforeach
+	                </div>
+	            </div>
+	            @error('event_category')
+	            <div class="form-group row">
+	                <span class="invalid-feedback" role="alert">
+	                    <strong>{{ $message }}</strong>
+	                </span>
+	            </div>
+	            @enderror
+	            <hr>
 	            <div class="row pt-4">
 	                <button class="btn btn-primary">Finalize Edit</button>
 	            </div>
