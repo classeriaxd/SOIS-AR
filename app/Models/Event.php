@@ -32,4 +32,9 @@ class Event extends Model
     {
         return $this->belongsTo(EventCategory::class, 'event_category_id');
     }
+
+    public function documents()
+    {
+        return $this->hasMany(EventDocument::class, 'event_id');
+    }
 }
