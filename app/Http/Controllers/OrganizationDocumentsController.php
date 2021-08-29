@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 
-class DocumentManagementController extends Controller
+class OrganizationDocumentController extends Controller
 {
     public function create()
     {

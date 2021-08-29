@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use \App\Models\User;
-use \App\Models\Event;
-use \App\Models\EventImage;
-use \App\Models\EventCategory;
-use \App\Models\EventRole;
+use App\Models\User;
+use App\Models\Event;
+use App\Models\EventImage;
+use App\Models\EventCategory;
+use App\Models\EventRole;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
