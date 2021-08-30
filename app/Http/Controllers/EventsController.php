@@ -11,6 +11,7 @@ use App\Models\EventRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use Intervention\Image\Facades\Image;
 
@@ -65,7 +66,14 @@ class EventsController extends Controller
                 $event->role_color = 'secondary';
 
             $eventImages = EventImage::where('event_id', $event->event_id)->get();
-            return view('events.show',compact('event', 'eventImages'));
+            $eventDocuments = DB::table('event_documents as documents')
+            ->join('event_document_types as types','documents.event_document_type_id','=','types.event_document_type_id')
+            ->where('documents.event_id', $event->event_id)
+            ->whereNull('deleted_at')
+            ->orderBy('documents.event_document_type_id', 'ASC')
+            ->select('types.document_type as document_type', 'documents.title as title')
+            ->get();
+            return view('events.show',compact('event', 'eventImages', 'eventDocuments'));
         }
         else
             abort(404);

@@ -17,9 +17,9 @@ class CreateEventDocumentsTable extends Migration
             $table->id('event_document_id');
             $table->foreignId('event_id');
             $table->foreignId('event_document_type_id');
-            $table->string('file');
             $table->string('title');
             $table->text('description');
+            $table->string('file');
             $table->softDeletes();
             $table->timestamps();
         });

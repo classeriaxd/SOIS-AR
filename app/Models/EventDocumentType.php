@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EventDocumentType extends Model
 {
     protected $primaryKey = 'event_document_type_id';
-    protected $table = 'event_roles';
+    protected $table = 'event_document_types';
 
     public function document()
     {

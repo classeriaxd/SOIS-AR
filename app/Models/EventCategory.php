@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EventCategory extends Model
 {
+    protected $guarded = [];
     protected $primaryKey = 'event_category_id';
     protected $table = 'event_categories';
 

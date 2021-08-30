@@ -14,7 +14,7 @@ class CreateEventDocumentTypesTable extends Migration
     public function up()
     {
         Schema::create('event_document_types', function (Blueprint $table) {
-            $table->id();
+            $table->id('event_document_type_id');
             $table->string('document_type');
         });
     }
