@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Event;
 use App\Models\EventDocument;
 use App\Models\EventDocumentType;
 use App\Models\TemporaryFile;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -109,7 +109,7 @@ class EventDocumentsController extends Controller
         {
             $filePath = storage_path('/app/public/'. $document->file);
             $headers = ['Content-Type: application/pdf'];
-            $fileName = Str::slug($document->title, '-') .'-' . Str::slug($document->type, '-') .'.pdf';
+            $fileName = Str::limit(Str::slug($document->title, '-'), 20, '-') .'-' . Str::slug($document->type, '-') .'.pdf';
             return response()->download($filePath, $fileName, $headers);
         }
         else
@@ -131,18 +131,17 @@ class EventDocumentsController extends Controller
                 $merger = new Merger;
                 $merger->addIterator($documentArray);
                 $mergedPDF = $merger->merge();
-                $fileName = Str::slug($event->title, '-') . '-compiled-supporting-documents-' . date('F-d-Y');
-                file_put_contents(storage_path('/app/public/compiledDocuments/' . $fileName . '.pdf'), $mergedPDF);
-                // $filePath = storage_path('/app/public/'. $document->file);
-                // $headers = ['Content-Type: application/pdf'];
-                // $fileName = Str::slug($document->title, '-') .'-' . Str::slug($document->type, '-') .'.pdf';
-                // return response()->download($filePath, $fileName, $headers);
+                $fileName = Str::limit(Str::slug($event->title, '-'), 20, '-') . '-docu-compiled-' . date('MdY') . '.pdf';
+                $filePath = storage_path('/app/public/compiledDocuments/' . $fileName);
+                file_put_contents($filePath, $mergedPDF);
+
+                // Send Download Response
+                $headers = ['Content-Type: application/pdf'];
+                return response()->download($filePath, $fileName, $headers)->deleteFileAfterSend(true);
             }
             else
-            {
-                // return no documents
-                abort(404);
-            }
+                return redirect()->action(
+                    [EventsController::class, 'show'], ['event_slug' => $event->slug]);
         }
         else
             abort(404);
