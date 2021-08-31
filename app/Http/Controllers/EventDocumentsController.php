@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+use iio\libmergepdf\Merger;
+
 class EventDocumentsController extends Controller
 {
     public function create($event_slug)
@@ -83,7 +85,6 @@ class EventDocumentsController extends Controller
             if($document = EventDocument::where('event_document_id', $document_id)
                 ->where('event_id', $event->event_id)->first())
             {
-                dd($document);
                 $document->delete();
             }
             else
@@ -102,6 +103,7 @@ class EventDocumentsController extends Controller
             ->join('event_document_types as types', 'documents.event_document_type_id', '=', 'types.event_document_type_id')
             ->where('events.slug', $event_slug)
             ->where('documents.event_document_id', $document_id)
+            ->whereNull('documents.deleted_at')
             ->select('documents.file as file', 'events.title as title', 'types.document_type as type')
             ->first())
         {
@@ -109,6 +111,38 @@ class EventDocumentsController extends Controller
             $headers = ['Content-Type: application/pdf'];
             $fileName = Str::slug($document->title, '-') .'-' . Str::slug($document->type, '-') .'.pdf';
             return response()->download($filePath, $fileName, $headers);
+        }
+        else
+            abort(404);
+    }
+    public function downloadAllDocument($event_slug)
+    {
+        if ($event = Event::where('slug', $event_slug)->first())
+        {
+            if ($event->documents->count() > 0)
+            {
+                $documents = $event->documents;
+                $documentArray = array();
+                foreach($documents as $document)
+                {
+                    $filePath = storage_path('/app/public/'. $document->file);
+                    array_push($documentArray, $filePath);
+                }
+                $merger = new Merger;
+                $merger->addIterator($documentArray);
+                $mergedPDF = $merger->merge();
+                $fileName = Str::slug($event->title, '-') . '-compiled-supporting-documents-' . date('F-d-Y');
+                file_put_contents(storage_path('/app/public/compiledDocuments/' . $fileName . '.pdf'), $mergedPDF);
+                // $filePath = storage_path('/app/public/'. $document->file);
+                // $headers = ['Content-Type: application/pdf'];
+                // $fileName = Str::slug($document->title, '-') .'-' . Str::slug($document->type, '-') .'.pdf';
+                // return response()->download($filePath, $fileName, $headers);
+            }
+            else
+            {
+                // return no documents
+                abort(404);
+            }
         }
         else
             abort(404);

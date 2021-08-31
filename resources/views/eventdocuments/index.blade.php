@@ -6,12 +6,17 @@
         <div class="col-md-10">
     		<h2 class="display-2 text-center">{{ $event->title }}</h2>
             <h4 class="display-5 text-center">Supporting Documents</h4>
+            <div class="row justify-content-center mb-1">
+                <form action="{{route('event_documents.downloadAll',['event_slug' => $event->slug])}}" enctype="multipart/form-data">
+                    <button type="submit" class="btn btn-primary">Download All</button>
+                </form>
+            </div>
             @foreach($eventDocuments as $document)
             <hr>
             <h4 class="display-4 text-center">{{ $document->document_type }}</h4>
         	<div class="row justify-content-center mb-1">
                 <div class="col-md-11">
-                    <iframe src="/storage{{$document->file}}#toolbar=0" width="100%" style="height:25vh;">
+                    <iframe src="/storage{{$document->file}}#toolbar=0" width="100%" style="height:50vh;">
                     </iframe>
                 </div>
                 <div class="col-md-1">

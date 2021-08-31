@@ -19,4 +19,9 @@ class Organization extends Model
     {
         return $this->hasMany(Courses::class, 'organization_id');
     }
+
+    public function compiledDocuments()
+    {
+        return $this->hasMany(CompiledDocuments::class, 'organization_id');
+    }
 }

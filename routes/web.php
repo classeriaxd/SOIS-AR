@@ -40,6 +40,7 @@ Route::post('/e', [App\Http\Controllers\EventsController::class, 'store'])->midd
 // EVENT DOCUMENTS
 Route::delete('/e/{event_slug}/document/{document_id}', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'document_id' => '^[0-9]*$'])->middleware('auth')->name('event_documents.destroy');
 Route::get('/e/{event_slug}/document/{document_id}/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadDocument'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'document_id' => '^[0-9]*$'])->middleware('auth')->name('event_documents.download');
+Route::get('/e/{event_slug}/documents/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadAllDocument'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.downloadAll');
 Route::get('/e/{event_slug}/documents', [App\Http\Controllers\EventDocumentsController::class, 'index'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.index');
 Route::post('/e/{event_slug}/documents', [App\Http\Controllers\EventDocumentsController::class, 'store'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.store');
 Route::get('/e/{event_slug}/documents/create', [App\Http\Controllers\EventDocumentsController::class, 'create'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.create');
