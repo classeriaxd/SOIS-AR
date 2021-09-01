@@ -25,7 +25,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // EVENT DOCUMENT UPLOADS
 Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->middleware('auth');
 Route::post('/e/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->middleware('auth');
-// EVENT ROUTES
+// EVENT REPORTS
 Route::get('/e/reports', [App\Http\Controllers\EventReportsController::class, 'index'])->middleware('auth');
 Route::post('/e/reports', [App\Http\Controllers\EventReportsController::class, 'show'])->middleware('auth');
 Route::get('/e/reports/print', [App\Http\Controllers\EventReportsController::class, 'pdf'])->middleware('auth');

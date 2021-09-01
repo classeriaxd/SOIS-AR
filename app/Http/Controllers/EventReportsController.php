@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\EventImage;
 use App\Models\Organization;
 use App\Models\OrganizationAsset;
+use App\Models\SchoolYear;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,30 +21,17 @@ class EventReportsController extends Controller
 {
     public function index()
     {
-    	return view('eventreports.index');
+        $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')->get();
+    	return view('eventreports.index' compact('schoolYears'));
     }
 
     public function show()
     {
-    	if(request('first'))
+
+    	if(request('first_semester'))
     	{
     		$start_date = date('Y').'-01-01';
     		$end_date = date('Y').'-03-31';
-    	}
-    	else if(request('second'))
-    	{
-    		$start_date = date('Y').'-04-01';
-    		$end_date = date('Y').'-06-30';
-    	}
-    	else if(request('third'))
-    	{
-    		$start_date = date('Y').'-07-01';
-    		$end_date = date('Y').'-09-30';
-    	}
-    	else if(request('fourth'))
-    	{
-    		$start_date = date('Y').'-10-01';
-    		$end_date = date('Y').'-12-31';
     	}
         else if(request('custom'))
         {

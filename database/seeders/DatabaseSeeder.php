@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             OrganizationSeeder::class,
-            
             CourseSeeder::class,
             UserSeeder::class,
             PositionTitleSeeder::class,
@@ -27,6 +26,7 @@ class DatabaseSeeder extends Seeder
             EventRoleSeeder::class,
             EventDocumentTypeSeeder::class,
             //EventSeeder::class,
+            SchoolYearSeeder::class,
         ]);
     }
 }
