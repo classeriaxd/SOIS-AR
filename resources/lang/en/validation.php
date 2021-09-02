@@ -150,6 +150,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'custom_start_date' => 'Start Date',
+        'custom_end_date' => 'End Date',
+    ],
 
 ];
