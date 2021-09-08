@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+// halep me organize this shit ples
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
@@ -26,8 +26,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->middleware('auth');
 Route::post('/e/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->middleware('auth');
 // EVENT REPORTS
+Route::post('e/reports/create/finalize', [App\Http\Controllers\EventReportsController::class, 'finalizeReport'])->middleware('auth')->name('eventreports.finalizeReport');
+Route::post('/e/reports/create/checklist', [App\Http\Controllers\EventReportsController::class, 'showChecklist'])->middleware('auth')->name('eventreports.showChecklist');
 Route::get('/e/reports', [App\Http\Controllers\EventReportsController::class, 'index'])->middleware('auth');
-Route::post('/e/reports', [App\Http\Controllers\EventReportsController::class, 'show'])->middleware('auth');
 Route::get('/e/reports/print', [App\Http\Controllers\EventReportsController::class, 'pdf'])->middleware('auth');
 Route::get('/e/create', [App\Http\Controllers\EventsController::class, 'create'])->middleware('auth');
 Route::get('/e/{event_slug}/edit', [App\Http\Controllers\EventsController::class, 'edit'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth');

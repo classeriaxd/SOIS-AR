@@ -10,7 +10,7 @@
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">
                 	<h4 class="card-header card-text text-center bg-primary text-white">Semestral</h4>
-                	<form action="/e/reports" enctype="multipart/form-data" method="POST" id="semestralReportForm">
+                	<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
 		            	<div class="card-body">
 		            		<div class="row text-center">
 		            			<div class="col"><h3 class="text-center">School Year</h3></div>
