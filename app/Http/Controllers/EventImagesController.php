@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use \App\Models\User;
-use \App\Models\Event;
-use \App\Models\EventImage;
+use App\Models\User;
+use App\Models\Event;
+use App\Models\EventImage;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Str;

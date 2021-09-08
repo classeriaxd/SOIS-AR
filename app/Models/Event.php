@@ -22,4 +22,19 @@ class Event extends Model
     {
         return $this->belongsTo(Organization::class, 'organization_id');
     }
+
+    public function eventRole()
+    {
+        return $this->belongsTo(EventRole::class, 'event_role_id');
+    }
+
+    public function eventCategory()
+    {
+        return $this->belongsTo(EventCategory::class, 'event_category_id');
+    }
+
+    public function eventDocuments()
+    {
+        return $this->hasMany(EventDocument::class, 'event_id');
+    }
 }

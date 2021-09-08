@@ -31,7 +31,7 @@
                                             {{$event->title}}
                                         </td>
                                         <td>
-                                            {{date_format(date_create($event->date), 'F d, Y')
+                                            {{date_format(date_create($event->start_date), 'F d, Y')
                                             }}
                                         </td>
                                         <td class="text-right">

@@ -14,13 +14,13 @@ class CreateOrganizationDocumentTypesTable extends Migration
     public function up()
     {
         Schema::create('organization_document_types', function (Blueprint $table) {
-            $table->id('orgdoctype_id');
-            $table->foreignId('org_id');
-            $table->string('doctype');
+            $table->id('organization_document_type_id');
+            $table->foreignId('organization_id');
+            $table->string('type');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('org_id')->references('organization_id')->on('organizations');
+            $table->foreign('organization_id')->references('organization_id')->on('organizations');
         });
     }
 
@@ -32,5 +32,6 @@ class CreateOrganizationDocumentTypesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('organization_document_types');
+        $table->dropForeign('organization_id');
     }
 }
