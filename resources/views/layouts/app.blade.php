@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('fontawesome-free-5.15.4/js/all.min.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -38,7 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -66,10 +66,17 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @if($notifications->count() > 0)
                                     @foreach($notifications as $notification)
-                                    <a class="dropdown-item" href="{{$notification->link}}">
-                                        <h4>{{$notification->title}}</h4>
-                                        <p>{{$notification->description}}</p>
-                                    </a>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <a class="dropdown-item" href="{{$notification->link}}" >
+                                                <h4>{{$notification->title}}</h4>
+                                                <p>{{$notification->description}}</p>
+                                            </a>
+                                        </div>
+                                        <div class="col-2">
+                                            <read-notification v-bind:notification_id="{{$notification->notification_id}}"></read-notification>
+                                        </div>
+                                    </div>
                                     @endforeach
                                     @else
                                     <p class="dropdown-item">No Notifications found!</p>
