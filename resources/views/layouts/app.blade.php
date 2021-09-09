@@ -38,7 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -58,15 +58,17 @@
                             @endif
                         @else
                             {{-- Notifications --}}
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <i class="far fa-bell"></i><span class="badge badge-pill badge-light">{{$notifications->count() ?? 0}}</span>
+                            <li class="nav-item dropdown">                             
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle align-middle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="far fa-bell fa-lg"></i>
+                                    <span class="badge badge-pill badge-primary align-top"><small>{{$notifications->count() ?? 0}}</small></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @if($notifications->count() > 0)
                                     @foreach($notifications as $notification)
                                     <a class="dropdown-item" href="{{$notification->link}}">
-                                        {{$notification->title}}
+                                        <h4>{{$notification->title}}</h4>
+                                        <p>{{$notification->description}}</p>
                                     </a>
                                     @endforeach
                                     @else
@@ -74,7 +76,7 @@
                                     @endif
                                 </div>
                             </li>
-
+                            {{-- Profile -> Logout --}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }}
