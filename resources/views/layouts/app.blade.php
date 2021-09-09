@@ -57,6 +57,24 @@
                                 </li>
                             @endif
                         @else
+                            {{-- Notifications --}}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="far fa-bell"></i><span class="badge badge-pill badge-light">{{$notifications->count() ?? 0}}</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @if($notifications->count() > 0)
+                                    @foreach($notifications as $notification)
+                                    <a class="dropdown-item" href="{{$notification->link}}">
+                                        {{$notification->title}}
+                                    </a>
+                                    @endforeach
+                                    @else
+                                    <p class="dropdown-item">No Notifications found!</p>
+                                    @endif
+                                </div>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }}
