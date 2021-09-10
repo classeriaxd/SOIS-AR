@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
+use Illuminate\Pagination\Paginator;
 
 use App\Models\User;
 use App\Models\PositionTitle;
@@ -30,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Bootstrap Paginator
+        Paginator::useBootstrap();
+
         // Load Notifications on all Views
         View::composer('*', function ($view) {
             if (Auth::check() && $user_id = Auth::user()->user_id) 

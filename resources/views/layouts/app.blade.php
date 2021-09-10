@@ -80,14 +80,15 @@
                                         endif;
                                     @endphp
                                     @endforeach
-                                    <div class="row">
-                                        <div class="col text-center">
-                                            <a class="dropdown-item" href="#">See All Notifications</a>    
-                                        </div>
-                                    </div>
+                                    
                                     @else
                                     <p class="dropdown-item">No Notifications found!</p>
                                     @endif
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
                             {{-- Profile -> Logout --}}
