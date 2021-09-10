@@ -74,7 +74,17 @@
                                     link= "{{ $notification->link }}"
                                     >
                                     </read-notification>
+                                    @php
+                                        if($loop->index == 4):
+                                            break;
+                                        endif;
+                                    @endphp
                                     @endforeach
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <a class="dropdown-item" href="#">See All Notifications</a>    
+                                        </div>
+                                    </div>
                                     @else
                                     <p class="dropdown-item">No Notifications found!</p>
                                     @endif

@@ -1911,9 +1911,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    // If Notification is read, change badgeText and disable Button
     badgeText: function badgeText() {
-      // If Notification is read, change badgeText
       return this.isRead ? '' : '\xa0';
+    },
+    disableButton: function disableButton() {
+      return this.isRead ? true : false;
     }
   },
   methods: {
@@ -37627,13 +37630,19 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-2" }, [
       _c(
-        "div",
+        "button",
         {
-          staticClass: "btn notification",
+          staticClass: "btn w-100 h-100 shadow-none",
+          attrs: { disabled: _vm.disableButton },
           on: {
-            click: function($event) {
-              return _vm.readNotification()
-            }
+            click: [
+              function($event) {
+                return _vm.readNotification()
+              },
+              function($event) {
+                $event.stopPropagation()
+              }
+            ]
           }
         },
         [

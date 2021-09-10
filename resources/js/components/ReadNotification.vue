@@ -7,9 +7,9 @@
             </a>
         </div>
         <div class="col-2">
-            <div class="btn notification" @click="readNotification()">
+            <button class="btn w-100 h-100 shadow-none" v-bind:disabled="disableButton" @click="readNotification()" @click.stop>
                 <a class="badge badge-pill badge-primary" v-text="badgeText"></a>
-            </div>
+            </button>
         </div>
     </div>
 </template>
@@ -35,9 +35,12 @@
         },
 
         computed: {
+            // If Notification is read, change badgeText and disable Button
             badgeText(){
-                // If Notification is read, change badgeText
                 return (this.isRead) ? '' : '\xa0';
+            },
+            disableButton(){
+                return (this.isRead) ? true : false;
             },
 
         },

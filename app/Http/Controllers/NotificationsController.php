@@ -10,6 +10,10 @@ use Carbon\Carbon;
 
 class NotificationsController extends Controller
 {
+    public function show()
+    {
+        
+    }
     public function markAsRead($notification_id)
     {
         if($notification = Notification::where('notification_id', $notification_id)->first())
