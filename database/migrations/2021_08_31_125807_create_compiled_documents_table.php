@@ -20,8 +20,8 @@ class CreateCompiledDocumentsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('file');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('created_by')->references('user_id')->on('users');
             $table->foreign('organization_id')->references('organization_id')->on('organizations');

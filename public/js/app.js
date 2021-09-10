@@ -1886,18 +1886,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  mounted: function mounted() {},
+  props: {
+    notification_id: Number,
+    read: Boolean,
+    title: String,
+    description: String,
+    link: String
+  },
+  data: function data() {
+    return {
+      isRead: this.read
+    };
+  },
+  computed: {
+    badgeText: function badgeText() {
+      // If Notification is read, change badgeText
+      return this.isRead ? '' : '\xa0';
+    }
   },
   methods: {
     readNotification: function readNotification() {
-      var yeet = this.$props.notification_id;
-      console.log(yeet);
+      var _this = this;
+
+      // Get Notification Id Property then mark as Read
+      axios.post('/u/notification/' + this.$props.notification_id).then(function (response) {
+        _this.isRead = !_this.isRead;
+        console.log(response.data);
+      });
     }
-  },
-  props: {
-    notification_id: Number
   }
 });
 
@@ -37576,18 +37604,47 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass: "btn notification",
-      on: {
-        click: function($event) {
-          return _vm.readNotification()
-        }
-      }
-    },
-    [_c("a", { staticClass: "badge badge-pill badge-primary" }, [_vm._v(" ")])]
-  )
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-10" }, [
+      _c(
+        "a",
+        {
+          staticClass: "dropdown-item",
+          attrs: { href: _vm.link },
+          on: {
+            click: function($event) {
+              return _vm.readNotification()
+            }
+          }
+        },
+        [
+          _c("h4", [_vm._v(_vm._s(_vm.title))]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(_vm.description))])
+        ]
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-2" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn notification",
+          on: {
+            click: function($event) {
+              return _vm.readNotification()
+            }
+          }
+        },
+        [
+          _c("a", {
+            staticClass: "badge badge-pill badge-primary",
+            domProps: { textContent: _vm._s(_vm.badgeText) }
+          })
+        ]
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

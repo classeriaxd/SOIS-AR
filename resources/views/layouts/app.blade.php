@@ -66,17 +66,14 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @if($notifications->count() > 0)
                                     @foreach($notifications as $notification)
-                                    <div class="row">
-                                        <div class="col-10">
-                                            <a class="dropdown-item" href="{{$notification->link}}" >
-                                                <h4>{{$notification->title}}</h4>
-                                                <p>{{$notification->description}}</p>
-                                            </a>
-                                        </div>
-                                        <div class="col-2">
-                                            <read-notification v-bind:notification_id="{{$notification->notification_id}}"></read-notification>
-                                        </div>
-                                    </div>
+                                    <read-notification 
+                                    v-bind:notification_id= "{{$notification->notification_id}}" 
+                                    :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                    title= "{{ $notification->title }}"
+                                    description= "{{ $notification->description }}"
+                                    link= "{{ $notification->link }}"
+                                    >
+                                    </read-notification>
                                     @endforeach
                                     @else
                                     <p class="dropdown-item">No Notifications found!</p>

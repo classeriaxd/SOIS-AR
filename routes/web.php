@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 // NOTES 
 // GET BEFORE POST
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -21,6 +22,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+
+// User Notification Routes
+Route::post('/u/notification/{notification_id}', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->where(['notification_id' => '^[0-9]*$'])->middleware('auth');
 
 // EVENT DOCUMENT UPLOADS
 Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->middleware('auth');

@@ -30,13 +30,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Load Notifications on all Controllers
+        // Load Notifications on all Views
         View::composer('*', function ($view) {
             if (Auth::check() && $user_id = Auth::user()->user_id) 
             {
-                // Load Notifications on all Controllers
                 $notifications = Notification::where('user_id', $user_id)
                     ->whereRaw('created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY')
+                    ->whereNull('read_at')
+                    ->orderBy('read_at', 'ASC')
+                    ->orderBy('created_at', 'DESC')
                     ->get();
                 $view->with('notifications', $notifications);
             }
