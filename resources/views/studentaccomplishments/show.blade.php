@@ -66,6 +66,16 @@
                     </div>
         		</div>
         	</div>
+            @isset($newAccomplishment)
+            @if($newAccomplishment)
+            <hr>
+            <div class="row justify-content-center pt-1">
+                <a href="/s/accomplishments/create">
+                    <button class="btn btn-primary">Submit Another</button>
+                </a>
+            </div>
+            @endif
+            @endisset
         	<hr>
         	<div class="row justify-content-center pt-1">
         		<a href="/s/accomplishments">

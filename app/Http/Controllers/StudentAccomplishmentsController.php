@@ -151,12 +151,13 @@ class StudentAccomplishmentsController extends Controller
             }
             $sender = User::where('user_id', Auth::user()->user_id)->value('first_name');
             $this->sendNotificationToOfficers($sender, Auth::user()->course->organization_id, $accomplishment_uuid);
-            return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
+
+            return redirect()->route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid, 'newAccomplishment' => true]);
         }
         else
             abort(404);
     }
-    public function show($accomplishment_uuid)
+    public function show($accomplishment_uuid, $newAccomplishment = false)
     {
         if($accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishment_uuid)
             ->first())
@@ -164,7 +165,10 @@ class StudentAccomplishmentsController extends Controller
             $accomplishmentFiles = StudentAccomplishmentFile::where('student_accomplishment_id', $accomplishment->student_accomplishment_id)->select('file', 'caption')
                 ->orderBy('updated_at', 'DESC')
                 ->get();
-            return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles'));
+            if ($newAccomplishment)
+                return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles', 'newAccomplishment'));
+            else
+                return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles'));
         }
         else
             abort(404);
