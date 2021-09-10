@@ -15,7 +15,7 @@
                         <h4 class="text-center">{{ $range }}</h4>
                         <br>
                         @else
-                        <h4 class="text-center">{{ $start_date . '-' . $end_date }}</h4><br>
+                        <h4 class="text-center">{{ $start_date . ' - ' . $end_date }}</h4><br>
                         @endisset
                     </div>
                 </div>
@@ -152,18 +152,34 @@
                                                     </tr>
                                                     @php $j += 1; @endphp
                                                     @endforeach
-                                                    @else
-                                                    <tr>
-                                                        <td scope="row">{{ $i }}</td>
-                                                        <td scope="row">NO EVENTS FOUND</td>
-                                                        <td scope="row">&nbsp;</td>
-                                                        <td scope="row">&nbsp;</td>
-                                                    </tr>
-                                                    @endif
                                                 </tbody>
                                             </table>
                                         </td>
                                     </tr>
+                                    @php $i += 1; @endphp
+                                @else
+                                    <tr>
+                                        <td scope="row" class="text-center">{{ $i }}</td>
+                                        <td scope="row">NO EVENTS FOUND</td>
+                                        <td scope="row">&nbsp;</td>
+                                        <td scope="row">&nbsp;</td>
+                                        <td scope="row">&nbsp;</td>
+                                        <td scope="row">&nbsp;</td>
+                                    </tr>
+                                    @php $i += 1; @endphp
+                                @endif
+                                @if($studentAccomplishments->count() > 0)
+                                @else
+                                    <tr>
+                                        <td scope="row" class="text-center">{{ $i }}</td>
+                                        <td scope="row">NO ACCOMPLISHMENT FOUND</td>
+                                        <td scope="row">&nbsp;</td>
+                                        <td scope="row">&nbsp;</td>
+                                        <td scope="row">&nbsp;</td>
+                                        <td scope="row">&nbsp;</td>
+                                    </tr>
+                                    @php $i += 1; @endphp
+                                @endif
                                 </tbody>
                             </table>
                             
