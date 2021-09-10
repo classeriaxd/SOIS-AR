@@ -413,7 +413,7 @@ class StudentAccomplishmentsController extends Controller
             {
                 if ($reciever != NULL)
                 {
-                    $notification_title = "New Student Accomplishment Submission";
+                    $notification_title = "New Student Accomplishment Submission: ". $sender;
                     $notification_description = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
                     $notification_link = route('student_accomplishment.review',['accomplishment_uuid' => $accomplishment_uuid,]);
                     Notification::create([
