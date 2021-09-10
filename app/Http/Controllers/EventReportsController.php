@@ -213,9 +213,8 @@ class EventReportsController extends Controller
                 'custom_start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
                 'custom_end_date' => 'required|date|date_format:Y-m-d|after_or_equal:custom_start_date|before_or_equal:now|after:1992-01-01',
                 ]);
-            $range = $start_date . '-' . $end_date;
-            $start_date = Carbon::parse($data['custom_start_date']);
-            $end_date = Carbon::parse($data['custom_end_date']);
+            $start_date = Carbon::parse($data['custom_start_date'])->format('F d, Y') ;
+            $end_date = Carbon::parse($data['custom_end_date'])->format('F d, Y') ;
         }
         else
         {
@@ -245,7 +244,8 @@ class EventReportsController extends Controller
     		->orderBy('event_role_id', 'ASC')
     		->get();
             //dd($events);
-        return view('eventreports.showChecklist', compact('events', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date'));
+        $studentAccomplishments = collect(NULL);
+        return view('eventreports.showChecklist', compact('events', 'studentAccomplishments', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date'));
         
     }
     

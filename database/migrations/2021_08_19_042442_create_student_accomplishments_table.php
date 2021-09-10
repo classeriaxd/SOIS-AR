@@ -25,8 +25,8 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->unsignedTinyInteger('status')->default(0);
             $table->foreignId('reviewed_by')->nullable()->default(NULL);
             $table->text('remarks')->nullable()->default(NULL);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('organization_id')->references('organization_id')->on('organizations');

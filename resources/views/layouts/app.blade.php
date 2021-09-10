@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('fontawesome-free-5.15.4/js/all.min.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -57,6 +57,41 @@
                                 </li>
                             @endif
                         @else
+                            {{-- Notifications --}}
+                            <li class="nav-item dropdown">                             
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle align-middle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="far fa-bell fa-lg"></i>
+                                    <span class="badge badge-pill badge-primary align-top"><small>{{$notifications->count() ?? 0}}</small></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @if($notifications->count() > 0)
+                                    @foreach($notifications as $notification)
+                                    <read-notification 
+                                    v-bind:notification_id= "{{$notification->notification_id}}" 
+                                    :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                    title= "{{ $notification->title }}"
+                                    description= "{{ $notification->description }}"
+                                    link= "{{ $notification->link }}"
+                                    >
+                                    </read-notification>
+                                    @php
+                                        if($loop->index == 4):
+                                            break;
+                                        endif;
+                                    @endphp
+                                    @endforeach
+                                    
+                                    @else
+                                    <p class="dropdown-item">No Notifications found!</p>
+                                    @endif
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {{-- Profile -> Logout --}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }}

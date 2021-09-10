@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\StudentAccomplishment;
-use App\Models\Notification;
 
 class HomeController extends Controller
 {
@@ -34,9 +33,7 @@ class HomeController extends Controller
             $orgCurrentPositionArray = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
             $orgCurrentPosition = $orgCurrentPositionArray[0];
             $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-            $notifications = Notification::where('user_id', $user_id)
-                ->whereRaw('created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY')
-                ->get();
+
             if ($orgCurrentPosition == 'Member')
             {
                 $accomplishments = StudentAccomplishment::where('user_id', $user_id)
@@ -46,7 +43,7 @@ class HomeController extends Controller
                 $pendingAccomplishmentCount = $accomplishments[0] ?? 0;
                 $disapprovedAccomplishmentCount = $accomplishments[2] ?? 0;
 
-                return view('home', compact('approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount', 'notifications'));
+                return view('home', compact('approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount'));
 
             }
 
@@ -59,7 +56,7 @@ class HomeController extends Controller
                 $submissionCount = StudentAccomplishment::where('status', 0)
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
-                return view('home', compact('submissionCount','notifications'));
+                return view('home', compact('submissionCount'));
             }
 
             else
