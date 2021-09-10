@@ -25,6 +25,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // User Notification Routes
 Route::post('/u/notification/{notification_id}', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->where(['notification_id' => '^[0-9]*$'])->middleware('auth');
+Route::post('/u/notifications/all', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->middleware('auth')->name('notifications.markAllAsRead');
 Route::get('/u/notifications', [App\Http\Controllers\NotificationsController::class, 'show'])->middleware('auth')->name('notifications.show');
 
 // EVENT DOCUMENT UPLOADS

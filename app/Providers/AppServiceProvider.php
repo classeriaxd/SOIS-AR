@@ -43,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
                     ->whereNull('read_at')
                     ->orderBy('read_at', 'ASC')
                     ->orderBy('created_at', 'DESC')
+                    ->limit(5)
                     ->get();
                 $view->with('notifications', $notifications);
             }
