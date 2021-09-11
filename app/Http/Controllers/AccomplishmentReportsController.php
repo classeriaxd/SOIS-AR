@@ -19,13 +19,28 @@ use Carbon\Carbon;
 use iio\libmergepdf\Merger;
 use PDF;
 
-class EventReportsController extends Controller
+/**
+ * Handles all Accomplishment Report Requests
+ * Libraries:
+ * DomPDF, Carbon, LibMergePDF
+ */ 
+
+class AccomplishmentReportsController extends Controller
 {
+    /**
+     * Show Index Page, Display Date Ranges
+     */
     public function index()
     {
         $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')->orderBy('year_start', 'DESC')->get();
-    	return view('eventreports.index', compact('schoolYears'));
+    	return view('accomplishmentreports.index', compact('schoolYears'));
     }
+    /**
+     * Function to Group Keys using a given key array
+     * choiceKeyArray = array() 
+     * rowCount = int
+     * category = String
+     */ 
     public function groupKeysWithAttributes($choiceKeyArray, $rowCount, $category)
     {
         // Loop throughout the array, then append attributes to numbers
@@ -67,31 +82,15 @@ class EventReportsController extends Controller
         }
         return $newArray;
     }
-    public function finalizeReport(Request $request)
+    /**
+     * Function to Sort and Compile Events using Key Array and Events Collection
+     * keys = array()
+     * events = collection()
+     */ 
+    public function sortAndCompileEvents($keys, $events)
     {
-        // Get and Validate Date
-        $date_data = $request->validate([
-            'start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
-            'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date|before_or_equal:now|after:1992-01-01',
-        ]);
-        // Fetch Organization Details
-        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)->first();
-        // Fetch Events within Dates
-        $events = Event::with([
-            'eventImages' => function ($query) {
-                    $query->orderBy('image_type', 'ASC')->get();},
-            'eventDocuments' => function ($query) {
-                    $query->orderBy('event_document_type_id', 'ASC')->get();},
-                ])
-            ->where('organization_id', $organization->organization_id)
-            ->whereBetween('start_date', [$date_data['start_date'], $date_data['end_date']])
-            ->orderBy('event_role_id', 'ASC')
-            ->get();
-
-        // Get all Keys from Form
-        $allKeys= $request->except(['start_date', 'end_date', '_token']);
         // Filter Event Keys
-        $eventKeys = Arr::where($allKeys, function ($value, $key) {
+        $eventKeys = Arr::where($keys, function ($value, $key) {
             if(Str::startsWith($key, 'event'))
                 return $key;
         });
@@ -119,6 +118,40 @@ class EventReportsController extends Controller
                 $sortedEvents->push($currentEvent);
             }
         }
+        return $sortedEvents;
+    }
+    /**
+     * Get request from showChecklist, then Output Final AR
+     */
+    public function finalizeReport(Request $request)
+    {
+        // Get and Validate Date
+        $date_data = $request->validate([
+            'start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
+            'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date|before_or_equal:now|after:1992-01-01',
+        ]);
+
+        // Fetch Organization Details
+        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)->first();
+
+        // Fetch Events within Dates
+        $events = Event::with([
+            'eventImages' => function ($query) {
+                    $query->orderBy('image_type', 'ASC')->get();},
+            'eventDocuments' => function ($query) {
+                    $query->orderBy('event_document_type_id', 'ASC')->get();},
+                ])
+            ->where('organization_id', $organization->organization_id)
+            ->whereBetween('start_date', [$date_data['start_date'], $date_data['end_date']])
+            ->orderBy('event_role_id', 'ASC')
+            ->get();
+
+        // Get all Keys from Form
+        $allKeys= $request->except(['start_date', 'end_date', '_token']);
+
+        // Get Sorted Events
+        $sortedEvents = $this->sortAndCompileEvents($allKeys, $events);
+
         // Create Event PDF, save it to File, then add to array
         // After that get all documents, then add to array
         $compiledDocuments = array();
@@ -126,7 +159,7 @@ class EventReportsController extends Controller
         {
             //dd($event);
             $fileName = uniqid() . '-' . now()->timestamp . '.pdf';
-            $dompdf = PDF::loadView('eventreports.singlePageEvent', compact('event'))->save(storage_path('/app/public/compiledDocuments/' . $fileName));
+            $dompdf = PDF::loadView('accomplishmentreports.singlePageEvent', compact('event'))->save(storage_path('/app/public/compiledDocuments/' . $fileName));
             array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $fileName));
             if (isset($event['event_documents']))
             {
@@ -145,8 +178,11 @@ class EventReportsController extends Controller
         file_put_contents($filePath, $mergedPDF);
 
         return redirect()->action(
-                [EventReportsController::class, 'index']);
+                [AccomplishmentReportsController::class, 'index']);
     }
+    /**
+     * Get request from Index, then Show Checklist Page
+     */
     public function showChecklist(Request $request)
     {
         $range = NULL;
@@ -219,16 +255,12 @@ class EventReportsController extends Controller
         else
         {
             return redirect()->action(
-                [EventReportsController::class, 'index']);
+                [AccomplishmentReportsController::class, 'index']);
         }
 
         //Fetch organization and assets
         $organization = Organization::where('organization_id', Auth::user()->course->organization_id)
             ->first();
-        // $organization_logo = OrganizationAsset::where('organization_id', $organization->organization_id)
-        //     ->where('type', '1')
-        //     ->select('image')
-        //     ->first();
         
         // Get all Events within $start_date and $end_date, 
         // then grabs all of their child Event Images and Documents
@@ -243,10 +275,12 @@ class EventReportsController extends Controller
             ->whereBetween('start_date', [$start_date, $end_date])
     		->orderBy('event_role_id', 'ASC')
     		->get();
-            //dd($events);
+
+
         $studentAccomplishments = collect(NULL);
-        return view('eventreports.showChecklist', compact('events', 'studentAccomplishments', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date'));
-        
+
+        return view('accomplishmentreports.showChecklist', 
+            compact('events', 'studentAccomplishments', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date')); 
     }
     
 

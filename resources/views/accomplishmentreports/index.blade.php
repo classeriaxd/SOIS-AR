@@ -10,7 +10,7 @@
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">
                 	<h4 class="card-header card-text text-center bg-primary text-white">Semestral</h4>
-                	<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
+                	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
 		            	<div class="card-body">
 		            		<div class="row text-center">
 		            			<div class="col"><h3 class="text-center">School Year</h3></div>
@@ -73,7 +73,7 @@
             <div class="row mb-1 mt-1">
 	    		<div class="card w-100">
 					<h4 class="card-header card-text text-center bg-primary text-white">Quarterly</h4>
-					<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
+					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
 		    			<div class="card-body">
 		    				<h5 class="card-text text-center">{{ date('Y') }}</h5>
 		    				<div class="row text-center">
@@ -144,7 +144,7 @@
         	<div class="row mt-1">
         		<div class="card w-100">
         			<h4 class="card-header card-text text-center bg-primary text-white">Custom</h4>
-    				<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
+    				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
         			<div class="card-body">
         				<div class="form-group row">
         				    <label for="custom_start_date" class="col-md-4 col-form-label">Start Date</label>

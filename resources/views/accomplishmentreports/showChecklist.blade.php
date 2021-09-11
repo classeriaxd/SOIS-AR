@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-            <form action="{{route('eventreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm">
+            <form action="{{route('accomplishmentreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm">
                 <div class="row">
                     <div class="col">
                         <h2 class="text-center display-3">{{ $organization->organization_acronym }} Organization Report</h2>
