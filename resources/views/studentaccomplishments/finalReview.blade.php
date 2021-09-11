@@ -67,7 +67,7 @@
                                         @if($file->type == 1)
                                         {{-- IMG --}}
                                         <div>
-                                            <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                            <img src="{{'/storage/'.$file->file}}" style="max-width:600; max-height:300px;min-width:600; min-height:300px;">
                                             <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
                                         </div>
                                         @elseif($file->type == 2)

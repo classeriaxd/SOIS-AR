@@ -27,7 +27,7 @@
                             @if($file->type == 1)
                             {{-- IMG --}}
                             <div class="row justify-content-center mb-2">
-                                <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <img src="{{'/storage/'.$file->file}}" style="max-width:600px; max-height:300px;min-width:600px; min-height:300px;">
                                 <br>
                             </div>
                             @elseif($file->type == 2)
