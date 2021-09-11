@@ -8,6 +8,7 @@ use App\Models\EventImage;
 use App\Models\Organization;
 use App\Models\OrganizationAsset;
 use App\Models\SchoolYear;
+use App\Models\StudentAccomplishment;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -35,6 +36,7 @@ class AccomplishmentReportsController extends Controller
         $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')->orderBy('year_start', 'DESC')->get();
     	return view('accomplishmentreports.index', compact('schoolYears'));
     }
+
     /**
      * Function to Group Keys using a given key array
      * choiceKeyArray = array() 
@@ -82,6 +84,7 @@ class AccomplishmentReportsController extends Controller
         }
         return $newArray;
     }
+
     /**
      * Function to Sort and Compile Events using Key Array and Events Collection
      * keys = array()
@@ -120,6 +123,7 @@ class AccomplishmentReportsController extends Controller
         }
         return $sortedEvents;
     }
+
     /**
      * Get request from showChecklist, then Output Final AR
      */
@@ -180,6 +184,7 @@ class AccomplishmentReportsController extends Controller
         return redirect()->action(
                 [AccomplishmentReportsController::class, 'index']);
     }
+
     /**
      * Get request from Index, then Show Checklist Page
      */
@@ -282,8 +287,12 @@ class AccomplishmentReportsController extends Controller
         return view('accomplishmentreports.showChecklist', 
             compact('events', 'studentAccomplishments', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date')); 
     }
-    
+   
+
+
+
+
+
+
 
 }
-
-

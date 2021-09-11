@@ -3,10 +3,10 @@
 @section('content')
 <div class="container">
 	<div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
     		<h2 class="display-2 text-center">Initial Review</h2>
         	<div class="row justify-content-center pb-1">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="card">
                         <h5 class="card-header card-title text-center">{{ $accomplishment->title }}</h5>
                         <div class="card-body">
@@ -24,11 +24,22 @@
                             <hr>
                             <h6 class="text-center text-dark font-weight-bold">Uploaded Evidences</h6>
                             @foreach($accomplishmentFiles as $file)
+                            @if($file->type == 1)
+                            {{-- IMG --}}
                             <div class="row justify-content-center mb-2">
                                 <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
+                                <br>
                             </div>
+                            @elseif($file->type == 2)
+                            {{-- PDF --}}
+                            <div class="row justify-content-center mb-2">
+                                <iframe src="{{'/storage/'.$file->file}}#toolbar=0" width="100%" style="height:25vh;">
+                                </iframe>
+                                <br>
+                            </div>
+                            @endif
                             <div class="row justify-content-center">
-                                <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
+                                <p class="text-center">{{$file->caption}}</p>
                             </div>
                             @endforeach
                         </div>

@@ -16,6 +16,8 @@ class CreateStudentAccomplishmentFilesTable extends Migration
         Schema::create('student_accomplishment_files', function (Blueprint $table) {
             $table->id('student_accomplishment_file_id');
             $table->foreignId('student_accomplishment_id');
+            // type: 1 - IMG | 2 - PDF
+            $table->unsignedTinyInteger('type');
             $table->string('file');
             $table->text('caption')->nullable();
             $table->timestamps();

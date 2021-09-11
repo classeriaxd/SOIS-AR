@@ -3,14 +3,13 @@
 @section('content')
 <div class="container">
 	<div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
     		<h2 class="display-2 text-center">Final Review</h2>
-            <h5 class="display-5 text-center">Final edits for the accomplishment submission</h6>
+            <h5 class="display-5 text-center">Final edits for the Accomplishment Submission</h6>
             <form action="{{route('student_accomplishment.approveSubmission',['accomplishment_uuid' => $accomplishment->accomplishment_uuid,]);}}" method="POST" id="approvedSubmissionForm">   
             	<div class="row justify-content-center pb-1">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="card">
-                            
                             <h5 class="card-header card-title text-center">{{ $accomplishment->title }}</h5>
                             <div class="card-body">
                                 <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Student Details</span></h6>
@@ -65,10 +64,20 @@
                                         <div>
                                             <h6>Evidence {{$i}}</h6>
                                         </div>
+                                        @if($file->type == 1)
+                                        {{-- IMG --}}
                                         <div>
                                             <img src="{{'/storage/'.$file->file}}" style="max-width:200px; max-height:200px;min-width:200px; min-height:200px;">
                                             <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
                                         </div>
+                                        @elseif($file->type == 2)
+                                        {{-- PDF --}}
+                                        <div>
+                                            <iframe src="{{'/storage/'.$file->file}}#toolbar=0" width="100%" style="height:25vh;">
+                                            </iframe>
+                                            <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
+                                        </div>
+                                        @endif
                                         <div>
                                             <label for="{{'evidence' . $i}}" class="@error('evidence'.$i) text-danger @enderror">Include this evidence on final?
                                             </label>

@@ -155,22 +155,13 @@
     <script type="module">
         FilePond.registerPlugin(FilePondPluginFileValidateType);
         FilePond.registerPlugin(FilePondPluginImagePreview);
-        // Get a reference to the file input element
-        FilePond.setOptions({
-            server: {
-                url: '/s/accomplishments/upload',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                revert: '/revert',
-            }
-        });
 
+        // Get a reference to the file input element
         const mainInputElement = document.getElementById('evidence1');
         FilePond.create( mainInputElement, {
-          acceptedFileTypes: ['image/png', 'image/jpeg'],
-          labelFileTypeNotAllowed: 'Only Images [ PNG / JPEG ] are allowed.',
-          labelIdle: 'Drop an Image here First or <span class="filepond--label-action"> Browse </span>',
+          acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'],
+          labelFileTypeNotAllowed: 'Only Images [ PNG / JPEG / JPG ] and PDF Documents [PDF] are allowed.',
+          labelIdle: 'Drop an Image/PDF here First or <span class="filepond--label-action"> Browse </span>',
           });
 
         const otherInputElements = document.querySelectorAll('input.filepond:not(#evidence1)');
@@ -179,8 +170,8 @@
 
           // create a FilePond instance at the input element location
           FilePond.create( inputElement, {
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
-            labelFileTypeNotAllowed: 'Only Images [ PNG / JPEG ] are allowed.',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'],
+            labelFileTypeNotAllowed: 'Only Images [ PNG / JPEG / JPG ] and PDF [PDF] are allowed.',
             labelIdle: 'Drop here next or <span class="filepond--label-action"> Browse </span>',
             });
 
