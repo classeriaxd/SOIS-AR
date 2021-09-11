@@ -23,6 +23,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
 
+// Bloodhound Routes (TypeAheadJS)
+Route::get('/e/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
+
 // User Notification Routes
 Route::post('/u/notification/{notification_id}', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->where(['notification_id' => '^[0-9]*$'])->middleware('auth');
 Route::post('/u/notifications/all', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->middleware('auth')->name('notifications.markAllAsRead');
@@ -33,7 +36,7 @@ Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocuments
 Route::post('/e/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->middleware('auth');
 
 // EVENT REPORTS
-Route::post('e/reports/create/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReport'])->middleware('auth')->name('accomplishmentreports.finalizeReport');
+Route::post('/e/reports/create/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReport'])->middleware('auth')->name('accomplishmentreports.finalizeReport');
 Route::post('/e/reports/create/checklist', [App\Http\Controllers\AccomplishmentReportsController::class, 'showChecklist'])->middleware('auth')->name('accomplishmentreports.showChecklist');
 Route::get('/e/reports', [App\Http\Controllers\AccomplishmentReportsController::class, 'index'])->middleware('auth');
 Route::get('/e/reports/print', [App\Http\Controllers\AccomplishmentReportsController::class, 'pdf'])->middleware('auth');

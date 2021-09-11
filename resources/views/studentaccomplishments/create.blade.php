@@ -12,7 +12,7 @@
                     <label for="title" class="col-md-4 col-form-label">Title</label>
                     <input id="title" 
                     type="text" 
-                    class="form-control @error('title') is-invalid @enderror" 
+                    class="form-control typeahead @error('title') is-invalid @enderror" 
                     name="title" 
                     value="{{ old('title') }}" 
                     required>
@@ -119,7 +119,7 @@
                     @enderror
                 </div>
                 <div class="text-center">
-                    <small>Images are only allowed. Max size is 3MB. Up to 3 Files can be uploaded.</small>
+                    <small>Only Images and PDF are allowed. Max size is 3MB. Up to 3 Files can be uploaded.</small>
                 </div> 
                 <div class=" form-group row justify-content-center mt-3">
                     <button class="btn btn-primary">Add Accomplishment</button>
@@ -148,6 +148,12 @@
         <script src="{{ asset('js/filepond.js') }}" type="text/javascript"></script>
         <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
         <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    @endpush
+@endif
+
+@if($typeAheadJS ?? false)
+    @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" defer></script>
     @endpush
 @endif
 
@@ -187,4 +193,48 @@
             }
         });
     </script>
+    <script type="text/javascript" defer>
+        jQuery(document).ready(function($) {
+            // Set the Options for "Bloodhound" suggestion engine
+            var engine = new Bloodhound({
+                remote: {
+                    url: '/e/find?event=%QUERY%',
+                    wildcard: '%QUERY%',
+                },
+                datumTokenizer: Bloodhound.tokenizers.whitespace('event'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+            });
+
+            // Get Input
+            $("#title").typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 0,
+            },
+            {
+                source: engine.ttAdapter(),
+
+                // This will be appended to "tt-dataset-" to form the class name of the suggestion menu.
+                name: 'eventList',
+                // Key to Display
+                display: 'title',
+                // Number of suggestions to display
+                limit: 3,
+                templates: 
+                {
+                    empty: [
+                        '<div class="list-group search-results-dropdown"><div class="list-group-item">Nothing found.</div></div>'
+                    ],
+                    header: [
+                        '<div class="list-group search-results-dropdown">Suggested Events'
+                    ],
+                    suggestion: function (data) 
+                    {
+                        return '<a class="list-group-item">' + data.title + ' ('+ data.start_date +')'+'</a>'
+                    }
+                }
+            });
+        });
+    </script>
+    <link href="{{ asset('css/typeaheadjs.css') }}" rel="stylesheet">
 @endsection

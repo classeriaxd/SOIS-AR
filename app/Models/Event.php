@@ -6,12 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Nicolaslopezj\Searchable\SearchableTrait;
+
 class Event extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, SearchableTrait;
     protected $guarded = [];
     protected $primaryKey = 'event_id';
     protected $table = 'events';
+    protected $searchable = [
+        'columns' => [
+            'events.title' => 10,
+        ],];
     
     public function eventImages()
     {

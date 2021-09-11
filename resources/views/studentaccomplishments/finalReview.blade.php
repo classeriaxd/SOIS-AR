@@ -20,40 +20,9 @@
                                 </div>
                                 <hr>
                                 <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Accomplishment Details</span></h6>
-                                <div class="form-group row">
-                                    <label for="title" class="col-md-4 col-form-label">Title</label>
-                                    <input id="title" 
-                                    type="text" 
-                                    class="form-control @error('title') is-invalid @enderror" 
-                                    name="title" 
-                                    value="{{ $accomplishment->title }}" 
-                                    required>
-                                    @error('title')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group row">
-                                    <label for="description" class="col-md-4 col-form-label">Description</label>    
-                                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" 
-                                    name="description"
-                                    required>{{ $accomplishment->description }}</textarea>
-                                    @error('description')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group row">
-                                    <label for="date_awarded" class="col-md-4 col-form-label">Date Awarded</label>    
-                                    <input type="date" class="form-control" name="date_awarded" min="1992-01-01" max="{{date('Y-m-d')}}" value="{{ $accomplishment->date_awarded }}">
-                                    @error('date_awarded')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                                <p class="text-center">TITLE: {{ $accomplishment->title  ?? 'NONE' }}</p>
+                                <p class="text-center">DESCRIPTION: {{ $accomplishment->description  ?? 'NONE' }}</p>
+                                <p class="text-center">DATE AWARDED: {{ date_format(date_create($accomplishment->date_awarded), 'F d, Y')  ?? 'NONE' }}</p>
                                 <hr>
                                 <h5 class="text-center text-dark font-weight-bold">Uploaded Evidences</h5>
                                 <h6 class="text-center">At least one evidence is required</h6>

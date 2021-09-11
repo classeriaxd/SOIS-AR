@@ -197,4 +197,18 @@ class EventsController extends Controller
     	])->slug;
         return redirect()->route('event.show',['event_slug' => $event_slug,]);
     }
+    public function findEvent(Request $request)
+    {
+        $events = Event::search($request->get('event'))
+            ->select('title', 
+                DB::raw('DATE_FORMAT(start_date, "%M %d, %Y") as start_date'),)
+            ->orderby('start_date', 'DESC')
+            ->get();
+        if($events != NULL)
+            return $events;
+        else 
+            return NULL;
+    }
+    // Notes
+    //https://github.com/laravel/framework/issues/14997#issuecomment-242129087
 }

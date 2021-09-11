@@ -79,7 +79,8 @@ class StudentAccomplishmentsController extends Controller
     public function create()
     {
         $filePondJS = true;
-    	return view('studentaccomplishments.create', compact('filePondJS',));
+        $typeAheadJS = true;
+    	return view('studentaccomplishments.create', compact('filePondJS', 'typeAheadJS'));
     }
     public function store(Request $request)
     {
@@ -333,9 +334,6 @@ class StudentAccomplishmentsController extends Controller
                 {
                     $data = request()->validate([
                         'remarks' => 'required|string',
-                        'title' => 'required|string',
-                        'description' => 'required|string',
-                        'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
                         'evidence1' => 'required',
                     ]);
                 }
@@ -343,9 +341,6 @@ class StudentAccomplishmentsController extends Controller
                 {
                     $data = request()->validate([
                         'remarks' => 'required|string',
-                        'title' => 'required|string',
-                        'description' => 'required|string',
-                        'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
                         'evidence1' => 'required_without:evidence2',
                         'evidence2' => 'required_without:evidence1',
                     ]);
@@ -371,9 +366,6 @@ class StudentAccomplishmentsController extends Controller
                 {
                     $data = request()->validate([
                         'remarks' => 'required|string',
-                        'title' => 'required|string',
-                        'description' => 'required|string',
-                        'date_awarded' => 'required|date|before_or_equal:now|after:1992-01-01',
                         'evidence1' => 'required_without_all:evidence2,evidence3',
                         'evidence2' => 'required_without_all:evidence1,evidence3',
                         'evidence3' => 'required_without_all:evidence1,evidence2',
@@ -407,9 +399,6 @@ class StudentAccomplishmentsController extends Controller
                 }
 
                 $accomplishment_data = [
-                    'title' => $data['title'],
-                    'description' => $data['description'],
-                    'date_awarded' => $data['date_awarded'],
                     'remarks' => $data['remarks'],
                     'status' => 1,
                     'reviewed_by' => Auth::user()->user_id,
