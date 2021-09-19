@@ -86,8 +86,7 @@
                     type="text" 
                     class="form-control @error('caption2') is-invalid @enderror" 
                     name="caption2" 
-                    value="{{ old('caption2') }}" 
-                    required>
+                    value="{{ old('caption2') }}">
                     @error('caption2')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -110,8 +109,7 @@
                     type="text" 
                     class="form-control @error('caption3') is-invalid @enderror" 
                     name="caption3" 
-                    value="{{ old('caption3') }}" 
-                    required>
+                    value="{{ old('caption3') }}">
                     @error('caption3')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

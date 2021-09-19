@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 use Carbon\Carbon;
@@ -76,6 +78,11 @@ class AccomplishmentReportsController extends Controller
                         else if (Str::endsWith($choiceKeyArray[$temp],'documents'))
                             $newArray[$number] += ['documents' => true,];
                         break;
+                    case 'accomplishments':
+                        if (Str::endsWith($choiceKeyArray[$temp],'details'))
+                            $newArray[$number] += ['details' => true];
+                        else if (Str::endsWith($choiceKeyArray[$temp],'files'))
+                            $newArray[$number] += ['files' => true];
                     default:
                         break;
                 }
@@ -86,44 +93,70 @@ class AccomplishmentReportsController extends Controller
     }
 
     /**
-     * Function to Sort and Compile Events using Key Array and Events Collection
+     * Function to Sort and Compile Report using Key Array and Report Collection
      * keys = array()
-     * events = collection()
+     * reportCollection = collection()
+     * reportType = String (events, accomplishments)
      */ 
-    public function sortAndCompileEvents($keys, $events)
+    public function sortAndCompileReport($keys, $reportCollection, $reportType)
     {
-        // Filter Event Keys
-        $eventKeys = Arr::where($keys, function ($value, $key) {
-            if(Str::startsWith($key, 'event'))
-                return $key;
-        });
+        // Filter Event/Accomplishment Keys
+        if ($reportType == 'events')
+        {
+            $collectionKeys = Arr::where($keys, function ($value, $key) {
+                if(Str::startsWith($key, 'event'))
+                    return $key;
+            });
+        }
+        elseif ($reportType == 'accomplishments')
+        {
+            $collectionKeys = Arr::where($keys, function ($value, $key) {
+                if(Str::startsWith($key, 'accomplishment'))
+                    return $key;
+            });
+        }
 
         // Remake array, only keys remain
-        $eventKeys = array_keys($eventKeys);
+        $collectionKeys = array_keys($collectionKeys);
         // Group Keys, add attributes
-        $eventWithAttributes = $this->groupKeysWithAttributes($eventKeys, $events->count(), 'events');
+        $collectionWithAttributes = $this->groupKeysWithAttributes($collectionKeys, $reportCollection->count(), $reportType);
+        $sortedCollection = collect([]);
 
-        $sortedEvents = collect([]);
-        foreach ($eventWithAttributes as $key => $value) 
+        // Rearrange Collection, then retain/remove attributes
+        foreach ($collectionWithAttributes as $key => $value) 
         {
-            // If details attribute is set, add event to new Collection
+            // If details attribute is set, add report to new Collection
             if (isset($value['details']))
             {
-                // Get current event using Key from original Event Query
-                $currentEvent = collect($events->get($key));
-                // If images is not set, remove from current event
-                if((! isset($value['images'])) && ($currentEvent['event_images'] != NULL))
-                    $currentEvent->forget('event_images');
-                // If documents is not set, remove from current event
-                if((! isset($value['documents'])) && ($currentEvent['event_documents'] != NULL))
-                    $currentEvent->forget('event_documents');
-                // Push updated current event to a new collection
-                $sortedEvents->push($currentEvent);
+                if ($reportType == 'events')
+                {
+                    // Get current event using Key from original Event Query
+                    $currentEvent = collect($reportCollection->get($key));
+                    // If images is not set, remove from current event
+                    if((! isset($value['images'])) && ($currentEvent['event_images'] != NULL))
+                        $currentEvent->forget('event_images');
+                    // If documents is not set, remove from current event
+                    if((! isset($value['documents'])) && ($currentEvent['event_documents'] != NULL))
+                        $currentEvent->forget('event_documents');
+                    // Push updated current event to a new collection
+                    $sortedCollection->push($currentEvent);
+                }
+                elseif ($reportType == 'accomplishments')
+                {
+                    // Get current accomplishment using Key from original Accomplishment Query
+                    $currentAccomplishment = collect($reportCollection->get($key));
+                    // If files is not set, remove from current accomplishment
+                    if((! isset($value['files'])) && ($currentAccomplishment['accomplishment_files'] != NULL))
+                        $currentAccomplishment->forget('accomplishment_files');               
+                    // Push updated current accomplishment to a new collection
+                    $sortedCollection->push($currentAccomplishment);
+                }
             }
         }
-        return $sortedEvents;
-    }
 
+        return $sortedCollection;
+    }
+    
     /**
      * Get request from showChecklist, then Output Final AR
      */
@@ -134,11 +167,18 @@ class AccomplishmentReportsController extends Controller
             'start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
             'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date|before_or_equal:now|after:1992-01-01',
         ]);
-
+        // Get all Keys from Form
+        $allKeys= $request->except(['start_date', 'end_date', '_token']);
+        if (count($allKeys) == 0) 
+        {
+            return redirect()->action(
+                [AccomplishmentReportsController::class, 'index']
+            );
+        }
         // Fetch Organization Details
         $organization = Organization::where('organization_id', Auth::user()->course->organization_id)->first();
 
-        // Fetch Events within Dates
+        // Fetch Events and Accomplishments within Dates
         $events = Event::with([
             'eventImages' => function ($query) {
                     $query->orderBy('image_type', 'ASC')->get();},
@@ -149,22 +189,51 @@ class AccomplishmentReportsController extends Controller
             ->whereBetween('start_date', [$date_data['start_date'], $date_data['end_date']])
             ->orderBy('event_role_id', 'ASC')
             ->get();
+        $studentAccomplishments = StudentAccomplishment::with([
+            'accomplishmentFiles' => function ($query) {
+                    $query->orderBy('type', 'ASC')->get();},
+            'user',
+                ])
+            ->where('organization_id', $organization->organization_id)
+            ->whereBetween('date_awarded', [$date_data['start_date'], $date_data['end_date']])
+            ->where('status', 1)
+            ->get();
+        
 
-        // Get all Keys from Form
-        $allKeys= $request->except(['start_date', 'end_date', '_token']);
-
-        // Get Sorted Events
-        $sortedEvents = $this->sortAndCompileEvents($allKeys, $events);
-
+        // Get Sorted Events and Accomplishments
+        $sortedEvents = $this->sortAndCompileReport($allKeys, $events, 'events');
+        $sortedAccomplishments = $this->sortAndCompileReport($allKeys, $studentAccomplishments, 'accomplishments');
+        
         // Create Event PDF, save it to File, then add to array
         // After that get all documents, then add to array
         $compiledDocuments = array();
+        // Create Folder
+        $folder = uniqid() . '-' . now()->timestamp;
+        if (!is_dir(storage_path('/app/public/compiledDocuments/' . $folder))) {
+            // dir doesn't exist, make it
+            mkdir(storage_path('/app/public/compiledDocuments/' . $folder));
+        }
+
+        $temp = true;
+
         foreach($sortedEvents as $event)
         {
+            if ($temp)
+            {
+                // Create and Append Event Title Page
+                $fileName = uniqid() . '-' . now()->timestamp . '.pdf';
+                $dompdf = PDF::loadView('accomplishmentreports.eventTitlePage')
+                    ->setPaper('letter', 'portrait')
+                    ->save(storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+                $temp = false;
+            }
             //dd($event);
             $fileName = uniqid() . '-' . now()->timestamp . '.pdf';
-            $dompdf = PDF::loadView('accomplishmentreports.singlePageEvent', compact('event'))->save(storage_path('/app/public/compiledDocuments/' . $fileName));
-            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $fileName));
+            $dompdf = PDF::loadView('accomplishmentreports.singlePageEvent', compact('event'))
+                ->setPaper('letter', 'portrait')
+                ->save(storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
             if (isset($event['event_documents']))
             {
                 foreach ($event['event_documents'] as $document) 
@@ -172,6 +241,42 @@ class AccomplishmentReportsController extends Controller
                     array_push($compiledDocuments, storage_path('/app/public/' . $document['file']));
                 }
             }
+        }
+
+        $temp = true;
+
+        foreach ($sortedAccomplishments as $accomplishment)
+        {
+            if($temp)
+            {
+                // Create and Append Accomplishment Title Page
+                $fileName = uniqid() . '-' . now()->timestamp . '.pdf';
+                $dompdf = PDF::loadView('accomplishmentreports.accomplishmentTitlePage')->save(storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+                $temp = false;
+            }
+            $fileName = uniqid() . '-' . now()->timestamp . '.pdf';
+            $dompdf = PDF::loadView('accomplishmentreports.singlePageAccomplishment', compact('accomplishment'))
+                ->setPaper('letter', 'portrait')
+                ->save(storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName));
+            if (isset($accomplishment['accomplishment_files']))
+            {
+                foreach ($accomplishment['accomplishment_files'] as $file) 
+                {
+                    if($file['type'] == 2)
+                        array_push($compiledDocuments, storage_path('/app/public/' . $file['file']));
+                    elseif($file['type'] == 1)
+                    {
+                        $fileName2 = uniqid() . '-' . now()->timestamp . '.pdf';
+                        $dompdf = PDF::loadView('accomplishmentreports.singlePageAccomplishmentImage', compact('file'))
+                            ->setPaper('letter', 'portrait')
+                            ->save(storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName2));
+                        array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $folder . '/' . $fileName2));
+                    }
+                }
+            }
+
         }
         //Merge all documents in the array
         $merger = new Merger;
@@ -181,8 +286,17 @@ class AccomplishmentReportsController extends Controller
         $filePath = storage_path('/app/public/compiledDocuments/' . $fileNameFINAL);
         file_put_contents($filePath, $mergedPDF);
 
+        // Delete Created Folder and its contents
+        // first delete contents of the directory, but preserve the directory itself
+        Storage::deleteDirectory('/public/compiledDocuments/' . $folder, true);
+        // sleep 0.3 second because of race condition with HD
+        sleep(0.3);
+        // actually delete the folder itself
+        Storage::deleteDirectory('/public/compiledDocuments/' . $folder);
+
         return redirect()->action(
-                [AccomplishmentReportsController::class, 'index']);
+                [AccomplishmentReportsController::class, 'index'])
+                ->with('success','Report Generated');
     }
 
     /**
@@ -281,9 +395,16 @@ class AccomplishmentReportsController extends Controller
     		->orderBy('event_role_id', 'ASC')
     		->get();
 
-
-        $studentAccomplishments = collect(NULL);
-
+        $studentAccomplishments = StudentAccomplishment::with([
+            'accomplishmentFiles' => function ($query) {
+                    $query->orderBy('type', 'ASC')->get();},
+            'user',
+                ])
+            ->where('organization_id', $organization->organization_id)
+            ->whereBetween('date_awarded', [$start_date, $end_date])
+            ->where('status', 1)
+            ->get();
+        //dd($studentAccomplishments);
         return view('accomplishmentreports.showChecklist', 
             compact('events', 'studentAccomplishments', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date')); 
     }

@@ -197,11 +197,14 @@ class EventsController extends Controller
     	])->slug;
         return redirect()->route('event.show',['event_slug' => $event_slug,]);
     }
+    /**
+     * Find Function for Bloodhound and TypeAheadJS
+     */
     public function findEvent(Request $request)
     {
         $events = Event::search($request->get('event'))
             ->select('title', 
-                DB::raw('DATE_FORMAT(start_date, "%M %d, %Y") as start_date'),)
+                DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'),)
             ->orderby('start_date', 'DESC')
             ->get();
         if($events != NULL)

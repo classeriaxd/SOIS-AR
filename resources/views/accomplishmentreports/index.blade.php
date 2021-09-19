@@ -4,6 +4,16 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
+        	@if (session('success'))
+        	<div id="success_alert">
+        	    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        	        {{ session('success') }}
+        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        	            <span aria-hidden="true">&times;</span>
+        	        </button>
+        	    </div>
+        	</div>
+        	@endif
         	<h2 class="text-center display-3">Organization Report</h2>
         	<h5 class="text-center">Choose from Semestral, Quarterly, & Custom</h5>
         	<hr>
