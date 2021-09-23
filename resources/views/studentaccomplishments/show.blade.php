@@ -5,6 +5,15 @@
 	<div class="row justify-content-center">
         <div class="col-md-10">
     		<h2 class="display-2 text-center">Accomplishment</h2>
+            @position_title('Officer')
+            @if($accomplishment->status == 0)
+            <div class="row justify-content-center my-1">  
+                <a href="{{route('student_accomplishment.review', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}">
+                    <button class="btn btn-primary">Review this Accomplishment</button>
+                </a>
+            </div>
+            @endif
+            @endposition_title
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     <div class="card">

@@ -11,39 +11,11 @@
                         <br>
                         <h3 class="text-center">All Events and Accomplishment for</h3>
                         <br>
-                        @isset($range)
                         <h4 class="text-center">{{ $range }}</h4>
                         <br>
-                        @else
-                        <h4 class="text-center">{{ $start_date . ' - ' . $end_date }}</h4><br>
-                        @endisset
                     </div>
                 </div>
-                <hr>
-                <div class="form-group row">
-                    <div class="col text-right">
-                        <label for="radioARFormatGroup" class="form-label h4">Select Format</label>
-                    </div>
-                    <div class="col" id="radioARFormatGroup">
-                        <div class="form-check">
-                            <input type="radio" id="tabular" name="ar_format" class="form-check-input" value="tabular">
-                            <label class="form-check-label" for="tabular">Tabular</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="design" name="ar_format" class="form-check-input" value="design">
-                            <label class="form-check-label" for="design">Design</label>
-                        </div>
-                    </div>
-                </div>
-                @error('ar_format')
-                    <div class="row">
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    </div>
-                @enderror
-                <hr>
-                <div class="row mt-1">
+                <div class="row my-1">
                     @php $i = 1; @endphp
                     <div class="col">
                         <div class="card card-body table-responsive">
@@ -211,7 +183,7 @@
                                                             <input type="checkbox" id="childaccomplishment{{$j}}" onchange="accomplishmentToggleGrandchild(this)">
                                                         </td>
                                                         <td scope="row">
-                                                            <a class="btn btn-primary" href="{{route('student_accomplishment.show', ['accomplishment_uuid' => $accomplishment->accomplishment_uuid])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
+                                                            <a class="btn btn-primary" href="{{route('student_accomplishment.show', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
                                                         </td>
                                                     </tr>
                                                     @php $j += 1; @endphp
@@ -237,19 +209,77 @@
                         </div>
                     </div>
                 </div>
-            <div class="row justify-content-center mt-2">
-                <button class="btn btn-primary" type="submit">Submit Checklist</button>
-            </div>
-            @csrf
-            <input type="hidden" name="start_date" value="{{$start_date}}">
-            <input type="hidden" name="end_date" value="{{$end_date}}">
+                <hr>
+                <h3 class="text-center">Report Details</h3>
+                <div class="form-group justify-content-center row my-1">
+                    <div class="col-md-8">
+                        <div class="form-group row">
+                            <label for="title" class="col-md-4 col-form-label">Title <span class="required">*</span></label>
+                            <input id="title" 
+                            type="text" 
+                            class="form-control"
+                            name="title"
+                            placeholder="Report Title" 
+                            required>
+                        </div>
+                    </div>  
+                </div>
+                <div class="form-group justify-content-center row my-1">
+                    <div class="col-md-8">
+                        <div class="form-group row">
+                            <label for="description" class="col-md-4 col-form-label">Description</label>    
+                            <textarea id="description" 
+                            class="form-control" 
+                            name="description" 
+                            placeholder="Report Description">
+                            </textarea>
+                        </div>
+                    </div>
+                    
+                </div>
+                <hr>
+                <div class="form-group row my-1">
+                    <div class="col text-right">
+                        <label for="radioARFormatGroup" class="form-label h5 align-middle">Select Format</label>
+                    </div>
+                    <div class="col" id="radioARFormatGroup">
+                        <div class="form-check">
+                            <input type="radio" id="tabular" name="ar_format" class="form-check-input" value="tabular" disabled required autocomplete="off">
+                            <label class="form-check-label" for="tabular">Tabular</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="design" name="ar_format" class="form-check-input" value="design" required autocomplete="off">
+                            <label class="form-check-label" for="design">Design</label>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group justify-content-center my-1 row">
+                    <div class="form-check">
+                        <input type="checkbox" id="archive" name="archive" class="form-check-input">
+                        <label class="form-check-label" for="archive">Archive this Accomplishment Report?</label>
+                        <a role="button"
+                            data-toggle="popover" 
+                            title="Archiving Accomplishment Reports" 
+                            data-content="Reports that will be archived are stored permanently. Temporary reports will only last for 30 days. ">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+                    </div>
+                </div>
+                <hr>
+                <div class="row justify-content-center my-1">
+                    <button class="btn btn-primary" type="submit">Submit Checklist</button>
+                </div>
+                @csrf
+                <input type="hidden" name="start_date" value="{{$start_date}}">
+                <input type="hidden" name="end_date" value="{{$end_date}}">
+                <input type="hidden" name="range_title" value="{{$rangeTitle}}">
             </form>
         </div>
-
 	</div>
     <hr>
     <div class="row justify-content-center mt-2">
-        <a href="/home">
+        <a href="{{url()->previous()}}">
             <button class="btn btn-secondary">Go back</button>
         </a>
     </div>
@@ -257,6 +287,7 @@
 @endsection
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js" defer></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
 @endpush
 @section('scripts')
     <script type="text/javascript">
@@ -311,6 +342,11 @@
         var sortable = Sortable.create(dragArea);
         var sortable2 = Sortable.create(dragArea2);
         var sortable3 = Sortable.create(dragArea3);
-
     </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover();   
+        });
+    </script>
+
 @endsection

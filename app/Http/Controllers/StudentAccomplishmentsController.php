@@ -54,7 +54,7 @@ class StudentAccomplishmentsController extends Controller
                     ->get();
                 return view('studentaccomplishments.index', compact('approvedAccomplishments', 'pendingAccomplishments', 'disapprovedAccomplishments'));
             }
-            // Other Documentation Officers
+            // Documentation Officers
             else if(in_array($orgCurrentPosition, $document_officers))
             {
                 $accomplishmentSubmissions = DB::table('student_accomplishments')
@@ -68,8 +68,6 @@ class StudentAccomplishmentsController extends Controller
                     ->paginate(10);
                 return view('studentaccomplishments.index', compact('accomplishmentSubmissions',));
             }
-            // Organization President
-            else if($orgCurrentPosition == 'President') {}
             else
                 abort(404);
         }
@@ -80,7 +78,8 @@ class StudentAccomplishmentsController extends Controller
     {
         $filePondJS = true;
         $typeAheadJS = true;
-    	return view('studentaccomplishments.create', compact('filePondJS', 'typeAheadJS'));
+        $loadJSWithoutDefer = true;
+    	return view('studentaccomplishments.create', compact('filePondJS', 'typeAheadJS', 'loadJSWithoutDefer'));
     }
     public function store(Request $request)
     {
@@ -198,10 +197,7 @@ class StudentAccomplishmentsController extends Controller
                 ->orderBy('updated_at', 'DESC')
                 ->get();
                 
-            if ($newAccomplishment)
-                return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles', 'newAccomplishment'));
-            else
-                return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles'));
+            return view('studentaccomplishments.show', compact('accomplishment', 'accomplishmentFiles', 'newAccomplishment'));
         }
         else
             abort(404);
@@ -300,7 +296,7 @@ class StudentAccomplishmentsController extends Controller
             'reviewed_by' => Auth::user()->user_id,
         ];
         $accomplishment->update($accomplishment_data);
-        $this->sendNotificationToMember($accomplishment->user_id, 'declined', $accomplishment->accomplishment_uuid);
+        $this->sendNotificationToMember($accomplishment->user_id, $accomplishment->accomplishment_uuid, 'declined');
 
     }
     public function approveSubmission($accomplishment_uuid)
@@ -404,7 +400,7 @@ class StudentAccomplishmentsController extends Controller
                     'reviewed_by' => Auth::user()->user_id,
                 ];
                 $accomplishment->update($accomplishment_data);
-                $this->sendNotificationToMember($accomplishment->user_id, 'approved', $accomplishment->accomplishment_uuid);
+                $this->sendNotificationToMember($accomplishment->user_id, $accomplishment->accomplishment_uuid, 'approved');
                 return redirect()->route('student_accomplishment.index');
             }
         }
@@ -415,10 +411,10 @@ class StudentAccomplishmentsController extends Controller
     /*
      * Send Notification to Officers
      */
-    public function sendNotificationToOfficers($sender, $reciever_organization_id, $accomplishment_uuid)
+    public function sendNotificationToOfficers($sender, $recieverOrganizationID, $accomplishmentUUID, $type = 3)
     {
         $valid_positions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-        $recieving_positions = PositionTitle::where('organization_id', $reciever_organization_id)
+        $recieving_positions = PositionTitle::where('organization_id', $recieverOrganizationID)
             ->whereIn('position_title', $valid_positions)
             ->pluck('position_title_id');
         $recieving_users = array();
@@ -429,20 +425,23 @@ class StudentAccomplishmentsController extends Controller
                 array_push($recieving_users,$recieving_user_id);
         }
 
+        $notificationTitle = "New Student Accomplishment Submission";
+        $notificationDescription = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
+        $notificationType = $type;
+        $notificationLink = $accomplishmentUUID;
+
         if (count($recieving_users) > 0)
         {
             foreach($recieving_users as $reciever)
             {
                 if ($reciever != NULL)
                 {
-                    $notification_title = "New Student Accomplishment Submission";
-                    $notification_description = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
-                    $notification_link = route('student_accomplishment.review',['accomplishment_uuid' => $accomplishment_uuid,]);
                     Notification::create([
                         'user_id' => $reciever,
-                        'title' => $notification_title,
-                        'description' => $notification_description,
-                        'link' => $notification_link,
+                        'title' => $notificationTitle,
+                        'description' => $notificationDescription,
+                        'type' => $notificationType,
+                        'link' => $notificationLink,
                     ]);
                 }
             }
@@ -451,34 +450,32 @@ class StudentAccomplishmentsController extends Controller
     /*
      * Send Notification to Member
      */
-    public function sendNotificationToMember($reciever_id, $status, $accomplishment_uuid)
+    public function sendNotificationToMember($recieverID, $accomplishmentUUID, $status, $type = 3)
     {
-        if ($reciever_id != NULL)
+        if ($recieverID != NULL)
         {
+            $notificationLink = $accomplishmentUUID;
+            $notificationType = $type;
+
             if ($status == 'approved')
             {
-                $notification_title = "Submission Approved";
-                $notification_description = 'Your Accomplishment Submission has been approved. Cheers!';
-                $notification_link = route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
-                Notification::create([
-                    'user_id' => $reciever_id,
-                    'title' => $notification_title,
-                    'description' => $notification_description,
-                    'link' => $notification_link,
-                ]);
+                $notificationTitle = "Submission Approved";
+                $notificationDescription = 'Your Accomplishment Submission has been approved. Cheers!';
             }
             else if ($status == 'declined')
             {
-                $notification_title = "Submission Declined";
-                $notification_description = 'Your Accomplishment Submission has been declined.';
-                $notification_link = route('student_accomplishment.show',['accomplishment_uuid' => $accomplishment_uuid,]);
-                Notification::create([
-                    'user_id' => $reciever_id,
-                    'title' => $notification_title,
-                    'description' => $notification_description,
-                    'link' => $notification_link,
-                ]);
+                $notificationTitle = "Submission Declined";
+                $notificationDescription = 'Your Accomplishment Submission has been declined.';
             }
+
+            Notification::create([
+                'user_id' => $recieverID,
+                'title' => $notificationTitle,
+                'description' => $notificationDescription,
+                'type' => $notificationType,
+                'link' => $notificationLink,
+            ]);
+
         }
     }
 

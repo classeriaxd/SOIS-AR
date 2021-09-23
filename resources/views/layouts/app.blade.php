@@ -72,7 +72,15 @@
                                     :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                     title= "{{ $notification->title }}"
                                     description= "{{ $notification->description }}"
-                                    link= "{{ $notification->link }}"
+                                    link= " 
+                                        @if($notification->type == 3)
+                                            {{-- Student Accomplishments --}}
+                                            {{route('student_accomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                        @elseif($notification->type == 4)
+                                            {{-- Accomplishment Reports --}}
+                                            {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                        @endif
+                                     "
                                     >
                                     </read-notification>
                                     @php
@@ -125,10 +133,10 @@
             @yield('content')
         </main>       
     </div>
-    @if($typeAheadJS ?? false)
-    <script src="{{ asset('js/app.js') }}"></script>
+    @if($loadJSWithoutDefer ?? false)
+        <script src="{{ asset('js/app.js') }}"></script>
     @else
-    <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/app.js') }}" defer></script>
     @endif
 
     @stack('footer-scripts')

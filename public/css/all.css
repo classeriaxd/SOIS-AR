@@ -1,3 +1,6 @@
 .bg-maroon {
     background-color: #800000 !important;
 }
+.required {
+    color: red;
+}

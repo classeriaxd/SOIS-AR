@@ -134,8 +134,16 @@
                     </div>
                 </div>
             </div>
+            @if($newEvent)
         	<hr>
-        	<div class="row justify-content-center pt-1">
+            <div class="row justify-content-center my-1">
+                <a href="{{route('event.create')}}">
+                    <button class="btn btn-primary">Create Another Event</button>
+                </a>
+            </div>
+            @endif
+            <hr>
+        	<div class="row justify-content-center my-1">
         		<a href="/e">
         			<button class="btn btn-secondary">Go back</button>
         		</a>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\StudentAccomplishment;
+use App\Models\AccomplishmentReport;
 
 class HomeController extends Controller
 {
@@ -33,7 +34,7 @@ class HomeController extends Controller
             $orgCurrentPositionArray = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
             $orgCurrentPosition = $orgCurrentPositionArray[0];
             $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-
+            
             if ($orgCurrentPosition == 'Member')
             {
                 $accomplishments = StudentAccomplishment::where('user_id', $user_id)
@@ -48,7 +49,14 @@ class HomeController extends Controller
             }
 
             // Organization President
-            else if($orgCurrentPosition == 'President') {}
+            else if($orgCurrentPosition == 'President') 
+            {
+                $pendingARSubmissionCount = AccomplishmentReport::where('status', 1)
+                    ->where('organization_id', Auth::user()->course->organization_id)
+                    ->count();
+
+                return view('home', compact('pendingARSubmissionCount'));
+            }
 
             // Other Documentation Officers
             else if(in_array($orgCurrentPosition, $document_officers))
@@ -56,7 +64,10 @@ class HomeController extends Controller
                 $submissionCount = StudentAccomplishment::where('status', 0)
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
-                return view('home', compact('submissionCount'));
+                $pendingARSubmissionCount = AccomplishmentReport::where('status', 1)
+                    ->where('organization_id', Auth::user()->course->organization_id)
+                    ->count();
+                return view('home', compact('submissionCount', 'pendingARSubmissionCount'));
             }
 
             else

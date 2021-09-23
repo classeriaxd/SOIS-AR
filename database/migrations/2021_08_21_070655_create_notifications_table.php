@@ -18,7 +18,9 @@ class CreateNotificationsTable extends Migration
             $table->foreignId('user_id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('link')->nullable();
+            // Types > 1=System | 2=Event(GPOA)| 3=StudentAccomplishment| 4=AccomplishmentRport
+            $table->unsignedTinyInteger('type');
+            $table->uuid('link')->nullable();
             $table->timestamp('read_at')->nullable()->default(NULL);
             $table->timestamps();
 

@@ -53,6 +53,9 @@ class UserPositionSeeder extends Seeder
             [$position_title_table.'position_title_id' => '64',
              $user_table.'user_id' => '12'
             ],
+            [$position_title_table.'position_title_id' => '49',
+             $user_table.'user_id' => '13'
+            ],
 
         ];
         DB::table('users_position_titles')->insert($data);

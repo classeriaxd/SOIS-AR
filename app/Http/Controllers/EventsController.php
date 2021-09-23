@@ -39,7 +39,7 @@ class EventsController extends Controller
 
         return view('events.index', compact('events', 'orgAcronym'));
     }
-    public function show($event_slug)
+    public function show($event_slug, $newEvent = false)
     {
         /*
          * Shows the Specific Event Details
@@ -49,21 +49,23 @@ class EventsController extends Controller
             $event->event_category = EventCategory::where('event_category_id', $event->event_category_id)->value('category');
             $event->event_role = EventRole::where('event_role_id', $event->event_role_id)->value('event_role');
             // some colors
-            if ($event->event_category == 'Academic')
-                $event->category_color = 'primary';
-            elseif ($event->event_category == 'Non-academic') 
-                $event->category_color = 'danger';
-            elseif ($event->event_category == 'Cultural') 
-                $event->category_color = 'warning';
-            elseif ($event->event_category == 'Sports') 
-                $event->category_color = 'success';
+                if ($event->event_category == 'Academic')
+                    $event->category_color = 'primary';
+                elseif ($event->event_category == 'Non-academic') 
+                    $event->category_color = 'danger';
+                elseif ($event->event_category == 'Cultural') 
+                    $event->category_color = 'warning';
+                elseif ($event->event_category == 'Sports') 
+                    $event->category_color = 'success';
+                elseif ($event->event_category == 'Community Outreach') 
+                    $event->category_color = 'info text-white';
 
-            if ($event->event_role == 'Organizer')
-                $event->role_color = 'primary';
-            elseif ($event->event_role == 'Sponsor') 
-                $event->role_color = 'success';
-            elseif ($event->event_role == 'Participant') 
-                $event->role_color = 'secondary';
+                if ($event->event_role == 'Organizer')
+                    $event->role_color = 'primary';
+                elseif ($event->event_role == 'Sponsor') 
+                    $event->role_color = 'success';
+                elseif ($event->event_role == 'Participant') 
+                    $event->role_color = 'secondary';
 
             $eventImages = EventImage::where('event_id', $event->event_id)->get();
             $eventDocuments = DB::table('event_documents as documents')
@@ -73,7 +75,8 @@ class EventsController extends Controller
             ->orderBy('documents.event_document_type_id', 'ASC')
             ->select('types.document_type as document_type', 'documents.title as title')
             ->get();
-            return view('events.show',compact('event', 'eventImages', 'eventDocuments'));
+
+            return view('events.show',compact('event', 'eventImages', 'eventDocuments', 'newEvent'));
         }
         else
             abort(404);
@@ -156,7 +159,8 @@ class EventsController extends Controller
     {
         $event_categories = EventCategory::all();
         $event_roles = EventRole::all();
-    	return view('events.create', compact('event_categories', 'event_roles'));
+        $loadJSWithoutDefer = true;
+    	return view('events.create', compact('event_categories', 'event_roles', 'loadJSWithoutDefer'));
     }
     public function store()
     {
@@ -195,7 +199,8 @@ class EventsController extends Controller
     		'budget' => $data['budget'],
             'slug' => Str::slug($data['title'], '-') . '-' . Carbon::parse($data['start_date'])->format('Y') . '-' . Str::uuid(),
     	])->slug;
-        return redirect()->route('event.show',['event_slug' => $event_slug,]);
+
+        return redirect()->route('event.show',['event_slug' => $event_slug, 'newEvent' => true,]);
     }
     /**
      * Find Function for Bloodhound and TypeAheadJS
