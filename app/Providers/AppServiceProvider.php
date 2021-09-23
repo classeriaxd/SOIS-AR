@@ -50,14 +50,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Blade::if('position_title', function ($position_title) {
-            $allowedOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation', 'President'];
+            $allowedOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
+            $presidentOfficerTitle = 'President';
             $isAuth = false;
             $positionExists = false;
             if (Auth::check()) 
             {
+                $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
                 if ($position_title == 'Member')
                 {
-                    $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
                     foreach($user_position_titles as $title)
                     {
                         if($position_title == $title)
@@ -66,9 +67,16 @@ class AppServiceProvider extends ServiceProvider
                         }
                     }
                 }
+                else if ($position_title == 'President')
+                {
+                    foreach($user_position_titles as $title)
+                    {
+                        if($title == $presidentOfficerTitle)
+                            $positionExists = true;
+                    }
+                }
                 else if ($position_title == 'Officer')
                 {
-                    $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
                     foreach($user_position_titles as $title)
                     {
                         if(in_array($title, $allowedOfficers, true))
@@ -77,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
                         }
                     }
                 }
+                
             }
 
             if ( $positionExists )

@@ -60,10 +60,10 @@
             </div>
             <div class="card-body">
                 <div class="row justify-content-center">
-                    <a href="/e/create">
+                    <a href="{{route('event.create')}}">
                         <button class="btn btn-primary mr-2">Add Event</button>
                     </a>
-                    <a href="/e/reports">
+                    <a href="{{route('accomplishmentreports.create')}}">
                         <button class="btn btn-primary">Year Summary</button>
                     </a>
                 </div>
@@ -71,7 +71,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <a href="/home">
+        <a href="{{route('home')}}">
             <button class="btn btn-secondary">Go back</button>
         </a>
     </div>

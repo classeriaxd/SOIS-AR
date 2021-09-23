@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CompiledDocument extends Model
+class AccomplishmentReport extends Model
 {
     use SoftDeletes;
     protected $guarded = [];
-    protected $primaryKey = 'compiled_document_id';
-    protected $table = 'compiled_documents';
+    protected $primaryKey = 'accomplishment_report_id';
+    protected $table = 'accomplishment_reports';
 
     public function organization()
     {

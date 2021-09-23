@@ -20,9 +20,6 @@ class UserPositionSeeder extends Seeder
             [$position_title_table.'position_title_id' => '54',
              $user_table.'user_id' => '1'
             ],
-            [$position_title_table.'position_title_id' => '16',
-             $user_table.'user_id' => '1'
-            ],
             [$position_title_table.'position_title_id' => '6',
              $user_table.'user_id' => '2'
             ],
@@ -55,6 +52,9 @@ class UserPositionSeeder extends Seeder
             ],
             [$position_title_table.'position_title_id' => '64',
              $user_table.'user_id' => '12'
+            ],
+            [$position_title_table.'position_title_id' => '49',
+             $user_table.'user_id' => '13'
             ],
 
         ];

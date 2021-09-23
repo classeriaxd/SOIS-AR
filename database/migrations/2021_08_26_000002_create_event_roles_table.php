@@ -16,6 +16,7 @@ class CreateEventRolesTable extends Migration
         Schema::create('event_roles', function (Blueprint $table) {
             $table->id('event_role_id');
             $table->string('event_role');
+            $table->string('helper');
         });
     }
 

@@ -186,6 +186,12 @@
                         <div class="form-check">
                             <input type="radio" id="{{$role->event_role}}" name="event_role" class="form-check-input" value="{{$role->event_role_id}}">
                             <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+                            <a role="button"
+                                data-toggle="popover" 
+                                title="{{$role->event_role}}" 
+                                data-content="{{$role->helper}}">
+                                <i class="far fa-question-circle"></i>
+                            </a>
                         </div>
                         @endforeach
                     </div>
@@ -207,6 +213,12 @@
                         <div class="form-check">
                             <input type="radio" id="{{$category->category}}" name="event_category" class="form-check-input" value="{{$category->event_category_id}}">
                             <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+                            <a role="button"
+                                data-toggle="popover" 
+                                title="{{$category->category}}" 
+                                data-content="{{$category->helper}}">
+                                <i class="far fa-question-circle"></i>
+                            </a>
                         </div>
                         @endforeach
                     </div>
@@ -232,4 +244,11 @@
         </a>
     </div>
 </div>
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover();   
+        });
+    </script>
 @endsection

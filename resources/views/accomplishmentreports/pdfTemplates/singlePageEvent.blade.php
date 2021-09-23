@@ -8,15 +8,34 @@
 <body>
 
     <div class="page">
-        <div class="event-title-block vertical-center">
-            <p class="block-title">{{ $event['title'] }}</p>
-        </div>
-    </div>
-    <div class="page-break"></div>
-    
-    <div class="page">
-        <div class="event-desc-block vertical-center">
-            <p class="block-desc">{{ $event['description'] }}</p>
+        <div class="vertical-center">
+            <div class="event-title-block">
+                <p class="block-title">{{ $event['title'] }}</p>
+                <h2 style="text-align: center;">
+                    @if ($event['event_role_id'] == 1)
+                        <span style="color: #0275d8">Organizer</span>
+                    @elseif ($event['event_role_id'] == 2) 
+                        <span style="color: #5cb85c">Sponsor</span>
+                    @elseif ($event['event_role_id'] == 3) 
+                        <span style="color: gray">Participant</span>
+                    @endif
+                    |
+                    @if ($event['event_category_id'] == 1)
+                        <span style="color: #0275d8">Academic</span>
+                    @elseif ($event['event_category_id'] == 2) 
+                        <span style="color: #d9534f">Non-academic</span>
+                    @elseif ($event['event_category_id'] == 3) 
+                        <span style="color: #f0ad4e">Cultural</span>
+                    @elseif ($event['event_category_id'] == 4) 
+                        <span style="color: #5cb85c">Sports</span>
+                    @endif
+                </h2>
+            </div>
+
+            <div class="event-desc-block">
+                
+                <p class="block-desc">{{ $event['description'] }}</p>
+            </div>
         </div>
     </div>
     <div class="page-break"></div>
@@ -56,6 +75,7 @@
         </div>
     </div>
     @isset($event['event_images'])
+    @if($event['event_images'] != NULL)
     <div class="page-break"></div>
         @php 
             $i = 1; 
@@ -101,6 +121,7 @@
             @endif
 
         @endforeach {{-- endforeach event-img --}}
+    @endif
     @endisset
 </body>
 </html>
