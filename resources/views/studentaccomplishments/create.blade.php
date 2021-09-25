@@ -196,7 +196,7 @@
             // Set the Options for "Bloodhound" suggestion engine
             var engine = new Bloodhound({
                 remote: {
-                    url: '/e/find?event=%QUERY%',
+                    url: '/e/find/?event=%QUERY%',
                     wildcard: '%QUERY%',
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace('event'),

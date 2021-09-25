@@ -18,6 +18,8 @@ class CreateEventsTable extends Migration
             $table->foreignId('organization_id');
             $table->foreignId('event_category_id');
             $table->foreignId('event_role_id');
+            $table->foreignId('level_id');
+            $table->foreignId('fund_source_id');
             $table->string('title');
             $table->text('description');
             $table->text('objective');
@@ -28,8 +30,9 @@ class CreateEventsTable extends Migration
             $table->string('venue');
             $table->string('activity_type');
             $table->string('beneficiaries');
+            $table->unsignedInteger('total_beneficiary');
             $table->string('sponsors');
-            $table->integer('budget')->nullable();
+            $table->unsignedInteger('budget');
             $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();
@@ -37,6 +40,8 @@ class CreateEventsTable extends Migration
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
             $table->foreign('event_category_id')->references('event_category_id')->on('event_categories');
             $table->foreign('event_role_id')->references('event_role_id')->on('event_roles');
+            $table->foreign('level_id')->references('level_id')->on('levels');
+            $table->foreign('fund_source_id')->references('fund_source_id')->on('fund_sources');
         });
     }
 
@@ -51,5 +56,7 @@ class CreateEventsTable extends Migration
         $table->dropForeign('organization_id');
         $table->dropForeign('event_category_id');
         $table->dropForeign('event_role_id');
+        $table->dropForeign('level_id');
+        $table->dropForeign('fund_source_id');
     }
 }

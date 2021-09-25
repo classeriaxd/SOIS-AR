@@ -24,31 +24,23 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
 
 // Bloodhound Routes (TypeAheadJS)
-    Route::get('/e/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
+    Route::get('/e/find/{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
 
-// User Notification Routes
-    Route::post('/u/notification/{notification_id}', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->where(['notification_id' => '^[0-9]*$'])->middleware('auth');
-    Route::post('/u/notifications/all', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->middleware('auth')->name('notifications.markAllAsRead');
-    Route::get('/u/notifications', [App\Http\Controllers\NotificationsController::class, 'show'])->middleware('auth')->name('notifications.show');
-
-// EVENT DOCUMENT UPLOADS
-    Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->middleware('auth');
-    Route::post('/e/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->middleware('auth');
-
-// Accomplishment Reports
+// Sorted Routes
     Route::group(['middleware' => 'auth'], function () {
+
         // Show and Review of Accomplishment report
         Route::group([
                 'as' => 'accomplishmentReport.',
                 'prefix' => '/e/report/{accomplishmentReportUUID}',
-                'where' => ['accomplishmentReportUUID' => '^[a-zA-Z0-9-]{36}$'],
-            ], 
+                'where' => ['accomplishmentReportUUID' => '^[a-zA-Z0-9-]{36}$'],], 
             function () {
                 Route::post('/review/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReview'])->name('finalizeReview');
                 Route::get('/review', [App\Http\Controllers\AccomplishmentReportsController::class, 'review'])->name('review');
                 Route::get('/{newAccomplishmentReport?}', [App\Http\Controllers\AccomplishmentReportsController::class, 'show'])->name('show');
             }
         );
+
         // Accomplishment Reports
         Route::group([
                 'as' => 'accomplishmentreports.',
@@ -68,28 +60,39 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
                 });
             }
         );
-    });
-    
-    
 
-
-// Events
-    Route::group(['middleware' => 'auth'], function () {
         // Events
         Route::group([
                 'as' => 'event.',
                 'prefix' => '/e'], 
             function () {
                 Route::get('/create', [App\Http\Controllers\EventsController::class, 'create'])->name('create');
-                Route::get('/{event_slug}/edit', [App\Http\Controllers\EventsController::class, 'edit'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$']);
-                Route::patch('/{event_slug}', [App\Http\Controllers\EventsController::class, 'update'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$']);
-                Route::delete('/{event_slug}', [App\Http\Controllers\EventsController::class, 'destroy'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('destroy');
-                Route::get('/{event_slug}/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('show');
                 Route::get('', [App\Http\Controllers\EventsController::class, 'index'])->name('index');
-                Route::post('', [App\Http\Controllers\EventsController::class, 'store']);
+                Route::post('', [App\Http\Controllers\EventsController::class, 'store'])->name('store');
+
+                Route::group([
+                        'prefix' => '/{event_slug}',
+                        'where' => ['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit']);
+                        Route::patch('', [App\Http\Controllers\EventsController::class, 'update'])->name('update');;
+                        Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
+                        Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show');
+                    });
             }
         );
     });
+
+// User Notification Routes
+    Route::post('/u/notification/{notification_id}', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->where(['notification_id' => '^[0-9]*$'])->middleware('auth');
+    Route::post('/u/notifications/all', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->middleware('auth')->name('notifications.markAllAsRead');
+    Route::get('/u/notifications', [App\Http\Controllers\NotificationsController::class, 'show'])->middleware('auth')->name('notifications.show');
+
+// EVENT DOCUMENT UPLOADS
+    Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->middleware('auth');
+    Route::post('/e/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->middleware('auth');
+
+
     
 // EVENT DOCUMENTS
     Route::delete('/e/{event_slug}/document/{document_id}', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'document_id' => '^[0-9]*$'])->middleware('auth')->name('event_documents.destroy');

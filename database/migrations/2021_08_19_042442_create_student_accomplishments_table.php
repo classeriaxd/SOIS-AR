@@ -17,6 +17,7 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->id('student_accomplishment_id');
             $table->foreignId('user_id');
             $table->foreignId('organization_id');
+            $table->foreignId('level_id');
             $table->uuid('accomplishment_uuid')->unique();
             $table->string('title');
             $table->text('description');
@@ -30,6 +31,7 @@ class CreateStudentAccomplishmentsTable extends Migration
 
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
+            $table->foreign('level_id')->references('level_id')->on('levels');
             $table->foreign('reviewed_by')->references('user_id')->on('users');
 
         });
@@ -45,6 +47,7 @@ class CreateStudentAccomplishmentsTable extends Migration
         Schema::dropIfExists('student_accomplishments');
         $table->dropForeign('user_id');
         $table->dropForeign('organization_id');
+        $table->dropForeign('level_id');
         $table->dropForeign('reviewed_by');
     }
 }
