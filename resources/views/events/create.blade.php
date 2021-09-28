@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <form action="/e" enctype="multipart/form-data" method="POST" id="eventForm">
+    <form action="{{route('event.store')}}" enctype="multipart/form-data" method="POST" id="eventForm">
         @csrf
         <div class="row">
             <div class="col-8 offset-2">
@@ -305,7 +305,7 @@
     </form>
     <hr>
     <div class="row justify-content-center">
-        <a href="/home">
+        <a href="{{route('home')}}">
             <button class="btn btn-secondary">Go Home</button>
         </a>
     </div>

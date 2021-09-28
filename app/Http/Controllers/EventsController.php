@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\{
     Event,
@@ -24,9 +27,6 @@ use App\Services\EventServices\{
     EventGetOrganizationIDService,
     EventGetDocumentTitlesService,
 };
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {
@@ -125,12 +125,14 @@ class EventsController extends Controller
     }
     /**
      * Find Function for Bloodhound and TypeAheadJS
+     , 
+                
      */
     public function findEvent(Request $request)
     {
         $events = Event::search($request->get('event'))
-            ->select('title', 
-                DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'),)
+            ->select('title',
+                DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'))
             ->orderby('start_date', 'DESC')
             ->get();
         if($events != NULL)

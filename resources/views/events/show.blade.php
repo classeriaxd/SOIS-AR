@@ -154,7 +154,7 @@
             @endif
             <hr>
         	<div class="row justify-content-center my-1">
-        		<a href="/e">
+        		<a href="{{route('event.index')}}">
         			<button class="btn btn-secondary">Go back</button>
         		</a>
         	</div>

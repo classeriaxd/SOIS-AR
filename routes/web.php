@@ -20,14 +20,14 @@ Route::get('/', function () {
 });
 // halep me organize this shit ples
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
-
 // Bloodhound Routes (TypeAheadJS)
-    Route::get('/e/find/{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
+Route::get('/e/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
+
 
 // Sorted Routes
     Route::group(['middleware' => 'auth'], function () {
+
+        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
         // Show and Review of Accomplishment report
         Route::group([
@@ -67,6 +67,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
                 'prefix' => '/e'], 
             function () {
                 Route::get('/create', [App\Http\Controllers\EventsController::class, 'create'])->name('create');
+
                 Route::get('', [App\Http\Controllers\EventsController::class, 'index'])->name('index');
                 Route::post('', [App\Http\Controllers\EventsController::class, 'store'])->name('store');
 
@@ -79,6 +80,34 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
                         Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
                         Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show');
                     });
+            }
+        );
+
+        // Student Accomplishments
+        Route::group([
+                'as' => 'studentAccomplishment.',
+                'prefix' => '/s/accomplishments',],
+            function ()
+            {
+                Route::delete('/upload/revert', [App\Http\Controllers\StudentAccomplishmentsController::class, 'undoUpload']);
+                Route::get('/create', [App\Http\Controllers\StudentAccomplishmentsController::class, 'create'])->name('create');
+                Route::post('/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload']);
+                Route::get('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->name('index');
+                Route::post('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store']);
+            }
+        );
+
+        Route::group([
+                'as' => 'studentAccomplishment.',
+                'prefix' => '/s/accomplishment/{accomplishmentUUID}',
+                'where' => ['accomplishmentUUID' => '^[a-zA-Z0-9-]{36}$'],],
+            function ()
+            {
+                Route::get('/final', [App\Http\Controllers\StudentAccomplishmentsController::class, 'finalReview'])->name('finalReview');
+                Route::post('/final', [App\Http\Controllers\StudentAccomplishmentsController::class, 'approveSubmission'])->name('approveSubmission');
+                Route::get('/review', [App\Http\Controllers\StudentAccomplishmentsController::class, 'initialReview'])->name('review');
+                Route::post('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'getSubmissionDecision'])->name('submissionDecision');
+                Route::get('/{newAccomplishment?}', [App\Http\Controllers\StudentAccomplishmentsController::class, 'show'])->name('show');   
             }
         );
     });
@@ -125,17 +154,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
     // Route::get('/o/documents/create', [App\Http\Controllers\DocumentManagementController::class, 'create'])->middleware('auth');
     // Route::post('/o/documents', [App\Http\Controllers\DocumentManagementController::class, 'store'])->middleware('auth');
 
-// Student Accomplishments
-    Route::delete('/s/accomplishments/upload/revert', [App\Http\Controllers\StudentAccomplishmentsController::class, 'undoUpload'])->middleware('auth');
-    Route::get('/s/accomplishment/{accomplishment_uuid}/final', [App\Http\Controllers\StudentAccomplishmentsController::class, 'finalReview'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.finalReview');
-    Route::post('/s/accomplishment/{accomplishment_uuid}/final', [App\Http\Controllers\StudentAccomplishmentsController::class, 'approveSubmission'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.approveSubmission');
-    Route::get('/s/accomplishment/{accomplishmentUUID}/review', [App\Http\Controllers\StudentAccomplishmentsController::class, 'initialReview'])->where(['accomplishmentUUID' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.review');
 
-    Route::post('/s/accomplishment/{accomplishment_uuid}', [App\Http\Controllers\StudentAccomplishmentsController::class, 'getSubmissionDecision'])->where(['accomplishment_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.submissionDecision');
-
-    Route::get('/s/accomplishment/{accomplishmentUUID}/{newAccomplishment?}', [App\Http\Controllers\StudentAccomplishmentsController::class, 'show'])->where(['accomplishmentUUID' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('student_accomplishment.show');
-    Route::get('/s/accomplishments/create', [App\Http\Controllers\StudentAccomplishmentsController::class, 'create'])->middleware('auth');
-    Route::post('/s/accomplishments/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload'])->middleware('auth');
-    Route::get('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->middleware('auth')->name('student_accomplishment.index');
-    Route::post('/s/accomplishments', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store'])->middleware('auth');
 

@@ -75,7 +75,7 @@
                                     link= " 
                                         @if($notification->type == 3)
                                             {{-- Student Accomplishments --}}
-                                            {{route('student_accomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                            {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
                                         @elseif($notification->type == 4)
                                             {{-- Accomplishment Reports --}}
                                             {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}

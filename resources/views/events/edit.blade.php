@@ -317,6 +317,12 @@
 	        </div>
 	    </div>
 	</form>
+	<hr>
+	<div class="row justify-content-center">
+	    <a href="{{route('event.show', ['event_slug' => $event->slug])}}">
+	        <button class="btn btn-secondary">Go Back</button>
+	    </a>
+	</div>
 </div>
 @endsection
 @section('scripts')
