@@ -49,6 +49,7 @@ Route::get('/e/find{event?}', [App\Http\Controllers\EventsController::class, 'fi
                 Route::post('/create/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReport'])->name('finalizeReport');
                 Route::post('/create/checklist', [App\Http\Controllers\AccomplishmentReportsController::class, 'showChecklist'])->name('showChecklist');
                 Route::get('/create', [App\Http\Controllers\AccomplishmentReportsController::class, 'create'])->name('create');
+                Route::get('/tabular', [App\Http\Controllers\AccomplishmentReportsController::class, 'tabularAR']);
                 Route::get('', [App\Http\Controllers\AccomplishmentReportsController::class, 'index'])->name('index');
 
                 // Fallback for POST-only Routes

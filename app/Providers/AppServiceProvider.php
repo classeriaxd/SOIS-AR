@@ -44,7 +44,12 @@ class AppServiceProvider extends ServiceProvider
                     ->orderBy('created_at', 'DESC')
                     ->limit(5)
                     ->get();
+                $notificationCount = Notification::where('user_id', Auth::user()->user_id)
+                    ->whereNull('read_at')
+                    ->count();
+                    
                 $view->with('notifications', $notifications);
+                $view->with('notificationCount', $notificationCount);
             }
         });
 

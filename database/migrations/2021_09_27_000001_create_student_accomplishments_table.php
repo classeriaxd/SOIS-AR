@@ -20,6 +20,8 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->foreignId('level_id')->nullable()->default(NULL);
             $table->foreignId('fund_source_id')->nullable()->default(NULL);
             $table->foreignId('event_id')->nullable()->default(NULL);
+            $table->foreignId('event_category_id')->nullable()->default(NULL);
+
             $table->uuid('accomplishment_uuid')->unique();
             $table->string('title');
             $table->text('description');
@@ -29,9 +31,9 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->string('venue');
+            $table->string('organizer');
             $table->string('activity_type')->nullable()->default(NULL);
             $table->string('beneficiaries')->nullable()->default(NULL);
-            $table->string('organizer');
             $table->unsignedInteger('budget')->nullable()->default(NULL);
             // Status: 1 - PENDING | 2 - APPROVED | 3 - DISAPPROVED
             $table->unsignedTinyInteger('status')->default(1);
@@ -45,6 +47,7 @@ class CreateStudentAccomplishmentsTable extends Migration
             $table->foreign('level_id')->references('level_id')->on('levels');
             $table->foreign('fund_source_id')->references('fund_source_id')->on('fund_sources');
             $table->foreign('event_id')->references('event_id')->on('events');
+            $table->foreign('event_category_id')->references('event_category_id')->on('event_categories');
             $table->foreign('reviewed_by')->references('user_id')->on('users');
 
         });
@@ -62,6 +65,8 @@ class CreateStudentAccomplishmentsTable extends Migration
         $table->dropForeign('organization_id');
         $table->dropForeign('level_id');
         $table->dropForeign('fund_source_id');
+        $table->dropForeign('event_id');
+        $table->dropForeign('event_category_id');
         $table->dropForeign('reviewed_by');
     }
 }

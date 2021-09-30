@@ -33,8 +33,8 @@ class EventStoreService
             'activity_type' => $request->input('activityType'),
             'beneficiaries' => $request->input('beneficiaries'),
             'total_beneficiary' => $request->input('totalBeneficiary'),
-            'sponsors' => $request->input('sponsors'),
-            'budget' => $request->input('budget'),
+            'sponsors' => $request->input('sponsors', NULL),
+            'budget' => $request->input('budget', NULL),
             'slug' => Str::slug($request->input('title'), '-') . '-' . Carbon::parse($request->input('startDate'))->format('Y') . '-' . Str::uuid(),
         ])->slug;
         return $event_slug;
