@@ -62,7 +62,7 @@
                             <li class="nav-item dropdown">                             
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle align-middle text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     <i class="far fa-bell fa-lg"></i>
-                                    <span class="badge badge-pill badge-primary align-top"><small>{{$notifications->count() ?? 0}}</small></span>
+                                    <span class="badge badge-pill badge-primary align-top"><small>{{$notificationCount ?? 0}}</small></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right text-light" aria-labelledby="navbarDropdown">
                                     @if($notifications->count() > 0)
@@ -75,7 +75,7 @@
                                     link= " 
                                         @if($notification->type == 3)
                                             {{-- Student Accomplishments --}}
-                                            {{route('student_accomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                            {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
                                         @elseif($notification->type == 4)
                                             {{-- Accomplishment Reports --}}
                                             {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}

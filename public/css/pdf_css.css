@@ -47,6 +47,12 @@
     font-size: 48px;
     font-weight: bold;
 }
+.event-title-block .block-desc
+{
+    vertical-align: middle;
+    text-align: center;
+    font-size: 24px;
+}
 
 .event-prep-block
 {
@@ -107,22 +113,22 @@
 
 .event-img-block .info-block p
 {
-   border: 3px solid black;
-   padding: 5px
+   border: 1px solid black;
+   padding: 3px
 }
 
 .event-img-block .img-block
 {
     margin-left: auto;
     margin-right: auto;
-    max-width: 400px
+    max-width: 676px;
 }
 
 .event-img-block .img-block img
 {
-    min-width: 400px;
-    max-width: 400px;
-    min-height: 250px;
-    max-height: 250px;
-    border: 3px solid black;
+    min-width: 672px;
+    max-width: 672px;
+    min-height: 480px;
+    max-height: 480px;
+    border: 1px solid black;
 }
