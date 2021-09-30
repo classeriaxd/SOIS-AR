@@ -36,20 +36,16 @@ class AppServiceProvider extends ServiceProvider
 
         // Load Notifications on all Views
         View::composer('*', function ($view) {
-            if (Auth::check()) 
+            if (Auth::check() && $user_id = Auth::user()->user_id) 
             {
-                $notifications = Notification::where('user_id', Auth::user()->user_id)
+                $notifications = Notification::where('user_id', $user_id)
+                    ->whereRaw('created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY')
                     ->whereNull('read_at')
                     ->orderBy('read_at', 'ASC')
                     ->orderBy('created_at', 'DESC')
                     ->limit(5)
                     ->get();
-                $notificationCount = Notification::where('user_id', Auth::user()->user_id)
-                    ->whereNull('read_at')
-                    ->count();
-                    
                 $view->with('notifications', $notifications);
-                $view->with('notificationCount', $notificationCount);
             }
         });
 

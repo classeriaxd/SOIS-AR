@@ -70,9 +70,9 @@
             </div>
         </div>
     </div>
-    <div class="row my-2 justify-content-center">
+    <div class="row justify-content-center">
         <a href="{{route('home')}}">
-            <button class="btn btn-secondary">Go Home</button>
+            <button class="btn btn-secondary">Go back</button>
         </a>
     </div>
 

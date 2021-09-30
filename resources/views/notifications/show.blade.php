@@ -26,7 +26,7 @@
                             <a href="
                                     @if($notification->type == 3)
                                         {{-- Student Accomplishments --}}
-                                        {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                        {{route('student_accomplishment.show', ['accomplishmentUUID' => $notification->link])}}
                                     @elseif($notification->type == 4)
                                         {{-- Accomplishment Reports --}}
                                         {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}

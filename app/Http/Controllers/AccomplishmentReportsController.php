@@ -2,32 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{
-    User,
-    Event,
-    EventImage,
-    Organization,
-    OrganizationAsset,
-    SchoolYear,
-    StudentAccomplishment,
-    AccomplishmentReport,
-    PositionTitle,
-    Notification,
-};
+use App\Models\User;
+use App\Models\Event;
+use App\Models\EventImage;
+use App\Models\Organization;
+use App\Models\OrganizationAsset;
+use App\Models\SchoolYear;
+use App\Models\StudentAccomplishment;
+use App\Models\AccomplishmentReport;
+use App\Models\PositionTitle;
+use App\Models\Notification;
 
-use App\Http\Requests\AccomplishmentReportRequests\{
-    FinalizeReportRequest,
-    FinalizeReviewRequest,
-};
+use App\Http\Requests\AccomplishmentReportRequests\FinalizeReportRequest;
+use App\Http\Requests\AccomplishmentReportRequests\FinalizeReviewRequest;
 
-use App\Services\AccomplishmentReportServices\{
-    AccomplishmentReportGeneratePDFService,
-    AccomplishmentReportStoreService,
-};
-
-use App\Services\NotificationServices\{
-    AccomplishmentReportNotificationService,
-};
+use App\Controllers\NotificationsController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -200,8 +189,10 @@ class AccomplishmentReportsController extends Controller
                 $this->deleteDirectory(Str::of(storage_path('/app/public/' . $accomplishmentReport->file))->dirname());
 
                 // Insert to archive table if archive=true
-                $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-                $accomplishmentReportNotificationService->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'approved');
+
+                $this->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'approved');
+                
+
             }
             else if ($request->has('decline'))
             {
@@ -210,8 +201,7 @@ class AccomplishmentReportsController extends Controller
                     'reviewed_by' => Auth::user()->user_id,
                     'remarks' => $request->input('remarks'),
                 ]);
-                $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-                $accomplishmentReportNotificationService->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'declined');
+                $this->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'declined');
                 
             }
             return redirect()->action(
@@ -325,11 +315,11 @@ class AccomplishmentReportsController extends Controller
         $studentAccomplishments = StudentAccomplishment::with([
             'accomplishmentFiles' => function ($query) {
                     $query->orderBy('type', 'ASC')->get();},
-            'student',
+            'user',
                 ])
             ->where('organization_id', $organization->organization_id)
-            ->whereBetween('end_date', [$start_date, $end_date])
-            ->where('status', 2)
+            ->whereBetween('date_awarded', [$start_date, $end_date])
+            ->where('status', 1)
             ->get();
         //dd($studentAccomplishments);
         $loadJSWithoutDefer = true;
@@ -342,6 +332,33 @@ class AccomplishmentReportsController extends Controller
      */
     public function finalizeReport(FinalizeReportRequest $request)
     {
+        // Get Date, Format, Archive, and Range Title
+        $dateData = $request->only(['start_date', 'end_date']);
+        $format = $request->only('ar_format');
+        $archive = $request->has('archive') ? 1 : 0;
+        $rangeTitleRequest = $request->only('range_title');
+        $rangeTitle = NULL;
+        // change range title
+        switch ($rangeTitleRequest['range_title']) {
+            case 'Semestral':
+                $rangeTitle = 1;
+                break;
+            case 'Quarterly':
+                $rangeTitle = 2;
+                break;
+            case 'Custom':
+                $rangeTitle = 3;
+                break;
+        }
+
+        // Get all Keys from Form
+        $allKeys= $request->except(['start_date', 'end_date', '_token', 'ar_format', 'range_title']);
+        if (count($allKeys) == 0) 
+        {
+            return redirect()->action(
+                [AccomplishmentReportsController::class, 'index'])
+                ->with('error', 'No Report Selected!');
+        }
         // Fetch Organization Details
         $organization = Organization::where('organization_id', Auth::user()->course->organization_id)->first();
 
@@ -351,64 +368,363 @@ class AccomplishmentReportsController extends Controller
                     $query->orderBy('image_type', 'ASC')->get();},
             'eventDocuments' => function ($query) {
                     $query->orderBy('event_document_type_id', 'ASC')->get();},
-            'eventLevel',
-            'eventFundSource',
-            'organization',
                 ])
             ->where('organization_id', $organization->organization_id)
-            ->whereBetween('start_date', [$request->input('start_date'), $request->input('end_date')])
+            ->whereBetween('start_date', [$dateData['start_date'], $dateData['end_date']])
             ->orderBy('event_role_id', 'ASC')
             ->get();
         $studentAccomplishments = StudentAccomplishment::with([
             'accomplishmentFiles' => function ($query) {
                     $query->orderBy('type', 'ASC')->get();},
-            'student',
-            'level',
+            'user',
                 ])
             ->where('organization_id', $organization->organization_id)
-            ->whereBetween('end_date', [$request->input('start_date'), $request->input('end_date')])
-            ->where('status', 2)
+            ->whereBetween('date_awarded', [$dateData['start_date'], $dateData['end_date']])
+            ->where('status', 1)
             ->get();
-
-        if ($request->input('ar_format') == 'tabular')
-        {
-             /*** 4 tables
-             * 1-- Student Accomplishments outside PUP
-             * 2-- Events under Community Outreach category
-             * 3-- Events that are Seminar/Workshops
-             * 4-- All Academic and Non Academic Events
-             */ 
-            $table1 = $studentAccomplishments->whereIn('level_id', [2,3,4,5]);
-            $table2 = $events->where('event_category_id', 6);
-            $table3 = $events->where('event_category_id', 5);
-            $table4 = $events->whereIn('event_category_id', [1,2]);
-
-        return view('accomplishmentreports.tabularTest', compact('table1', 'table2', 'table3', 'table4'));
-        }
-
-        elseif ($request->input('ar_format') == 'design') 
-        {
-            $accomplishmentReportGeneratePDFService = new AccomplishmentReportGeneratePDFService();
-            $ARDirectory = $accomplishmentReportGeneratePDFService->generate($request, $events, $studentAccomplishments,);
-
-        }
-        $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
-        $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization);
         
-        $sender = Auth::user()->last_name . ', '.  Auth::user()->first_name . ' ' .  Auth::user()->middle_name;
-        $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-        $accomplishmentReportNotificationService->sendNotificationToPresident($sender, Auth::user()->course->organization_id, $accomplishmentReportUUID);
 
+        // Get Sorted Events and Accomplishments
+        $sortedEvents = $this->sortAndCompileReport($allKeys, $events, 'events');
+        $sortedAccomplishments = $this->sortAndCompileReport($allKeys, $studentAccomplishments, 'accomplishments');
+        
+        // Create Folder and Directory
+            $temporaryFolder = 'tmp/temporaryFolder-' . uniqid() . '-' . now()->timestamp;
+            if (!is_dir(storage_path('/app/public/compiledDocuments/tmp/'))) {
+                // dir doesn't exist, make it
+                mkdir(storage_path('/app/public/compiledDocuments/tmp/'));
+            }
+            if (!is_dir(storage_path('/app/public/compiledDocuments/' . $temporaryFolder))) {
+                // dir doesn't exist, make it
+                mkdir(storage_path('/app/public/compiledDocuments/' . $temporaryFolder));
+            }
+
+        // Create Event PDF, save it to File, then add to array
+        // After that get all documents, then add to array
+        // temp is true for Title Page
+        $compiledDocuments = array();
+        $temp = true;
+
+        foreach($sortedEvents as $event)
+        {
+            if ($temp)
+            {
+                // Create and Append Event Title Page
+                $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
+                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.eventTitlePage')
+                    ->setPaper('letter', 'portrait')
+                    ->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+                $temp = false;
+            }
+            //dd($event);
+            $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
+            $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageEvent', compact('event'))
+                ->setPaper('letter', 'portrait')
+                ->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+            if (isset($event['event_documents']))
+            {
+                foreach ($event['event_documents'] as $document) 
+                {
+                    array_push($compiledDocuments, storage_path('/app/public/' . $document['file']));
+                }
+            }
+        }
+
+        $temp = true;
+
+        foreach ($sortedAccomplishments as $accomplishment)
+        {
+            if($temp)
+            {
+                // Create and Append Accomplishment Title Page
+                $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
+                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.accomplishmentTitlePage')->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+                $temp = false;
+            }
+            $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
+            $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageAccomplishment', compact('accomplishment'))
+                ->setPaper('letter', 'portrait')
+                ->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
+            if (isset($accomplishment['accomplishment_files']))
+            {
+                foreach ($accomplishment['accomplishment_files'] as $file) 
+                {
+                    if($file['type'] == 2)
+                        array_push($compiledDocuments, storage_path('/app/public/' . $file['file']));
+                    elseif($file['type'] == 1)
+                    {
+                        $fileName2 = uniqid() . '-' . now()->timestamp . '.pdf';
+                        $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageAccomplishmentImage', compact('file'))
+                            ->setPaper('letter', 'portrait')
+                            ->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName2));
+                        array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName2));
+                    }
+                }
+            }
+        }
+        // Merge all documents then delete temporary folder
+            $finalFolderName = uniqid() . '-' . now()->timestamp;
+            if (!is_dir(storage_path('/app/public/compiledDocuments/accomplishmentReports/'))) {
+                // dir doesn't exist, make it
+                mkdir(storage_path('/app/public/compiledDocuments/accomplishmentReports/'));
+            }
+            if (!is_dir(storage_path('/app/public/compiledDocuments/accomplishmentReports/' . $finalFolderName))) {
+                // dir doesn't exist, make it
+                mkdir(storage_path('/app/public/compiledDocuments/accomplishmentReports/' . $finalFolderName));
+            }
+        $finalFileName = uniqid() . '-' . now()->timestamp . '.pdf';
+        $this->mergePDF($compiledDocuments, $finalFileName, $finalFolderName);
+        $this->deleteDirectory($temporaryFolder);
+
+        // Create new CompiledDocument model
+        $accomplishmentReportUUID = AccomplishmentReport::create([
+            'accomplishment_report_uuid' => Str::uuid(),
+            'organization_id' => $organization->organization_id,
+            'created_by' => Auth::user()->user_id,
+            'title' => $request->input('title'),
+            'description' => $request->input('description', NULL),
+            'file' => '/compiledDocuments/accomplishmentReports/' . $finalFolderName . '/' . $finalFileName,
+            'for_archive' => $archive,
+            'start_date' => $dateData['start_date'],
+            'end_date' => $dateData['end_date'],
+            'range_title' => $rangeTitle,
+        ])->accomplishment_report_uuid;
+        
+        $senderDetails = User::where('user_id', Auth::user()->user_id)->select('first_name', 'middle_name', 'last_name')->first();
+        $sender = $senderDetails->last_name . ', '. $senderDetails->first_name . ' ' . $senderDetails->middle_name;
+        $this->sendNotificationToPresident($sender, Auth::user()->course->organization_id, $accomplishmentReportUUID);
         return redirect()->route('accomplishmentReport.show',
             ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
             ->with('success', 'Accomplishment Report Generated. Sent in for President\'s Approval.');
     }
+    
+    /**
+     * Function to Send Notification to Organization President
+     * about new Accomplishment Report
+     * 
+     * sender = String
+     * recieverOrganizationId = int
+     * accomplishmentReportUUID = String
+     * type = String (System,Event,SA,AR)
+     */ 
+    public function sendNotificationToPresident($sender, $recieverOrganizationId, $accomplishmentReportUUID, $type = 4)
+    {
+        $validPositions = ['President'];
+        $recievingPositions = PositionTitle::where('organization_id', $recieverOrganizationId)
+            ->whereIn('position_title', $validPositions)
+            ->pluck('position_title_id');
+        $recievingUsers = array();
+        foreach($recievingPositions as $reciever)
+        {
+            $recievingUserId = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
+            if ($recievingUserId != NULL) 
+                array_push($recievingUsers,$recievingUserId);
+        }
+
+        if (count($recievingUsers) > 0)
+        {
+            foreach($recievingUsers as $reciever)
+            {
+                if ($reciever != NULL)
+                {
+                    $notificationTitle = "New Accomplishment Report Submission";
+                    $notificationDescription = 'An Officer named ' . $sender . ' sent an Accomplishment Report Submission. Please review it!';
+                    $notificationType = $type;
+                    $notificationLink = $accomplishmentReportUUID;
+                    Notification::create([
+                        'user_id' => $reciever,
+                        'title' => $notificationTitle,
+                        'description' => $notificationDescription,
+                        'type' => $notificationType,
+                        'link' => $notificationLink,
+                    ]);
+                }
+            }
+        }
+    }
+    /**
+     * Function to Send Notification to Documentation Officer
+     * about Accomplishment Report status
+     * 
+     * sender = String
+     * recieverOrganizationId = int
+     * accomplishmentReportUUID = String
+     * status = String(approved,declined)
+     * type = String (System,Event,SA,AR)
+     */ 
+    public function sendNotificationToOfficer($recieverOrganizationId, $accomplishmentReportUUID, $status, $type = 4)
+    {
+        $validPositions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
+        $recievingPositions = PositionTitle::where('organization_id', $recieverOrganizationId)
+            ->whereIn('position_title', $validPositions)
+            ->pluck('position_title_id');
+        $recievingUsers = array();
+        foreach($recievingPositions as $reciever)
+        {
+            $recievingUserId = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
+            if ($recievingUserId != NULL) 
+                array_push($recievingUsers,$recievingUserId);
+        }
+
+        $notificationType = $type;
+        $notificationLink = $accomplishmentReportUUID;
+
+        if (count($recievingUsers) > 0)
+        {
+            foreach($recievingUsers as $reciever)
+            {
+                if ($reciever != NULL)
+                {
+                    if($status == 'approved')
+                    {
+                        $notificationTitle = "AR Submission approved!";
+                        $notificationDescription = "Your Accomplishment Report Submission has been approved.";
+
+                    }
+                    else if($status == 'declined')
+                    {
+                        $notificationTitle = "AR Submission declined.";
+                        $notificationDescription = "Your Accomplishment Report Submission has been declined.";
+                    }
+                    
+                    Notification::create([
+                        'user_id' => $reciever,
+                        'title' => $notificationTitle,
+                        'description' => $notificationDescription,
+                        'type' => $notificationType,
+                        'link' => $notificationLink,
+                    ]);
+                }
+            }
+        }
+    }
+    /**
+     * Function to Sort and Compile Report using Key Array and Report Collection
+     * keys = array()
+     * reportCollection = collection()
+     * reportType = String (events, accomplishments)
+     */ 
+    private function sortAndCompileReport($keys, $reportCollection, $reportType)
+    {
+        // Filter Event/Accomplishment Keys
+        if ($reportType == 'events')
+        {
+            $collectionKeys = Arr::where($keys, function ($value, $key) {
+                if(Str::startsWith($key, 'event'))
+                    return $key;
+            });
+        }
+        elseif ($reportType == 'accomplishments')
+        {
+            $collectionKeys = Arr::where($keys, function ($value, $key) {
+                if(Str::startsWith($key, 'accomplishment'))
+                    return $key;
+            });
+        }
+
+        // Remake array, only keys remain
+        $collectionKeys = array_keys($collectionKeys);
+        // Group Keys, add attributes
+        $collectionWithAttributes = $this->groupKeysWithAttributes($collectionKeys, $reportCollection->count(), $reportType);
+        $sortedCollection = collect([]);
+
+        // Rearrange Collection, then retain/remove attributes
+        foreach ($collectionWithAttributes as $key => $value) 
+        {
+            // If details attribute is set, add report to new Collection
+            if (isset($value['details']))
+            {
+                if ($reportType == 'events')
+                {
+                    // Get current event using Key from original Event Query
+                    $currentEvent = collect($reportCollection->get($key));
+                    // If images is not set, remove from current event
+                    if((! isset($value['images'])) && ($currentEvent['event_images'] != NULL))
+                        $currentEvent->forget('event_images');
+                    // If documents is not set, remove from current event
+                    if((! isset($value['documents'])) && ($currentEvent['event_documents'] != NULL))
+                        $currentEvent->forget('event_documents');
+                    // Push updated current event to a new collection
+                    $sortedCollection->push($currentEvent);
+                }
+                elseif ($reportType == 'accomplishments')
+                {
+                    // Get current accomplishment using Key from original Accomplishment Query
+                    $currentAccomplishment = collect($reportCollection->get($key));
+                    // If files is not set, remove from current accomplishment
+                    if((! isset($value['files'])) && ($currentAccomplishment['accomplishment_files'] != NULL))
+                        $currentAccomplishment->forget('accomplishment_files');               
+                    // Push updated current accomplishment to a new collection
+                    $sortedCollection->push($currentAccomplishment);
+                }
+            }
+        }
+
+        return $sortedCollection;
+    }
+
+    /**
+     * Function to Group Keys using a given key array
+     * choiceKeyArray = array() 
+     * rowCount = int
+     * category = String
+     */ 
+    private function groupKeysWithAttributes($choiceKeyArray, $rowCount, $category)
+    {
+        // Loop throughout the array, then append attributes to numbers
+        $temp = 0;
+        $currentNumber = null;
+        $newArray = array();
+        while($temp <= count($choiceKeyArray)-1)
+        {
+            // Get Number character from Key
+            // Number is the Ordinal Position of the Event from the Original Query
+            $number = array();
+            $condition = preg_match_all('!\d+!', $choiceKeyArray[$temp], $number);
+            $number = (int)$number[0][0];
+
+            if(($condition === 1 || $condition === true) && ($number <= $rowCount))
+            {
+                if ($number !== $currentNumber) 
+                {
+                    // Create new Array Instance if there is a new Number
+                    $currentNumber = $number;
+                    $newArray[$number] = array();
+                }
+                switch ($category) 
+                {
+                    // Depending on Category, add attribute
+                    case 'events':
+                        if (Str::endsWith($choiceKeyArray[$temp],'details'))
+                            $newArray[$number] += ['details' => true];
+                        else if (Str::endsWith($choiceKeyArray[$temp],'images'))
+                            $newArray[$number] += ['images' => true];
+                        else if (Str::endsWith($choiceKeyArray[$temp],'documents'))
+                            $newArray[$number] += ['documents' => true,];
+                        break;
+                    case 'accomplishments':
+                        if (Str::endsWith($choiceKeyArray[$temp],'details'))
+                            $newArray[$number] += ['details' => true];
+                        else if (Str::endsWith($choiceKeyArray[$temp],'files'))
+                            $newArray[$number] += ['files' => true];
+                    default:
+                        break;
+                }
+            }
+            $temp += 1;
+        }
+        return $newArray;
+    }
+
     /**
      * Function to Merge PDF using documents array.
      * documents = array()
      * fileName = String
      * folderName = String
-     * @return void
      */
     private function mergePDF($documents, $fileName, $folderName)
     {
@@ -422,7 +738,6 @@ class AccomplishmentReportsController extends Controller
     /**
      * Function to Delete Created Folder and its contents
      * folder = String
-     * @return void
      */
     private function deleteDirectory($folder)
     {
@@ -433,7 +748,6 @@ class AccomplishmentReportsController extends Controller
         // actually delete the folder itself
         Storage::deleteDirectory('/public/compiledDocuments/' . $folder);
     }
-    
 
    
 

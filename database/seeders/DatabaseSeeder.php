@@ -27,8 +27,6 @@ class DatabaseSeeder extends Seeder
             EventDocumentTypeSeeder::class,
             //EventSeeder::class,
             SchoolYearSeeder::class,
-            FundSourceSeeder::class,
-            LevelSeeder::class,
         ]);
     }
 }

@@ -40,9 +40,10 @@ class HomeController extends Controller
                 $accomplishments = StudentAccomplishment::where('user_id', $user_id)
                     ->pluck('status') ?? false;
                 $accomplishments = ($accomplishments) ? array_count_values($accomplishments->toArray()) : NULL;
-                $approvedAccomplishmentCount = $accomplishments[2] ?? 0;
-                $pendingAccomplishmentCount = $accomplishments[1] ?? 0;
-                $disapprovedAccomplishmentCount = $accomplishments[3] ?? 0;
+                $approvedAccomplishmentCount = $accomplishments[1] ?? 0;
+                $pendingAccomplishmentCount = $accomplishments[0] ?? 0;
+                $disapprovedAccomplishmentCount = $accomplishments[2] ?? 0;
+
                 return view('home', compact('approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount'));
 
             }
@@ -60,7 +61,7 @@ class HomeController extends Controller
             // Other Documentation Officers
             else if(in_array($orgCurrentPosition, $document_officers))
             {
-                $submissionCount = StudentAccomplishment::where('status', 1)
+                $submissionCount = StudentAccomplishment::where('status', 0)
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
                 $pendingARSubmissionCount = AccomplishmentReport::where('status', 1)

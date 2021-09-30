@@ -6,9 +6,9 @@
         <div class="col-md-10">
     		<h2 class="display-2 text-center">Accomplishment</h2>
             @position_title('Officer')
-            @if($accomplishment->status == 1)
+            @if($accomplishment->status == 0)
             <div class="row justify-content-center my-1">  
-                <a href="{{route('studentAccomplishment.review', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}">
+                <a href="{{route('student_accomplishment.review', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}">
                     <button class="btn btn-primary">Review this Accomplishment</button>
                 </a>
             </div>
@@ -19,154 +19,31 @@
                     <div class="card">
                         <h5 class="card-header card-title text-center">{{ $accomplishment->title }}</h5>
                         <div class="card-body">
-                        @if($accomplishment->status == 1)
+                        @if($accomplishment->status == 0)
                             <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Status: PENDING</span></h6>
-                            <h3 class="card-title text-center"><span style="font-weight: bold;">Accomplishment Details</span>
-                            </h3>
-                            <h5 class="card-title"><span style="font-weight: bold;">Title:</span>
-                                {{ $accomplishment->title }}
-                            </h5>
-                            <p class="card-text"><span style="font-weight: bold;">Description:</span>
-                                {{ $accomplishment->description }}
-                            </p>
-                            <p class="card-text"><span style="font-weight: bold;">Objective:</span>
-                                {{ $accomplishment->objective }}</p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Organizer:</span> 
-                                {{ $accomplishment->organizer }}
-                            </p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Venue:</span> 
-                                {{ $accomplishment->venue }}
-                            </p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Date:</span> 
-                                @if($accomplishment->start_date == $accomplishment->end_date){{date_format(date_create($accomplishment->start_date), 'F d, Y')}}
-                                @else{{date_format(date_create($accomplishment->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishment->end_date), 'F d, Y')}}
-                                @endif
-                            </p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Time:</span>
-                                @if($accomplishment->start_time == $accomplishment->end_time){{date_format(date_create($accomplishment->start_time), 'h:i A')}}
-                                @else{{date_format(date_create($accomplishment->start_time), 'h:i A') . ' - ' . date_format(date_create($accomplishment->end_time), 'h:i A')}}
-                                @endif
-                            </p>
-                            <hr>
-                            <h3 class="card-title text-center"><span style="font-weight: bold;">Student Details</span>
-                            </h3>
-                            <div>
-                                <p><span style="font-weight: bold;">Name:</span>
-                                    {{ $accomplishment->student->last_name . ', ' . $accomplishment->student->first_name . ' ' . $accomplishment->student->middle_name }}
-                                </p>
-                                <p><span style="font-weight: bold;">Student Number:</span>
-                                    {{ $accomplishment->student->student_number  }}
-                                </p>
-                                <p><span style="font-weight: bold;">Email:</span>
-                                    {{ $accomplishment->student->email }}
-                                </p>
-                            </div>
+                            <p class="text-center">{{ $accomplishment->description }}</p>
+                            <p class="text-center">{{ date_format(date_create($accomplishment->date_awarded), 'F d, Y') }}</p>
                             <hr>
                             <h6 class="text-center text-dark font-weight-bold">Uploaded Evidences</h6>
                             
-                        @elseif ($accomplishment->status == 2)
+                        @elseif ($accomplishment->status == 1)
                             <h6 class="text-center text-white font-weight-bold"><span class="bg-success rounded">Status: APPROVED</span></h6>
-                            <h3 class="card-title text-center"><span style="font-weight: bold;">Title:</span>
-                                {{ $accomplishment->title }}
-                            </h3>
-                            <p class="card-text text-center"><span style="font-weight: bold;">Description:</span>
-                                {{ $accomplishment->description }}
-                            </p>
-                            <p class="card-text text-center"><span style="font-weight: bold;">Objective:</span>
-                                {{ $accomplishment->objective }}</p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Organizer:</span> {{ $accomplishment->organizer }}
-                            </p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Venue:</span> {{ $accomplishment->venue }}
-                            </p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Date:</span> 
-                                @if($accomplishment->start_date == $accomplishment->end_date){{date_format(date_create($accomplishment->start_date), 'F d, Y')}}
-                                @else{{date_format(date_create($accomplishment->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishment->end_date), 'F d, Y')}}
-                                @endif
-                            </p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Time:</span>
-                                @if($accomplishment->start_time == $accomplishment->end_time){{date_format(date_create($accomplishment->start_time), 'h:i A')}}
-                                @else{{date_format(date_create($accomplishment->start_time), 'h:i A') . ' - ' . date_format(date_create($accomplishment->end_time), 'h:i A')}}
-                                @endif
-                            </p>
-                            <p class="text-center">Level: {{ $accomplishment->level->level ?? 'NONE' }}</p>
-                            <p class="text-center">Fund Source: {{ $accomplishment->fundSource->fund_source ?? 'NONE' }}</p>
-                            <p class="text-center">Event: {{ $accomplishment->event->title ?? 'NONE' }}</p>
-                            <hr>
-                            <h3 class="card-title text-center"><span style="font-weight: bold;">Student Details</span>
-                            </h3>
-                            <div>
-                                <p><span style="font-weight: bold;">Name:</span>
-                                    {{ $accomplishment->student->last_name . ', ' . $accomplishment->student->first_name . ' ' . $accomplishment->student->middle_name }}
-                                </p>
-                                <p><span style="font-weight: bold;">Student Number:</span>
-                                    {{ $accomplishment->student->student_number  }}
-                                </p>
-                                <p><span style="font-weight: bold;">Email:</span>
-                                    {{ $accomplishment->student->email }}
-                                </p>
-                            </div>
+                            <p class="text-center">{{ $accomplishment->description }}</p>
                             <hr>
                             <h6 class="text-center text-dark font-weight-bold">Evidences</h6>
 
-                        @elseif ($accomplishment->status == 3)
+                        @else
                             <h6 class="text-center text-white font-weight-bold"><span class="bg-danger rounded">Status: DISAPPROVED</span></h6>
-                            <h3 class="card-title text-center"><span style="font-weight: bold;">Title:</span>
-                                {{ $accomplishment->title }}
-                            </h3>
-                            <p class="card-text text-center"><span style="font-weight: bold;">Description:</span>
-                                {{ $accomplishment->description }}
-                            </p>
-                            <p class="card-text text-center"><span style="font-weight: bold;">Objective:</span>
-                                {{ $accomplishment->objective }}</p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Organizer:</span> {{ $accomplishment->organizer }}
-                            </p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Venue:</span> {{ $accomplishment->venue }}
-                            </p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Date:</span> 
-                                @if($accomplishment->start_date == $accomplishment->end_date){{date_format(date_create($accomplishment->start_date), 'F d, Y')}}
-                                @else{{date_format(date_create($accomplishment->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishment->end_date), 'F d, Y')}}
-                                @endif
-                            </p>
-                            <p class="card-text text-center">
-                                <span style="font-weight: bold;">Time:</span>
-                                @if($accomplishment->start_time == $accomplishment->end_time){{date_format(date_create($accomplishment->start_time), 'h:i A')}}
-                                @else{{date_format(date_create($accomplishment->start_time), 'h:i A') . ' - ' . date_format(date_create($accomplishment->end_time), 'h:i A')}}
-                                @endif
-                            </p>
-                            <hr>
-                            <h3 class="card-title text-center"><span style="font-weight: bold;">Student Details</span>
-                            </h3>
-                            <div>
-                                <p><span style="font-weight: bold;">Name:</span>
-                                    {{ $accomplishment->student->last_name . ', ' . $accomplishment->student->first_name . ' ' . $accomplishment->student->middle_name }}
-                                </p>
-                                <p><span style="font-weight: bold;">Student Number:</span>
-                                    {{ $accomplishment->student->student_number  }}
-                                </p>
-                                <p><span style="font-weight: bold;">Email:</span>
-                                    {{ $accomplishment->student->email }}
-                                </p>
-                            </div>
+                            <p class="text-center">{{ $accomplishment->description }}</p>
                             <hr>
                             <p class="text-center">REMARKS</p>
-                            <p class="text-center">{{ $accomplishment->remarks }}</p>
+                            <p class="text-center">{{$accomplishment->remarks}}</p>
                             <hr>
                             <h6 class="text-center text-dark font-weight-bold">Uploaded Evidences</h6>
                             
                         @endif
 
-                        @foreach($accomplishment->accomplishmentFiles as $file)
+                        @foreach($accomplishmentFiles as $file)
                             @if($file->type == 1)
                             {{-- IMG --}}
                             <div class="row justify-content-center mb-2">
@@ -193,7 +70,7 @@
             @if($newAccomplishment)
             <hr>
             <div class="row justify-content-center pt-1">
-                <a href="{{route('studentAccomplishment.create')}}">
+                <a href="/s/accomplishments/create">
                     <button class="btn btn-primary">Submit Another</button>
                 </a>
             </div>
@@ -201,7 +78,7 @@
             @endisset
         	<hr>
         	<div class="row justify-content-center pt-1">
-        		<a href="{{route('studentAccomplishment.index')}}">
+        		<a href="/s/accomplishments">
         			<button class="btn btn-secondary">Go back</button>
         		</a>
         	</div>

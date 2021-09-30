@@ -16,20 +16,17 @@ class EventCategorySeeder extends Seeder
     {
         $data = [
             ['category' => 'Academic', 
-                'helper' => 'Events that relates to competitive Academic Activities and Academic Awards. (Ex. Quiz Bees, Debates, Recognitions)'
+                'helper' => 'Events that relates to Education and Academic Improvement. Ex. (Quiz Bees, Seminar/Webinars, Tutorials)'
             ],
 
             ['category' => 'Non-academic', 
                 'helper' => 'Events that relates to Social, Civic, or Spiritual Improvement and Obligations. (Ex. Monthly Mass, Flag Raising Ceremony, Elections)'
             ],
             ['category' => 'Cultural', 
-                'helper' => 'Events that relates to Cultural and Social Improvement. (Ex. Cultural Dances, Speech Choirs, Poster Making)'
+                'helper' => 'Events that relate to Cultural and Social Improvement. (Ex. Cultural Dances, Speech Choirs, Poster Making)'
             ],
             ['category' => 'Sports', 
-                'helper' => 'Events that relates to competitive Physical or Mental Activities. (Ex. Basketball, Chess, Badminton)'
-            ],
-            ['category' => 'Seminars/Workshops', 
-                'helper' => 'Events that relates Education and Academic Improvements. (Ex. Seminars, Workshops, Webinars, Tutorials)'
+                'helper' => 'Events that relate to competitive Physical or Mental Activities. (Ex. Basketball, Chess, Badminton)'
             ],
             ['category' => 'Community Outreach', 
                 'helper' => 'Events that relate to helping and educating communities outside the University. (Ex. Cleanup Drives, Relief Operations, Public Lectures)'

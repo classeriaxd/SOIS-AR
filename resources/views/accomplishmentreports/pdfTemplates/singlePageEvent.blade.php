@@ -28,10 +28,6 @@
                         <span style="color: #f0ad4e">Cultural</span>
                     @elseif ($event['event_category_id'] == 4) 
                         <span style="color: #5cb85c">Sports</span>
-                    @elseif ($event['event_category_id'] == 5) 
-                        <span style="color: #5bc0de">Seminars/Workshops</span>
-                    @elseif ($event['event_category_id'] == 6)
-                        <span style="color: #5bc0de">Community Outreach</span>
                     @endif
                 </h2>
             </div>
@@ -81,29 +77,49 @@
     @isset($event['event_images'])
     @if($event['event_images'] != NULL)
     <div class="page-break"></div>
-        @php $runOnce = 1; @endphp
+        @php 
+            $i = 1; 
+            $j = 1;
+            $imageCount = count($event['event_images']);
+        @endphp
+
+        {{-- Prints 2 imgs in a single page --}}
         @foreach($event['event_images'] as $eventImage)
 
-            @if($runOnce == 1)
-                <div class="event-img-block">
-                    <p class="block-title">Event Images</p>
-                </div>
-            @php $runOnce = 0; @endphp
+            @if($j == 1)
+            <div class="page">
             @endif
 
-            <div class="page">
-                <div class="event-img-block">
-                    <div class="img-block">
-                        <img src="{{ public_path('/storage/'.$eventImage['image']) }}">
-                    </div>
-                    <div class="info-block">
-                        <p class="block-desc">{{ $eventImage['caption'] }}</p>
-                    </div>
+            @if($i == 1)
+            <div class="event-img-block">
+                <p class="block-title">Event Images</p>
+            </div>
+                @php $i = 0; @endphp
+            @endif
+
+            @if($j <= 2)
+            <div class="event-img-block">
+                <div class="img-block">
+                    <img src="{{ public_path('/storage/'.$eventImage['image']) }}">
+                </div>
+                <div class="info-block">
+                    <p class="block-desc">{{ $eventImage['caption'] }}</p>
                 </div>
             </div>
-            @if(!($loop->last))
-            <div class="page-break"></div>
+                @php 
+                    $j++;
+                    $imageCount -= 1;
+                @endphp
+
+            @else
+            </div> {{-- end page --}}
+                @if($loop->last)
+                @else
+                <div class="page-break"></div>
+                @endif
+                @php $j = 1; @endphp
             @endif
+
         @endforeach {{-- endforeach event-img --}}
     @endif
     @endisset

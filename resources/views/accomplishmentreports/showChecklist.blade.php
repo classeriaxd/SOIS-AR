@@ -183,7 +183,7 @@
                                                             <input type="checkbox" id="childaccomplishment{{$j}}" onchange="accomplishmentToggleGrandchild(this)">
                                                         </td>
                                                         <td scope="row">
-                                                            <a class="btn btn-primary" href="{{route('studentAccomplishment.show', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
+                                                            <a class="btn btn-primary" href="{{route('student_accomplishment.show', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
                                                         </td>
                                                     </tr>
                                                     @php $j += 1; @endphp
@@ -244,7 +244,7 @@
                     </div>
                     <div class="col" id="radioARFormatGroup">
                         <div class="form-check">
-                            <input type="radio" id="tabular" name="ar_format" class="form-check-input" value="tabular" required autocomplete="off">
+                            <input type="radio" id="tabular" name="ar_format" class="form-check-input" value="tabular" disabled required autocomplete="off">
                             <label class="form-check-label" for="tabular">Tabular</label>
                         </div>
                         <div class="form-check">

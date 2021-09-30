@@ -62,9 +62,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
-
-    public function studentAccomplishments()
-    {
-        return $this->hasMany(studentAccomplishments::class, 'user_id');
-    }
 }

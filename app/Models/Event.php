@@ -29,10 +29,6 @@ class Event extends Model
         return $this->belongsTo(Organization::class, 'organization_id');
     }
 
-    public function eventDocuments()
-    {
-        return $this->hasMany(EventDocument::class, 'event_id');
-    }
     public function eventRole()
     {
         return $this->belongsTo(EventRole::class, 'event_role_id');
@@ -43,13 +39,8 @@ class Event extends Model
         return $this->belongsTo(EventCategory::class, 'event_category_id');
     }
 
-    public function eventFundSource()
+    public function eventDocuments()
     {
-        return $this->belongsTo(FundSource::class, 'fund_source_id');
-    }
-    
-    public function eventLevel()
-    {
-        return $this->belongsTo(Level::class, 'level_id');
+        return $this->hasMany(EventDocument::class, 'event_id');
     }
 }

@@ -5,44 +5,34 @@
 	<div class="row justify-content-center">
         <div class="col-md-10">
     		<h2 class="display-2 text-center">{{ $event->title }}</h2>
-            <h4 class="text-center"><span class="badge badge-{{$event->category_color}}">{{$event->eventCategory->category}}</span>  <span class="badge badge-{{$event->role_color}}">{{$event->eventRole->event_role}}</span></h4>
+            <h4 class="text-center"><span class="badge badge-{{$event->category_color}}">{{$event->event_category}}</span>  <span class="badge badge-{{$event->role_color}}">{{$event->event_role}}</span></h4>
         	<div class="row justify-content-center mb-1">
         		<div class="col-md-5">
         			<div class="card">
         				<h4 class="card-header card-title text-center">Event Summary</h4>
         				<div class="card-body">
-        					<h3 class="card-title text-center">Title: {{ $event->title }}</h3>
+        					<h3 class="card-title">Title: {{ $event->title }}</h3>
         					<p class="card-text">
-        						<span style="font-weight: bold;">Date:</span> 
+        						Date: 
                                 @if($event->start_date == $event->end_date){{date_format(date_create($event->start_date), 'F d, Y')}}
                                 @else{{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
                                 @endif
         					</p>
                             <p class="card-text">
-                                <span style="font-weight: bold;">Time:</span>
+                                Time:
                                 @if($event->start_time == $event->end_time){{date_format(date_create($event->start_time), 'h:i A')}}
                                 @else{{date_format(date_create($event->start_time), 'h:i A') . ' - ' . date_format(date_create($event->end_time), 'h:i A')}}
                                 @endif
                             </p>
         					<p class="card-text">
-        						<span style="font-weight: bold;">Venue:</span> {{ $event->venue }}
+        						Venue: {{ $event->venue }}
         					</p>
         					<p class="card-text">
-        						<span style="font-weight: bold;">Type of Activity:</span> 
-                                {{ $event->activity_type }}
+        						Type of Activity: {{ $event->activity_type }}
         					</p>
         					<p class="card-text">
-        						<span style="font-weight: bold;">Sponsors:</span> 
-                                {{ $event->sponsors }}
+        						Sponsors: {{ $event->sponsors }}
         					</p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Budget:</span> 
-                                {{ $event->budget }} - {{ $event->eventFundSource->fund_source }}
-                            </p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Level:</span>
-                                {{ $event->eventLevel->level }}
-                            </p>
         				</div>
                         <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
@@ -154,7 +144,7 @@
             @endif
             <hr>
         	<div class="row justify-content-center my-1">
-        		<a href="{{route('event.index')}}">
+        		<a href="/e">
         			<button class="btn btn-secondary">Go back</button>
         		</a>
         	</div>

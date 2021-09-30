@@ -16,7 +16,6 @@ class CreateEventDocumentTypesTable extends Migration
         Schema::create('event_document_types', function (Blueprint $table) {
             $table->id('event_document_type_id');
             $table->string('document_type');
-            $table->string('helper')->nullable();
         });
     }
 

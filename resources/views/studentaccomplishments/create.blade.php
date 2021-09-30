@@ -14,7 +14,6 @@
                     type="text" 
                     class="form-control typeahead @error('title') is-invalid @enderror" 
                     name="title" 
-                    placeholder="Accomplishment Title"
                     value="{{ old('title') }}" 
                     required>
                     @error('title')
@@ -25,10 +24,8 @@
                 </div>
                 <div class="form-group row">
                     <label for="description" class="col-md-4 col-form-label">Description</label>    
-                    <textarea id="description" 
-                    class="form-control @error('description') is-invalid @enderror" 
+                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" 
                     name="description"
-                    placeholder="Accomplishment Description" 
                     required>{{ old('description') }}</textarea>
                     @error('description')
                         <span class="invalid-feedback" role="alert">
@@ -37,116 +34,16 @@
                     @enderror
                 </div>
                 <div class="form-group row">
-                    <label for="objective" class="col-md-4 col-form-label">Objective</label>
-                    <textarea id="objective" 
-                    class="form-control @error('objective') is-invalid @enderror" 
-                    name="objective"
-                    placeholder="Organizer's Objective in making the Event"
-                    required>{{ old('objective') }}</textarea>
-                    @error('objective')
+                    <label for="date_awarded" class="col-md-4 col-form-label">Date Awarded</label>    
+                    <input type="date" class="form-control" name="date_awarded" min="1992-01-01" max="{{date('Y-m-d')}}">
+                    @error('date_awarded')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
                 <div class="form-group row">
-                    <label for="organizer" class="col-md-4 col-form-label">Organizer</label>
-                    <input id="organizer" 
-                    type="text" 
-                    class="form-control @error('organizer') is-invalid @enderror" 
-                    name="organizer" 
-                    placeholder="Event Organizer / Certifying Body / Sponsor"
-                    value="{{ old('organizer') }}" 
-                    required>
-                    @error('organizer')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group row">
-                    <label for="venue" class="col-md-4 col-form-label">Venue</label>
-                    <input id="venue" 
-                    type="text" 
-                    class="form-control @error('venue') is-invalid @enderror" 
-                    name="venue"
-                    placeholder="Venue (Ex. Zoom or Facebook Live)"  
-                    value="{{ old('venue') }}">
-                    @error('venue')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group row">
-                    <div class="col">
-                        <label for="startDate" class="col-md-4 form-label">Start Date</label>
-                        <input id="startDate" 
-                        type="date" 
-                        class="form-control @error('startDate') is-invalid @enderror" 
-                        name="startDate" 
-                        value="{{ old('startDate') }}" 
-                        min="1992-01-01" 
-                        max="{{date('Y-m-d')}}"
-                        required>
-                        @error('startDate')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="col">
-                        <label for="endDate" class="col-md-4 form-label">End Date</label>
-                        <input id="endDate" 
-                        type="date" 
-                        class="form-control @error('endDate') is-invalid @enderror" 
-                        name="endDate" 
-                        value="{{ old('endDate') }}"
-                        min="1992-01-01" 
-                        max="{{date('Y-m-d')}}"
-                        required>
-                        @error('endDate')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>  
-                </div>
-                <div class="form-group row">
-                    <div class="col form-group">
-                        <label for="startTime" class="col-md-4 col-form-label">Start Time</label>
-                        <input id="startTime" 
-                        type="time" 
-                        class="form-control @error('startTime') is-invalid @enderror" 
-                        name="startTime" 
-                        value="{{ old('startTime') }}"
-                        required>
-                        @error('startTime')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="col form-group">
-                        <label for="endTime" class="col-md-4 col-form-label">End Time</label>
-                        <input id="endTime" 
-                        type="time" 
-                        class="form-control @error('endTime') is-invalid @enderror" 
-                        name="endTime" 
-                        value="{{ old('endTime') }}"
-                        required>
-                        @error('endTime')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-                <hr>
-            {{-- Evidences --}}
-                <div class="text-center my-1">
-                    <h4>Evidences</h4>
-                    <h6>Include a certificate and some screenshots of the event/accomplishment.</h6>
+                    <label for="evidences" class="col-md-4 col-form-label">Evidences</label>
                 </div>
                 <input type="file" 
                         class="filepond @error('evidence1') is-invalid @enderror"
@@ -164,8 +61,7 @@
                     <input id="caption1" 
                     type="text" 
                     class="form-control @error('caption1') is-invalid @enderror" 
-                    name="caption1"
-                    placeholder="Caption" 
+                    name="caption1" 
                     value="{{ old('caption1') }}" 
                     required>
                     @error('caption1')
@@ -190,7 +86,6 @@
                     type="text" 
                     class="form-control @error('caption2') is-invalid @enderror" 
                     name="caption2" 
-                    placeholder="Caption" 
                     value="{{ old('caption2') }}">
                     @error('caption2')
                         <span class="invalid-feedback" role="alert">
@@ -214,7 +109,6 @@
                     type="text" 
                     class="form-control @error('caption3') is-invalid @enderror" 
                     name="caption3" 
-                    placeholder="Caption" 
                     value="{{ old('caption3') }}">
                     @error('caption3')
                         <span class="invalid-feedback" role="alert">
@@ -338,8 +232,6 @@
                     }
                 }
             });
-
-
         });
     </script>
     <link href="{{ asset('css/typeaheadjs.css') }}" rel="stylesheet">
