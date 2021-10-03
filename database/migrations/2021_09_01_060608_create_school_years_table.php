@@ -25,14 +25,6 @@ class CreateSchoolYearsTable extends Migration
             $table->date('second_semester_end')->nullable();
             $table->date('summer_term_start')->nullable();
             $table->date('summer_term_end')->nullable();
-            $table->date('first_quarter_start')->nullable();
-            $table->date('first_quarter_end')->nullable();
-            $table->date('second_quarter_start')->nullable();
-            $table->date('second_quarter_end')->nullable();
-            $table->date('third_quarter_start')->nullable();
-            $table->date('third_quarter_end')->nullable();
-            $table->date('fourth_quarter_start')->nullable();
-            $table->date('fourth_quarter_end')->nullable();
             $table->timestamps();
         });
     }

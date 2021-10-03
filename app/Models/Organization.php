@@ -24,4 +24,9 @@ class Organization extends Model
     {
         return $this->hasMany(CompiledDocuments::class, 'organization_id');
     }
+
+    public function assets()
+    {
+        return $this->hasMany(OrganizationAsset::class, 'organization_id');
+    }
 }

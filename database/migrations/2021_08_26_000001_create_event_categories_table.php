@@ -16,6 +16,7 @@ class CreateEventCategoriesTable extends Migration
         Schema::create('event_categories', function (Blueprint $table) {
             $table->id('event_category_id');
             $table->string('category');
+            $table->string('helper')->nullable();
         });
     }
 

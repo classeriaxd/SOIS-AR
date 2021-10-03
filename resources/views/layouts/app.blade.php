@@ -7,12 +7,12 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ 'SOIS-AR' }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/sidebar.js') }}" defer></script>
-
+    <script src="{{ asset('fontawesome-free-5.15.4/js/all.min.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -24,7 +24,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/sidebar.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="{{ asset('css/all.css') }}" rel="stylesheet">
+
 
     @stack('scripts')
 </head>
@@ -162,7 +163,48 @@
                                     </div>
                                 </form>
                             -->
-                                
+                                {{-- Notifications --}}
+                            <li class="nav-item dropdown">                             
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle align-middle text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="far fa-bell fa-lg"></i>
+                                    <span class="badge badge-pill badge-primary align-top"><small>{{$notificationCount ?? 0}}</small></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right text-light" aria-labelledby="navbarDropdown">
+                                    @if($notifications->count() > 0)
+                                    @foreach($notifications as $notification)
+                                    <read-notification 
+                                    v-bind:notification_id= "{{$notification->notification_id}}" 
+                                    :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                    title= "{{ $notification->title }}"
+                                    description= "{{ $notification->description }}"
+                                    link= " 
+                                        @if($notification->type == 3)
+                                            {{-- Student Accomplishments --}}
+                                            {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                        @elseif($notification->type == 4)
+                                            {{-- Accomplishment Reports --}}
+                                            {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                        @endif
+                                     "
+                                    >
+                                    </read-notification>
+                                    @php
+                                        if($loop->index == 4):
+                                            break;
+                                        endif;
+                                    @endphp
+                                    @endforeach
+                                    
+                                    @else
+                                    <p class="dropdown-item">No Notifications found!</p>
+                                    @endif
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         <i class="fas fa-user"></i>
@@ -203,15 +245,24 @@
 
                         </div>
                         <!-- /#wrapper -->
-                            
-                        @endguest
-                  
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-        
+        <main class="py-4">
+            @yield('content')
+        </main>
     </div>
+    @if($loadJSWithoutDefer ?? false)
+        <script src="{{ asset('js/app.js') }}"></script>
+    @else
+        <script src="{{ asset('js/app.js') }}" defer></script>
+    @endif
+
     @stack('footer-scripts')
     @yield('scripts')
-    
     
 </body>
 </html>

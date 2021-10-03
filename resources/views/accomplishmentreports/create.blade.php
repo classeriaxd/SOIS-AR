@@ -4,13 +4,48 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
+        	{{-- Error/Success Messages --}}
+        	@if (session('success'))
+        	<div id="success_alert">
+        	    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        	        {{ session('success') }}
+        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        	            <span aria-hidden="true">&times;</span>
+        	        </button>
+        	    </div>
+        	</div>
+        	@elseif(session('error'))
+        	<div id="error_alert">
+        	    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        	        {{session('error')}}
+        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        	            <span aria-hidden="true">&times;</span>
+        	        </button>
+        	    </div>
+        	</div>
+        	@elseif(session('errors'))
+        	<div id="error_alert">
+        	    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        		@foreach ($errors->all() as $error)
+        	    	{{ $error }}
+        	    	@if(!($loop->last))
+        	    	<br>
+        	    	@endif
+				@endforeach
+        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        	            <span aria-hidden="true">&times;</span>
+        	        </button>
+        	    </div>
+        	</div>
+        	@endif
+
         	<h2 class="text-center display-3">Organization Report</h2>
         	<h5 class="text-center">Choose from Semestral, Quarterly, & Custom</h5>
         	<hr>
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">
                 	<h4 class="card-header card-text text-center bg-primary text-white">Semestral</h4>
-                	<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
+                	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
 		            	<div class="card-body">
 		            		<div class="row text-center">
 		            			<div class="col"><h3 class="text-center">School Year</h3></div>
@@ -73,7 +108,7 @@
             <div class="row mb-1 mt-1">
 	    		<div class="card w-100">
 					<h4 class="card-header card-text text-center bg-primary text-white">Quarterly</h4>
-					<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
+					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
 		    			<div class="card-body">
 		    				<h5 class="card-text text-center">{{ date('Y') }}</h5>
 		    				<div class="row text-center">
@@ -144,7 +179,7 @@
         	<div class="row mt-1">
         		<div class="card w-100">
         			<h4 class="card-header card-text text-center bg-primary text-white">Custom</h4>
-    				<form action="{{route('eventreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
+    				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
         			<div class="card-body">
         				<div class="form-group row">
         				    <label for="custom_start_date" class="col-md-4 col-form-label">Start Date</label>
@@ -182,8 +217,8 @@
         		</div>
         	</div>
             <div class="row justify-content-center mt-2">
-                <a href="/home">
-                    <button class="btn btn-secondary">Go back</button>
+                <a href="{{route('home')}}">
+                    <button class="btn btn-secondary">Go Home</button>
                 </a>
             </div>
     	</div>
