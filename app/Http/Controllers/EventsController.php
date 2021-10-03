@@ -38,8 +38,8 @@ class EventsController extends Controller
         $orgAcronym = Auth::user()->course->organization->organization_acronym;
         $eventIndexService = new EventIndexService();
         $events = $eventIndexService->index();
-
-        return view('events.index', compact('events', 'orgAcronym'));
+        $simpleDataTables = true;
+        return view('events.index', compact('events', 'orgAcronym', 'simpleDataTables'));
     }
     public function show($event_slug, $newEvent = false)
     {

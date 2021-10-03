@@ -7,7 +7,7 @@
             <h2 class="display-2">{{$orgAcronym}} Events</h2>
         </div>
         <div class="col-md-10">
-            <div class="accordion" id="eventAccordion">
+            {{-- <div class="accordion" id="eventAccordion">
                 @php $open = true; @endphp
                 @foreach ($events as $year => $yearEvent)
                     <div class="card w-100">
@@ -48,7 +48,41 @@
                     </div>
                 @php $open = false; @endphp
                 @endforeach
-            </div>
+            </div> --}}
+            <table class="table-striped table-bordered" id="eventTable">
+                <thead>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Role</th>
+                    <th>Level</th>
+                    <th>Date</th>
+                    <th data-sortable="false">Options</th>
+                </thead>
+                <tbody>
+                    @php $i = 1; @endphp
+                    @foreach($events as $event)
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ $event->title }}</td>
+                        <td>{{ $event->eventCategory->category }}</td>
+                        <td>{{ $event->eventRole->event_role }}</td>
+                        <td>{{ $event->eventLevel->level }}</td>
+                        <td> 
+                            @if($event->start_date == $event->end_date)
+                                {{date_format(date_create($event->start_date), 'F d, Y')}}
+                            @else
+                                {{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
+                            @endif
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="{{route('event.show', ['event_slug' => $event->slug])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
+                        </td>
+                    </tr>
+                    @php $i += 1; @endphp
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -77,4 +111,21 @@
     </div>
 
 </div>
+@endsection
+@push('scripts')
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+@endpush
+@section('scripts')
+    <script type="module">
+        const dataTable = new simpleDatatables.DataTable("#eventTable", {
+            searchable: true,
+            labels: {
+            placeholder: "Search Events...",
+            perPage: "Show {select} events per page",
+            noRows: "No events to display",
+            info: "Showing {start} to {end} of {rows} events (Page {page} of {pages} pages)",
+            },
+        })
+    </script>
 @endsection
