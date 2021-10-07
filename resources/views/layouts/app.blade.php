@@ -9,8 +9,6 @@
 
     <title>{{ 'SOIS-AR' }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('fontawesome-free-5.15.4/js/all.min.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -60,7 +58,7 @@
                         @else
                             {{-- Notifications --}}
                             <li class="nav-item dropdown">                             
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle align-middle text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle align-middle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     <i class="far fa-bell fa-lg"></i>
                                     <span class="badge badge-pill badge-primary align-top"><small>{{$notificationCount ?? 0}}</small></span>
                                 </a>
@@ -102,7 +100,7 @@
                             </li>
                             {{-- Profile -> Logout --}}
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }}
                                 </a>
 
@@ -133,11 +131,15 @@
             @yield('content')
         </main>       
     </div>
+
+    {{-- Javascript Imports --}}
     @if($loadJSWithoutDefer ?? false)
         <script src="{{ asset('js/app.js') }}"></script>
     @else
         <script src="{{ asset('js/app.js') }}" defer></script>
     @endif
+
+    <script src="{{ asset('fontawesome-free-5.15.4/js/all.min.js') }}" defer></script>
 
     @stack('footer-scripts')
     @yield('scripts')

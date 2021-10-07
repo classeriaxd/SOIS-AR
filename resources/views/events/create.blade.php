@@ -201,9 +201,11 @@
                             <input type="radio" id="{{$source->fund_source}}" name="fundSource" class="form-check-input" value="{{$source->fund_source_id}}">
                             <label class="form-check-label" for="{{$source->fund_source}}">{{$source->fund_source}}</label>
                             <a role="button"
-                                data-toggle="popover" 
+                                data-bs-toggle="popover" 
+                                data-bs-container="body"
                                 title="{{$source->fund_source}}" 
-                                data-content="{{$source->helper}}">
+                                data-bs-content="{{$source->helper}}"
+                                data-bs-placement="right">
                                 <i class="far fa-question-circle"></i>
                             </a>
                         </div>
@@ -227,9 +229,11 @@
                             <input type="radio" id="{{$role->event_role}}" name="eventRole" class="form-check-input" value="{{$role->event_role_id}}">
                             <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
                             <a role="button"
-                                data-toggle="popover" 
+                                data-bs-toggle="popover"
+                                data-bs-container="body" 
                                 title="{{$role->event_role}}" 
-                                data-content="{{$role->helper}}">
+                                data-bs-content="{{$role->helper}}"
+                                data-bs-placement="right">
                                 <i class="far fa-question-circle"></i>
                             </a>
                         </div>
@@ -254,9 +258,11 @@
                             <input type="radio" id="{{$category->category}}" name="eventCategory" class="form-check-input" value="{{$category->event_category_id}}">
                             <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
                             <a role="button"
-                                data-toggle="popover" 
+                                data-bs-toggle="popover"
+                                data-bs-container="body" 
                                 title="{{$category->category}}" 
-                                data-content="{{$category->helper}}">
+                                data-bs-content="{{$category->helper}}"
+                                data-bs-placement="right">
                                 <i class="far fa-question-circle"></i>
                             </a>
                         </div>
@@ -280,9 +286,11 @@
                             <input type="radio" id="{{$level->level}}" name="level" class="form-check-input" value="{{$level->level_id}}">
                             <label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
                             <a role="button"
-                                data-toggle="popover" 
+                                data-bs-toggle="popover"
+                                data-bs-container="body" 
                                 title="{{$level->level}}" 
-                                data-content="{{$level->helper}}">
+                                data-bs-content="{{$level->helper}}"
+                                data-bs-placement="right">
                                 <i class="far fa-question-circle"></i>
                             </a>
                         </div>
@@ -313,8 +321,18 @@
 @endsection
 @section('scripts')
     <script type="text/javascript">
-        $(document).ready(function(){
-            $('[data-toggle="popover"]').popover();   
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+          return new bootstrap.Popover(popoverTriggerEl)
+        })
+        $('body').on('click', function (e) {
+            $('[data-bs-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
         });
     </script>
 @endsection
