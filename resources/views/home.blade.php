@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
-            <!--<div id="login_alert">
+        <div class="col-md-8">
+            <div id="login_alert">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     @if (session('status'))
                         {{ session('status') }}
@@ -15,61 +14,68 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            </div>-->
+            </div>
         @position_title('Officer')
+            <div class="card my-1">
+                <div class="card-header text-center align-middle">
+                    <div class="display-5">Welcome Officer</div>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <a href="{{route('event.create')}}">
+                            <button class="btn btn-primary mr-2">Add Event</button>
+                        </a>
+                        <a href="{{route('event.index')}}">
+                            <button class="btn btn-primary mr-2">View Events</button>
+                        </a>
+                        <a href="{{route('accomplishmentreports.create')}}">
+                            <button class="btn btn-primary">Year Summary</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        <div class="row">
-          <div class="col-md-12">
-            <h4>Dashboard</h4>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 mb-3">
-            <div class="card bg-primary text-white h-100">
-              <div class="card-body py-5">Primary Card</div>
-              <div class="card-footer d-flex">
-                View Details
-                <span class="ms-auto">
-                    <i class="fas fa-home"></i>
-                </span>
-              </div>
+            <div class="card my-1">
+                <div class="card-header text-center align-middle">
+                    <div class="display-5">Accomplishment Reports</div>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <a href="{{route('accomplishmentreports.index')}}">
+                            <button class="btn btn-primary">Report Submissions<span class="badge badge-pill badge-warning">{{$pendingARSubmissionCount ?? "0"}}</span></button>
+                        </a>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <div class="card bg-warning text-dark h-100">
-              <div class="card-body py-5">Warning Card</div>
-              <div class="card-footer d-flex">
-                View Details
-                <span class="ms-auto">
-                    <i class="fas fa-home"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <div class="card bg-success text-white h-100">
-              <div class="card-body py-5">Success Card</div>
-              <div class="card-footer d-flex">
-                View Details
-                <span class="ms-auto">
-                    <i class="fas fa-home"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <div class="card bg-danger text-white h-100">
-              <div class="card-body py-5">Danger Card</div>
-              <div class="card-footer d-flex">
-                View Details
-                <span class="ms-auto">
-                    <i class="fas fa-home"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
 
+            {{-- <div class="card my-1">
+                <div class="card-header text-center align-middle">
+                    <div class="display-5">Organization Documents</div>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center mb-2">
+                        <a href="/o/documents/create">
+                            <button class="btn btn-primary mr-2" disabled>Add Organization Documents</button>
+                        </a>
+                        <a href="o/documents">
+                            <button class="btn btn-primary mr-2" disabled>View Organization Documents</button>
+                        </a>
+                    </div>
+                </div>
+            </div> --}}
+
+            <div class="card my-1">
+                <div class="card-header text-center align-middle">
+                    <div class="display-5">Student Accomplishments</div>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <a href="/s/accomplishments">
+                            <button class="btn btn-primary">Accomplishment Submissions<span class="badge badge-pill badge-light">{{$submissionCount ?? "0"}}</span></button>
+                        </a>
+                    </div>
+                </div>
+            </div>
         @elseposition_title('Member')
             <div class="pb-2">
                 <div class="card">
