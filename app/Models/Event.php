@@ -23,6 +23,10 @@ class Event extends Model
     {
     	return $this->hasMany(EventImage::class, 'event_id');
     }
+    public function eventImage()
+    {
+        return $this->hasOne(EventImage::class, 'event_id');
+    }
 
     public function organization()
     {

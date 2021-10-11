@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <form action="/e/{{$event->slug}}/images/{{$eventImage->slug}}" enctype="multipart/form-data" method="POST" id="imageDetails_form">
+    <form action="{{route('event.image.update', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageUpdateForm">
         @csrf
         @method('PATCH')
     	<div class="row justify-content-center">
@@ -15,15 +15,15 @@
                             <div class="card-header text-center align-middle">
                                 <div class="display-5">Image</div>
                             </div>
-                            <img src="/storage/{{$eventImage->image}}" class="card-img-middle w-100" style="width:500px;">
+                            <img src="/storage/{{$event->eventImage->image}}" class="card-img-middle w-100" style="width:500px;">
                             <div class="card-footer text-center align-middle">
-                                <div class="display-5">
-@if($eventImage->image_type == 0)
+                                <h5 class="display-5">
+                                @if($event->eventImage->image_type == 0)
                                     Poster
-@else
+                                @else
                                     Evidence
-@endif
-                                </div>
+                                @endif
+                                </h5>
                             </div>
                         </div>  
         		    </div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="card-body">
                                 <label for="caption" class="col-md-4 col-form-label">Caption</label>  
-                                <textarea id="caption" name="caption" class="form-control @error('caption') is-invalid @enderror" autocomplete="caption">{{ old('caption') ?? $eventImage->caption }}</textarea>
+                                <textarea id="caption" name="caption" class="form-control @error('caption') is-invalid @enderror" autocomplete="caption">{{ old('caption') ?? $event->eventImage->caption }}</textarea>
 
                                 <label class="col-md-4 col-form-label">Image Type</label>
                                 <br>  
@@ -48,11 +48,11 @@
                                 <div class="form-check justify-content-between" id="form-image_type">
                                    
                                     <div>
-                                        <input class="form-check-input @error('image_type') is-invalid @enderror" type="radio" name="image_type" id="image_type1" value="0" {{ ($eventImage->image_type==0)? "checked" : "" }}>
+                                        <input class="form-check-input @error('image_type') is-invalid @enderror" type="radio" name="image_type" id="image_type1" value="0" {{ ($event->eventImage->image_type==0)? "checked" : "" }}>
                                         <label class="form-check-label" for="image_type1">Poster</label>
                                     </div>
                                     <div>
-                                        <input class="form-check-input @error('image_type') is-invalid @enderror" type="radio" name="image_type" id="image_type2" value="1" {{ ($eventImage->image_type==1)? "checked" : "" }}>
+                                        <input class="form-check-input @error('image_type') is-invalid @enderror" type="radio" name="image_type" id="image_type2" value="1" {{ ($event->eventImage->image_type==1)? "checked" : "" }}>
                                         <label class="form-check-label" for="image_type2">Evidence</label>
                                     </div>
                                </div>
@@ -62,19 +62,20 @@
                                 <div class="display-5">Options</div>
                             </div>
                             <div class="card-body d-flex align-items-center justify-content-center">
-                                <a href="#">
-                                    <button class="btn btn-primary mr-3">Finalize Edit</button>
-                                </a>
+                                <button class="btn btn-primary text-white me-3" type="submit">Finalize Edit</button>
                             </div>
                         </div>
                     </div>      
         	    </div>	 
             	<hr>
-            	<div class="row justify-content-center pt-1">
-            		<a href="/e/{{$event->slug}}/images/{{$eventImage->slug}}">
-            			<button class="btn btn-secondary">Go back</button>
-            		</a>
-            	</div>
+
+                <div class="flex-row my-2 text-center">
+                    <a href="{{route('event.image.show', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}"
+                        class="btn btn-secondary text-white"
+                        role="button">
+                            Go Back
+                    </a>
+                </div>
             </div>
         </div>
     </form>

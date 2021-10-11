@@ -4,19 +4,34 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-            @position_title('Member')
-    		<h3 class="display-3 text-center">My Accomplishments</h3>
-            @elseposition_title('Officer')
-            <h3 class="display-3 text-center">Accomplishment Submissions</h3>
-            @endposition_title
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                @position_title('Member')
+                <h4 class="display-5 text-center">My Accomplishments</h4>
+                @elseposition_title('Officer')
+                <h4 class="display-5 text-center">Accomplishment Submissions</h4>
+                @endposition_title
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Student Accomplishments
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     @position_title('Member')
                     <div class="mb-2 text-center">
-                        <a href="/s/accomplishments/create">
-                            <button class="btn btn-primary">
-                                Submit an Accomplishment
-                            </button>
+                        <a href="{{route('studentAccomplishment.create')}}"
+                        class="btn btn-primary text-white"
+                        role="button">
+                            Submit an Accomplishment
                         </a>
                     </div>
                     <div class="card mb-1">
