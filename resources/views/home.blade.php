@@ -21,7 +21,7 @@
                     <div class="display-5">Welcome Officer</div>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-center">
+                    <div class="justify-content-around d-flex flex-row">
                         <a href="{{route('event.create')}}">
                             <button class="btn btn-primary mr-2">Add Event</button>
                         </a>
@@ -40,7 +40,7 @@
                     <div class="display-5">Accomplishment Reports</div>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-center">
+                    <div class="justify-content-center d-flex flex-row">
                         <a href="{{route('accomplishmentreports.index')}}">
                             <button class="btn btn-primary">Report Submissions<span class="badge badge-pill badge-warning">{{$pendingARSubmissionCount ?? "0"}}</span></button>
                         </a>
@@ -69,7 +69,7 @@
                     <div class="display-5">Student Accomplishments</div>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-center">
+                    <div class="justify-content-center d-flex flex-row">
                         <a href="/s/accomplishments">
                             <button class="btn btn-primary">Accomplishment Submissions<span class="badge badge-pill badge-light">{{$submissionCount ?? "0"}}</span></button>
                         </a>
@@ -97,7 +97,7 @@
                     <div class="display-5">Welcome President</div>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-center">
+                    <div class="justify-content-around d-flex">
                         <a href="{{route('accomplishmentreports.index')}}">
                             <button class="btn btn-primary mr-2">View Pending Accomplishment Reports <span class="badge badge-pill badge-warning">{{ $pendingARSubmissionCount ?? "0" }}</span></button>
                         </a>

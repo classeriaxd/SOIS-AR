@@ -8,7 +8,7 @@
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     <div class="card my-1">
-                        <h4 class="card-title card-header">Approved Reports</h4>
+                        <h4 class="card-title card-header text-white bg-maroon">Approved Reports</h4>
                         <div class="card-body">
                         @if($approvedAccomplishmentReports->isNotEmpty())
                             @foreach($approvedAccomplishmentReports as $report)
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="card my-1">
-                        <h4 class="card-title card-header">Pending Reports</h4>
+                        <h4 class="card-title card-header text-white bg-maroon">Pending Reports</h4>
                         <div class="card-body">
                         @if($pendingAccomplishmentReports->isNotEmpty())
                             @foreach($pendingAccomplishmentReports as $report)
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="card my-1">
-                        <h4 class="card-title card-header">Declined Reports</h4>
+                        <h4 class="card-title card-header text-white bg-maroon">Declined Reports</h4>
                         <div class="card-body">
                         @if($declinedAccomplishmentReports->isNotEmpty())
                             @foreach($declinedAccomplishmentReports as $report)
@@ -92,7 +92,7 @@
         	</div>
 
         	<hr>
-        	<div class="row justify-content-center pt-1">
+        	<div class="justify-content-center d-flex flex-row">
         		<a href="/home">
         			<button class="btn btn-secondary">Home</button>
         		</a>

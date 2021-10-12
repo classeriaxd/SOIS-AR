@@ -2,13 +2,28 @@
 
 @section('content')
 <div class="container">
-    <h2 class="text-center">New Event Report</h2>
+    <h2 class="text-center fw-bold">New Event Report</h2>
     <form action="{{route('event.store')}}" enctype="multipart/form-data" method="POST" id="eventForm">
+    <h2 class="display-2 text-center">New Event Report</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Create
+                        </li>
+                    </ol>
+                </nav>
     @csrf
     <div class="row">
         <div class="col">
             <div class="card mb-3">
-                <div class="card-header">TITLE</div>
+                <div class="card-header text-white bg-maroon">WHAT</div>
                 <div class="card-body">
                     <div class="form-group row">
                         <label for="title" class="col-md-4 col-form-label">Title</label>
@@ -52,7 +67,7 @@
                 </div>    
             </div>
             <div class="card">
-                <div class="card-header">TITLE</div>
+                <div class="card-header text-white bg-maroon ">WHERE</div>
                 <div class="card-body">
                     <div class="form-group row">
                             <label for="venue" class="col-md-4 col-form-label">Venue</label>
@@ -144,7 +159,7 @@
         </div>
         <div class="col">
             <div class="card">
-                <div class="card-header">TITLE</div>
+                <div class="card-header text-white bg-maroon">WHEN</div>
                 <div class=card-body>
                     <div class="form-group row">
                         <div class="col">
@@ -332,8 +347,10 @@
 </form>
     <hr>
     <div class="row justify-content-center">
-        <a href="{{route('home')}}">
-            <button class="btn btn-secondary">Go Home</button>
+        <a href="{{route('home')}}"
+            class="btn btn-secondary text-white"
+            role="button">
+        <button class="btn btn-secondary">Go Home</button>
         </a>
     </div>
 </div>

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="text-center">
-            <h2 class="display-2">{{$orgAcronym}} Events</h2>
+            <h2 class="display-2 ">{{$orgAcronym}} Events</h2>
         </div>
         <div class="col-md-10">
             {{-- <div class="accordion" id="eventAccordion">
@@ -49,6 +49,7 @@
                 @php $open = false; @endphp
                 @endforeach
             </div> --}}
+        
             <table class="table-striped table-bordered" id="eventTable">
                 <thead>
                     <th>#</th>
@@ -90,10 +91,10 @@
     <div class="row justify-content-center">
         <div class="card">
             <div class="card-header text-center align-middle">
-                <div class="display-5">Navigation</div>
+                <div class="display-5 text-white bg-maroon">Navigation</div>
             </div>
             <div class="card-body">
-                <div class="row justify-content-center">
+                <div class="justify-content-around d-flex flex-row">
                     <a href="{{route('event.create')}}">
                         <button class="btn btn-primary mr-2">Add Event</button>
                     </a>
