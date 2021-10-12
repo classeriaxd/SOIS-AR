@@ -70,7 +70,7 @@
     </div>
 
     <hr>
-
+    
     <div class="flex-row my-2 text-center">
         <a href="{{route('home')}}"
         class="btn btn-secondary text-white"

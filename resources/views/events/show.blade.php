@@ -81,7 +81,7 @@
     				    <h4 class="card-header card-title text-center">Event Gallery</h4>
         				<div class="card-body">
                             <h3 class="card-title text-center">Posters</h3>
-                            <div class="row flex-row flex-nowrap pb-2 pl-1" style="overflow-x:auto;">
+                            <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
                         @if($eventImages->where('image_type', 0)->count() > 0)
 
                         @foreach($eventImages as $eventImage)
@@ -151,6 +151,7 @@
                     @endif
                     </div>
                     <h5 class="card-header card-text text-center border-top">Options</h5>
+
                     <div class="card-body d-flex justify-content-around">
                         <a href="{{route('event.document.create',['event_slug' => $event->slug,])}}"
                             class="btn btn-primary text-white"
