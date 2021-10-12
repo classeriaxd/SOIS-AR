@@ -2,23 +2,26 @@
 
 @section('content')
 <div class="container">
-    <h2 class="text-center fw-bold">New Event Report</h2>
     <form action="{{route('event.store')}}" enctype="multipart/form-data" method="POST" id="eventForm">
-    <h2 class="display-2 text-center">New Event Report</h2>
-                {{-- Breadcrumbs --}}
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center">
-                        <li class="breadcrumb-item">
-                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Create
-                        </li>
-                    </ol>
-                </nav>
+        {{-- Title and Breadcrumbs --}}
+        <div class="row">
+            {{-- Title --}}
+            <h4 class="display-5 text-center">New Event Report</h4>
+            {{-- Breadcrumbs --}}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Create
+                    </li>
+                </ol>
+            </nav>
+        </div>
     @csrf
     <div class="row">
         <div class="col">
@@ -341,18 +344,20 @@
             </div> 
         </div>
     <hr>
-    <div class="row my-2 justify-content-center">
-        <button class="btn btn-primary">Add Event</button>
+    <div class="flex-row my-2 text-center">
+        <button class="btn btn-primary text-white" type="submit">Add Event</button>
     </div>      
 </form>
     <hr>
-    <div class="row justify-content-center">
+
+    <div class="flex-row my-1 text-center">
         <a href="{{route('home')}}"
             class="btn btn-secondary text-white"
             role="button">
-        <button class="btn btn-secondary">Go Home</button>
+            Go Home
         </a>
     </div>
+
 </div>
 @endsection
 @section('scripts')

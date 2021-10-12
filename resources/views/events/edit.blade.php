@@ -4,25 +4,32 @@
 
 @section('content')
 <div class="container">
-    <h2 class="text-center fw-bold">New Event Report</h2>
     <form action="/e/{{ $event->slug }}" enctype="multipart/form-data" method="POST">
 	@csrf
 	@method('PATCH')
-    <h2 class="display-2 text-center">Edit Event</h2>
-    {{-- Breadcrumbs --}}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb justify-content-center">
-            <li class="breadcrumb-item">
-                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                Create
-            </li>
-        </ol>
-    </nav>
+    <div class="row">
+    	{{-- Title --}}
+    	<h4 class="display-5 text-center">Edit Event</h4>
+    	<p class="text-center">{{ $event->title }}</p>
+    	{{-- Breadcrumbs --}}
+	    <nav aria-label="breadcrumb">
+	        <ol class="breadcrumb justify-content-center">
+	            <li class="breadcrumb-item">
+	                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+	            </li>
+	            <li class="breadcrumb-item">
+	                <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+	            </li>
+	            <li class="breadcrumb-item">
+	                <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none">{{ $event->title }}</a>
+	            </li>
+	            <li class="breadcrumb-item active" aria-current="page">
+	                Edit
+	            </li>
+	        </ol>
+	    </nav>
+    </div>
+    
     <div class="row">
     	<div class="col" >
 			
@@ -350,19 +357,24 @@
             @enderror
     	</div>
     </div>
+    
 	<hr>
-    <div class="row my-2 justify-content-center">
-    <button class="btn btn-primary">Finalize Edit</button>
+
+    <div class="flex-row my-2 text-center">
+    	<button class="btn btn-primary text-white">Finalize Edit</button>
     </div>
+
 	</form>
 	<hr>
-	<div class="row justify-content-center">
+
+	<div class="flex-row my-1 text-center">
 	    <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
 	        class="btn btn-secondary text-white"
 	        role="button">
-			Go Back</button>
+	        Go Home
 	    </a>
 	</div>
+
 </div> <!--/*end of container*/-->
 @endsection
 @section('scripts')
