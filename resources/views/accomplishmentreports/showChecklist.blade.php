@@ -5,15 +5,28 @@
 	<div class="row justify-content-center">
         <div class="col-md-10">
             <form action="{{route('accomplishmentreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm">
+                {{-- Title and Breadcrumbs --}}
                 <div class="row">
-                    <div class="col">
-                        <h2 class="text-center display-3">{{ $organization->organization_acronym }} Organization Report</h2>
-                        <br>
-                        <h3 class="text-center">All Events and Accomplishment for</h3>
-                        <br>
-                        <h4 class="text-center">{{ $range }}</h4>
-                        <br>
-                    </div>
+                    {{-- Title --}}
+                    <h4 class="display-5 text-center">{{ $organization->organization_acronym }} Organization Report</h4>
+                    <p class="text-center">All Events and Accomplishment for</p>
+                    <p class="text-center">{{ $range }}</p>
+                    {{-- Breadcrumbs --}}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item">
+                                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
+                                    Accomplishment Reports
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Checklist
+                            </li>
+                        </ol>
+                    </nav>
                 </div>
                 <div class="row my-1">
                     @php $i = 1; @endphp
@@ -22,7 +35,7 @@
                             <table class="table-hover table-bordered mx-auto w-100">
                                 <thead>
                                     <tr class="text-center">
-                                        <th scope="col" colspan="6" class=" align-middle">Event and Accomplishment Checklist</th>
+                                        <th scope="col" colspan="6" class="align-middle bg-maroon text-white fw-bold fs-3">Event and Accomplishment Checklist</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th scope="col" style="width: 5%;">#</th>
@@ -70,7 +83,7 @@
                                 @if($events->count() > 0)
                                     <tr>
                                         <td scope="row" colspan="6">
-                                            <table class="w-100">
+                                            <table class="w-100 table-bordered">
                                                 <tr class="table-primary">
                                                     <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
                                                     <td scope="col" style="width: 20%;">
@@ -143,7 +156,7 @@
                                 @if($studentAccomplishments->count() > 0)
                                     <tr>
                                         <td scope="row" colspan="6">
-                                            <table class="w-100">
+                                            <table class="w-100 table-bordered">
                                                 <tr class="table-primary">
                                                     <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
                                                     <td scope="col" style="width: 20%;">
@@ -237,7 +250,9 @@
                     </div>
                     
                 </div>
+
                 <hr>
+
                 <div class="form-group row my-1">
                     <div class="col text-right">
                         <label for="radioARFormatGroup" class="form-label h5 align-middle">Select Format</label>
@@ -253,22 +268,10 @@
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="form-group justify-content-center my-1 row">
-                    <div class="form-check">
-                        <input type="checkbox" id="archive" name="archive" class="form-check-input">
-                        <label class="form-check-label" for="archive">Archive this Accomplishment Report?</label>
-                        <a role="button"
-                            data-toggle="popover" 
-                            title="Archiving Accomplishment Reports" 
-                            data-content="Reports that will be archived are stored permanently. Temporary reports will only last for 30 days. ">
-                            <i class="far fa-question-circle"></i>
-                        </a>
-                    </div>
-                </div>
+                
                 <hr>
                 <div class="row justify-content-center my-1">
-                    <button class="btn btn-primary" type="submit">Submit Checklist</button>
+                    <button class="btn btn-primary text-white" type="submit">Submit Checklist</button>
                 </div>
                 @csrf
                 <input type="hidden" name="start_date" value="{{$start_date}}">
@@ -278,11 +281,15 @@
         </div>
 	</div>
     <hr>
-    <div class="row justify-content-center mt-2">
-        <a href="{{url()->previous()}}">
-            <button class="btn btn-secondary">Go back</button>
+
+    <div class="flex-row my-2 text-center">
+        <a href="{{ route('accomplishmentreports.create') }}"
+            class="btn btn-secondary text-white"
+            role="button">
+                Go Back
         </a>
     </div>
+    
 </div>
 @endsection
 @push('scripts')
@@ -342,11 +349,6 @@
         var sortable = Sortable.create(dragArea);
         var sortable2 = Sortable.create(dragArea2);
         var sortable3 = Sortable.create(dragArea3);
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('[data-toggle="popover"]').popover();   
-        });
     </script>
 
 @endsection

@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Requests\EventDocumentRequests\{
+    EventDocumentStoreRequest,
+};
+
+
 use iio\libmergepdf\Merger;
 
 class EventDocumentsController extends Controller
@@ -25,34 +30,27 @@ class EventDocumentsController extends Controller
         $event = Event::where('slug', $event_slug)->first();
         return view('eventdocuments.create', compact('event','filePondJS', 'eventDocumentTypes'));
     }
-    public function store($event_slug)
+    public function store(EventDocumentStoreRequest $request, $event_slug)
     {
-        $document = request()->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-            'document_type' => 'required|exists:event_document_types,event_document_type_id',
-            'document' => 'required|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
-        ]);
         if($event = Event::where('slug', $event_slug)->first())
         {
-            $temp_path = '/public/uploads/tmp/';
-            $final_path = '/public/uploads/event_documents/';
-            $db_path = '/uploads/event_documents/';
-            if($document['document'] ?? false)
-            {
-                $description = ($document['description'])?$document['description']:NULL;
-                $file = TemporaryFile::where('folder', $document['document'])->value('filename');
+            $tempPath = '/public/uploads/tmp/';
+            $finalPath = '/public/uploads/events/documents/';
+            $dbPath = '/uploads/events/documents/';
 
-                Storage::move($temp_path . $document['document'] . '/' . $file, $final_path . $file);
-                Storage::deleteDirectory($temp_path . $document['document'], true);
-                sleep(0.5);
-                Storage::deleteDirectory($temp_path . $document['document']);
+            if($request->has('document'))
+            {
+                $file = TemporaryFile::where('folder', $request->input('document'))->value('filename');
+                Storage::move($tempPath . $request->input('document') . '/' . $file, $finalPath . $file);
+                $this->deleteDirectory($tempPath . $request->input('document'));
+                TemporaryFile::where('folder', $request->input('document'))->delete();
+
                 EventDocument::create([
                     'event_id' => $event->event_id,
-                    'event_document_type_id' => $document['document_type'],
-                    'title' => $document['title'],
-                    'description' => $description,
-                    'file' =>  $db_path . $file, 
+                    'event_document_type_id' => $request->input('document_type'),
+                    'title' => $request->input('title', NULL),
+                    'description' => $request->input('description', NULL),
+                    'file' =>  $dbPath . $file, 
                 ]);
             }
             return redirect()->action(
@@ -67,12 +65,12 @@ class EventDocumentsController extends Controller
         if($event = Event::where('slug', $event_slug)->first())
         {
             $eventDocuments = DB::table('event_documents as documents')
-            ->join('event_document_types as types','documents.event_document_type_id','=','types.event_document_type_id')
-            ->where('documents.event_id', $event->event_id)
-            ->whereNull('deleted_at')
-            ->orderBy('documents.event_document_type_id', 'ASC')
-            ->select('types.document_type as document_type', 'documents.title as title', 'documents.file as file', 'documents.event_document_id as event_document_id')
-            ->get();
+                ->join('event_document_types as types','documents.event_document_type_id','=','types.event_document_type_id')
+                ->where('documents.event_id', $event->event_id)
+                ->whereNull('deleted_at')
+                ->orderBy('documents.event_document_type_id', 'ASC')
+                ->select('types.document_type as document_type', 'documents.title as title', 'documents.file as file', 'documents.event_document_id as event_document_id')
+                ->get();
             return view('eventdocuments.index', compact('event', 'eventDocuments'));
         }
         else 
@@ -117,13 +115,12 @@ class EventDocumentsController extends Controller
     }
     public function downloadAllDocument($event_slug)
     {
-        if ($event = Event::where('slug', $event_slug)->first())
+        if ($event = Event::with('eventDocuments')->where('slug', $event_slug)->first())
         {
-            if ($event->documents->count() > 0)
+            if ($event->eventDocuments->count() > 0)
             {
-                $documents = $event->documents;
                 $documentArray = array();
-                foreach($documents as $document)
+                foreach($event->eventDocuments as $document)
                 {
                     $filePath = storage_path('/app/public/'. $document->file);
                     array_push($documentArray, $filePath);
@@ -185,5 +182,16 @@ class EventDocumentsController extends Controller
             return 'file deleted';
          }
          return 'file not deleted';
+    }
+    /**
+     * Private Function to delete temporary directories.
+     *
+     * @return void
+     */
+    private function deleteDirectory($folderPath)
+    {
+        Storage::deleteDirectory($folderPath, true);
+        sleep(0.3);
+        Storage::deleteDirectory($folderPath);
     }
 }

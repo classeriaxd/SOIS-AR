@@ -4,11 +4,26 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">Accomplishment Report</h2>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h4 class="display-5 text-center">Accomplishment Reports</h4>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Accomplishment Reports
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
-                    <div class="card my-1">
-                        <h4 class="card-title card-header text-white bg-maroon">Approved Reports</h4>
+                    <div class="card my-2">
+                        <h4 class="card-title card-header text-center bg-maroon text-white fw-bold">Approved Reports</h4>
                         <div class="card-body">
                         @if($approvedAccomplishmentReports->isNotEmpty())
                             @foreach($approvedAccomplishmentReports as $report)
@@ -34,8 +49,8 @@
                         </div>
                     </div>
 
-                    <div class="card my-1">
-                        <h4 class="card-title card-header text-white bg-maroon">Pending Reports</h4>
+                    <div class="card my-2">
+                        <h4 class="card-title card-header text-center bg-maroon text-white fw-bold">Pending Reports</h4>
                         <div class="card-body">
                         @if($pendingAccomplishmentReports->isNotEmpty())
                             @foreach($pendingAccomplishmentReports as $report)
@@ -61,8 +76,8 @@
                         </div>
                     </div>
 
-                    <div class="card my-1">
-                        <h4 class="card-title card-header text-white bg-maroon">Declined Reports</h4>
+                    <div class="card my-2">
+                        <h4 class="card-title card-header text-center bg-maroon text-white fw-bold">Declined Reports</h4>
                         <div class="card-body">
                         @if($declinedAccomplishmentReports->isNotEmpty())
                             @foreach($declinedAccomplishmentReports as $report)
@@ -92,11 +107,15 @@
         	</div>
 
         	<hr>
-        	<div class="justify-content-center d-flex flex-row">
-        		<a href="/home">
-        			<button class="btn btn-secondary">Home</button>
-        		</a>
-        	</div>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('home')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Home
+                </a>
+            </div>
+            
         </div>
     </div>
 </div>

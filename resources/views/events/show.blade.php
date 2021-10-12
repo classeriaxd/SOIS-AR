@@ -4,8 +4,27 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">{{ $event->title }}</h2>
-            <h4 class="text-center"><span class="badge badge-{{$event->category_color}}">{{$event->eventCategory->category}}</span>  <span class="badge badge-{{$event->role_color}}">{{$event->eventRole->event_role}}</span></h4>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h2 class="display-2 text-center">{{ $event->title }}</h2>
+                <h3 class="text-center"><span class="badge bg-{{$event->category_color}}">{{$event->eventCategory->category}}</span>  <span class="badge bg-{{$event->role_color}}">{{$event->eventRole->event_role}}</span></h3>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ $event->title }}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            
         	<div class="row justify-content-center mb-1">
         		<div class="col-md-5">
         			<div class="card">
@@ -91,11 +110,11 @@
                         </div>
                         <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
-                            <a href="/e/{{$event->slug}}/images/create">
-                                <button class="btn btn-primary">Add Image</button>
+                            <a href="{{route('event.image.create', ['event_slug' => $event->slug])}}">
+                                <button class="btn btn-primary text-white">Add Image</button>
                             </a>
-                            <a href="/e/{{$event->slug}}/images">
-                                <button class="btn btn-primary">View Event Gallery</button>
+                            <a href="{{route('event.image.index', ['event_slug' => $event->slug])}}">
+                                <button class="btn btn-primary text-white">View Event Gallery</button>
                             </a>	
         				</div>
         			</div>
@@ -132,32 +151,47 @@
                     @endif
                     </div>
                     <h5 class="card-header card-text text-center border-top">Options</h5>
-                    <div class="card-body  d-flex flex-row justify-content-around">
-                        <a href="{{route('event_documents.create',['event_slug' => $event->slug,])}}">
-                            <button class="btn btn-primary">Add Document</button>
+
+                    <div class="card-body d-flex justify-content-around">
+                        <a href="{{route('event.document.create',['event_slug' => $event->slug,])}}"
+                            class="btn btn-primary text-white"
+                            role="button">
+                            Add Document
                         </a>
-                        <br>
-                        <a href="{{route('event_documents.index',['event_slug' => $event->slug,])}}">
-                            <button class="btn btn-primary">View All Documents</button>
+
+                        <a href="{{route('event.document.index',['event_slug' => $event->slug,])}}"
+                            class="btn btn-primary text-white"
+                            role="button">
+                            View All Event Documents
                         </a>
                         
                     </div>
                 </div>
             </div>
             @if($newEvent)
-        	<hr>
-            <div class="row justify-content-center my-1">
-                <a href="{{route('event.create')}}">
-                    <button class="btn btn-primary">Create Another Event</button>
+            
+            	<hr>
+
+                <div class="flex-row my-2 text-center">
+                    <a href="{{route('event.create')}}"
+                        class="btn btn-primary text-white"
+                        role="button">
+                            Create Another Event
+                    </a>
+                </div>
+
+            @endif
+
+            <hr>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('event.index')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
                 </a>
             </div>
-            @endif
-            <hr>
-        	<div class="row justify-content-center my-1">
-        		<a href="{{route('event.index')}}">
-        			<button class="btn btn-secondary">Go back</button>
-        		</a>
-        	</div>
+
         </div>
     </div>
 </div>

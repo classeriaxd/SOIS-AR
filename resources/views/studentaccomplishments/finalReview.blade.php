@@ -4,29 +4,59 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-12">
-    		<h2 class="display-2 text-center">Final Review</h2>
-            <h5 class="display-5 text-center">Final edits for the Accomplishment Submission</h6>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h4 class="display-5 text-center">Final Review</h4>
+                <p class="text-center">Final edits for the Accomplishment Submission</p>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('studentAccomplishment.index')}}" class="text-decoration-none">
+                                @position_title('Officer')
+                                Student Accomplishments
+                                @elseposition_title('Member')
+                                My Accomplishments
+                                @endposition_title
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('studentAccomplishment.show' , ['accomplishmentUUID' => $accomplishment->accomplishment_uuid ])}}" class="text-decoration-none">
+                                {{ $accomplishment->title }}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Final Review
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            
             <form action="{{route('studentAccomplishment.approveSubmission',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST" id="approvedSubmissionForm">   
             	<div class="row justify-content-center pb-1">
                     <div class="col-md-8">
                         <div class="card">
-                            <h5 class="card-header card-title text-center">{{ $accomplishment->title }}</h5>
+                            <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $accomplishment->title }}</h5>
                             <div class="card-body">
                             {{-- Accomplishment Details --}}
                                 <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Accomplishment Details</span></h6>
-                                <p class="text-center">TITLE: {{ $accomplishment->title }}</p>
-                                <p class="text-center">DESCRIPTION: {{ $accomplishment->description }}</p>
-                                <p class="text-center">OBJECTIVE: {{ $accomplishment->objective }}</p>
-                                <p class="text-center">ORGANIZER: {{ $accomplishment->organizer }}</p>
-                                <p class="text-center">VENUE: {{ $accomplishment->venue }}</p>
+                                <p class="text-center"><span class="fw-bold">TITLE: </span>{{ $accomplishment->title }}</p>
+                                <p class="text-center"><span class="fw-bold">DESCRIPTION: </span>{{ $accomplishment->description }}</p>
+                                <p class="text-center"><span class="fw-bold">OBJECTIVE: </span>{{ $accomplishment->objective }}</p>
+                                <p class="text-center"><span class="fw-bold">ORGANIZER: </span>{{ $accomplishment->organizer }}</p>
+                                <p class="text-center"><span class="fw-bold">VENUE: </span>{{ $accomplishment->venue }}</p>
                                 <p class="text-center">
-                                    DATE: 
+                                    <span class="fw-bold"> DATE: </span>
                                     @if($accomplishment->start_date == $accomplishment->end_date){{date_format(date_create($accomplishment->start_date), 'F d, Y')}}
                                     @else{{date_format(date_create($accomplishment->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishment->end_date), 'F d, Y')}}
                                     @endif
                                 </p>
                                 <p class="text-center">
-                                    TIME: 
+                                    <span class="fw-bold"> TIME: </span>
                                     @if($accomplishment->start_time == $accomplishment->end_time){{date_format(date_create($accomplishment->start_time), 'h:i A')}}
                                     @else{{date_format(date_create($accomplishment->start_time), 'h:i A') . ' - ' . date_format(date_create($accomplishment->end_time), 'h:i A')}}
                                     @endif
@@ -36,14 +66,14 @@
                             {{-- Student Details --}}
                                 <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Student Details</span></h6>
                                 <div class="text-center">
-                                    <p>NAME: {{ $accomplishment->student->last_name . ', ' . $accomplishment->student->first_name . ' ' . $accomplishment->student->middle_name }}</p>
-                                    <p>STUDENT NUMBER: {{ $accomplishment->student->student_number  }}</p>
-                                    <p>EMAIL: {{ $accomplishment->student->email }}</p>
+                                    <p><span class="fw-bold">NAME: </span>{{ $accomplishment->student->last_name . ', ' . $accomplishment->student->first_name . ' ' . $accomplishment->student->middle_name }}</p>
+                                    <p><span class="fw-bold">STUDENT NUMBER: </span>{{ $accomplishment->student->student_number  }}</p>
+                                    <p><span class="fw-bold">EMAIL: </span>{{ $accomplishment->student->email }}</p>
                                 </div>
 
                                 <hr>
                             {{-- Activity Type --}}
-                                <div class="form-group row">
+                                <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="activityType" class="col-form-label">Activity Type</label>
                                     </div>
@@ -65,7 +95,7 @@
                                 </div>
                                 @enderror
                             {{-- Beneficiaries --}}
-                                <div class="form-group row">
+                                <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="beneficiaries" class="col-form-label">Beneficiaries</label>
                                     </div>
@@ -87,7 +117,7 @@
                                 </div>
                                 @enderror
                             {{-- Budget --}}
-                                <div class="form-group row">
+                                <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="budget" class="col-form-label">Budget</label>
                                     </div>
@@ -109,7 +139,7 @@
                                 </div>
                                 @enderror
                             {{-- Fund Source --}}
-                                <div class="form-group row">
+                                <div class="form-group row my-1 border border-dark">
                                     <div class="col">
                                         <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">Who funded this Event/Accomplishment?</label>
                                     </div>
@@ -141,7 +171,7 @@
                                 </div>
                                 @enderror
                             {{-- Level --}}
-                                <div class="form-group row justify-content-center">
+                                <div class="form-group row justify-content-center my-1 border border-dark">
                                     <div class="col">
                                         <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Accomplishment Level</label>
                                     </div>
@@ -173,7 +203,7 @@
                                 </div>
                                 @enderror
                             {{-- Related Event --}}
-                                <div class="form-group row justify-content-center">
+                                <div class="form-group row justify-content-center my-1 border border-dark">
                                     <div class="col">
                                         <label for="radioRelatedEventGroup" class="form-label @error('relatedEvent') text-danger @enderror">Related Event</label>
                                         <a role="button"
@@ -213,8 +243,8 @@
                                 <h6 class="text-center">At least one evidence is required</h6>
                                 @php $i = 1; @endphp
                                 @foreach($accomplishment->accomplishmentFiles as $file)
-                                <div class="form-group row">
-                                    <div class=" col text-center">
+                                <div class="row">
+                                    <div class="form-check col text-center">
                                         <div>
                                             <h6>Evidence {{$i}}</h6>
                                         </div>
@@ -232,16 +262,18 @@
                                             <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
                                         </div>
                                         @endif
-                                        <div>
-                                            <label for="{{'evidence' . $i}}" class="@error('evidence'.$i) text-danger @enderror">Include this evidence on final?
+                                        <div class="d-flex flex-column align-items-center">
+                                            <label for="{{'evidence' . $i}}" class="@error('evidence'.$i) text-danger @enderror form-check-label">Include this evidence on final?
                                             </label>
                                             <input type="checkbox" 
-                                            class="form-control" 
+                                            class="form-check-input" 
                                             name="{{'evidence' . $i}}" 
-                                            id="{{'evidence' . $i}}" 
+                                            id="{{'evidence' . $i}}"
+                                            style="top: 1.2rem; width: 1.85rem; height: 1.85rem;" 
                                             @if($i == 1) checked @endif 
                                             onchange="atLeastOneCheckboxIsChecked('evidence{{$i}}')"
                                             >
+
                                             @error('evidence'.$i)
                                                 <span class="invalid-feedback d-block" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -259,7 +291,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-1 w-100">
-                            <div class="card-header card-title text-center">Review Remarks</div>
+                            <div class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</div>
                             <small class="text-center">Include comments for possible improvement for this submission.</small>
                             <div class="card-body">
                                 <textarea class="form-control" id="remarks" name="remarks" placeholder="Start Review here..." rows="9" required></textarea>
@@ -268,13 +300,13 @@
                         <div class="card card-body text-center">
                             <div class="row mt-2 justify-content-center">
                                 <div class="col">
-                                    <button class="btn btn-danger w-100" type="submit" name="decline" id="decline" value="decline">Decline</button>
+                                    <button class="btn btn-danger w-100 text-white" type="submit" name="decline" id="decline" value="decline">Decline</button>
                                 </div>
                             </div>
                             <hr>
                             <div class="row mb-2 justify-content-center">
                                 <div class="col">
-                                    <button class="btn btn-success w-100" type="submit" name="success" id="success" value="success">Finalize Review</button>
+                                    <button class="btn btn-success w-100 text-white" type="submit" name="success" id="success" value="success">Finalize Review</button>
                                 </div>
                             </div>
                         </div>
@@ -283,11 +315,15 @@
                 @csrf
             </form>
         	<hr>
-        	<div class="row justify-content-center pt-1">
-        		<a href="/s/accomplishments">
-        			<button class="btn btn-secondary">Go back</button>
-        		</a>
-        	</div>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{ route('studentAccomplishment.index') }}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
+                </a>
+            </div>
+
         </div>
     </div>
 </div>

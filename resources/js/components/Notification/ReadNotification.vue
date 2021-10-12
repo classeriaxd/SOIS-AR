@@ -2,13 +2,13 @@
     <div class="row">     
         <div class="col-10">
             <a class="dropdown-item" v-bind:href="link" @click="readNotification()">
-                <h4>{{ title }}</h4>
-                <p>{{ description }}</p>
+                <h4 class="text-truncate">{{ title }}</h4>
+                <p class="text-truncate">{{ description }}</p>
             </a>
         </div>
         <div class="col-2">
-            <button class="btn w-100 h-100 shadow-none" v-bind:disabled="disableButton" @click="readNotification()" @click.stop>
-                <a class="badge badge-pill badge-primary" v-text="badgeText"></a>
+            <button class="btn w-100 h-100" v-bind:disabled="disableButton" @click="readNotification()" @click.stop>
+                <a class="badge rounded-pill bg-primary text-decoration-none shadow" v-text="badgeText"></a>
             </button>
         </div>
     </div>
