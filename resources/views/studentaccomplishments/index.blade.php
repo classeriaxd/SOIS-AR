@@ -35,7 +35,7 @@
                         </a>
                     </div>
                     <div class="card mb-1">
-                        <h5 class="card-header card-title text-center bg-primary text-white">My Accomplishments</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">My Accomplishments</h5>
                         <div class="card-body">
                             @if($approvedAccomplishments->count()>0)
                             @foreach($approvedAccomplishments as $accomplishment)
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="card mb-1">
-                        <h5 class="card-header card-title text-center bg-primary text-white">Pending Accomplishments</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Pending Accomplishments</h5>
                         <div class="card-body">
                             @if($pendingAccomplishments->count()>0)
                             @foreach($pendingAccomplishments as $accomplishment)
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h5 class="card-header card-title text-center bg-primary text-white">Disapproved Accomplishments</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Disapproved Accomplishments</h5>
                         <div class="card-body">
                             @if($disapprovedAccomplishments->count()>0)
                             @foreach($disapprovedAccomplishments as $accomplishment)
@@ -85,7 +85,7 @@
                     <hr>
                     @elseposition_title('Officer')
                     <div class="card mb-1">
-                        <h5 class="card-header card-title text-center bg-primary text-white">Student Accomplishment Submissions</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Student Accomplishment Submissions</h5>
                         <div class="card-body">
                             @if($accomplishmentSubmissions->count()>0)
                             @foreach($accomplishmentSubmissions as $accomplishment)
@@ -108,11 +108,15 @@
         		</div>
         	</div>
         	<hr>
-        	<div class="row justify-content-center pt-1">
-        		<a href="/home">
-        			<button class="btn btn-secondary">Go back</button>
-        		</a>
-        	</div>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{ route('home') }}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
+                </a>
+            </div>
+            
         </div>
     </div>
 </div>
