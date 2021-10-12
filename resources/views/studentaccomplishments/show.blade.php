@@ -4,20 +4,46 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">Accomplishment</h2>
-            @position_title('Officer')
-            @if($accomplishment->status == 1)
-            <div class="row justify-content-center my-1">  
-                <a href="{{route('studentAccomplishment.review', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}">
-                    <button class="btn btn-primary">Review this Accomplishment</button>
-                </a>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h4 class="display-5 text-center">Accomplishment</h4>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('studentAccomplishment.index')}}" class="text-decoration-none">
+                                @position_title('Officer')
+                                Student Accomplishments
+                                @elseposition_title('Member')
+                                My Accomplishments
+                                @endposition_title
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ $accomplishment->title }}
+                        </li>
+                    </ol>
+                </nav>
             </div>
-            @endif
+            @position_title('Officer')
+                @if($accomplishment->status == 1)
+                    <div class="flex-row my-2 text-center">
+                        <a href="{{route('studentAccomplishment.review', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}"
+                            class="btn btn-primary text-white"
+                            role="button">
+                                Review this Accomplishment
+                        </a>
+                    </div>
+                @endif
             @endposition_title
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     <div class="card">
-                        <h5 class="card-header card-title text-center">{{ $accomplishment->title }}</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $accomplishment->title }}</h5>
                         <div class="card-body">
                         @if($accomplishment->status == 1)
                             <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Status: PENDING</span></h6>
@@ -190,21 +216,28 @@
         		</div>
         	</div>
             @isset($newAccomplishment)
-            @if($newAccomplishment)
-            <hr>
-            <div class="row justify-content-center pt-1">
-                <a href="{{route('studentAccomplishment.create')}}">
-                    <button class="btn btn-primary">Submit Another</button>
+                @if($newAccomplishment)
+                    <hr>
+                    <div class="flex-row my-2 text-center">
+                        <a href="{{route('studentAccomplishment.create')}}"
+                            class="btn btn-secondary text-white"
+                            role="button">
+                                Create Another
+                        </a>
+                    </div>
+                @endif
+            @endisset
+
+        	<hr>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('studentAccomplishment.index')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
                 </a>
             </div>
-            @endif
-            @endisset
-        	<hr>
-        	<div class="row justify-content-center pt-1">
-        		<a href="{{route('studentAccomplishment.index')}}">
-        			<button class="btn btn-secondary">Go back</button>
-        		</a>
-        	</div>
+
         </div>
     </div>
 </div>

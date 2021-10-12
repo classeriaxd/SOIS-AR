@@ -39902,9 +39902,13 @@ var render = function() {
           }
         },
         [
-          _c("h4", [_vm._v(_vm._s(_vm.title))]),
+          _c("h4", { staticClass: "text-truncate" }, [
+            _vm._v(_vm._s(_vm.title))
+          ]),
           _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(_vm.description))])
+          _c("p", { staticClass: "text-truncate" }, [
+            _vm._v(_vm._s(_vm.description))
+          ])
         ]
       )
     ]),
@@ -39913,7 +39917,7 @@ var render = function() {
       _c(
         "button",
         {
-          staticClass: "btn w-100 h-100 shadow-none",
+          staticClass: "btn w-100 h-100",
           attrs: { disabled: _vm.disableButton },
           on: {
             click: [
@@ -39928,7 +39932,8 @@ var render = function() {
         },
         [
           _c("a", {
-            staticClass: "badge badge-pill badge-primary",
+            staticClass:
+              "badge rounded-pill bg-primary text-decoration-none shadow",
             domProps: { textContent: _vm._s(_vm.badgeText) }
           })
         ]

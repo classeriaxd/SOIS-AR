@@ -5,126 +5,262 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\EventImage;
-use Illuminate\Validation\Rule;
+use App\Models\TemporaryFile;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
+use App\Http\Requests\EventImageRequests\{
+    EventImageStoreRequest,
+    EventImageStoreCaptionRequest,
+    EventImageUpdateRequest,
+};
 
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use Carbon\Carbon;
 
 class EventImagesController extends Controller
 {
     public function index($event_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        $eventImages = EventImage::where('event_id', $event->event_id)->get();
-        return view('eventimages.index',compact('event', 'eventImages'));
+        $event = Event::with('eventImages')
+            ->where('slug', $event_slug)->first();
+        return view('events.eventimages.index',compact('event'));
     }
 
     public function show($event_slug, $eventImage_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        $eventImage = EventImage::where('slug', $eventImage_slug)->first();
-        return view('eventimages.show',compact('event', 'eventImage'));
+        $event = Event::with([
+            'eventImage' => function ($query) use ($eventImage_slug) {
+                $query->where('slug', $eventImage_slug);},
+            ])
+        ->where('slug', $event_slug)->first();
+        return view('events.eventimages.show',compact('event'));
     }
 
     public function edit($event_slug, $eventImage_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        $eventImage = EventImage::where('slug', $eventImage_slug)->first();
-    	return view('eventimages.edit', compact('event', 'eventImage'));
+        $event = Event::with([
+            'eventImage' => function ($query) use ($eventImage_slug) {
+                $query->where('slug', $eventImage_slug);},
+            ])
+        ->where('slug', $event_slug)->first();
+
+    	return view('events.eventimages.edit', compact('event'));
     }
 
-    public function update($event_slug, $eventImage_slug)
+    public function update(EventImageUpdateRequest $request, $event_slug, $eventImage_slug)
     {
-    	$data = request()->validate([
-    	    'caption' => '',
-            'image_type' => ['required',Rule::in([0, 1])],
-    	]);
-        $event = Event::where('slug', $event_slug)->first();
-    	$eventImage = EventImage::where('slug', $eventImage_slug)->update($data);
-    	return redirect("/e/{$event_slug}/images/{$eventImage_slug}");
+        EventImage::where('slug', $eventImage_slug)
+            ->update([
+                'caption' => $request->input('caption', NULL),
+                'image_type' => $request->input('image_type'),
+        ]);
+
+        return redirect()->action(
+            [EventImagesController::class, 'show'], ['event_slug' => $event_slug, 'eventImage_slug' => $eventImage_slug]
+        );
     }
 
     public function destroy($event_slug, $eventImage_slug)
     {
         $event = Event::where('slug', $event_slug)->first();
         $eventImage = EventImage::where('slug', $eventImage_slug)->delete();
-        return redirect("/e/{$event_slug}/images");
+        return redirect()->action(
+            [EventImagesController::class, 'index'], ['event_slug' => $event->slug]
+        );
     }
 
     
     public function create($event_slug)
     {
         $event = Event::where('slug', $event_slug)->first();
-        return view('eventimages.create', compact('event'));
+        $filePondJS = true;
+        $loadJSWithoutDefer = true;
+        return view('events.eventimages.create', compact('event', 'filePondJS', 'loadJSWithoutDefer'));
     }
-    public function store($event_slug)
+    public function createCaption($event_slug)
     {
-		$data = request()->validate([
-	        'poster' => 'image|file|max:2048',
-	        'poster_caption' => '',
-	        'evidence' => 'image|file|max:2048',
-	        'evidence_caption' => '',
-		]);
         $event = Event::where('slug', $event_slug)->first();
-    	// Image Type > 0 = Poster | 1 = Evidence
-        if(request('poster') && request('evidence'))
+        $eventImages['posters'] = collect();
+        $eventImages['evidences'] = collect();
+        if(session()->has('eventImagesArray'))
         {
-            $posterPath = request('poster')->store('uploads','public');
-            $image = Image::make(public_path("storage/{$posterPath}"))->fit(1200, 1000);
-            $image->save();
+            $eventImagesArray = session()->get('eventImagesArray');
+            session()->keep(['eventImagesArray']);
+            $eventImages['posters'] = EventImage::where('image_type', 0)
+                ->where('event_id', $event->event_id)
+                ->whereIn('event_image_id', $eventImagesArray)
+                ->get();
+            $eventImages['evidences'] = EventImage::where('image_type', 1)
+                ->where('event_id', $event->event_id)
+                ->whereIn('event_image_id', $eventImagesArray)
+                ->get();
+        }
+        $loadJSWithoutDefer = true;
+        return view('events.eventimages.createCaption', compact('event','eventImages', 'loadJSWithoutDefer'));
+    }
+    public function store(EventImageStoreRequest $request, $event_slug)
+    {
+        $event = Event::where('slug', $event_slug)->first();
+    	$insertedImages = array();
+        $currentTime = Carbon::now();
+        if($request->has('poster'))
+        {
+            $tempPath = '/public/uploads/tmp/';
+            $finalPath = '/public/uploads/events/posters/';
+            $dbPath = '/uploads/events/posters/';
+            
+            foreach($request->input('poster') as $poster)
+            {
+                $file = TemporaryFile::where('folder', $poster)->value('filename');
+                Storage::move($tempPath . $poster . '/' . $file, $finalPath . $file);
+                $this->deleteDirectory($tempPath . $poster);
+                TemporaryFile::where('folder', $poster)->delete();
 
-            EventImage::create([
-                'event_id' => $event->event_id,
-                'image' => $posterPath,
-                'image_type' => 0,
-                'caption' => $data['poster_caption'],
-                'slug' => Str::uuid(),
-            ]);
-            $evidencePath = request('evidence')->store('uploads','public');
-            $image = Image::make(public_path("storage/{$evidencePath}"))->fit(1200, 1000);
-            $image->save();
-
-            EventImage::create([
-                'event_id' => $event->event_id,
-                'image' => $evidencePath,
-                'image_type' => 1,
-                'caption' => $data['evidence_caption'],
-                'slug' => Str::uuid(),
-            ]);
+                // Image Type > 0 = Poster | 1 = Evidence
+                $eventImageID = EventImage::insertGetId([
+                    'event_id' => $event->event_id,
+                    'image' => $dbPath . $file,
+                    'image_type' => 0,
+                    'caption' => NULL,
+                    'slug' => Str::uuid(),
+                    'created_at' => $currentTime,
+                    'updated_at' => $currentTime,
+                ]);
+                array_push($insertedImages, $eventImageID);
+            }
         }
 
-    	else if(request('poster'))
-    	{
-    	    $posterPath = request('poster')->store('uploads','public');
-    	    $image = Image::make(public_path("storage/{$posterPath}"))->fit(1200, 1000);
-    	    $image->save();
+        if($request->has('evidence'))
+        {
+            $tempPath = '/public/uploads/tmp/';
+            $finalPath = '/public/uploads/events/evidences/';
+            $dbPath = '/uploads/events/evidences/';
+            foreach($request->input('evidence') as $evidence)
+            {
+                $file = TemporaryFile::where('folder', $evidence)->value('filename');
+                Storage::move($tempPath . $evidence . '/' . $file, $finalPath . $file);
+                $this->deleteDirectory($tempPath . $evidence);
+                TemporaryFile::where('folder', $evidence)->delete();
 
-    	    EventImage::create([
-    	        'event_id' => $event->event_id,
-    	        'image' => $posterPath,
-    	        'image_type' => 0,
-    	        'caption' => $data['poster_caption'],
-                'slug' => Str::uuid(),
-    	    ]);
-    	}
+                // Image Type > 0 = Poster | 1 = Evidence
+                $eventImageID = EventImage::insertGetId([
+                    'event_id' => $event->event_id,
+                    'image' => $dbPath . $file,
+                    'image_type' => 1,
+                    'caption' => NULL,
+                    'slug' => Str::uuid(),
+                    'created_at' => $currentTime,
+                    'updated_at' => $currentTime,
+                ]);
+                array_push($insertedImages, $eventImageID);
+            }
+        }
+        if(count($insertedImages) > 0)
+        {   
+            session()->flash('eventImagesArray', $insertedImages);
+            return redirect()->action(
+                [EventImagesController::class, 'createCaption'], ['event_slug' => $event->slug,]
+            );
+        }
+        else
+            return redirect()->action(
+                [EventsController::class, 'show'], ['event_slug' => $event->slug]
+            );
+    }
+    public function storeCaption(EventImageStoreCaptionRequest $request, $event_slug)
+    {
+        if($request->has('caption'))
+        {
+            $event = Event::where('slug', $event_slug)->first();
+            foreach($request->input('caption') as $image => $caption)
+            {
+                if ($caption != NULL)
+                {
+                    EventImage::where('event_id', $event->event_id)
+                        ->where('slug', $image)
+                        ->update(['caption' => $caption ]);
+                }
+            }
+        }
+        return redirect()->action(
+            [EventsController::class, 'show'], ['event_slug' => $event->slug]
+        );
+    }
 
-    	else if(request('evidence'))
-    	{
-    	    $evidencePath = request('evidence')->store('uploads','public');
-    	    $image = Image::make(public_path("storage/{$evidencePath}"))->fit(1200, 1000);
-    	    $image->save();
+    /* FilePond JS
+     * Upload Functions
+     */
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('evidence'))
+        {
+            $request->validate([
+                'evidence.*' => 'mimes:jpg,jpeg,png',
+            ]);
+            foreach ($request->file('evidence') as $file) 
+            {
+                $filename = uniqid() . '-' . now()->timestamp . '.' .$file->extension();
+                $folder = uniqid() . '-' . now()->timestamp;
+                $file->storeAs('/public/uploads/tmp/' . $folder, $filename);
 
-    	    EventImage::create([
-    	        'event_id' => $event->event_id,
-    	        'image' => $evidencePath,
-    	        'image_type' => 1,
-    	        'caption' => $data['evidence_caption'],
-                'slug' => Str::uuid(),
-    	    ]);
-    	}
-    	return redirect('/e/'.$event_slug);
+                TemporaryFile::create([
+                    'folder' => $folder,
+                    'filename' => $filename,
+                ]);
+                return $folder;
+            }
+        }
+
+        if ($request->hasFile('poster'))
+        {
+            $request->validate([
+                'poster.*' => 'mimes:jpg,jpeg,png',
+            ]);
+            foreach ($request->file('poster') as $file) 
+            {
+                $filename = uniqid() . '-' . now()->timestamp . '.' .$file->extension();
+                $folder = uniqid() . '-' . now()->timestamp;
+                $file->storeAs('/public/uploads/tmp/' . $folder, $filename);
+
+                TemporaryFile::create([
+                    'folder' => $folder,
+                    'filename' => $filename,
+                ]);
+                return $folder;
+            }
+        }
+        
+        return 'not uploaded';
+    }
+    public function undoUpload(Request $request)
+    {
+         if ($request->getContent())
+         {
+            $folder = $request->getContent();
+            TemporaryFile::where('folder', $folder)->delete();
+            // first delete contents of the directory, but preserve the directory itself
+            Storage::deleteDirectory('/public/uploads/tmp/' . $folder, true);
+            // sleep 0.5 second because of race condition with HD
+            sleep(0.5);
+            // actually delete the folder itself
+            Storage::deleteDirectory('/public/uploads/tmp/' . $folder);
+            return 'file deleted';
+         }
+         return 'file not deleted';
+    }
+    /**
+     * Private Function to delete temporary directories.
+     *
+     * @return void
+     */
+    private function deleteDirectory($folderPath)
+    {
+        Storage::deleteDirectory($folderPath, true);
+        sleep(0.3);
+        Storage::deleteDirectory($folderPath);
     }
 
 }

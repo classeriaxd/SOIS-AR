@@ -34,6 +34,8 @@ class HomeController extends Controller
             $orgCurrentPositionArray = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
             $orgCurrentPosition = $orgCurrentPositionArray[0];
             $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
+
+            $loginAlert = $this->showLoginAlert();
             
             if ($orgCurrentPosition == 'Member')
             {
@@ -43,7 +45,7 @@ class HomeController extends Controller
                 $approvedAccomplishmentCount = $accomplishments[2] ?? 0;
                 $pendingAccomplishmentCount = $accomplishments[1] ?? 0;
                 $disapprovedAccomplishmentCount = $accomplishments[3] ?? 0;
-                return view('home', compact('approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount'));
+                return view('home', compact('loginAlert', 'approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount'));
 
             }
 
@@ -54,7 +56,7 @@ class HomeController extends Controller
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
 
-                return view('home', compact('pendingARSubmissionCount'));
+                return view('home', compact('loginAlert', 'pendingARSubmissionCount'));
             }
 
             // Other Documentation Officers
@@ -66,7 +68,7 @@ class HomeController extends Controller
                 $pendingARSubmissionCount = AccomplishmentReport::where('status', 1)
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
-                return view('home', compact('submissionCount', 'pendingARSubmissionCount'));
+                return view('home', compact('loginAlert', 'submissionCount', 'pendingARSubmissionCount'));
             }
 
             else
@@ -74,6 +76,17 @@ class HomeController extends Controller
         }
         else
             abort(404);
+    }
+    public function showLoginAlert()
+    {
+        $loginAlert = NULL;
+        
+        if(session()->get('showLoginAlert') == 1)
+        {
+            $loginAlert =  'You are logged in! :)';
+            session()->decrement('showLoginAlert');
+        }
 
+        return $loginAlert;
     }
 }

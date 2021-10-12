@@ -4,24 +4,42 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">Notifications</h2>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h2 class="display-2 text-center">Notifications</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Notifications
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
-                    <div class="row mb-2">
-                        <div class="col  text-center">
-                            <form method="POST" action="{{route('notifications.markAllAsRead')}}">
-                                <button type="submit" class="btn btn-primary">Mark all as Read</button>
-                                @csrf
-                            </form>
-                        </div>
-                    </div>
+                    
                     <div class="card">
-                        <h5 class="card-header card-title text-center" id="notification-header">All Notifications</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">All Notifications</h5>
                         <div class="card-body">
+                        @if($allNotifications->isNotEmpty())
+                        <div class="row mb-2">
+                            <div class="col text-center">
+                                <form method="POST" action="{{route('notifications.markAllAsRead')}}">
+                                    <button type="submit" class="btn btn-primary text-white">Mark all as Read</button>
+                                    @csrf
+                                </form>
+                            </div>
+                        </div>
+
                         <div class="row justify-content-center">
                             {{ $allNotifications->links() }}
                         </div>
-                        @if($allNotifications->count() > 0)
+                        
                         @foreach($allNotifications as $notification)
                             <a href="
                                     @if($notification->type == 3)
@@ -31,13 +49,13 @@
                                         {{-- Accomplishment Reports --}}
                                         {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
                                     @endif" 
-                                class="text-dark ">
+                            class="text-decoration-none text-dark">
                                 <div class="row m-2 p-1 border border-dark">
                                     <div class="col">
                                         <h5 class="text-center font-weight-bold">
                                             {{$notification->title}}
                                             @if($notification->read_at == NULL)
-                                            <span class="badge badge-pill badge-primary">New</span>
+                                            <span class="badge rounded-pill bg-primary text-white">New</span>
                                             @endif
                                         </h5>
                                         <p class="text-center">{{$notification->description}}</p>
@@ -56,12 +74,16 @@
                     </div>
         		</div>
         	</div>
+
         	<hr>
-        	<div class="row justify-content-center pt-1">
-        		<a href="/home">
-        			<button class="btn btn-secondary">Go back</button>
-        		</a>
-        	</div>
+
+        	<div class="flex-row my-2 text-center">
+                    <a href="{{route('home')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Home
+                    </a>
+            </div>
         </div>
     </div>
 </div>

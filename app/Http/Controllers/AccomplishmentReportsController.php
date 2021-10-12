@@ -383,7 +383,7 @@ class AccomplishmentReportsController extends Controller
             $table3 = $events->where('event_category_id', 5);
             $table4 = $events->whereIn('event_category_id', [1,2]);
 
-        return view('accomplishmentreports.tabularTest', compact('table1', 'table2', 'table3', 'table4'));
+            return view('accomplishmentreports.tabularTest', compact('table1', 'table2', 'table3', 'table4'));
         }
 
         elseif ($request->input('ar_format') == 'design') 

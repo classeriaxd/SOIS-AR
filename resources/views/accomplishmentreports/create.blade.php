@@ -39,19 +39,41 @@
         	</div>
         	@endif
 
-        	<h2 class="text-center display-3">Organization Report</h2>
-        	<h5 class="text-center">Choose from Semestral, Quarterly, & Custom</h5>
+        	{{-- Title and Breadcrumbs --}}
+        	<div class="row">
+        	    {{-- Title --}}
+        	    <h4 class="display-5 text-center">Organization Report</h4>
+        	    <p class="text-center">Choose from Semestral, Quarterly, & Custom</p>
+        	    {{-- Breadcrumbs --}}
+        	    <nav aria-label="breadcrumb">
+        	        <ol class="breadcrumb justify-content-center">
+        	            <li class="breadcrumb-item">
+        	                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+        	            </li>
+        	            <li class="breadcrumb-item">
+        	                <a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
+        	                    Accomplishment Reports
+        	                </a>
+        	            </li>
+        	            <li class="breadcrumb-item active" aria-current="page">
+        	                Create Accomplishment Report
+        	            </li>
+        	        </ol>
+        	    </nav>
+        	</div>
+
         	<hr>
+
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">
-                	<h4 class="card-header card-text text-center bg-primary text-white">Semestral</h4>
+                	<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Semestral</h4>
                 	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
 		            	<div class="card-body">
 		            		<div class="row text-center">
 		            			<div class="col"><h3 class="text-center">School Year</h3></div>
 		            			<div class="col">
 		            			@if( $schoolYears->count() > 0)
-		            				<select class="form-control" name="school_year">
+		            				<select class="form-select" name="school_year">
 		        					@php $i = 1; @endphp
 		        					@foreach($schoolYears as $year)
 		            					<option @if ($loop->first)  selected @endif
@@ -70,16 +92,11 @@
 		            			<div class="col"><h6 class="text-center">Select Semester</h6></div>
 		            		</div>
 		    				<div class="row text-center mt-3">
-		    					
 								<div class="col">
-		        					<a href="#">
-		        						<button class="btn btn-primary" name="first_semester" value="first_semester" type="submit" style="height:100%;">1st Semester</button>
-		        					</a>
+	        						<button class="btn btn-primary text-center text-white" name="first_semester" value="first_semester" type="submit" style="height:100%;">1st Semester</button>
 		        				</div>
 		    					<div class="col">
-		    						<a href="#">
-		    							<button class="btn btn-primary" name="second_semester" value="second_semester" type="submit" style="height:100%;">2nd Semester</button>
-		    						</a>
+	    							<button class="btn btn-primary text-center text-white" name="second_semester" value="second_semester" type="submit" style="height:100%;">2nd Semester</button>
 		    					</div>
 		    				</div>
 	    					@endif
@@ -107,23 +124,23 @@
             <hr>
             <div class="row mb-1 mt-1">
 	    		<div class="card w-100">
-					<h4 class="card-header card-text text-center bg-primary text-white">Quarterly</h4>
+					<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Quarterly</h4>
 					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
 		    			<div class="card-body">
 		    				<h5 class="card-text text-center">{{ date('Y') }}</h5>
 		    				<div class="row text-center">
 								<div class="col">
-		    						<button class="btn btn-primary" name="first_quarter" value="first_quarter" type="submit" style="height:100%;">1st Quarter</button>
+		    						<button class="btn btn-primary text-white" name="first_quarter" value="first_quarter" type="submit" style="height:100%;">1st Quarter</button>
 		        				</div>
 		    					<div class="col">
-									<button class="btn btn-primary" name="second_quarter" value="second_quarter" type="submit" style="height:100%;">2nd Quarter</button>
+									<button class="btn btn-primary text-white" name="second_quarter" value="second_quarter" type="submit" style="height:100%;">2nd Quarter</button>
 		    					</div>
 		    					<div class="col">
-		    						<button class="btn btn-primary" name="third_quarter" value="third_quarter" type="submit" style="height:100%;">3rd Quarter</button>
+		    						<button class="btn btn-primary text-white" name="third_quarter" value="third_quarter" type="submit" style="height:100%;">3rd Quarter</button>
 
 		    					</div>
 		    					<div class="col">
-		    						<button class="btn btn-primary"  name="fourth_quarter" value="fourth_quarter" type="submit" style="height:100%;">4th Quarter</button>
+		    						<button class="btn btn-primary text-white"  name="fourth_quarter" value="fourth_quarter" type="submit" style="height:100%;">4th Quarter</button>
 		    					</div>        					
 		    				</div>
 		    				<div class="row text-center text-muted">
@@ -178,7 +195,7 @@
         	<hr>
         	<div class="row mt-1">
         		<div class="card w-100">
-        			<h4 class="card-header card-text text-center bg-primary text-white">Custom</h4>
+        			<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Custom</h4>
     				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
         			<div class="card-body">
         				<div class="form-group row">
@@ -208,7 +225,7 @@
         				    @enderror
         				</div>
         				<div class="row text-center justify-content-center">
-        				    <button class="btn btn-primary" type="submit">Submit</button>
+        				    <button class="btn btn-primary text-white" type="submit">Submit Custom</button>
         				</div>
         			</div>
         			@csrf
@@ -216,11 +233,15 @@
         			</form>
         		</div>
         	</div>
-            <div class="row justify-content-center mt-2">
-                <a href="{{route('home')}}">
-                    <button class="btn btn-secondary">Go Home</button>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('home')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Home
                 </a>
             </div>
+            
     	</div>
 	</div>
 

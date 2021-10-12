@@ -6,8 +6,28 @@
     <form action="/s/accomplishments" enctype="multipart/form-data" method="POST" id="studentAccomplishmentForm">
         @csrf
         <div class="row">
-            <div class="col-8 offset-2">
-                <h2 class="text-center">Add Accomplishment</h2>
+            <div class="col-md-12">
+                {{-- Title and Breadcrumbs --}}
+                <div class="row">
+                    {{-- Title --}}
+                    <h4 class="display-5 text-center">Add Accomplishment</h4>
+                    {{-- Breadcrumbs --}}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item">
+                                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('studentAccomplishment.index')}}" class="text-decoration-none">
+                                    My Accomplishments
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Create Accomplishment
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
                 <div class="form-group row">
                     <label for="title" class="col-md-4 col-form-label">Title</label>
                     <input id="title" 
@@ -232,11 +252,15 @@
         </div>
     </form>
     <hr>
-    <div class="row justify-content-center">
-        <a href="/home">
-            <button class="btn btn-secondary">Go back</button>
+
+    <div class="flex-row my-2 text-center">
+        <a href="{{ route('home') }}"
+            class="btn btn-secondary text-white"
+            role="button">
+                Go Back
         </a>
     </div>
+
 </div>
 @endsection
 
