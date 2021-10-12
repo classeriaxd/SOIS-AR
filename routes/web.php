@@ -67,6 +67,8 @@ Auth::routes();
 
                 Route::delete('/images/upload/revert', [App\Http\Controllers\EventImagesController::class, 'undoUpload']);
                 Route::post('/images/upload', [App\Http\Controllers\EventImagesController::class, 'upload']);
+                Route::delete('/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload']);
+                Route::post('/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload']);
                 Route::get('/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
                 Route::get('/create', [App\Http\Controllers\EventsController::class, 'create'])->name('create');
                 Route::post('', [App\Http\Controllers\EventsController::class, 'store'])->name('store');
@@ -84,6 +86,7 @@ Auth::routes();
                         Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
                         Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show')->where(['newEvent' => '^[0-9]*$']);
 
+                        // Event Images
                         Route::group([
                                 'as' => 'image.',
                                 'prefix' => '/images',],
@@ -111,6 +114,35 @@ Auth::routes();
                                 Route::get('', [App\Http\Controllers\EventImagesController::class, 'show'])->name('show');
                             });
                         });
+
+                        // Event Documents {/document}
+                        Route::group([
+                                'as' => 'document.',
+                                'prefix' => '/document/{document_id}',
+                                'where' => ['document_id' => '^[0-9]*$'],],
+                            function() {
+                            // Event Documents
+                            // --> /e/{event_slug}/document/{document_id}
+
+                                    Route::delete('', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
+                                    Route::get('/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadDocument'])->name('download');
+                        });
+
+                        // Event Documents {/documents}
+                        Route::group([
+                                'as' => 'document.',
+                                'prefix' => '/documents',],
+                            function() {
+                            // Event Documents
+                            // --> /e/{event_slug}/documents
+
+                                    Route::get('/create', [App\Http\Controllers\EventDocumentsController::class, 'create'])->name('create');
+                                    Route::get('/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadAllDocument'])->name('downloadAll');
+                                    Route::get('', [App\Http\Controllers\EventDocumentsController::class, 'index'])->name('index');
+                                    Route::post('', [App\Http\Controllers\EventDocumentsController::class, 'store'])->name('store');
+                                    
+                        });
+
                 });
         });
 
@@ -155,6 +187,7 @@ Auth::routes();
                 Route::post('', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->name('markAsRead'); 
         });
 
+        // User Notification Routes
         Route::group([
                 'as' => 'notifications.',
                 'prefix' => '/u/notifications',],
@@ -168,23 +201,11 @@ Auth::routes();
 
     });
 
-// User Notification Routes
+
     
     
 
-// EVENT DOCUMENT UPLOADS
-    Route::delete('/e/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->middleware('auth');
-    Route::post('/e/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->middleware('auth');
 
-
-    
-// EVENT DOCUMENTS
-    Route::delete('/e/{event_slug}/document/{document_id}', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'document_id' => '^[0-9]*$'])->middleware('auth')->name('event_documents.destroy');
-    Route::get('/e/{event_slug}/document/{document_id}/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadDocument'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$', 'document_id' => '^[0-9]*$'])->middleware('auth')->name('event_documents.download');
-    Route::get('/e/{event_slug}/documents/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadAllDocument'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.downloadAll');
-    Route::get('/e/{event_slug}/documents', [App\Http\Controllers\EventDocumentsController::class, 'index'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.index');
-    Route::post('/e/{event_slug}/documents', [App\Http\Controllers\EventDocumentsController::class, 'store'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.store');
-    Route::get('/e/{event_slug}/documents/create', [App\Http\Controllers\EventDocumentsController::class, 'create'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->middleware('auth')->name('event_documents.create');
 
 
 

@@ -4,15 +4,37 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">{{ $event->title }}</h2>
-            <h4 class="display-5 text-center">Supporting Documents</h4>
-            <div class="row justify-content-center mb-1">
-                <form action="{{route('event_documents.downloadAll',['event_slug' => $event->slug])}}" enctype="multipart/form-data">
-                    <button type="submit" class="btn btn-primary">Download All</button>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h5 class="display-5 text-center">Supporting Documents</h5>
+                <h6 class="text-center">{{ $event->title }}</h6>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none"> {{ $event->title }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Documents
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="flex-row text-center my-1">
+                <form action="{{route('event.document.downloadAll',['event_slug' => $event->slug])}}" enctype="multipart/form-data">
+                    <button type="submit" class="btn btn-primary text-white">Download All</button>
                 </form>
             </div>
+
             @foreach($eventDocuments as $document)
-            <hr>
             <h4 class="display-4 text-center">{{ $document->document_type }}</h4>
         	<div class="row justify-content-center mb-1">
                 <div class="col-md-11">
@@ -20,26 +42,30 @@
                     </iframe>
                 </div>
                 <div class="col-md-1">
-                    <form action="{{route('event_documents.download',['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" enctype="multipart/form-data">
-                        <button type="submit" class="btn btn-primary">Download</button>
+                    <form action="{{route('event.document.download',['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" enctype="multipart/form-data">
+                        <button type="submit" class="btn btn-primary text-white">Download</button>
                     </form>
                     <br>
-                    <form action="{{route('event_documents.destroy', ['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" method="POST">
+                    <form action="{{route('event.document.destroy', ['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" method="POST">
                         @method('DELETE')
                         @csrf
-                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-danger text-white">Delete</button>
                     </form>  
                         
                     </a>
                 </div>
             </div>
-            @endforeach
             <hr>
-            <div class="row justify-content-center mt-1">
-                <a href="/e/{{$event->slug}}">
-                    <button class="btn btn-secondary">Go back</button>
+            @endforeach
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
                 </a>
             </div>
+
         </div>
     </div>
 </div>

@@ -4,20 +4,42 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">Accomplishment Report</h2>
+            {{-- Title and Breadcrumbs --}}
+            <div class="row">
+                {{-- Title --}}
+                <h4 class="display-5 text-center">Accomplishment Report</h4>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
+                                Accomplishment Reports
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ $accomplishmentReport->title }}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     @position_title('President')
                     @if($accomplishmentReport->status == 1)
-                    <div class="row justify-content-center my-1">  
-                        <a href="{{route('accomplishmentReport.review', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}">
-                            <button class="btn btn-primary">Review this Accomplishment</button>
+                    <div class="flex-row my-2 text-center">  
+                        <a href="{{route('accomplishmentReport.review', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}"
+                            class="btn btn-primary text-white"
+                            role="button">
+                            Review this Accomplishment
                         </a>
                     </div>
                     @endif
                     @endposition_title
                     <div class="card">
-                        <h5 class="card-header card-title text-center">{{ $accomplishmentReport->title }}</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $accomplishmentReport->title }}</h5>
                         <div class="card-body">
                         @if($accomplishmentReport->status == 1)
                             <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Status: PENDING</span></h6>
@@ -29,13 +51,7 @@
 
                         <p class="text-center">{{ $accomplishmentReport->description }}</p>
                         <p class="text-center">Inclusive Date<br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
-                        <p class="text-center">
-                        @if($accomplishmentReport->for_archive)
-                            <span style="color:green;">This Report will be Archived</span>
-                        @else
-                            <span style="color:red;">This Report will not be Archived</span>
-                        @endif
-                        </p>
+                        
                         <div class="row justify-content-center mb-2">
                             <iframe src="{{'/storage/'.$accomplishmentReport->file}}#toolbar=0" width="100%" style="height:75vh;">
                             </iframe>
@@ -55,11 +71,15 @@
                 </div>
             @endif
         	<hr>
-        	<div class="row justify-content-center pt-1">
-        		<a href="{{route('accomplishmentreports.index')}}">
-        			<button class="btn btn-secondary">Go Back</button>
-        		</a>
-        	</div>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('accomplishmentreports.index')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
+                </a>
+            </div>
+
         </div>
     </div>
 </div>

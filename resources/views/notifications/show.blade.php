@@ -24,7 +24,7 @@
         		<div class="col-md-8">
                     
                     <div class="card">
-                        <h5 class="card-header card-title text-center">All Notifications</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">All Notifications</h5>
                         <div class="card-body">
                         @if($allNotifications->isNotEmpty())
                         <div class="row mb-2">

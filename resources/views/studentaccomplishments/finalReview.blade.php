@@ -4,12 +4,11 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-12">
-    		<h2 class="display-2 text-center"></h2>
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
                 <h4 class="display-5 text-center">Final Review</h4>
-                <h6 class="display-6 text-center">Final edits for the Accomplishment Submission</h6>
+                <p class="text-center">Final edits for the Accomplishment Submission</p>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center">

@@ -2,12 +2,34 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('event_documents.store',['event_slug' => $event->slug,])}}" enctype="multipart/form-data" method="POST" id="eventDocumentForm">
+    <form action="{{route('event.document.store',['event_slug' => $event->slug,])}}" enctype="multipart/form-data" method="POST" id="eventDocumentForm">
         @csrf
         <div class="row">
             <div class="col-8 offset-2">
-                <h2 class="text-center">New Event Document</h2>
-                <h6 class="text-center">{{ $event->title }}</h6>
+                {{-- Title and Breadcrumbs --}}
+                <div class="row">
+                    {{-- Title --}}
+                    <h5 class="display-5 text-center">New Event Document</h5>
+                    <h6 class="text-center">{{ $event->title }}</h6>
+                    {{-- Breadcrumbs --}}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item">
+                                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none"> {{ $event->title }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Add Documents
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+
                 <div class="form-group row">
                     <label for="title" class="col-md-4 col-form-label">Title<span style="color:red">*</span></label>
                     <input id="title" 
@@ -67,17 +89,21 @@
                 @enderror
                 <hr>
                 <div class="row pt-4">
-                    <button class="btn btn-primary">Add Document</button>
+                    <button class="btn btn-primary text-white">Add Document</button>
                 </div>
             </div>
         </div>
     </form>
     <hr>
-    <div class="row justify-content-center">
-        <a href="/home">
-            <button class="btn btn-secondary">Go back</button>
+
+    <div class="flex-row my-2 text-center">
+        <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
+            class="btn btn-secondary text-white"
+            role="button">
+                Go Back
         </a>
     </div>
+
 </div>
 @endsection
 @if($filePondJS ?? false)

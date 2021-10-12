@@ -108,7 +108,7 @@ class AccomplishmentReportGeneratePDFService
         $this->createDirectory('/app/public/compiledDocuments/accomplishmentReports', $finalFolderName);
         $finalFileName = uniqid() . '-' . now()->timestamp . '.pdf';
         $this->mergePDF($compiledDocuments, $finalFileName, $finalFolderName);
-        $this->deleteDirectory($temporaryFolder);
+        $this->deleteDirectory('/tmp/' . $temporaryFolder);
 
         $ARDirectory = [
             'finalFolderName' => $finalFolderName, 

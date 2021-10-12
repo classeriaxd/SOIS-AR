@@ -151,32 +151,46 @@
                     @endif
                     </div>
                     <h5 class="card-header card-text text-center border-top">Options</h5>
-                    <div class="card-body">
-                        <a href="{{route('event_documents.create',['event_slug' => $event->slug,])}}">
-                            <button class="btn btn-primary">Add Document</button>
+                    <div class="card-body d-flex justify-content-around">
+                        <a href="{{route('event.document.create',['event_slug' => $event->slug,])}}"
+                            class="btn btn-primary text-white"
+                            role="button">
+                            Add Document
                         </a>
-                        <br>
-                        <a href="{{route('event_documents.index',['event_slug' => $event->slug,])}}">
-                            <button class="btn btn-primary">View All Event Documents</button>
+
+                        <a href="{{route('event.document.index',['event_slug' => $event->slug,])}}"
+                            class="btn btn-primary text-white"
+                            role="button">
+                            View All Event Documents
                         </a>
                         
                     </div>
                 </div>
             </div>
             @if($newEvent)
-        	<hr>
-            <div class="row justify-content-center my-1">
-                <a href="{{route('event.create')}}">
-                    <button class="btn btn-primary">Create Another Event</button>
+            
+            	<hr>
+
+                <div class="flex-row my-2 text-center">
+                    <a href="{{route('event.create')}}"
+                        class="btn btn-primary text-white"
+                        role="button">
+                            Create Another Event
+                    </a>
+                </div>
+
+            @endif
+
+            <hr>
+
+            <div class="flex-row my-2 text-center">
+                <a href="{{route('event.index')}}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Back
                 </a>
             </div>
-            @endif
-            <hr>
-        	<div class="row justify-content-center my-1">
-        		<a href="{{route('event.index')}}">
-        			<button class="btn btn-secondary">Go back</button>
-        		</a>
-        	</div>
+
         </div>
     </div>
 </div>

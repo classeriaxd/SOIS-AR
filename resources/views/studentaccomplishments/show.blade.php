@@ -4,7 +4,6 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
-    		<h2 class="display-2 text-center">Accomplishment</h2>
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
@@ -44,7 +43,7 @@
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     <div class="card">
-                        <h5 class="card-header card-title text-center">{{ $accomplishment->title }}</h5>
+                        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $accomplishment->title }}</h5>
                         <div class="card-body">
                         @if($accomplishment->status == 1)
                             <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Status: PENDING</span></h6>
