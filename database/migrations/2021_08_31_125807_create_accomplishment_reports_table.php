@@ -23,8 +23,8 @@ class CreateAccomplishmentReportsTable extends Migration
             $table->string('file');
             // range title - 1 = Semestral | 2 = Quarterly | 3 = Custom
             $table->unsignedTinyInteger('range_title');
-            // for archive - 0 = FALSE | 1 = TRUE
-            $table->unsignedTinyInteger('for_archive')->default(0);
+            // Accomplishment Report Type - 1 = Tabular | 2 = Design
+            $table->unsignedTinyInteger('accomplishment_report_type');
             $table->date('start_date');
             $table->date('end_date');
             // status - 1 = PENDING | 2 = ACCEPTED | 3 = DECLINED

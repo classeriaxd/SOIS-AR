@@ -52,9 +52,22 @@
                         <p class="text-center">{{ $accomplishmentReport->description }}</p>
                         <p class="text-center">Inclusive Date<br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
                         
-                        <div class="row justify-content-center mb-2">
+                        <div class="flex-row text-center mb-2">
+                            {{-- Tabular --}}
+                            @if($accomplishmentReport->accomplishment_report_type == 1)
+                            <p class="text-center">No preview for spreadsheet files, you can download the generated report instead.</p>  
+                            <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
+                                <button class="btn btn-primary text-white" type="submit">
+                                    <i class="fas fa-file-excel"></i> Download Spreadsheet
+                                </button>
+                            </form>
+
+                            {{-- Design --}}
+                            @elseif($accomplishmentReport->accomplishment_report_type == 2)
                             <iframe src="{{'/storage/'.$accomplishmentReport->file}}#toolbar=0" width="100%" style="height:75vh;">
                             </iframe>
+                            @endif
+                            
                             <br>
                         </div>
 
@@ -74,9 +87,9 @@
 
             <div class="flex-row my-2 text-center">
                 <a href="{{route('accomplishmentreports.index')}}"
-                    class="btn btn-secondary text-white"
+                    class="btn btn-secondary text-white align-middle"
                     role="button">
-                        Go Back
+                        <i class="fas fa-arrow-left"></i> Go Back
                 </a>
             </div>
 

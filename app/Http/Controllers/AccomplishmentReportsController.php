@@ -22,6 +22,7 @@ use App\Http\Requests\AccomplishmentReportRequests\{
 
 use App\Services\AccomplishmentReportServices\{
     AccomplishmentReportGeneratePDFService,
+    AccomplishmentReportGenerateXLSXService,
     AccomplishmentReportStoreService,
 };
 
@@ -82,6 +83,7 @@ class AccomplishmentReportsController extends Controller
     {
         if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
         {
+            
             return view('accomplishmentreports.show', compact('accomplishmentReport','newAccomplishmentReport'));
         }
         else
@@ -190,7 +192,6 @@ class AccomplishmentReportsController extends Controller
                 $archive = ($request->has('archive')) ? 1 : 0;
                 $accomplishmentReport->update([
                     'file' => '/compiledDocuments/accomplishmentReports/' . $finalFolderName . '/' . $finalFileName,
-                    'for_archive' => $archive,
                     'status' => 2,
                     'reviewed_by' => Auth::user()->user_id,
                     'remarks' => $request->input('remarks'),
@@ -369,32 +370,30 @@ class AccomplishmentReportsController extends Controller
             ->whereBetween('end_date', [$request->input('start_date'), $request->input('end_date')])
             ->where('status', 2)
             ->get();
-
+        $AltARDirectory = NULL;
         if ($request->input('ar_format') == 'tabular')
         {
-             /*** 4 tables
-             * 1-- Student Accomplishments outside PUP
-             * 2-- Events under Community Outreach category
-             * 3-- Events that are Seminar/Workshops
-             * 4-- All Academic and Non Academic Events
-             */ 
-            $table1 = $studentAccomplishments->whereIn('level_id', [2,3,4,5]);
-            $table2 = $events->where('event_category_id', 6);
-            $table3 = $events->where('event_category_id', 5);
-            $table4 = $events->whereIn('event_category_id', [1,2]);
+            // Generate XLSX AR then Return the directory where it is saved
+            $accomplishmentReportGenerateXLSXService = new AccomplishmentReportGenerateXLSXService();
+            $ARDirectory = $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
+            $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
 
-            return view('accomplishmentreports.tabularTest', compact('table1', 'table2', 'table3', 'table4'));
+            $accomplishmentReportType = 1;
         }
 
         elseif ($request->input('ar_format') == 'design') 
         {
+            // Generate PDF AR then Return the directory where it is saved
             $accomplishmentReportGeneratePDFService = new AccomplishmentReportGeneratePDFService();
             $ARDirectory = $accomplishmentReportGeneratePDFService->generate($request, $events, $studentAccomplishments,);
-
+            $accomplishmentReportType = 2;
         }
+
+        // Store Accomplishment Report
         $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
-        $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization);
+        $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization, $accomplishmentReportType, $AltARDirectory);
         
+        // Send Notification
         $sender = Auth::user()->last_name . ', '.  Auth::user()->first_name . ' ' .  Auth::user()->middle_name;
         $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
         $accomplishmentReportNotificationService->sendNotificationToPresident($sender, Auth::user()->course->organization_id, $accomplishmentReportUUID);
@@ -402,6 +401,22 @@ class AccomplishmentReportsController extends Controller
         return redirect()->route('accomplishmentReport.show',
             ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
             ->with('success', 'Accomplishment Report Generated. Sent in for President\'s Approval.');
+    }
+    public function downloadAccomplishmentReport($accomplishmentReportUUID)
+    {
+        if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
+        {
+            $filePath = storage_path('/app/public/'. $accomplishmentReport->file);
+
+            if ($accomplishmentReport->accomplishment_report_type == 1) 
+                $headers = ['Content-Type: application/vnd.ms-excel'];
+            else if ($accomplishmentReport->accomplishment_report_type == 2) 
+                $headers = ['Content-Type: application/pdf'];
+            
+            $fileName = Str::limit(Str::slug($accomplishmentReport->title, '-'), 20, '-') .'-AccomplishmentReport.' .  pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
+
+            return response()->download($filePath, $fileName, $headers);
+        }
     }
     /**
      * Function to Merge PDF using documents array.
