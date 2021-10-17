@@ -34,6 +34,7 @@ Auth::routes();
             function () {
                 Route::post('/review/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReview'])->name('finalizeReview');
                 Route::get('/review', [App\Http\Controllers\AccomplishmentReportsController::class, 'review'])->name('review');
+                Route::get('/download', [App\Http\Controllers\AccomplishmentReportsController::class, 'downloadAccomplishmentReport'])->name('download');
                 Route::get('/{newAccomplishmentReport?}', [App\Http\Controllers\AccomplishmentReportsController::class, 'show'])->name('show');
         });
 

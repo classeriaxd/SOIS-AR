@@ -96,22 +96,23 @@ class EventDocumentsController extends Controller
     }
     public function downloadDocument($event_slug, $document_id)
     {
-        if($document = DB::table('events')
-            ->join('event_documents as documents', 'events.event_id', '=', 'documents.event_id')
-            ->join('event_document_types as types', 'documents.event_document_type_id', '=', 'types.event_document_type_id')
-            ->where('events.slug', $event_slug)
-            ->where('documents.event_document_id', $document_id)
-            ->whereNull('documents.deleted_at')
-            ->select('documents.file as file', 'events.title as title', 'types.document_type as type')
-            ->first())
+        $event = Event::with([
+                'eventDocument' => function ($query) use ($document_id) {
+                    $query->where('event_document_id', $document_id);},
+                'eventDocument.documentType:event_document_type_id,document_type',
+                ])
+            ->where('slug', $event_slug)
+            ->select('slug')
+            ->first();
+        if ($event->eventDocument != NULL) 
         {
-            $filePath = storage_path('/app/public/'. $document->file);
+            $filePath = storage_path('/app/public/'. $event->eventDocument->file);
             $headers = ['Content-Type: application/pdf'];
-            $fileName = Str::limit(Str::slug($document->title, '-'), 20, '-') .'-' . Str::slug($document->type, '-') .'.pdf';
+            $fileName = Str::limit(Str::slug($event->eventDocument->title, '-'), 20, '-') .'-' . Str::slug($$event->eventDocument->documentType->type, '-') .  pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
             return response()->download($filePath, $fileName, $headers);
         }
         else
-            abort(404);
+            return NULL;
     }
     public function downloadAllDocument($event_slug)
     {

@@ -37,6 +37,10 @@ class Event extends Model
     {
         return $this->hasMany(EventDocument::class, 'event_id');
     }
+    public function eventDocument()
+    {
+        return $this->hasOne(EventDocument::class, 'event_id');
+    }
     public function eventRole()
     {
         return $this->belongsTo(EventRole::class, 'event_role_id');

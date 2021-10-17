@@ -254,8 +254,8 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
-     * Function to Delete Created Folder and its contents
-     * folder = String
+     * @param String $folder
+     * Function to Delete Temporary Folder and its contents
      * @return void
      */
     private function deleteDirectory($folder)
@@ -267,6 +267,12 @@ class AccomplishmentReportGeneratePDFService
         // actually delete the folder itself
         Storage::deleteDirectory('/public/compiledDocuments/' . $folder);
     }
+    
+    /**
+     * @param String $directory, String $folder
+     * Function to create directory if it doesn't exist
+     * @return void
+     */
     private function createDirectory($directory, $folder)
     {
         if (!is_dir(storage_path($directory))) 
