@@ -4,6 +4,15 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
+            {{-- Success Alert --}}
+                @if (session()->has('success'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
@@ -33,7 +42,7 @@
                         <a href="{{route('accomplishmentReport.review', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}"
                             class="btn btn-primary text-white"
                             role="button">
-                            Review this Accomplishment
+                            <i class="fas fa-clipboard-check"></i> Review this Accomplishment
                         </a>
                     </div>
                     @endif
@@ -51,8 +60,19 @@
 
                         <p class="text-center">{{ $accomplishmentReport->description }}</p>
                         <p class="text-center">Inclusive Date<br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
-                        
-                        <div class="flex-row text-center mb-2">
+
+                        @if ($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishment_report_type == 2)
+                        {{-- Download button for Design --}}
+                        <div class="flex-row text-center my-1">
+                            <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
+                                <button class="btn btn-primary text-white" type="submit">
+                                    <i class="fas fa-file-pdf"></i> Download Accomplishment Report
+                                </button>
+                            </form>
+                        </div>
+                        @endif
+
+                        <div class="flex-row text-center my-1">
                             {{-- Tabular --}}
                             @if($accomplishmentReport->accomplishment_report_type == 1)
                             <p class="text-center">No preview for spreadsheet files, you can download the generated report instead.</p>  
@@ -76,13 +96,19 @@
         		</div>
         	</div>
             @if($newAccomplishmentReport)
+
                 <hr>
-                <div class="row justify-content-center pt-1">
-                    <a href="{{route('accomplishmentreports.create')}}">
-                        <button class="btn btn-primary">Submit Another</button>
+
+                <div class="flex-row my-2 text-center">
+                    <a href="{{route('accomplishmentreports.create')}}"
+                        class="btn btn-primary text-white align-middle"
+                        role="button">
+                            <i class="fas fa-file-alt"></i> Submit Another
                     </a>
                 </div>
+
             @endif
+
         	<hr>
 
             <div class="flex-row my-2 text-center">

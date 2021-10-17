@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\{
-    User,
     Event,
-    EventImage,
     Organization,
-    OrganizationAsset,
     SchoolYear,
     StudentAccomplishment,
     AccomplishmentReport,
-    PositionTitle,
-    Notification,
 };
 
 use App\Http\Requests\AccomplishmentReportRequests\{
@@ -24,43 +19,46 @@ use App\Services\AccomplishmentReportServices\{
     AccomplishmentReportGeneratePDFService,
     AccomplishmentReportGenerateXLSXService,
     AccomplishmentReportStoreService,
+    AccomplishmentReportReviewService,
 };
 
 use App\Services\NotificationServices\{
     AccomplishmentReportNotificationService,
 };
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\{
+    Http\Request,
+    Support\Str,
+    Support\Facades\Auth,
+};
 
 use Carbon\Carbon;
 use iio\libmergepdf\Merger;
 use PDF;
 
 /**
- * Handles all Accomplishment Report Requests
+ * Handles all Accomplishment Report Requests, Services, and Exports
  * Libraries:
  * DomPDF, Carbon, LibMergePDF
- */ 
+ */
 
+// Remaining tasks: showChecklist()
 class AccomplishmentReportsController extends Controller
 {
     /**
-     * Show Create Page, Display Date Ranges
-     */
+     * Function to show page to create accomplishment report
+     * @return View
+     */ 
     public function create()
     {
         $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')->orderBy('year_start', 'DESC')->get();
     	return view('accomplishmentreports.create', compact('schoolYears'));
     }
+
     /**
-     * Show Index Page
-     */
+     * Function to show index page for all accomplishment reports
+     * @return View
+     */ 
     public function index()
     {
         $approvedAccomplishmentReports = AccomplishmentReport::where('status', 2)
@@ -76,23 +74,25 @@ class AccomplishmentReportsController extends Controller
     }
 
     /**
-     * Show Accomplishment Report
-     * accomplishmentReportUUID = String
-     */
+     * @param String $accomplishmentReportUUID
+     * Function to show specific accomplishment report
+     * @return View
+     */ 
     public function show($accomplishmentReportUUID, $newAccomplishmentReport = false)
     {
         if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
         {
-            
             return view('accomplishmentreports.show', compact('accomplishmentReport','newAccomplishmentReport'));
         }
         else
             abort(404);
     }
+
     /**
-     * Show Accomplishment Report Review Page
-     * accomplishmentReportUUID = String
-     */
+     * @param String $accomplishmentReportUUID
+     * Function to show review page for an accomplishment report
+     * @return View
+     */ 
     public function review($accomplishmentReportUUID)
     {
         if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
@@ -107,116 +107,22 @@ class AccomplishmentReportsController extends Controller
         else
             abort(404);
     }
+
     /**
-     * Get Request from review page
-     * accomplishmentReportUUID = String
-     */
-    public function finalizeReview($accomplishmentReportUUID, FinalizeReviewRequest $request)
+     * @param Request $request, String $accomplishmentReportUUID
+     * Function to review the submitted Accomplishment Report
+     * @return Redirect Response
+     */ 
+    public function finalizeReview(FinalizeReviewRequest $request, $accomplishmentReportUUID)
     {
         if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
         {
-            if ($request->has('success'))
-            {
-                $signatoryDocumentationOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-                $signatoryPresident = ['President'];
+            $accomplishmentReportReviewService = new AccomplishmentReportReviewService();
+            $message = $accomplishmentReportReviewService->reviewAccomplishmentReport($accomplishmentReport, $request);
 
-                $signature = false;
-                if($request->has('esignature'))
-                    $signature = true;
-
-                $rangeTitle = $accomplishmentReport->range_title;
-                $startDate = Carbon::parse($accomplishmentReport->start_date)->format('F d, Y');
-                $endDate = Carbon::parse($accomplishmentReport->end_date)->format('F d, Y');
-
-                $documentationSignatory = PositionTitle::with(['users' => function($query){
-                    $query->select([DB::raw('CONCAT(first_name, " ", middle_name, " ", last_name) as full_name')]);
-                }])
-                    ->whereIn('position_title', $signatoryDocumentationOfficers)
-                    ->where('organization_id', $accomplishmentReport->organization_id)
-                    ->orderBy('position_title', 'DESC')
-                    ->get();
-
-                $presidentSignatory = PositionTitle::with(['users' => function($query){
-                    $query->select([DB::raw('CONCAT(first_name, " ", middle_name, " ", last_name) as full_name')]);
-                }])
-                    ->whereIn('position_title', $signatoryPresident)
-                    ->where('organization_id', $accomplishmentReport->organization_id)
-                    ->first();
-
-                $organization = Organization::with('assets')
-                    ->where('organization_id', $accomplishmentReport->organization_id)
-                    ->first();
-                
-                // Create temporary folder directory
-                $temporaryFolder = 'tmp/temporaryFolder-' . uniqid() . '-' . now()->timestamp;
-                if (!is_dir(storage_path('/app/public/compiledDocuments/tmp/'))) {
-                    // dir doesn't exist, make it
-                    mkdir(storage_path('/app/public/compiledDocuments/tmp/'));
-                }
-                if (!is_dir(storage_path('/app/public/compiledDocuments/' . $temporaryFolder))) {
-                    // dir doesn't exist, make it
-                    mkdir(storage_path('/app/public/compiledDocuments/' . $temporaryFolder));
-                }
-
-                // Create Array and insert accomplishment report first
-                $compiledDocuments = array(storage_path('/app/public/' . $accomplishmentReport->file));
-
-                // Create Signatory Page PDF then insert to Array
-                $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.signatoryPage', compact('documentationSignatory', 'presidentSignatory', 'organization', 'signature'))
-                    ->setPaper('letter', 'portrait')
-                    ->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
-                array_unshift($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
-
-                // Create Title Page PDF then insert to Array
-                $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.titlePage', compact('organization', 'rangeTitle', 'startDate', 'endDate'))
-                    ->setPaper('letter', 'portrait')
-                    ->save(storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
-                array_unshift($compiledDocuments, storage_path('/app/public/compiledDocuments/' . $temporaryFolder . '/' . $fileName));
-
-
-                // Merge all documents then delete temporary folder
-                $finalFolderName = uniqid() . '-' . now()->timestamp;
-                if (!is_dir(storage_path('/app/public/compiledDocuments/accomplishmentReports/'))) {
-                    // dir doesn't exist, make it
-                    mkdir(storage_path('/app/public/compiledDocuments/accomplishmentReports/'));
-                }
-                if (!is_dir(storage_path('/app/public/compiledDocuments/accomplishmentReports/' . $finalFolderName))) {
-                    // dir doesn't exist, make it
-                    mkdir(storage_path('/app/public/compiledDocuments/accomplishmentReports/' . $finalFolderName));
-                }
-
-                $finalFileName = uniqid() . '-' . now()->timestamp . '.pdf';
-                $this->mergePDF($compiledDocuments, $finalFileName, $finalFolderName);
-                $archive = ($request->has('archive')) ? 1 : 0;
-                $accomplishmentReport->update([
-                    'file' => '/compiledDocuments/accomplishmentReports/' . $finalFolderName . '/' . $finalFileName,
-                    'status' => 2,
-                    'reviewed_by' => Auth::user()->user_id,
-                    'remarks' => $request->input('remarks'),
-                ]);
-                
-                $this->deleteDirectory($temporaryFolder);
-                $this->deleteDirectory(Str::of(storage_path('/app/public/' . $accomplishmentReport->file))->dirname());
-
-                // Insert to archive table if archive=true
-                $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-                $accomplishmentReportNotificationService->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'approved');
-            }
-            else if ($request->has('decline'))
-            {
-                $accomplishmentReport->update([
-                    'status' => 3,
-                    'reviewed_by' => Auth::user()->user_id,
-                    'remarks' => $request->input('remarks'),
-                ]);
-                $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-                $accomplishmentReportNotificationService->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'declined');
-                
-            }
             return redirect()->action(
-                [AccomplishmentReportsController::class, 'index']);
+                [AccomplishmentReportsController::class, 'index'])
+                ->with('success', $message);
             
         }
         else
@@ -339,38 +245,44 @@ class AccomplishmentReportsController extends Controller
     }
 
     /**
-     * Get request from showChecklist, then Output Final AR
-     */
+     * @param Request $request
+     * Function to compile events and student accomplishment to finalize the Accomplishment Report
+     * @return Redirect Response
+     */ 
     public function finalizeReport(FinalizeReportRequest $request)
     {
         // Fetch Organization Details
-        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)->first();
+        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)
+            ->select('organization_id')
+            ->first();
 
         // Fetch Events and Accomplishments within Dates
         $events = Event::with([
-            'eventImages' => function ($query) {
-                    $query->orderBy('image_type', 'ASC')->get();},
-            'eventDocuments' => function ($query) {
-                    $query->orderBy('event_document_type_id', 'ASC')->get();},
-            'eventLevel',
-            'eventFundSource',
-            'organization',
-                ])
+                'eventImages' => function ($query) {
+                        $query->orderBy('image_type', 'ASC')->get();},
+                'eventDocuments' => function ($query) {
+                        $query->orderBy('event_document_type_id', 'ASC')->get();},
+                'eventLevel',
+                'eventFundSource',
+                    ])
             ->where('organization_id', $organization->organization_id)
             ->whereBetween('start_date', [$request->input('start_date'), $request->input('end_date')])
             ->orderBy('event_role_id', 'ASC')
             ->get();
+
         $studentAccomplishments = StudentAccomplishment::with([
-            'accomplishmentFiles' => function ($query) {
-                    $query->orderBy('type', 'ASC')->get();},
-            'student',
-            'level',
-                ])
+                'accomplishmentFiles' => function ($query) {
+                        $query->orderBy('type', 'ASC')->get();},
+                'student',
+                'level',
+                    ])
             ->where('organization_id', $organization->organization_id)
             ->whereBetween('end_date', [$request->input('start_date'), $request->input('end_date')])
             ->where('status', 2)
             ->get();
-        $AltARDirectory = NULL;
+
+        $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
+
         if ($request->input('ar_format') == 'tabular')
         {
             // Generate XLSX AR then Return the directory where it is saved
@@ -378,7 +290,24 @@ class AccomplishmentReportsController extends Controller
             $ARDirectory = $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
             $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
 
+            // Assign Report Type for Tabular
             $accomplishmentReportType = 1;
+
+            // Store Accomplishment Report
+            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization, $accomplishmentReportType);
+
+            // Send Notification to Organization President
+            $this->sendNotificationToPresident($accomplishmentReportUUID);
+
+            // Automatic approval for Tabular reports
+            $accomplishmentReportReviewService = new AccomplishmentReportReviewService();
+            $accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
+            $accomplishmentReportReviewService->approveAccomplishmentReport_Tabular($accomplishmentReport);
+
+            // Go to AR Page
+            return redirect()->route('accomplishmentReport.show',
+                ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
+                ->with('success', 'Accomplishment Report Generated and Approved. No approval process is required for Tabular Reports.');
         }
 
         elseif ($request->input('ar_format') == 'design') 
@@ -386,22 +315,28 @@ class AccomplishmentReportsController extends Controller
             // Generate PDF AR then Return the directory where it is saved
             $accomplishmentReportGeneratePDFService = new AccomplishmentReportGeneratePDFService();
             $ARDirectory = $accomplishmentReportGeneratePDFService->generate($request, $events, $studentAccomplishments,);
+
+            // Assign Report Type for Design
             $accomplishmentReportType = 2;
+
+            // Store Accomplishment Report
+            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization, $accomplishmentReportType);
+
+            // Send Notification to Organization President
+            $this->sendNotificationToPresident($accomplishmentReportUUID);
+
+            // Go to AR Page
+            return redirect()->route('accomplishmentReport.show',
+                ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
+                ->with('success', 'Accomplishment Report Generated. Sent in for President\'s Approval.');
         }
-
-        // Store Accomplishment Report
-        $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
-        $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization, $accomplishmentReportType, $AltARDirectory);
-        
-        // Send Notification
-        $sender = Auth::user()->last_name . ', '.  Auth::user()->first_name . ' ' .  Auth::user()->middle_name;
-        $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-        $accomplishmentReportNotificationService->sendNotificationToPresident($sender, Auth::user()->course->organization_id, $accomplishmentReportUUID);
-
-        return redirect()->route('accomplishmentReport.show',
-            ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
-            ->with('success', 'Accomplishment Report Generated. Sent in for President\'s Approval.');
     }
+
+    /**
+     * @param String $accomplishmentReportUUID
+     * Function to send a download Response for an Accomplishment Report
+     * @return Response
+     */ 
     public function downloadAccomplishmentReport($accomplishmentReportUUID)
     {
         if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
@@ -418,44 +353,20 @@ class AccomplishmentReportsController extends Controller
             return response()->download($filePath, $fileName, $headers);
         }
     }
-    /**
-     * Function to Merge PDF using documents array.
-     * documents = array()
-     * fileName = String
-     * folderName = String
-     * @return void
-     */
-    private function mergePDF($documents, $fileName, $folderName)
-    {
-        $merger = new Merger;
-        $merger->addIterator($documents);
-        $mergedPDF = $merger->merge();
-        $filePath = storage_path('/app/public/compiledDocuments/accomplishmentReports/' . $folderName . '/' . $fileName);
-        file_put_contents($filePath, $mergedPDF);
-    }
 
     /**
-     * Function to Delete Created Folder and its contents
-     * folder = String
+     * @param String $accomplishmentReportUUID
+     * Function to send notification to Organization President
      * @return void
-     */
-    private function deleteDirectory($folder)
+     */ 
+    private function sendNotificationToPresident($accomplishmentReportUUID)
     {
-        // first delete contents of the directory, but preserve the directory itself
-        Storage::deleteDirectory('/public/compiledDocuments/' . $folder, true);
-        // sleep 0.3 second because of race condition with HD
-        sleep(0.3);
-        // actually delete the folder itself
-        Storage::deleteDirectory('/public/compiledDocuments/' . $folder);
+        // Get Sender Details
+        $sender = Auth::user()->last_name . ', '.  Auth::user()->first_name . ' ' .  Auth::user()->middle_name;
+
+        // Send Notification to Organization President
+        $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
+        $accomplishmentReportNotificationService->sendNotificationToPresident($sender, Auth::user()->course->organization_id, $accomplishmentReportUUID);
     }
-    
-
-   
-
-
-
-
-
-
 
 }

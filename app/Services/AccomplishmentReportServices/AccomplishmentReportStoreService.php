@@ -6,14 +6,13 @@ use App\Models\AccomplishmentReport;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
+use Carbon\Carbon;
+
 class AccomplishmentReportStoreService
 {
     /**
      * @param Request $request, Array $ARDirectory, Collection $organization, Integer $reportType, Array $alternateDirectory
-     * 
      * Service to Store an Accomplishment Report.
-     * Returns Accomplishment UUID on success.
-     *
      * @return String
      */
     public function store($request, $ARDirectory, $organization, $reportType)
@@ -21,7 +20,7 @@ class AccomplishmentReportStoreService
         $rangeTitleRequest = $request->only('range_title');
         $rangeTitle = NULL;
 
-        // change range title
+        // Get range title
         switch ($rangeTitleRequest['range_title']) {
             case 'Semestral':
                 $rangeTitle = 1;
@@ -34,8 +33,10 @@ class AccomplishmentReportStoreService
                 break;
         }
 
+        // Pre-generate UUID for Accomplishment Report
         $accomplishmentReportUUID = Str::uuid();
-        // Create new CompiledDocument model
+
+        // Create new Accomplishment Report model
         $accomplishmentReportID = AccomplishmentReport::insertGetId([
             'accomplishment_report_uuid' => $accomplishmentReportUUID,
             'organization_id' => $organization->organization_id,
@@ -49,6 +50,8 @@ class AccomplishmentReportStoreService
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),
             'range_title' => $rangeTitle,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         return $accomplishmentReportUUID;

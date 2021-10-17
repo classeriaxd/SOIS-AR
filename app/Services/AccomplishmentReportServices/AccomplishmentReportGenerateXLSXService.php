@@ -35,17 +35,13 @@ class AccomplishmentReportGenerateXLSXService
 
         $finalFolderName = uniqid() . '-' . now()->timestamp;
         $finalFileName = uniqid() . '-' . now()->timestamp . '.xlsx';
-        $altFinalFileName = uniqid() . '-' . now()->timestamp . '.pdf';
         
         Excel::store(new AccomplishmentReportExport($table1, $table2, $table3, $table4), '/public/compiledDocuments/accomplishmentReports/' . $finalFolderName . '/' . $finalFileName);
-
-        // Excel::store(new AccomplishmentReportExport($table1, $table2, $table3, $table4), '/public/compiledDocuments/accomplishmentReports/' . $finalFolderName . '/' . $altFinalFileName, '', \Maatwebsite\Excel\Excel::DOMPDF);
         
 
         $ARDirectory = [
             'finalFolderName' => $finalFolderName, 
             'finalFileName' => $finalFileName,
-            // 'altFinalFileName' => $altFinalFileName,
         ];
 
         return $ARDirectory;
