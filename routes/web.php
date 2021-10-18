@@ -24,6 +24,7 @@ Auth::routes();
 // Sorted Routes
     Route::group(['middleware' => 'auth'], function () {
 
+        Route::get('/admin/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin.home');
         Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
         // Show and Review of Accomplishment report
