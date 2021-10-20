@@ -167,7 +167,6 @@ return [
          */
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Acaronlex\LaravelCalendar\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -234,7 +233,6 @@ return [
 
 
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Calendar' => Acaronlex\LaravelCalendar\Facades\Calendar::class,
     ],
 
 ];
