@@ -48,41 +48,7 @@
 
 @section('scripts')
 
-    <script type="text/javascript">
-        {{-- FullCalendar JS --}}
-        var calendar;
-        document.addEventListener("DOMContentLoaded", function(event) { 
-            var calendarEl = document.getElementById('calendar')
-            calendar = new FullCalendar.Calendar(calendarEl,
-            {
-                "headerToolbar":
-                    {
-                        "start": 'title',
-                        "center": '',
-                        "end": "today prev,next dayGridMonth timeGridWeek timeGridDay",
-                        
-                    },
-                "footerToolbar":
-                    {
-                        "center": 'today prev,next dayGridMonth timeGridWeek timeGridDay',
-                        
-                    },
-                "eventLimit":true,
-                "timeZone": "local",
-                "locale":"en",
-                "firstDay": 0,
-                "displayEventTime":true,
-                "selectable":true,
-                "initialView":"dayGridMonth",
-                
-                "events":
-                        JSON.parse('{{ $calendarEvents }}'.replace(/(&quot;)+/g, '"')),
 
-                        
-            },);
-            calendar.render();
-        });
-    </script>
 
     <script type="text/javascript">
         {{-- LOGIN ALERT TIMEOUT --}}

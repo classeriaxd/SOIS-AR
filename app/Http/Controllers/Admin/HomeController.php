@@ -31,6 +31,23 @@ class HomeController extends Controller
     public function index()
     {
         $loginAlert = $this->showLoginAlert();
+        return view('admin.home', compact('loginAlert',));
+        
+    }
+    public function showLoginAlert()
+    {
+        $loginAlert = NULL;
+        
+        if(session()->get('showLoginAlert') == 1)
+        {
+            $loginAlert =  'You are logged in! :)';
+            session()->decrement('showLoginAlert');
+        }
+
+        return $loginAlert;
+    }
+    private function calendarSample()
+    {
         $calendarEvents = collect();
         $allEvents = Event::all();
         $calendarEventID = 1;
@@ -46,8 +63,12 @@ class HomeController extends Controller
                         'id' => $calendarEventID,
                         'title' => $event->title,
                         'allDay' => false,
-                        'start' => Carbon::parse(strtotime($event->start_date . $event->start_time))->addDays($i),
-                        'end' => Carbon::parse(strtotime($event->start_date . $event->end_time))->addDays($i),
+                        'start' => Carbon::parse(strtotime($event->start_date . $event->start_time))
+                            ->setTimeZone('Asia/Manila')
+                            ->addDays($i),
+                        'end' => Carbon::parse(strtotime($event->start_date . $event->end_time))
+                            ->setTimeZone('Asia/Manila')
+                            ->addDays($i),
                         'url' => route('event.show', ['event_slug' => $event->slug]),
                     );
                     $calendarEvents->push($arr);
@@ -60,31 +81,62 @@ class HomeController extends Controller
                     'id' => $calendarEventID,
                     'title' => $event->title,
                     'allDay' => false,
-                    'start' => Carbon::parse(strtotime($event->start_date . $event->start_time)),
-                    'end' => Carbon::parse(strtotime($event->end_date . $event->end_time)),
+                    'start' => Carbon::parse(strtotime($event->start_date . $event->start_time))
+                        ->setTimeZone('Asia/Manila'),
+                    'end' => Carbon::parse(strtotime($event->end_date . $event->end_time))
+                        ->setTimeZone('Asia/Manila'),
                     'url' => route('event.show', ['event_slug' => $event->slug]),
                 );
                
                 $calendarEvents->push($arr);
                 $calendarEventID+=1;
             }
-
         }
-        //dd($calendarEvents);
-        $loadJSWithoutDefer = false;
-        return view('admin.home', compact('loginAlert', 'calendarEvents', 'loadJSWithoutDefer'));
-        
-    }
-    public function showLoginAlert()
-    {
-        $loginAlert = NULL;
-        
-        if(session()->get('showLoginAlert') == 1)
-        {
-            $loginAlert =  'You are logged in! :)';
-            session()->decrement('showLoginAlert');
-        }
+        $calendarOptions = collect();
+        /*
+        <div class="row">
+            <div class="col">
+                <div id="calendar"></div>
+            </div>
+        </div>
 
-        return $loginAlert;
+        <script type="text/javascript">
+            {{-- FullCalendar JS --}}
+            var calendar;
+            document.addEventListener("DOMContentLoaded", function(event) { 
+                var calendarEl = document.getElementById('calendar')
+                calendar = new FullCalendar.Calendar(calendarEl,
+                {
+                    "headerToolbar":
+                        {
+                            "start": 'title',
+                            "center": '',
+                            "end": "today prev,next dayGridMonth timeGridWeek timeGridDay",
+                            
+                        },
+                    "footerToolbar":
+                        {
+                            "center": 'today prev,next dayGridMonth timeGridWeek timeGridDay',
+                        },
+                    "eventLimit":true,
+                    "timeZone": "Asia/Manila",
+                    "locale":"en",
+                    "firstDay": 0,
+                    "displayEventTime":true,
+                    "selectable":true,
+                    "initialView":"dayGridMonth",
+                    "validRange": 
+                        {
+                            "start": '2020-12-31',
+                            "end": '2021-12-31',
+                    "events":
+                            JSON.parse('{{ $calendarEvents }}'.replace(/(&quot;)+/g, '"')),
+
+                            
+                },);
+                calendar.render();
+            });
+        </script>
+        */
     }
 }
