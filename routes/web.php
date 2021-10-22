@@ -24,8 +24,36 @@ Auth::routes();
 // Sorted Routes
     Route::group(['middleware' => 'auth'], function () {
 
-        Route::get('/admin/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin.home');
         Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        
+        // Admin Routes
+        Route::group([
+                'as' => 'admin.',
+                'prefix' => '/admin',], 
+            function () {
+                Route::get('/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
+
+            Route::group([
+                    'as' => 'maintenance.',
+                    'prefix' => '/maintenance',], 
+                function () {
+
+                // Event Category Maintenance
+                Route::resource('eventCategories', App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventCategories.',
+                        'prefix' => '/eventCategories/{category_id}',
+                        'where' => ['category_id' => '^[0-9]$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+                });  
+            });
+
+        });
 
         // Show and Review of Accomplishment report
         Route::group([

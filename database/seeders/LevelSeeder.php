@@ -19,7 +19,7 @@ class LevelSeeder extends Seeder
                 'helper' => 'The Beneficiaries/Participants of the event were from PUP-Taguig only.',
             ],
             ['level' => 'Local',
-                'helper' => 'The Beneficiaries/Participants of the event were from not only PUP-Taguig but within Taguig City.',
+                'helper' => 'The Beneficiaries/Participants of the event were from not only PUP-Taguig but within Taguig City and other nearby Municipality.',
             ],
             ['level' => 'Regional',
                 'helper' => 'The Beneficiaries/Participants of the Event were from different parts of the NCR Region.',

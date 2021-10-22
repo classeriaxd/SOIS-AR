@@ -77,6 +77,8 @@
                                         @elseif($notification->type == 4)
                                             {{-- Accomplishment Reports --}}
                                             {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                        @else
+                                            #
                                         @endif
                                      "
                                     >

@@ -26,9 +26,44 @@
                     </ol>
                 </nav>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div id="calendar"></div>
+            <div class="card w-100">
+                <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Maintenance</h5>
+                <div class="card-body">
+                    <div class="flex-row text-center my-1">
+                        <a href="{{ route('admin.maintenance.eventCategories.index') }}"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Event Categories
+                        </a>
+                        <a href="#"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Event Roles
+                        </a>
+                        <a href="#"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Event Document Types
+                        </a>
+                    </div>
+                    <div class="flex-row text-center my-1">
+                        <a href="#"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Levels
+                        </a>
+                        <a href="#"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            School Years
+                        </a>
+                        <a href="#"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Organization Document Types
+                        </a>
+                    </div>
+                    
                 </div>
             </div>
             
@@ -37,14 +72,7 @@
     </div>
 </div>
 @endsection
-@push('scripts')
 
-    {{-- Calendar --}}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.0/main.css"/>
-
-@endpush
 
 @section('scripts')
 
