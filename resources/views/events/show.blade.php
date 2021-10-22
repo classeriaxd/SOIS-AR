@@ -8,7 +8,22 @@
             <div class="row">
                 {{-- Title --}}
                 <h2 class="display-2 text-center">{{ $event->title }}</h2>
-                <h3 class="text-center"><span class="badge bg-{{$event->category_color}}">{{$event->eventCategory->category}}</span>  <span class="badge bg-{{$event->role_color}}">{{$event->eventRole->event_role}}</span></h3>
+                <h3 class="text-center">
+                    <span class="badge" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                        {{$event->eventCategory->category}}
+                        @if($event->eventCategory->deleted_at != NULL)
+                        <a role="button"
+                            data-bs-toggle="popover"
+                            data-bs-container="body" 
+                            title="{{$event->eventCategory->category}}" 
+                            data-bs-content="This category has been deleted since {{date_format(date_create($event->eventCategory->deleted_at), 'F d, Y')}}."
+                            data-bs-placement="right">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </a>
+                        @endif
+                    </span>  
+                    <span class="badge" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">{{$event->eventRole->event_role}}</span>
+                </h3>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center">
@@ -65,7 +80,7 @@
         				</div>
                         <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
-        					<a href="/e/{{$event->slug}}/edit">
+        					<a href="{{route('event.edit', ['event_slug' => $event->slug])}}">
         						<button class="btn btn-primary">Edit Event</button>
         					</a>
         					<form action="{{route('event.destroy', $event->slug)}}" method="POST">
@@ -82,9 +97,9 @@
         				<div class="card-body">
                             <h3 class="card-title text-center">Posters</h3>
                             <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
-                        @if($eventImages->where('image_type', 0)->count() > 0)
+                        @if($event->eventImages->where('image_type', 0)->count() > 0)
 
-                        @foreach($eventImages as $eventImage)
+                        @foreach($event->eventImages as $eventImage)
                             @if($eventImage->image_type == 0)
                                 <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
                             @endif
@@ -96,9 +111,10 @@
                             <hr>
                             <h3 class="card-title text-center">Evidences</h3>
                             <div class="row flex-row flex-nowrap pb-2 pl-1" style="overflow-x:auto;">
-                        @if($eventImages->where('image_type', 1)->count() > 0)
 
-                        @foreach($eventImages as $eventImage)
+                        @if($event->eventImages->where('image_type', 1)->count() > 0)
+
+                        @foreach($event->eventImages as $eventImage)
                             @if($eventImage->image_type == 1)
                                 <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
                             @endif
@@ -124,7 +140,7 @@
                 <div class="card w-50">
                     <h4 class="card-header card-title text-center">Event Documents</h4>
                     <div class="card-body text-center">
-                    @if($eventDocuments->count() > 0 )
+                    @if($event->eventDocuments->count() > 0 )
                     @php $i = 1; @endphp
                     <table class="table-striped table-bordered w-100">
                         <thead>
@@ -135,10 +151,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                    @foreach($eventDocuments as $document)
+                    @foreach($event->eventDocuments as $document)
                             <tr>
                                 <td>{{ $i }}</td>
-                                <td>{{ $document->document_type }}</td>
+                                <td>{{ $document->documentType->document_type }}</td>
                                 <td>{{ $document->title }}</td>
                             </tr>
                     @php $i += 1; @endphp
@@ -195,4 +211,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+          return new bootstrap.Popover(popoverTriggerEl)
+        })
+        $('body').on('click', function (e) {
+            $('[data-bs-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
+    </script>
 @endsection

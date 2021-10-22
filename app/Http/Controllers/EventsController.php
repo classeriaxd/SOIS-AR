@@ -30,30 +30,30 @@ use App\Services\EventServices\{
 
 class EventsController extends Controller
 {
+    /**
+     * Shows the Index Page of all Events
+     * @return View
+     */
     public function index()
     {
-        /*
-         * Shows the Index Page of all Events
-         */
         $orgAcronym = Auth::user()->course->organization->organization_acronym;
-        $eventIndexService = new EventIndexService();
-        $events = $eventIndexService->index();
+        $events = (new EventIndexService())->index();
         $simpleDataTables = true;
         return view('events.index', compact('events', 'orgAcronym', 'simpleDataTables'));
     }
+
+    /**
+     * @param String $event_slug, Boolean $newEvent
+     * Shows the Specific Event Details
+     * @return View
+     */
     public function show($event_slug, $newEvent = false)
     {
-        /*
-         * Shows the Specific Event Details
-         */
-        $eventShowService = new EventShowService();
-        $eventGetDocumentTitlesService = new eventGetDocumentTitlesService;
-        $event = $eventShowService->show($event_slug);
-        $eventDocuments = $eventGetDocumentTitlesService->getDocumentTitles($event->event_id);
-        $eventImages = EventImage::where('event_id', $event->event_id)->get();
-
-        return view('events.show',compact('event', 'eventImages', 'eventDocuments', 'newEvent'));
+        $event = (new EventShowService())->show($event_slug);
+        $loadJSWithoutDefer = true;
+        return view('events.show',compact('event', 'newEvent', 'loadJSWithoutDefer'));
     }
+
     public function edit($event_slug)
     {
         /*
@@ -111,6 +111,7 @@ class EventsController extends Controller
             'fundSources', 
             'loadJSWithoutDefer'));
     }
+
     public function store(EventStoreRequest $request)
     {
         /*
@@ -123,10 +124,9 @@ class EventsController extends Controller
 
         return redirect()->route('event.show',['event_slug' => $event_slug, 'newEvent' => true,]);
     }
+
     /**
-     * Find Function for Bloodhound and TypeAheadJS
-     , 
-                
+     * Find Function for Bloodhound and TypeAheadJS  
      */
     public function findEvent(Request $request)
     {

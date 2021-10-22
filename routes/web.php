@@ -111,7 +111,7 @@ Auth::routes();
                         // Event
                         // --> /e/{event_slug}
 
-                        Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit']);
+                        Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit'])->name('edit');
                         Route::patch('', [App\Http\Controllers\EventsController::class, 'update'])->name('update');
                         Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
                         Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show')->where(['newEvent' => '^[0-9]*$']);

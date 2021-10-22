@@ -32,7 +32,6 @@
     
     <div class="row">
     	<div class="col" >
-			
 	        <div class="card mb-3">
 	            <div class="card-header text-white bg-maroon">WHAT</div>
 	            <div class="card-body">
@@ -73,7 +72,8 @@
 		            	@enderror
 	            	</div>
 	        	</div>    
-	    	</div> <!-- end of WHAT card-->
+	    	</div>
+
 	        <div class="card">
                 <div class="card-header text-white bg-maroon ">WHERE</div>
                 <div class="card-body">
@@ -158,7 +158,8 @@
                     </div>
                 </div>
             </div>
-    	</div> <!-- end 1st col -->
+    	</div> 
+
     	<div class="col">
     		<div class="card">
                 <div class="card-header text-white bg-maroon">WHEN</div>
@@ -296,6 +297,7 @@
                     <label for="radioEventCategoryGroup" class="form-label">Event Category</label>
                 </div>
                 <div class="col" id="radioEventCategoryGroup">
+                	@if($event->eventCategory->deleted_at != NULL)
                     @foreach($eventCategories as $category)
                     <div class="form-check">
                         <input type="radio" 
@@ -313,6 +315,7 @@
                         </a>
                     </div>
                     @endforeach
+                    @else
                 </div>
             </div>
             @error('eventCategory')
@@ -371,7 +374,7 @@
 	    <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
 	        class="btn btn-secondary text-white"
 	        role="button">
-	        Go Home
+	        Go Back
 	    </a>
 	</div>
 

@@ -48,7 +48,7 @@ class Event extends Model
 
     public function eventCategory()
     {
-        return $this->belongsTo(EventCategory::class, 'event_category_id');
+        return $this->belongsTo(EventCategory::class, 'event_category_id')->withTrashed();
     }
 
     public function eventFundSource()
