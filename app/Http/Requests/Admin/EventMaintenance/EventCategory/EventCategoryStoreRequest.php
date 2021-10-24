@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\EventMaintenance;
+namespace App\Http\Requests\Admin\EventMaintenance\EventCategory;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin\EventMaintenance;
+namespace App\Services\Admin\EventMaintenance\EventCategory;
 
 use App\Models\EventCategory;
 use Illuminate\Support\Str;

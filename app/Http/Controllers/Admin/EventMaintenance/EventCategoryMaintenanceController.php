@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
 use App\Models\EventCategory;
-use App\Http\Requests\Admin\EventMaintenance\{
+use App\Http\Requests\Admin\EventMaintenance\EventCategory\{
     EventCategoryStoreRequest,
     EventCategoryUpdateRequest,
     EventCategoryDeleteRequest,
 };
-use App\Services\Admin\EventMaintenance\{
+use App\Services\Admin\EventMaintenance\EventCategory\{
     EventCategoryStoreService,
     EventCategoryUpdateService,
     EventCategoryDeleteService,
@@ -43,8 +43,8 @@ class EventCategoryMaintenanceController extends Controller
 
     public function store(EventCategoryStoreRequest $request)
     {
-        $eventCategoryStoreService = new EventCategoryStoreService();
-        $message = $eventCategoryStoreService->store($request);
+        $message = (new EventCategoryStoreService())->store($request);
+        
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
             ->with($message);
@@ -61,8 +61,8 @@ class EventCategoryMaintenanceController extends Controller
     {
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
-        $eventCategoryUpdateService = new EventCategoryUpdateService();
-        $message = $eventCategoryUpdateService->update($eventCategory, $request);
+        $message = (new EventCategoryUpdateService())->update($eventCategory, $request);
+
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
             ->with($message);
@@ -80,8 +80,8 @@ class EventCategoryMaintenanceController extends Controller
     {
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
-        $eventCategoryDeleteService = new EventCategoryDeleteService();
-        $message = $eventCategoryDeleteService->delete($eventCategory, $request);
+        $message = (new EventCategoryDeleteService())->delete($eventCategory, $request);
+
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
             ->with($message);
@@ -95,6 +95,7 @@ class EventCategoryMaintenanceController extends Controller
     private function checkIfCategoryExists($category_id)
     {
         abort_if(! $eventCategory = EventCategory::where('event_category_id', $category_id)->first(), 404);
+
         return $eventCategory;
     }
 }

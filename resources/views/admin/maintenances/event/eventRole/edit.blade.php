@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.eventCategories.update', ['category_id' => $eventCategory->event_category_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryUpdateForm">
+    <form action="{{ route('admin.maintenance.eventRoles.update', ['role_id' => $eventRole->event_role_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryUpdateForm">
         @csrf
         @method('PATCH')
         <div class="row">
@@ -22,28 +22,28 @@
                                 Maintenances
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="{{route('admin.maintenance.eventCategories.index')}}" class="text-decoration-none">
-                                    Event Categories
+                                <a href="{{route('admin.maintenance.eventRoles.index')}}" class="text-decoration-none">
+                                    Event Roles
                                 </a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Edit Event Category
+                                Edit Event Role
                             </li>
                         </ol>
                     </nav>
                 </div>
 
                 <div class="form-group row my-1">
-                    <label for="category" class="col-md-4 col-form-label">Category</label>
-                    <input id="category" 
+                    <label for="role" class="col-md-4 col-form-label">Event Role</label>
+                    <input id="role" 
                     type="text" 
-                    class="form-control @error('category') is-invalid @enderror" 
-                    name="category" 
-                    placeholder="Category"
-                    value="{{ $eventCategory->category }}" 
+                    class="form-control @error('role') is-invalid @enderror" 
+                    name="role" 
+                    placeholder="Event Role"
+                    value="{{ $eventRole->event_role }}" 
                     onchange="changeText('sample')" 
                     required>
-                    @error('category')
+                    @error('role')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -56,7 +56,7 @@
                     class="form-control @error('helper') is-invalid @enderror" 
                     name="helper"
                     placeholder="Helper/Description" 
-                    required>{{ $eventCategory->helper }}</textarea>
+                    required>{{ $eventRole->helper }}</textarea>
                     @error('helper')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -72,7 +72,7 @@
                             class="form-control form-control-color" 
                             name="background_color"
                             id="background_color"
-                            value="{{ $eventCategory->background_color }}"
+                            value="{{ $eventRole->background_color }}"
                             onchange="changeSampleBackgroundColor('sample')">
                             @error('background_color')
                                 <span class="invalid-feedback" role="alert">
@@ -87,7 +87,7 @@
                             class="form-control form-control-color" 
                             name="text_color"
                             id="text_color"
-                            value="{{ $eventCategory->text_color }}"
+                            value="{{ $eventRole->text_color }}"
                             onchange="changeSampleTextColor('sample')">
                             @error('text_color')
                                 <span class="invalid-feedback" role="alert">
@@ -99,7 +99,7 @@
                     <div class="col d-flex align-items-center justify-content-center">
                         <div class="flex-row">
                             <span class="badge rounded-pill border border-dark fs-4"
-                            id="sample">{{ $eventCategory->category }}</span>
+                            id="sample">{{ $eventRole->event_role }}</span>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Update Event Category</button>
+                    <button class="btn btn-primary text-white" type="submit">Update Event Role</button>
                 </div>
             </div>
         </div>
@@ -120,7 +120,7 @@
     <hr>
 
     <div class="flex-row my-2 text-center">
-        <a href="{{ route('admin.maintenance.eventCategories.index') }}"
+        <a href="{{ route('admin.maintenance.eventRoles.index') }}"
             class="btn btn-secondary text-white"
             role="button">
                 Go Back
@@ -147,7 +147,7 @@
         }
         function changeText(elementID)
         {
-            document.getElementById(elementID).textContent = document.getElementById("category").value;
+            document.getElementById(elementID).textContent = document.getElementById("role").value;
         }
         
     </script>

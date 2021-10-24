@@ -9,6 +9,7 @@ class EventRole extends Model
 {
     use SoftDeletes;
     
+    protected $guarded = [];
     protected $primaryKey = 'event_role_id';
     protected $table = 'event_roles';
 

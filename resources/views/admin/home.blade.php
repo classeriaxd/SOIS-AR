@@ -35,7 +35,7 @@
                         class="btn btn-primary text-white">
                             Event Categories
                         </a>
-                        <a href="#"
+                        <a href="{{ route('admin.maintenance.eventRoles.index') }}"
                         role="button"
                         class="btn btn-primary text-white">
                             Event Roles
