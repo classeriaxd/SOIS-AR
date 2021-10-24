@@ -9,9 +9,9 @@ use Carbon\Carbon;
 class EventUpdateService
 {
     /**
+     * @param Request $request, String $oldEventSlug
      * Service to Update an event.
      * Returns New Event Slug on success.
-     *
      * @return String
      */
     public function update($request, $oldEventSlug)
@@ -38,9 +38,23 @@ class EventUpdateService
             'slug' => $newEventSlug,
         ];
 
-        if(Event::where('slug', $oldEventSlug)->update($eventData))
-            return $newEventSlug;
-        else 
-            abort(404);
+        try 
+        {
+            Event::where('slug', $oldEventSlug)->update($eventData);
+            $returnArray = array(
+                'eventSlug' => $newEventSlug, 
+                'message' => array('success' => 'Event updated sucessfully!'),
+            );
+            return $returnArray;
+        } 
+
+        catch (\Illuminate\Database\QueryException $e) 
+        {
+            $returnArray = array(
+                'eventSlug' => NULL, 
+                'message' => array('error' => 'Error in updating Event:' . $e->getMessage()),
+            );
+            return $returnArray;
+        }
     }
 }

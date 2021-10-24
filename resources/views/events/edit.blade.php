@@ -35,6 +35,7 @@
 	        <div class="card mb-3">
 	            <div class="card-header text-white bg-maroon">WHAT</div>
 	            <div class="card-body">
+	            	
 	                <div class="form-group row">
 		                <label for="title" class="col-md-4 col-form-label">Title</label>
 		                <input id="title" 
@@ -49,6 +50,7 @@
 		                    </span>
 		                @enderror
 	            	</div>
+
 	            	<div class="form-group row">
 		            	<label for="description" class="col-md-4 col-form-label">Description</label>    
 		            	<textarea id="description" class="form-control @error('description') is-invalid @enderror" 
@@ -59,6 +61,7 @@
 		            	    </span>
 		            	@enderror
 	            	</div>
+
 	            	<div class="form-group row">
 		            	<label for="objective" class="col-md-4 col-form-label">Objective</label>
 		            	<textarea id="objective" 
@@ -77,6 +80,7 @@
 	        <div class="card">
                 <div class="card-header text-white bg-maroon ">WHERE</div>
                 <div class="card-body">
+
 		            <div class="form-group row">
 		                <label for="venue" class="col-md-4 col-form-label">Venue</label>
 		                <input id="venue" 
@@ -90,6 +94,7 @@
 		                    </span>
 		                @enderror
 		            </div>
+
 		            <div class="form-group row">
 		                <label for="activityType" class="col-md-4 col-form-label">Type of Activity</label>
 		                <input id="activityType" 
@@ -103,6 +108,7 @@
 		                    </span>
 		                @enderror
 		            </div>
+
 		            <div class="form-group row">
 		                <label for="beneficiaries" class="col-md-4 col-form-label">Event Beneficiaries</label>
 		                <input id="beneficiaries" 
@@ -116,6 +122,7 @@
 		                    </span>
 		                @enderror
 		            </div>
+
 		            <div class="form-group row">
 		                <label for="totalBeneficiary" class="col-md-4 col-form-label">Number of Beneficiaries</label>
 		                <input id="totalBeneficiary" 
@@ -130,6 +137,7 @@
 		                    </span>
 		                @enderror
 		            </div>
+
 		            <div class="form-group row">
 		                <label for="sponsors" class="col-md-4 col-form-label">Sponsors</label>
 		                <input id="sponsors" 
@@ -143,6 +151,7 @@
 		                    </span>
 		                @enderror
 		            </div>
+
 		            <div class="form-group row">
 		                <label for="budget" class="col-md-4 col-form-label">Event Budget</label>
 		                <input id="budget" 
@@ -156,6 +165,7 @@
 		                    </span>
 		                @enderror
                     </div>
+
                 </div>
             </div>
     	</div> 
@@ -164,70 +174,75 @@
     		<div class="card">
                 <div class="card-header text-white bg-maroon">WHEN</div>
                 <div class=card-body>
-	            <div class="form-group row">
-	                <div class="col">
-	                    <label for="startDate" class="col-md-4 form-label">Start Date</label>
-	                    <input id="startDate" 
-	                    type="date" 
-	                    class="form-control @error('startDate') is-invalid @enderror" 
-	                    name="startDate" 
-	                    value="{{ $event->start_date }}" 
-	                    min="1992-01-01" 
-	                    max="{{date('Y-m-d')}}"
-	                    required>
-	                    @error('startDate')
-	                        <span class="invalid-feedback" role="alert">
-	                            <strong>{{ $message }}</strong>
-	                        </span>
-	                    @enderror
+		            <div class="form-group row">
+		                <div class="col">
+		                    <label for="startDate" class="col-md-4 form-label">Start Date</label>
+		                    <input id="startDate" 
+		                    type="date" 
+		                    class="form-control @error('startDate') is-invalid @enderror" 
+		                    name="startDate" 
+		                    value="{{ $event->start_date }}" 
+		                    min="1992-01-01" 
+		                    max="{{date('Y-m-d')}}"
+		                    required>
+		                    @error('startDate')
+		                        <span class="invalid-feedback" role="alert">
+		                            <strong>{{ $message }}</strong>
+		                        </span>
+		                    @enderror
+		                </div>
+
+		                <div class="col">
+		                    <label for="endDate" class="col-md-4 form-label">End Date</label>
+		                    <input id="endDate" 
+		                    type="date" 
+		                    class="form-control @error('endDate') is-invalid @enderror" 
+		                    name="endDate" 
+		                    value="{{ $event->end_date }}"
+		                    min="1992-01-01" 
+		                    max="{{date('Y-m-d')}}">
+		                    @error('endDate')
+		                        <span class="invalid-feedback" role="alert">
+		                            <strong>{{ $message }}</strong>
+		                        </span>
+		                    @enderror
+		                </div>  
+		            </div>
+
+		            <div class="form-group row">
+		                <div class="col form-group">
+		                    <label for="startTime" class="col-md-4 col-form-label">Start Time</label>
+		                    <input id="startTime" 
+		                    type="time" 
+		                    class="form-control @error('startTime') is-invalid @enderror" 
+		                    name="startTime" 
+		                    value="{{ date("H:i",strtotime($event->start_time)) }}">
+		                    @error('startTime')
+		                        <span class="invalid-feedback" role="alert">
+		                            <strong>{{ $message }}</strong>
+		                        </span>
+		                    @enderror
+		                </div>
+		                <div class="col form-group">
+		                    <label for="endTime" class="col-md-4 col-form-label">End Time</label>
+		                    <input id="endTime" 
+		                    type="time" 
+		                    class="form-control @error('endTime') is-invalid @enderror" 
+		                    name="endTime" 
+		                    value="{{ date("H:i",strtotime($event->end_time)) }}">
+		                    @error('endTime')
+		                        <span class="invalid-feedback" role="alert">
+		                            <strong>{{ $message }}</strong>
+		                        </span>
+		                    @enderror
+	                    </div>
 	                </div>
-	                <div class="col">
-	                    <label for="endDate" class="col-md-4 form-label">End Date</label>
-	                    <input id="endDate" 
-	                    type="date" 
-	                    class="form-control @error('endDate') is-invalid @enderror" 
-	                    name="endDate" 
-	                    value="{{ $event->end_date }}"
-	                    min="1992-01-01" 
-	                    max="{{date('Y-m-d')}}">
-	                    @error('endDate')
-	                        <span class="invalid-feedback" role="alert">
-	                            <strong>{{ $message }}</strong>
-	                        </span>
-	                    @enderror
-	                </div>  
-	            </div>
-	            <div class="form-group row">
-	                <div class="col form-group">
-	                    <label for="startTime" class="col-md-4 col-form-label">Start Time</label>
-	                    <input id="startTime" 
-	                    type="time" 
-	                    class="form-control @error('startTime') is-invalid @enderror" 
-	                    name="startTime" 
-	                    value="{{ date("H:i",strtotime($event->start_time)) }}">
-	                    @error('startTime')
-	                        <span class="invalid-feedback" role="alert">
-	                            <strong>{{ $message }}</strong>
-	                        </span>
-	                    @enderror
-	                </div>
-	                <div class="col form-group">
-	                    <label for="endTime" class="col-md-4 col-form-label">End Time</label>
-	                    <input id="endTime" 
-	                    type="time" 
-	                    class="form-control @error('endTime') is-invalid @enderror" 
-	                    name="endTime" 
-	                    value="{{ date("H:i",strtotime($event->end_time)) }}">
-	                    @error('endTime')
-	                        <span class="invalid-feedback" role="alert">
-	                            <strong>{{ $message }}</strong>
-	                        </span>
-	                    @enderror
-                        </div>
-                    </div>    
-                </div>   
+
+            	</div>
             </div>
+
             <hr>
+
             <div class="form-group row">
                 <div class="col">
                     <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?</label>
@@ -244,88 +259,196 @@
                         >
                         <label class="form-check-label" for="{{$source->fund_source}}">{{$source->fund_source}}</label>
                         <a role="button"
-                            data-toggle="popover" 
+                            data-bs-toggle="popover"
+                            data-bs-container="body" 
                             title="{{$source->fund_source}}" 
-                            data-content="{{$source->helper}}">
+                            data-bs-content="{{$source->helper}}"
+                            data-bs-placement="right">
                             <i class="far fa-question-circle"></i>
                         </a>
                 	</div>
                     @endforeach
                 </div>
             </div>
+
             @error('fundSource')
-            <div class="row text-center">
-                <span class="d-block invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            </div>
+	            <div class="row text-center">
+	                <span class="d-block invalid-feedback" role="alert">
+	                    <strong>{{ $message }}</strong>
+	                </span>
+	            </div>
             @enderror
+
             <hr>
+
+			{{-- Event Role --}}
             <div class="form-group row">
                 <div class="col">
                     <label for="radioEventRoleGroup" class="form-label">What was the Organization's Role in this Event?</label></div>
                 <div class="col" id="radioEventRoleGroup">
-                    @foreach($eventRoles as $role)
-                    <div class="form-check">
-                        <input type="radio" 
-                        id="{{$role->event_role}}" 
-                        name="eventRole" 
-                        class="form-check-input" 
-                        value="{{$role->event_role_id}}" 
-                        @if($event->event_role_id  == $role->event_role_id) checked @endif>
-                        <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
-                        <a role="button"
-                            data-toggle="popover" 
-                            title="{{$role->event_role}}" 
-                            data-content="{{$role->helper}}">
-                            <i class="far fa-question-circle"></i>
-                        </a>
-                    </div>
-                    @endforeach
+                	@if($event->eventRole->deleted_at === NULL)
+	                    @foreach($eventRoles as $role)
+
+	                    <div class="form-check">
+	                        <input type="radio" 
+	                        id="{{$role->event_role}}" 
+	                        name="eventRole" 
+	                        class="form-check-input" 
+	                        value="{{$role->event_role_id}}" 
+	                        @if($event->event_role_id  == $role->event_role_id) checked @endif>
+	                        <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+	                        <a role="button"
+	                            data-bs-toggle="popover"
+	                            data-bs-container="body"  
+	                            title="{{$role->event_role}}" 
+	                            data-bs-content="{{$role->helper}}"
+	                            data-bs-placement="right">
+	                            <i class="far fa-question-circle"></i>
+	                        </a>
+	                    </div>
+
+	                    @endforeach
+
+                    @else
+	                    {{-- Show Deleted Event Role --}}
+	                    <div class="form-check text-danger">
+	                    	<input type="radio" 
+	                    	id="{{$event->eventRole->event_role}}" 
+	                    	name="eventRole" 
+	                    	class="form-check-input" 
+	                    	value="{{$event->event_role_id}}" 
+	                    	checked>
+	                    	<label class="form-check-label blink" for="{{$event->eventRole->event_role}}">{{$event->eventRole->event_role}}</label>
+	                    	<a role="button"
+                    	        data-bs-toggle="popover"
+	                            data-bs-container="body" 
+	                    	    title="{{$event->eventRole->event_role}}" 
+	                    	    data-bs-content="{{$event->eventRole->helper . '.' . ' <b>This category has been deleted since ' . date_format(date_create($event->eventRole->deleted_at), 'F d, Y') . '.</b>'}}"
+	                    	    data-bs-html="true"
+	                    	    data-bs-placement="right">
+	                    	    <i class="far fa-question-circle"></i>
+	                    	</a>
+	                    </div>
+
+	                    {{-- Show Other Event Roles --}}
+	                    @foreach($eventRoles as $role)
+		                    <div class="form-check">
+		                        <input type="radio" 
+		                        id="{{$role->event_role}}" 
+		                        name="eventRole" 
+		                        class="form-check-input" 
+		                        value="{{$role->event_role_id}}">
+		                        <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+		                        <a role="button"
+		                            data-bs-toggle="popover"
+		                            data-bs-container="body" 
+		                            title="{{$role->event_role}}" 
+		                            data-bs-content="{{$role->helper}}"
+		                            data-bs-placement="right">
+		                            <i class="far fa-question-circle"></i>
+		                        </a>
+		                    </div>
+	                    @endforeach
+
+                    @endif                    
                 </div>
             </div>
+
             @error('eventRole')
-            <div class="row text-center">
-                <span class="d-block invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            </div>
+	            <div class="row text-center">
+	                <span class="d-block invalid-feedback" role="alert">
+	                    <strong>{{ $message }}</strong>
+	                </span>
+	            </div>
             @enderror
+
             <hr>
+
             <div class="form-group row">
                 <div class="col">
                     <label for="radioEventCategoryGroup" class="form-label">Event Category</label>
                 </div>
                 <div class="col" id="radioEventCategoryGroup">
-                	@if($event->eventCategory->deleted_at != NULL)
-                    @foreach($eventCategories as $category)
-                    <div class="form-check">
-                        <input type="radio" 
-                        id="{{$category->category}}" 
-                        name="eventCategory" 
-                        class="form-check-input" 
-                        value="{{$category->event_category_id}}" 
-                        @if($event->event_category_id  == $category->event_category_id) checked @endif>
-                        <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
-                        <a role="button"
-                            data-toggle="popover" 
-                            title="{{$category->category}}" 
-                            data-content="{{$category->helper}}">
-                            <i class="far fa-question-circle"></i>
-                        </a>
-                    </div>
-                    @endforeach
+
+                	@if($event->eventCategory->deleted_at === NULL)
+	                    @foreach($eventCategories as $category)
+
+	                    <div class="form-check">
+	                        <input type="radio" 
+	                        id="{{$category->category}}" 
+	                        name="eventCategory" 
+	                        class="form-check-input" 
+	                        value="{{$category->event_category_id}}" 
+	                        @if($event->event_category_id  == $category->event_category_id) checked @endif>
+	                        <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+	                        <a role="button"
+	                            data-bs-toggle="popover"
+	                            data-bs-container="body"  
+	                            title="{{$category->category}}" 
+	                            data-bs-content="{{$category->helper}}"
+	                            data-bs-placement="right">
+	                            <i class="far fa-question-circle"></i>
+	                        </a>
+	                    </div>
+	                    @endforeach
+
                     @else
+	                    {{-- Show Deleted Category --}}
+	                    <div class="form-check text-danger">
+	                    	<input type="radio" 
+	                    	id="{{$event->eventCategory->category}}" 
+	                    	name="eventCategory" 
+	                    	class="form-check-input" 
+	                    	value="{{$event->event_category_id}}" 
+	                    	checked>
+	                    	<label class="form-check-label blink" for="{{$event->eventCategory->category}}">{{$event->eventCategory->category}}</label>
+	                    	<a role="button"
+                    	        data-bs-toggle="popover"
+	                            data-bs-container="body" 
+	                    	    title="{{$event->eventCategory->category}}" 
+	                    	    data-bs-content="{{$event->eventCategory->helper . '.' . ' <b>This category has been deleted since ' . date_format(date_create($event->eventCategory->deleted_at), 'F d, Y') . '.</b>'}}"
+	                    	    data-bs-html="true"
+	                    	    data-bs-placement="right">
+	                    	    <i class="far fa-question-circle"></i>
+	                    	</a>
+	                    </div>
+	                    {{-- Show Other Categories --}}
+	                    @foreach($eventCategories as $category)
+
+	                    <div class="form-check">
+	                        <input type="radio" 
+	                        id="{{$category->category}}" 
+	                        name="eventCategory" 
+	                        class="form-check-input" 
+	                        value="{{$category->event_category_id}}">
+	                        <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+	                        <a role="button"
+	                            data-bs-toggle="popover"
+	                            data-bs-container="body" 
+	                            title="{{$category->category}}" 
+	                            data-bs-content="{{$category->helper}}"
+	                            data-bs-placement="right">
+	                            <i class="far fa-question-circle"></i>
+	                        </a>
+	                    </div>
+
+	                    @endforeach
+
+                    @endif
+
                 </div>
             </div>
+
             @error('eventCategory')
-            <div class="row text-center">
-                <span class="d-block invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            </div>
+	            <div class="row text-center">
+	                <span class="d-block invalid-feedback" role="alert">
+	                    <strong>{{ $message }}</strong>
+	                </span>
+	            </div>
             @enderror
+
             <hr>
+
             <div class="form-group row">
                 <div class="col">
                     <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level</label></div>
@@ -340,24 +463,26 @@
                         @if($event->level_id  == $level->level_id) checked @endif>
                         <label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
                         <a role="button"
-                            data-toggle="popover" 
+                            data-bs-toggle="popover"
+                            data-bs-container="body" 
                             title="{{$level->level}}" 
-                            data-content="{{$level->helper}}">
+                            data-bs-content="{{$level->helper}}"
+                            data-bs-placement="right">
                             <i class="far fa-question-circle"></i>
                         </a>
                     </div>
                     @endforeach
                 </div>
             </div>
-			<!--DIV-->
+
             @error('level')
-            <div class="row text-center">
-                <span class="d-block invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            </div>
-		<!--/div-->
+	            <div class="row text-center">
+	                <span class="d-block invalid-feedback" role="alert">
+	                    <strong>{{ $message }}</strong>
+	                </span>
+	            </div>
             @enderror
+
     	</div>
     </div>
     
@@ -378,7 +503,7 @@
 	    </a>
 	</div>
 
-</div> <!--/*end of container*/-->
+</div>
 @endsection
 @section('scripts')
     <script type="text/javascript">
@@ -396,4 +521,15 @@
             });
         });
     </script>
+    <style type="text/css">
+    	.blink {
+    	  animation: blinker 1s linear infinite;
+    	}
+
+    	@keyframes blinker {
+    	  50% {
+    	    opacity: 0;
+    	  }
+    	}
+    </style>
 @endsection

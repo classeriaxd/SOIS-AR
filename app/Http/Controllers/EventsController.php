@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\{
     Event,
-    EventImage,
     EventCategory,
     EventRole,
     Level,
@@ -25,7 +24,6 @@ use App\Services\EventServices\{
     EventUpdateService,
     EventDeleteService,
     EventGetOrganizationIDService,
-    EventGetDocumentTitlesService,
 };
 
 class EventsController extends Controller
@@ -49,55 +47,78 @@ class EventsController extends Controller
      */
     public function show($event_slug, $newEvent = false)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = (new EventShowService())->show($event_slug);
         $loadJSWithoutDefer = true;
         return view('events.show',compact('event', 'newEvent', 'loadJSWithoutDefer'));
     }
 
+    /**
+     * @param String $event_slug
+     * Open up Edit Page for an Event
+     * @return View
+     */
     public function edit($event_slug)
     {
-        /*
-         * Open up Edit Page for an Event
-         */
-        if($event = Event::where('slug', $event_slug)->first())
-        {
-            $eventCategories = EventCategory::all();
-            $eventRoles = EventRole::all();
-            $levels = Level::all();
-            $fundSources = FundSource::all();
-            $loadJSWithoutDefer = true;
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
-            return view('events.edit',compact('event', 'eventCategories', 'eventRoles', 'levels', 'fundSources', 'loadJSWithoutDefer'));
-        }
-        else
-            abort(404);
-    }
-    public function update(EventStoreRequest $request, $event_slug)
-    {
-        /*
-         * Recieve POST request from Edit Page
-         */
-        $eventUpdateService = new EventUpdateService();
-        $updatedEventSlug = $eventUpdateService->update($request, $event_slug);
-
-        return redirect()->route('event.show',['event_slug' => $updatedEventSlug,]);
-    }
-    public function destroy($event_slug)
-    {
-        /*
-         * Recieve DELETE request to Delete Event
-         */
-        $eventDeleteService = new EventDeleteService();
-        $eventDeleteService->destroy($event_slug);
-
-        return redirect()->route('event.index');
+        $event = Event::with('eventCategory', 'eventRole')->where('slug', $event_slug)->first();
+        $eventCategories = EventCategory::all();
+        $eventRoles = EventRole::all();
+        $levels = Level::all();
+        $fundSources = FundSource::all();
+        $loadJSWithoutDefer = true;
+        //dd($event);
+        return view('events.edit',compact('event', 'eventCategories', 'eventRoles', 'levels', 'fundSources', 'loadJSWithoutDefer'));
         
     }
+
+    /**
+     * @param Request $request, String $event_slug
+     * Function to Update an event
+     * @return Redirect
+     */
+    public function update(EventStoreRequest $request, $event_slug)
+    {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
+        $returnArray = (new EventUpdateService())->update($request, $event_slug);
+        $message = $returnArray['message'];
+
+        if ($returnArray['eventSlug'] == NULL) {
+            return redirect()->action(
+                [EventsController::class, 'index'])
+                ->with($message);
+        }
+        else
+            return redirect()->action(
+                [EventsController::class, 'show'], ['event_slug' => $returnArray['eventSlug']])
+                ->with($message);
+    }
+
+    /**
+     * @param String $event_slug
+     * Function to Open Event Creation Page
+     * @return View 
+     */ 
+    public function destroy($event_slug)
+    {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
+        $message = (new EventDeleteService())->destroy($event_slug);
+
+        return redirect()->action(
+                [EventsController::class, 'index'])
+                ->with($message);
+    }
+
+    /**
+     * Function to Open Event Creation Page
+     * @return View 
+     */ 
     public function create()
     {
-        /*
-         * Open up Create Page for Event
-         */
         $eventCategories = EventCategory::all();
         $eventRoles = EventRole::all();
         $levels = Level::all();
@@ -112,21 +133,32 @@ class EventsController extends Controller
             'loadJSWithoutDefer'));
     }
 
+    /**
+     * @param Request $request
+     * Function to Store Event
+     * @return Redirect
+     */
     public function store(EventStoreRequest $request)
     {
-        /*
-         * Recieve POST request to Store Event
-         */
-        $eventStoreService = new EventStoreService();
-        $eventGetOrganizationID = new EventGetOrganizationIDService();
-        $organizationID = $eventGetOrganizationID->getOrganizationID();
-        $event_slug = $eventStoreService->store($request, $organizationID);
+        $organizationID = (new EventGetOrganizationIDService())->getOrganizationID();
+        $returnArray = (new EventStoreService())->store($request, $organizationID);
+        $message = $returnArray['message'];
 
-        return redirect()->route('event.show',['event_slug' => $event_slug, 'newEvent' => true,]);
+        if ($returnArray['eventSlug'] == NULL) {
+            return redirect()->action(
+                [EventsController::class, 'index'])
+                ->with($message);
+        }
+        else
+            return redirect()->action(
+                [EventsController::class, 'show'], ['event_slug' => $returnArray['eventSlug'], 'newEvent' => true])
+                ->with($message);
     }
 
     /**
+     * @param Request $request
      * Find Function for Bloodhound and TypeAheadJS  
+     * @return Collection $events
      */
     public function findEvent(Request $request)
     {
