@@ -9,9 +9,9 @@ use Carbon\Carbon;
 class EventStoreService
 {
     /**
+     * @param Request $request, Integer $organizationID
      * Service to Store an event.
      * Returns Event Slug and Message on success.
-     *
      * @return Array
      */
     public function store($request, $organizationID): array

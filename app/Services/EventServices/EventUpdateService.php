@@ -14,7 +14,7 @@ class EventUpdateService
      * Returns New Event Slug on success.
      * @return String
      */
-    public function update($request, $oldEventSlug)
+    public function update($request, $oldEventSlug): array
     {
         $newEventSlug = Str::slug($request->input('title'), '-') . '-' . Carbon::parse($request->input('startDate'))->format('Y') . '-' . Str::uuid();
         $eventData = [

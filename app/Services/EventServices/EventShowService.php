@@ -3,8 +3,6 @@
 namespace App\Services\EventServices;
 
 use App\Models\Event;
-use App\Models\EventCategory;
-use App\Models\EventRole;
 
 class EventShowService
 {

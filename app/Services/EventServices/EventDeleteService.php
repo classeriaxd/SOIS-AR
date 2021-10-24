@@ -13,7 +13,7 @@ class EventDeleteService
      * Returns message on success.
      * @return Array
      */
-    public function destroy($eventSlug)
+    public function destroy($eventSlug): array
     {
         try 
         {
