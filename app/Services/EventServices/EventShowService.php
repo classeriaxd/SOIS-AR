@@ -16,7 +16,7 @@ class EventShowService
     {
         $event = Event::with([
             'eventCategory:event_category_id,category,background_color,text_color,deleted_at',
-            'eventRole:event_role_id,event_role,background_color,text_color',
+            'eventRole:event_role_id,event_role,background_color,text_color,deleted_at',
             'eventFundSource:fund_source_id,fund_source',
             'eventLevel:level_id,level',
             'eventImages:event_image_id,event_id,image,image_type',

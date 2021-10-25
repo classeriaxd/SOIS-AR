@@ -25,7 +25,7 @@
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
-                <h5 class="display-5 text-center">Event Categories</h5>
+                <h5 class="display-5 text-center">Event Natures</h5>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center">
@@ -36,60 +36,55 @@
                             Maintenances
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Event Categories
+                            Event Natures
                         </li>
                     </ol>
                 </nav>
             </div>
-            
+
             <div class="flex-row my-2 text-center">
-                <a href="{{ route('admin.maintenance.eventCategories.create') }}"
+                <a href="{{ route('admin.maintenance.eventNatures.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Event Category
+                        Add Event Nature
                 </a>
             </div>
-
+            
             <div class="card w-100">
                 <table class="w-100 table table-bordered table-striped table-hover border border-dark">
                     <thead class="align-middle bg-maroon text-white fw-bold fs-6">
                         <th>#</th>
-                        <th>Category</th>
+                        <th>Nature</th>
                         <th>Helper</th>
-                        <th>Color Scheme</th>
                         <th>Option</th>
                     </thead>
                     <tbody>
                     @php $i = 1; @endphp
-                    @foreach($eventCategories as $category)
+                    @foreach($eventNatures as $nature)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td>{{ $category->category }}</td>
-                            <td style="width: 50%;">{{ $category->helper }}</td>
-                            <td class="text-center align-middle">
-                                <span class="badge rounded-pill fs-6"
-                                    style="background-color: {{$category->background_color}}; color: {{$category->text_color}};" >
-                                    {{ $category->category }}
-                            </span>
-                            </td>
+                            <td>{{ $nature->nature }}</td>
+                            <td style="width: 50%;">{{ $nature->helper }}</td>
                             <td class="text-center">
                                 <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.eventCategories.show', ['category_id' => $category->event_category_id]) }}" 
+                                    href="{{ route('admin.maintenance.eventNatures.show', ['nature_id' => $nature->event_nature_id]) }}" 
                                     role="button">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.eventCategories.edit', ['category_id' => $category->event_category_id]) }}" 
+                                    href="{{ route('admin.maintenance.eventNatures.edit', ['nature_id' => $nature->event_nature_id]) }}" 
                                     role="button">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                            </td>
+                            </td>    
+
                         </tr>
                     @php $i += 1; @endphp
                     @endforeach
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 </div>

@@ -40,6 +40,16 @@
                         class="btn btn-primary text-white">
                             Event Roles
                         </a>
+                        <a href="{{ route('admin.maintenance.eventNatures.index') }}"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Event Natures
+                        </a>
+                        <a href="{{ route('admin.maintenance.eventClassifications.index') }}"
+                        role="button"
+                        class="btn btn-primary text-white">
+                            Event Classifications
+                        </a>
                         <a href="#"
                         role="button"
                         class="btn btn-primary text-white">

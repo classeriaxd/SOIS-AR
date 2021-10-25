@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.eventRoles.update', ['role_id' => $eventRole->event_role_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryUpdateForm">
+    <form action="{{ route('admin.maintenance.eventRoles.update', ['role_id' => $eventRole->event_role_id]) }}" enctype="multipart/form-data" method="POST" id="eventRoleUpdateForm">
         @csrf
         @method('PATCH')
         <div class="row">

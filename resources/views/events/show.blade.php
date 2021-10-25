@@ -40,7 +40,19 @@
                         </a>
                         @endif
                     </span>  
-                    <span class="badge" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">{{$event->eventRole->event_role}}</span>
+                    <span class="badge" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                        {{$event->eventRole->event_role}}
+                        @if($event->eventRole->deleted_at != NULL)
+                        <a role="button"
+                            data-bs-toggle="popover"
+                            data-bs-container="body" 
+                            title="{{$event->eventRole->event_role}}" 
+                            data-bs-content="This event role has been deleted since {{date_format(date_create($event->eventRole->deleted_at), 'F d, Y')}}."
+                            data-bs-placement="right">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </a>
+                        @endif
+                    </span>
                 </h3>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb">

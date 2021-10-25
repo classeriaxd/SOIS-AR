@@ -18,6 +18,8 @@ class CreateEventsTable extends Migration
             $table->foreignId('organization_id');
             $table->foreignId('event_category_id');
             $table->foreignId('event_role_id');
+            $table->foreignId('event_nature_id');
+            $table->foreignId('event_classification_id');
             $table->foreignId('level_id');
             $table->foreignId('fund_source_id');
             $table->string('title');
@@ -39,6 +41,8 @@ class CreateEventsTable extends Migration
 
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
             $table->foreign('event_category_id')->references('event_category_id')->on('event_categories');
+            $table->foreign('event_nature_id')->references('event_nature_id')->on('event_natures');
+            $table->foreign('event_classification_id')->references('event_classification_id')->on('event_classifications');
             $table->foreign('event_role_id')->references('event_role_id')->on('event_roles');
             $table->foreign('level_id')->references('level_id')->on('levels');
             $table->foreign('fund_source_id')->references('fund_source_id')->on('fund_sources');

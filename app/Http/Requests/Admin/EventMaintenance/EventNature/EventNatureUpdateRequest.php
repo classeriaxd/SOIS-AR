@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\EventMaintenance\EventRole;
+namespace App\Http\Requests\Admin\EventMaintenance\EventNature;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class EventRoleUpdateRequest extends FormRequest
+class EventNatureUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,8 @@ class EventRoleUpdateRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'role' => 'required|string|unique:App\Models\EventRole,event_role,' . $this->role_id,
+            'nature' => 'required|string|unique:App\Models\EventNature,nature,' . $this->nature_id,
             'helper' => 'sometimes|string',
-            'background_color' => 'required|regex:/^#([A-Fa-f0-9]{6})$/',
-            'text_color' => 'required|regex:/^#([A-Fa-f0-9]{6})$/',
         ];
         return $rules;
     }

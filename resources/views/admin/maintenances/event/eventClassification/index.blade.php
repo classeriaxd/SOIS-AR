@@ -25,7 +25,7 @@
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
-                <h5 class="display-5 text-center">Event Categories</h5>
+                <h5 class="display-5 text-center">Event Classifications</h5>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center">
@@ -36,17 +36,17 @@
                             Maintenances
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Event Categories
+                            Event Classifications
                         </li>
                     </ol>
                 </nav>
             </div>
             
             <div class="flex-row my-2 text-center">
-                <a href="{{ route('admin.maintenance.eventCategories.create') }}"
+                <a href="{{ route('admin.maintenance.eventClassifications.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Event Category
+                        Add Event Classification
                 </a>
             </div>
 
@@ -54,32 +54,25 @@
                 <table class="w-100 table table-bordered table-striped table-hover border border-dark">
                     <thead class="align-middle bg-maroon text-white fw-bold fs-6">
                         <th>#</th>
-                        <th>Category</th>
+                        <th>Classifications</th>
                         <th>Helper</th>
-                        <th>Color Scheme</th>
                         <th>Option</th>
                     </thead>
                     <tbody>
                     @php $i = 1; @endphp
-                    @foreach($eventCategories as $category)
+                    @foreach($eventClassifications as $classification)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td>{{ $category->category }}</td>
-                            <td style="width: 50%;">{{ $category->helper }}</td>
-                            <td class="text-center align-middle">
-                                <span class="badge rounded-pill fs-6"
-                                    style="background-color: {{$category->background_color}}; color: {{$category->text_color}};" >
-                                    {{ $category->category }}
-                            </span>
-                            </td>
+                            <td>{{ $classification->classification }}</td>
+                            <td style="width: 50%;">{{ $classification->helper }}</td>
                             <td class="text-center">
                                 <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.eventCategories.show', ['category_id' => $category->event_category_id]) }}" 
+                                    href="{{ route('admin.maintenance.eventClassifications.show', ['classification_id' => $classification->event_classification_id]) }}" 
                                     role="button">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.eventCategories.edit', ['category_id' => $category->event_category_id]) }}" 
+                                    href="{{ route('admin.maintenance.eventClassifications.edit', ['classification_id' => $classification->event_classification_id]) }}" 
                                     role="button">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -94,4 +87,3 @@
     </div>
 </div>
 @endsection
-

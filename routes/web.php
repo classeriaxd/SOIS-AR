@@ -64,7 +64,35 @@ Auth::routes();
                         Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'show'])->name('show');
                         Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'update'])->name('update');
                         Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Event Nature Maintenance
+                Route::resource('eventNatures', App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventNatures.',
+                        'prefix' => '/eventNatures/{nature_id}',
+                        'where' => ['nature_id' => '^[0-9]$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'destroy'])->name('destroy');
                 }); 
+
+                // Event Classification Maintenance
+                Route::resource('eventClassifications', App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventClassifications.',
+                        'prefix' => '/eventClassifications/{classification_id}',
+                        'where' => ['classification_id' => '^[0-9]$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'destroy'])->name('destroy');
+                });
             });
 
         });

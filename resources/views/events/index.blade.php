@@ -56,8 +56,16 @@
                     <tr>
                         <td scope="row" class="text-center">{{ $i }}</td>
                         <td>{{ $event->title }}</td>
-                        <td>{{ $event->eventCategory->category }}</td>
-                        <td>{{ $event->eventRole->event_role }}</td>
+                        <td class="text-center">
+                            <span class="badge fs-6" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                                {{$event->eventCategory->category}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge fs-6" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                                {{$event->eventRole->event_role}}
+                            </span>
+                        </td>
                         <td>{{ $event->eventLevel->level }}</td>
                         <td> 
                             @if($event->start_date == $event->end_date)

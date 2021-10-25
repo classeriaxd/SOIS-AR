@@ -42,14 +42,15 @@
                 </nav>
             </div>
             
+            <div class="flex-row my-2 text-center">
+                <a href="{{ route('admin.maintenance.eventRoles.create') }}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Add Event Role
+                </a>
+            </div>
+            
             <div class="card w-100">
-                <div class="flex-row my-2 text-center">
-                    <a href="{{ route('admin.maintenance.eventRoles.create') }}"
-                        class="btn btn-secondary text-white"
-                        role="button">
-                            Add Event Role
-                    </a>
-                </div>
                 <table class="w-100 table table-bordered table-striped table-hover border border-dark">
                     <thead class="align-middle bg-maroon text-white fw-bold fs-6">
                         <th>#</th>
@@ -82,15 +83,14 @@
                                     role="button">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                
+                            </td>    
 
                         </tr>
                     @php $i += 1; @endphp
                     @endforeach
                     </tbody>
                 </table>
-            
-
+            </div>
         </div>
     </div>
 </div>

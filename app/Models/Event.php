@@ -43,7 +43,7 @@ class Event extends Model
     }
     public function eventRole()
     {
-        return $this->belongsTo(EventRole::class, 'event_role_id');
+        return $this->belongsTo(EventRole::class, 'event_role_id')->withTrashed();
     }
 
     public function eventCategory()
