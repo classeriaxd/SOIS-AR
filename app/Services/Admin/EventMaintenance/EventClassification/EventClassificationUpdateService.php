@@ -14,7 +14,7 @@ class EventClassificationUpdateService
      * Returns Message on success
      * @return Array
      */
-    public function update(EventClassification $classification, $request)
+    public function update(EventClassification $classification, $request): array
     {
         try 
         {

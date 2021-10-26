@@ -50,26 +50,31 @@
                         class="btn btn-primary text-white">
                             Event Classifications
                         </a>
-                        <a href="#"
+                        <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
                         role="button"
                         class="btn btn-primary text-white">
                             Event Document Types
                         </a>
                     </div>
                     <div class="flex-row text-center my-1">
-                        <a href="#"
+                        <a href="{{ route('admin.maintenance.levels.index') }}"
                         role="button"
                         class="btn btn-primary text-white">
                             Levels
                         </a>
-                        <a href="#"
+                        <a href="{{ route('admin.maintenance.fundSources.index') }}"
                         role="button"
                         class="btn btn-primary text-white">
+                            Fund Sources
+                        </a>
+                        <a href="#"
+                        role="button"
+                        class="btn btn-primary text-white disabled">
                             School Years
                         </a>
                         <a href="#"
                         role="button"
-                        class="btn btn-primary text-white">
+                        class="btn btn-primary text-white disabled">
                             Organization Document Types
                         </a>
                     </div>

@@ -14,7 +14,7 @@ class EventNatureUpdateService
      * Returns Message on success
      * @return Array
      */
-    public function update(EventNature $nature, $request)
+    public function update(EventNature $nature, $request): array
     {
         try 
         {

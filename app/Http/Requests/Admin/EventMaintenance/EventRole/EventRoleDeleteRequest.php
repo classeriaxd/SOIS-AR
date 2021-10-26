@@ -4,7 +4,6 @@ namespace App\Http\Requests\Admin\EventMaintenance\EventRole;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use App\Models\EventRole;
 
 class EventRoleDeleteRequest extends FormRequest

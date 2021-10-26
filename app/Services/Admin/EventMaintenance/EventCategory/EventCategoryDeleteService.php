@@ -3,7 +3,6 @@
 namespace App\Services\Admin\EventMaintenance\EventCategory;
 
 use App\Models\EventCategory;
-use Illuminate\Support\Str;
 
 use App\Services\NotificationServices\Admin\AdminNotificationService;
 
@@ -14,7 +13,7 @@ class EventCategoryDeleteService
      * Returns message on success.
      * @return Array
      */
-    public function delete(EventCategory $category, $request)
+    public function delete(EventCategory $category, $request): array
     {
         try 
         {

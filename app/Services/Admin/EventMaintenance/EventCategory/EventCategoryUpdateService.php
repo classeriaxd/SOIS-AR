@@ -10,12 +10,12 @@ use App\Services\NotificationServices\Admin\AdminNotificationService;
 class EventCategoryUpdateService
 {
     /**
-     * @param Request $request
+     * @param Collection $category, Request $request
      * Service to Update an Event Category.
      * Returns Message on success
      * @return Array
      */
-    public function update(EventCategory $category, $request)
+    public function update(EventCategory $category, $request): array
     {
         try 
         {

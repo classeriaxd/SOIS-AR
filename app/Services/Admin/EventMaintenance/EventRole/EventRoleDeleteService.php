@@ -3,7 +3,6 @@
 namespace App\Services\Admin\EventMaintenance\EventRole;
 
 use App\Models\EventRole;
-use Illuminate\Support\Str;
 
 use App\Services\NotificationServices\Admin\AdminNotificationService;
 
@@ -15,7 +14,7 @@ class EventRoleDeleteService
      * Returns message on success.
      * @return Array
      */
-    public function delete(EventRole $role, $request)
+    public function delete(EventRole $role, $request): array
     {
         try 
         {

@@ -90,6 +90,14 @@
                     </tbody>
                 </table>
             </div>
+            
+            <div class="flex-row my-2 text-center">
+                <a href="{{ route('admin.home') }}"
+                    class="btn btn-secondary text-white"
+                    role="button">
+                        Go Home
+                </a>
+            </div>
         </div>
     </div>
 </div>

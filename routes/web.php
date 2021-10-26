@@ -93,6 +93,48 @@ Auth::routes();
                         Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'update'])->name('update');
                         Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'destroy'])->name('destroy');
                 });
+
+                // Event Document Type Maintenance
+                Route::resource('eventDocumentTypes', App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventDocumentTypes.',
+                        'prefix' => '/eventDocumentTypes/{document_type_id}',
+                        'where' => ['document_type_id' => '^[0-9]$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Fund Source Maintenance
+                Route::resource('fundSources', App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'fundSources.',
+                        'prefix' => '/fundSources/{fund_source_id}',
+                        'where' => ['fund_source_id' => '^[0-9]$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Level Maintenance
+                Route::resource('levels', App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'levels.',
+                        'prefix' => '/levels/{level_id}',
+                        'where' => ['level_id' => '^[0-9]$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'destroy'])->name('destroy');
+                });
             });
 
         });

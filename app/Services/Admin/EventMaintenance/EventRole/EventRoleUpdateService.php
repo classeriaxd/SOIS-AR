@@ -10,12 +10,12 @@ use App\Services\NotificationServices\Admin\AdminNotificationService;
 class EventRoleUpdateService
 {
     /**
-     * @param Request $request
-     * Service to Update an Event Category.
+     * @param Collection $role, Request $request
+     * Service to Update an Event Role.
      * Returns Message on success
      * @return Array
      */
-    public function update(EventRole $role, $request)
+    public function update(EventRole $role, $request): array
     {
         try 
         {

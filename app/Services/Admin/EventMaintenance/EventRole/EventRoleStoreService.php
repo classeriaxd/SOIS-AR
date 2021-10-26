@@ -15,7 +15,7 @@ class EventRoleStoreService
      * Returns Message on success
      * @return Array
      */
-    public function store($request)
+    public function store($request): array
     {
         try 
         {

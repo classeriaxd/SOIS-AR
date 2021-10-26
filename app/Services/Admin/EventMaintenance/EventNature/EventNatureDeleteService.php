@@ -14,7 +14,7 @@ class EventNatureDeleteService
      * Returns message on success.
      * @return Array
      */
-    public function delete(EventNature $nature, $request)
+    public function delete(EventNature $nature, $request): array
     {
         try 
         {

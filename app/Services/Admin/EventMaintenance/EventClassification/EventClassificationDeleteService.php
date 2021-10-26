@@ -14,7 +14,7 @@ class EventClassificationDeleteService
      * Returns message on success.
      * @return Array
      */
-    public function delete(EventClassification $classification, $request)
+    public function delete(EventClassification $classification, $request): array
     {
         try 
         {
