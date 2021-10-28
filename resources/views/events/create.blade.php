@@ -460,6 +460,7 @@
 
 @section('scripts')
     <script type="text/javascript">
+        // Enable Bootstrap Popovers
         document.addEventListener("DOMContentLoaded", function(event) { 
             var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
             var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
