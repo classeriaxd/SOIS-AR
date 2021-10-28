@@ -9,6 +9,8 @@ use App\Models\{
     Event,
     EventCategory,
     EventRole,
+    EventClassification,
+    EventNature,
     Level,
     FundSource,
 };
@@ -66,6 +68,8 @@ class EventsController extends Controller
         $event = Event::with('eventCategory', 'eventRole')->where('slug', $event_slug)->first();
         $eventCategories = EventCategory::all();
         $eventRoles = EventRole::all();
+        $eventClassifications = EventClassification::all();
+        $eventNatures = EventNature::all();
         $levels = Level::all();
         $fundSources = FundSource::all();
         $loadJSWithoutDefer = true;
@@ -121,16 +125,18 @@ class EventsController extends Controller
     {
         $eventCategories = EventCategory::all();
         $eventRoles = EventRole::all();
+        $eventClassifications = EventClassification::all();
+        $eventNatures = EventNature::all();
         $levels = Level::all();
         $fundSources = FundSource::all();
-        $loadJSWithoutDefer = true;
 
     	return view('events.create', compact(
             'eventCategories', 
             'eventRoles', 
+            'eventClassifications',
+            'eventNatures',
             'levels', 
-            'fundSources', 
-            'loadJSWithoutDefer'));
+            'fundSources',));
     }
 
     /**
