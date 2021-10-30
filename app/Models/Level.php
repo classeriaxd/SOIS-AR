@@ -21,4 +21,15 @@ class Level extends Model
     {
         return $this->hasMany(studentAccomplishments::class, 'level_id');
     }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * Scope a query to minimize returned columns.
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOnlyLevelColumns($query)
+    {
+        // similar to Model::select('primary_key', 'column')
+        return $query->select($this->primaryKey, 'level');
+    }
 }

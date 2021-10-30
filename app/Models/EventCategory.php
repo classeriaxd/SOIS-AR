@@ -19,12 +19,13 @@ class EventCategory extends Model
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder $query
      * Scope a query to minimize returned columns.
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeGetCategoriesWithMinimizedColumns($query)
+    public function scopeOnlyCategoryColumns($query)
     {
-        return $query->select($this->primaryKey, 'category')->get();
+        // similar to Model::select('primary_key', 'column')
+        return $query->select($this->primaryKey, 'category');
     }
 }

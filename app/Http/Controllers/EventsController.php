@@ -72,17 +72,14 @@ class EventsController extends Controller
                 'eventNature:event_nature_id,nature,deleted_at',
                 'eventClassification:event_classification_id,classification,deleted_at',)
             ->where('slug', $event_slug)->first();
-        //$eventCategories = EventCategory::select('event_category_id', 'category')->get();
-        $start = microtime(true);
-            $eventCategories = EventCategory::getCategoriesWithMinimizedColumns();
-        $time = microtime(true) - $start;
-        //$eventCategories = EventCategory::all();
-        dd($eventCategories);
-        $eventRoles = EventRole::select('event_role_id', 'event_role')->get();
-        $eventClassifications = EventClassification::select('event_classification_id', 'classification')->get();
-        $eventNatures = EventNature::select('event_nature_id', 'nature')->get();
-        $levels = Level::select('level_id', 'level')->get();
-        $fundSources = FundSource::select('fund_source_id', 'fund_source')->get();
+
+        $eventCategories = EventCategory::onlyCategoryColumns()->get();
+        $eventClassifications = EventClassification::onlyClassificationColumns()->get();
+        $eventNatures = EventNature::onlyNatureColumns()->get();
+        $eventRoles = EventRole::onlyEventRoleColumns()->get();
+        $fundSources = FundSource::onlyFundSourceColumns()->get();
+        $levels = Level::onlyLevelColumns()->get();
+        
         return view('events.edit',compact(
             'event', 
             'eventCategories', 
@@ -139,12 +136,12 @@ class EventsController extends Controller
      */ 
     public function create()
     {
-        $eventCategories = EventCategory::all();
-        $eventRoles = EventRole::all();
-        $eventClassifications = EventClassification::all();
-        $eventNatures = EventNature::all();
-        $levels = Level::all();
-        $fundSources = FundSource::all();
+        $eventCategories = EventCategory::onlyCategoryColumns()->get();
+        $eventClassifications = EventClassification::onlyClassificationColumns()->get();
+        $eventNatures = EventNature::onlyNatureColumns()->get();
+        $eventRoles = EventRole::onlyEventRoleColumns()->get();
+        $fundSources = FundSource::onlyFundSourceColumns()->get();
+        $levels = Level::onlyLevelColumns()->get();
 
     	return view('events.create', compact(
             'eventCategories', 

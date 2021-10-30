@@ -17,4 +17,15 @@ class EventNature extends Model
     {
         return $this->hasMany(Event::class, 'event_nature_id');
     }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * Scope a query to minimize returned columns.
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOnlyNatureColumns($query)
+    {
+        // similar to Model::select('primary_key', 'column')
+        return $query->select($this->primaryKey, 'nature');
+    }
 }
