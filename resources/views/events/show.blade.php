@@ -4,6 +4,7 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
+            
             {{-- Success Alert --}}
                 @if (session()->has('success'))
                     <div class="flex-row text-center" id="success_alert">
@@ -13,6 +14,7 @@
                         </div>
                     </div>
                 @endif
+
             {{-- Error Alert --}}
                 @if (session()->has('error'))
                     <div class="flex-row text-center" id="success_alert">
@@ -22,6 +24,7 @@
                         </div>
                     </div>
                 @endif
+
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
@@ -32,7 +35,8 @@
                         @if($event->eventCategory->deleted_at != NULL)
                         <a role="button"
                             data-bs-toggle="popover"
-                            data-bs-container="body" 
+                            data-bs-container="body"
+                            data-bs-trigger="hover focus" 
                             title="{{$event->eventCategory->category}}" 
                             data-bs-content="This category has been deleted since {{date_format(date_create($event->eventCategory->deleted_at), 'F d, Y')}}."
                             data-bs-placement="right">
@@ -46,6 +50,7 @@
                         <a role="button"
                             data-bs-toggle="popover"
                             data-bs-container="body" 
+                            data-bs-trigger="hover focus"
                             title="{{$event->eventRole->event_role}}" 
                             data-bs-content="This event role has been deleted since {{date_format(date_create($event->eventRole->deleted_at), 'F d, Y')}}."
                             data-bs-placement="right">
@@ -244,13 +249,6 @@
 @endsection
 
 @section('scripts')
-    <script type="text/javascript">
-        // Enable Bootstrap Popovers
-        document.addEventListener("DOMContentLoaded", function(event) { 
-            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-              return new bootstrap.Popover(popoverTriggerEl)
-            });
-        });
-    </script>
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection

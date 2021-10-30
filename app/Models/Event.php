@@ -53,11 +53,21 @@ class Event extends Model
 
     public function eventFundSource()
     {
-        return $this->belongsTo(FundSource::class, 'fund_source_id');
+        return $this->belongsTo(FundSource::class, 'fund_source_id')->withTrashed();
     }
     
     public function eventLevel()
     {
-        return $this->belongsTo(Level::class, 'level_id');
+        return $this->belongsTo(Level::class, 'level_id')->withTrashed();
+    }
+
+    public function eventClassification()
+    {
+        return $this->belongsTo(EventClassification::class, 'event_classification_id')->withTrashed();
+    }
+
+    public function eventNature()
+    {
+        return $this->belongsTo(EventNature::class, 'event_nature_id')->withTrashed();
     }
 }

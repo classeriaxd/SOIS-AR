@@ -20,6 +20,8 @@ class EventUpdateService
         $eventData = [
             'event_role_id' => $request->input('eventRole'),
             'event_category_id' => $request->input('eventCategory'),
+            'event_classification_id' => $request->input('eventClassification'),
+            'event_nature_id' => $request->input('eventNature'),
             'fund_source_id' => $request->input('fundSource'),
             'level_id' => $request->input('level'),
             'title' => $request->input('title'),

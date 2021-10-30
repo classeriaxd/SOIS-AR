@@ -17,6 +17,7 @@ use App\Models\{
 
 use App\Http\Requests\EventRequests\{
     EventStoreRequest,
+    EventUpdateRequest,
 };
 
 use App\Services\EventServices\{
@@ -52,8 +53,7 @@ class EventsController extends Controller
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $event = (new EventShowService())->show($event_slug);
-        $loadJSWithoutDefer = true;
-        return view('events.show',compact('event', 'newEvent', 'loadJSWithoutDefer'));
+        return view('events.show',compact('event', 'newEvent',));
     }
 
     /**
@@ -64,17 +64,33 @@ class EventsController extends Controller
     public function edit($event_slug)
     {
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
-
-        $event = Event::with('eventCategory', 'eventRole')->where('slug', $event_slug)->first();
-        $eventCategories = EventCategory::all();
-        $eventRoles = EventRole::all();
-        $eventClassifications = EventClassification::all();
-        $eventNatures = EventNature::all();
-        $levels = Level::all();
-        $fundSources = FundSource::all();
-        $loadJSWithoutDefer = true;
-        //dd($event);
-        return view('events.edit',compact('event', 'eventCategories', 'eventRoles', 'levels', 'fundSources', 'loadJSWithoutDefer'));
+        $event = Event::with(
+                'eventCategory:event_category_id,category,deleted_at', 
+                'eventRole:event_role_id,event_role,deleted_at', 
+                'eventLevel:level_id,level,deleted_at', 
+                'eventFundSource:fund_source_id,fund_source,deleted_at',
+                'eventNature:event_nature_id,nature,deleted_at',
+                'eventClassification:event_classification_id,classification,deleted_at',)
+            ->where('slug', $event_slug)->first();
+        //$eventCategories = EventCategory::select('event_category_id', 'category')->get();
+        $start = microtime(true);
+            $eventCategories = EventCategory::getCategoriesWithMinimizedColumns();
+        $time = microtime(true) - $start;
+        //$eventCategories = EventCategory::all();
+        dd($eventCategories);
+        $eventRoles = EventRole::select('event_role_id', 'event_role')->get();
+        $eventClassifications = EventClassification::select('event_classification_id', 'classification')->get();
+        $eventNatures = EventNature::select('event_nature_id', 'nature')->get();
+        $levels = Level::select('level_id', 'level')->get();
+        $fundSources = FundSource::select('fund_source_id', 'fund_source')->get();
+        return view('events.edit',compact(
+            'event', 
+            'eventCategories', 
+            'eventRoles', 
+            'eventNatures',
+            'eventClassifications',
+            'levels', 
+            'fundSources'));
         
     }
 
@@ -83,10 +99,10 @@ class EventsController extends Controller
      * Function to Update an event
      * @return Redirect
      */
-    public function update(EventStoreRequest $request, $event_slug)
+    public function update(EventUpdateRequest $request, $event_slug)
     {
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
-
+        
         $returnArray = (new EventUpdateService())->update($request, $event_slug);
         $message = $returnArray['message'];
 

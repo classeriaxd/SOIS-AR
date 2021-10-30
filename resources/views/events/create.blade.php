@@ -407,6 +407,39 @@
 
                 <hr>
 
+                {{-- Event Natures --}}
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="radioEventNatureGroup" class="form-label @error('eventNature') text-danger @enderror">Event Nature</label>
+                    </div>
+                    <div class="col" id="radioEventNatureGroup">
+                        @foreach($eventNatures as $nature)
+                        <div class="form-check">
+                            <input type="radio" id="{{$nature->nature}}" name="eventNature" class="form-check-input" value="{{$nature->event_nature_id}}">
+                            <label class="form-check-label" for="{{$nature->nature}}">{{$nature->nature}}</label>
+                            <a role="button"
+                                data-bs-toggle="popover"
+                                data-bs-container="body" 
+                                data-bs-trigger="hover focus"
+                                title="{{$nature->nature}}" 
+                                data-bs-content="{{$nature->helper}}"
+                                data-bs-placement="right">
+                                <i class="far fa-question-circle"></i>
+                            </a>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @error('eventNature')
+                    <div class="row text-center">
+                        <span class="d-block invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    </div>
+                @enderror
+
+                <hr>
+
                 {{-- Event Level --}}
                 <div class="form-group row">
                     <div class="col">
@@ -459,13 +492,6 @@
 @endsection
 
 @section('scripts')
-    <script type="text/javascript">
-        // Enable Bootstrap Popovers
-        document.addEventListener("DOMContentLoaded", function(event) { 
-            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-              return new bootstrap.Popover(popoverTriggerEl)
-            });
-        });
-    </script>
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection
