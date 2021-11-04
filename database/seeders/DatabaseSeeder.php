@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
             SchoolYearSeeder::class,
             FundSourceSeeder::class,
             LevelSeeder::class,
+            TabularTableSeeder::class,
+            TabularColumnSeeder::class,
         ]);
     }
 }

@@ -7,43 +7,38 @@
 
 <body>
 
+    {{-- Event Title Page --}}
     <div class="page">
         <div class="vertical-center">
             <div class="event-title-block">
                 <p class="block-title">{{ $event['title'] }}</p>
-                <h2 style="text-align: center;">
-                    @if ($event['event_role_id'] == 1)
-                        <span style="color: #0275d8">Organizer</span>
-                    @elseif ($event['event_role_id'] == 2) 
-                        <span style="color: #5cb85c">Sponsor</span>
-                    @elseif ($event['event_role_id'] == 3) 
-                        <span style="color: gray">Participant</span>
-                    @endif
+                <div style="text-align:center;">
+                    <span class="badge" style="background-color: {{$event['event_role']['background_color']}}; color: {{$event['event_role']['text_color']}};">{{ $event['event_role']['event_role'] }}</span>
                     |
-                    @if ($event['event_category_id'] == 1)
-                        <span style="color: #0275d8">Academic</span>
-                    @elseif ($event['event_category_id'] == 2) 
-                        <span style="color: #d9534f">Non-academic</span>
-                    @elseif ($event['event_category_id'] == 3) 
-                        <span style="color: #f0ad4e">Cultural</span>
-                    @elseif ($event['event_category_id'] == 4) 
-                        <span style="color: #5cb85c">Sports</span>
-                    @elseif ($event['event_category_id'] == 5) 
-                        <span style="color: #5bc0de">Seminars/Workshops</span>
-                    @elseif ($event['event_category_id'] == 6)
-                        <span style="color: #5bc0de">Community Outreach</span>
-                    @endif
-                </h2>
+                    <span class="badge" style="background-color: {{$event['event_category']['background_color']}}; color: {{$event['event_category']['text_color']}};">{{ $event['event_category']['category'] }}</span>
+                </div>
+                <p class="block-desc">Classification: {{ $event['event_classification']['classification'] }} </p>
+                <p class="block-desc">Nature: {{ $event['event_nature']['nature'] }}</p>
+                <p class="block-desc">Level: {{ $event['event_level']['level'] }}</p>
             </div>
 
+           
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    {{-- Description Page --}}
+    <div class="page">
+        <div class="vertical-center">
             <div class="event-desc-block">
-                
+                <p class="block-desc" style="text-align:center;">Description</p>
                 <p class="block-desc">{{ $event['description'] }}</p>
             </div>
         </div>
     </div>
     <div class="page-break"></div>
 
+    {{-- Event Information Page --}}
     <div class="page">
         <div class="event-info-block vertical-center">
             <p class="block-title">Objective</p>
@@ -75,37 +70,40 @@
             <p class="block-desc">{{ $event['sponsors'] }}</p>
 
             <p class="block-title">EVENT BUDGET</p>
-            <p class="block-desc">{{ ($event['budget']) ? $event['budget'] : '-'}}</p>
+            <p class="block-desc">{{ ($event['budget'] == 0) ? $event['budget'] : '-'}}</p>
         </div>
     </div>
+
+    {{-- Event Images --}}
     @isset($event['event_images'])
-    @if($event['event_images'] != NULL)
-    <div class="page-break"></div>
-        @php $runOnce = 1; @endphp
-        @foreach($event['event_images'] as $eventImage)
+        @if($event['event_images'] != NULL)
+        <div class="page-break"></div>
+            @php $runOnce = 1; @endphp
+            @foreach($event['event_images'] as $eventImage)
 
-            @if($runOnce == 1)
-                <div class="event-img-block">
-                    <p class="block-title">Event Images</p>
-                </div>
-            @php $runOnce = 0; @endphp
-            @endif
+                @if($runOnce == 1)
+                    <div class="event-img-block">
+                        <p class="block-title">Event Images</p>
+                    </div>
+                @php $runOnce = 0; @endphp
+                @endif
 
-            <div class="page">
-                <div class="event-img-block">
-                    <div class="img-block">
-                        <img src="{{ public_path('/storage/'.$eventImage['image']) }}">
-                    </div>
-                    <div class="info-block">
-                        <p class="block-desc">{{ $eventImage['caption'] }}</p>
+                <div class="page">
+                    <div class="event-img-block">
+                        <div class="img-block">
+                            <img src="{{ public_path('/storage/'.$eventImage['image']) }}">
+                        </div>
+                        <div class="info-block">
+                            <p class="block-desc">{{ $eventImage['caption'] }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            @if(!($loop->last))
-            <div class="page-break"></div>
-            @endif
-        @endforeach {{-- endforeach event-img --}}
-    @endif
+                @if(!($loop->last))
+                <div class="page-break"></div>
+                @endif
+            @endforeach {{-- endforeach event-img --}}
+        @endif
     @endisset
+
 </body>
 </html>

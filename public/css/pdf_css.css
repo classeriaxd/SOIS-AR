@@ -132,3 +132,12 @@
     max-height: 480px;
     border: 1px solid black;
 }
+
+.badge {
+    min-width: 2em; 
+    padding: 0.5em; 
+    border-radius: 1em;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
