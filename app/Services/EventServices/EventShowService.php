@@ -19,8 +19,8 @@ class EventShowService
             'eventRole:event_role_id,event_role,background_color,text_color,deleted_at',
             'eventFundSource:fund_source_id,fund_source',
             'eventLevel:level_id,level',
-            'eventImages:event_image_id,event_id,image,image_type',
-            'eventDocuments:event_document_id,event_id,event_document_type_id,title',
+            'eventImages:event_image_id,accomplished_event_id,image,image_type',
+            'eventDocuments:event_document_id,accomplished_event_id,event_document_type_id,title',
             'eventDocuments.documentType:event_document_type_id,document_type',
                 ])
         ->where('slug', $eventSlug)

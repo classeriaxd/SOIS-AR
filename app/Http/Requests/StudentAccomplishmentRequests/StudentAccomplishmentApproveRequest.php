@@ -32,7 +32,7 @@ class StudentAccomplishmentApproveRequest extends FormRequest
             'level' => 'required|integer|exists:levels,level_id',
             'fundSource' => 'required|integer|exists:fund_sources,fund_source_id',
             'budget' => 'sometimes|nullable|integer',
-            'relatedEvent' => 'sometimes|nullable|integer|exists:events,event_id',
+            'relatedEvent' => 'sometimes|nullable|integer|exists:App\Models\Event,accomplished_event_id',
             'beneficiaries' => 'required|string',
             'activityType' => 'required|string',
         ];

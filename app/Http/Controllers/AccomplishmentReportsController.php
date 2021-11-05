@@ -263,6 +263,7 @@ class AccomplishmentReportsController extends Controller
                         $query->orderBy('image_type', 'ASC')->get();},
                 'eventDocuments' => function ($query) {
                         $query->orderBy('event_document_type_id', 'ASC')->get();},
+                'eventDocuments.documentType:event_document_type_id,document_type',
                 'eventLevel:level_id,level',
                 'eventFundSource:fund_source_id,fund_source',
                 'eventCategory:event_category_id,category,text_color,background_color', 

@@ -25,6 +25,8 @@ class EventDocumentsController extends Controller
 {
     public function create($event_slug)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $filePondJS = true;
         $eventDocumentTypes = EventDocumentType::all();
         $event = Event::where('slug', $event_slug)->first();
@@ -32,6 +34,8 @@ class EventDocumentsController extends Controller
     }
     public function store(EventDocumentStoreRequest $request, $event_slug)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         if($event = Event::where('slug', $event_slug)->first())
         {
             $tempPath = '/public/uploads/tmp/';
@@ -46,7 +50,7 @@ class EventDocumentsController extends Controller
                 TemporaryFile::where('folder', $request->input('document'))->delete();
 
                 EventDocument::create([
-                    'event_id' => $event->event_id,
+                    'accomplished_event_id' => $event->accomplished_event_id,
                     'event_document_type_id' => $request->input('document_type'),
                     'title' => $request->input('title', NULL),
                     'description' => $request->input('description', NULL),
@@ -62,12 +66,14 @@ class EventDocumentsController extends Controller
     }
     public function index($event_slug)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         if($event = Event::where('slug', $event_slug)->first())
         {
             $eventDocuments = DB::table('event_documents as documents')
                 ->join('event_document_types as types','documents.event_document_type_id','=','types.event_document_type_id')
-                ->where('documents.event_id', $event->event_id)
-                ->whereNull('deleted_at')
+                ->where('documents.accomplished_event_id', $event->accomplished_event_id)
+                ->whereNull('documents.deleted_at')
                 ->orderBy('documents.event_document_type_id', 'ASC')
                 ->select('types.document_type as document_type', 'documents.title as title', 'documents.file as file', 'documents.event_document_id as event_document_id')
                 ->get();
@@ -78,10 +84,13 @@ class EventDocumentsController extends Controller
     }
     public function destroy($event_slug, $document_id)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventDocument::where('event_document_id', $document_id)->exists(), 404);
+
         if($event = Event::where('slug', $event_slug)->first())
         {
             if($document = EventDocument::where('event_document_id', $document_id)
-                ->where('event_id', $event->event_id)->first())
+                ->where('accomplished_event_id', $event->accomplished_event_id)->first())
             {
                 $document->delete();
             }
@@ -96,19 +105,25 @@ class EventDocumentsController extends Controller
     }
     public function downloadDocument($event_slug, $document_id)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventDocument::where('event_document_id', $document_id)->exists(), 404);
+
         $event = Event::with([
                 'eventDocument' => function ($query) use ($document_id) {
                     $query->where('event_document_id', $document_id);},
                 'eventDocument.documentType:event_document_type_id,document_type',
                 ])
             ->where('slug', $event_slug)
-            ->select('slug')
             ->first();
+        
         if ($event->eventDocument != NULL) 
         {
             $filePath = storage_path('/app/public/'. $event->eventDocument->file);
             $headers = ['Content-Type: application/pdf'];
-            $fileName = Str::limit(Str::slug($event->eventDocument->title, '-'), 20, '-') .'-' . Str::slug($$event->eventDocument->documentType->type, '-') .  pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
+            $fileName = Str::limit(Str::slug($event->eventDocument->title, '-'), 20, '-') .'-' . 
+                Str::slug($event->eventDocument->documentType->type, '-') . 
+                '.' . 
+                pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
             return response()->download($filePath, $fileName, $headers);
         }
         else
@@ -116,6 +131,8 @@ class EventDocumentsController extends Controller
     }
     public function downloadAllDocument($event_slug)
     {
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         if ($event = Event::with('eventDocuments')->where('slug', $event_slug)->first())
         {
             if ($event->eventDocuments->count() > 0)
@@ -184,9 +201,10 @@ class EventDocumentsController extends Controller
          }
          return 'file not deleted';
     }
+    
     /**
+     * @param String $folderPath
      * Private Function to delete temporary directories.
-     *
      * @return void
      */
     private function deleteDirectory($folderPath)

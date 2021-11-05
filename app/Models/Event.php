@@ -12,20 +12,20 @@ class Event extends Model
 {
     use HasFactory, SoftDeletes, SearchableTrait;
     protected $guarded = [];
-    protected $primaryKey = 'event_id';
-    protected $table = 'events';
+    protected $primaryKey = 'accomplished_event_id';
+    protected $table = 'accomplished_events';
     protected $searchable = [
         'columns' => [
-            'events.title' => 10,
+            'accomplished_event.title' => 10,
         ],];
     
     public function eventImages()
     {
-    	return $this->hasMany(EventImage::class, 'event_id');
+    	return $this->hasMany(EventImage::class, 'accomplished_event_id');
     }
     public function eventImage()
     {
-        return $this->hasOne(EventImage::class, 'event_id');
+        return $this->hasOne(EventImage::class, 'accomplished_event_id');
     }
 
     public function organization()
@@ -35,11 +35,11 @@ class Event extends Model
 
     public function eventDocuments()
     {
-        return $this->hasMany(EventDocument::class, 'event_id');
+        return $this->hasMany(EventDocument::class, 'accomplished_event_id');
     }
     public function eventDocument()
     {
-        return $this->hasOne(EventDocument::class, 'event_id');
+        return $this->hasOne(EventDocument::class, 'accomplished_event_id');
     }
     public function eventRole()
     {
