@@ -29,7 +29,7 @@
                 <div class="card-header text-white bg-maroon">WHAT</div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <label for="title" class="col-md-4 col-form-label">Title</label>
+                        <label for="title" class="col-md-4 col-form-label">Title<span class="required">*</span></label>
                         <input id="title" 
                         type="text" 
                         class="form-control @error('title') is-invalid @enderror" 
@@ -43,7 +43,7 @@
                         @enderror
                     </div>
                     <div class="form-group row">
-                            <label for="description" class="col-md-4 col-form-label">Description</label>    
+                            <label for="description" class="col-md-4 col-form-label">Description<<span class="required">*</span></label>    
                             <textarea id="description" 
                             class="form-control @error('description') is-invalid @enderror" 
                             name="description"
@@ -56,7 +56,7 @@
                             @enderror
                     </div>
                     <div class="form-group row">
-                        <label for="objective" class="col-md-4 col-form-label">Objective</label>
+                        <label for="objective" class="col-md-4 col-form-label">Objective<span class="required">*</span></label>
                         <textarea id="objective" 
                         class="form-control @error('objective') is-invalid @enderror" name="objective" 
                         placeholder="Objective" 
@@ -73,7 +73,7 @@
                 <div class="card-header text-white bg-maroon ">WHERE</div>
                 <div class="card-body">
                     <div class="form-group row">
-                            <label for="venue" class="col-md-4 col-form-label">Venue</label>
+                            <label for="venue" class="col-md-4 col-form-label">Venue<span class="required">*</span></label>
                             <input id="venue" 
                             type="text" 
                             class="form-control @error('venue') is-invalid @enderror" 
@@ -87,7 +87,7 @@
                             @enderror
                     </div>
                     <div class="form-group row">
-                            <label for="activityType" class="col-md-4 col-form-label">Type of Activity</label>
+                            <label for="activityType" class="col-md-4 col-form-label">Type of Activity<span class="required">*</span></label>
                             <input id="activityType" 
                             type="text" 
                             class="form-control @error('activityType') is-invalid @enderror" 
@@ -101,7 +101,7 @@
                             @enderror
                     </div>
                     <div class="form-group row">
-                            <label for="beneficiaries" class="col-md-4 col-form-label">Event Beneficiaries</label>
+                            <label for="beneficiaries" class="col-md-4 col-form-label">Event Beneficiaries<span class="required">*</span></label>
                             <input id="beneficiaries" 
                             type="text" 
                             class="form-control @error('beneficiaries') is-invalid @enderror" 
@@ -115,7 +115,7 @@
                             @enderror
                     </div>
                     <div class="form-group row">
-                            <label for="totalBeneficiary" class="col-md-4 col-form-label">Number of Beneficiaries</label>
+                            <label for="totalBeneficiary" class="col-md-4 col-form-label">Number of Beneficiaries<span class="required">*</span></label>
                             <input id="totalBeneficiary" 
                             type="text" 
                             class="form-control @error('totalBeneficiary') is-invalid @enderror" 
@@ -129,7 +129,7 @@
                             @enderror
                     </div>
                     <div class="form-group row">
-                            <label for="sponsors" class="col-md-4 col-form-label">Sponsors</label>
+                            <label for="sponsors" class="col-md-4 col-form-label">Sponsors<span class="required">*</span></label>
                             <input id="sponsors" 
                             type="text" 
                             class="form-control @error('sponsors') is-invalid @enderror" 
@@ -143,12 +143,12 @@
                             @enderror
                     </div>
                     <div class="form-group row">
-                            <label for="budget" class="col-md-4 col-form-label">Event Budget</label>
+                            <label for="budget" class="col-md-4 col-form-label">Event Budget<span class="required">*</span></label>
                             <input id="budget" 
                             type="text" 
                             class="form-control @error('budget') is-invalid @enderror" 
                             name="budget" 
-                            placeholder="Budget" 
+                            placeholder="₱" 
                             value="{{ old('budget') }}">
                             @error('budget')
                                 <span class="invalid-feedback" role="alert">
@@ -166,7 +166,7 @@
                 <div class=card-body>
                     <div class="form-group row">
                         <div class="col">
-                            <label for="startDate" class="col-md-4 form-label">Start Date</label>
+                            <label for="startDate" class="col-md-4 form-label">Start Date<span class="required">*</span></label>
                             <input id="startDate" 
                             type="date" 
                             class="form-control @error('startDate') is-invalid @enderror" 
@@ -182,7 +182,7 @@
                             @enderror
                         </div>
                         <div class="col">
-                            <label for="endDate" class="col-md-4 form-label">End Date</label>
+                            <label for="endDate" class="col-md-4 form-label">End Date<span class="required">*</span></label>
                             <input id="endDate" 
                             type="date" 
                             class="form-control @error('endDate') is-invalid @enderror" 
@@ -199,7 +199,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col">
-                            <label for="startTime" class="col-md-4 col-form-label">Start Time</label>
+                            <label for="startTime" class="col-md-4 col-form-label">Start Time<span class="required">*</span></label>
                             <input id="startTime" 
                             type="time" 
                             class="form-control @error('startTime') is-invalid @enderror" 
@@ -212,7 +212,7 @@
                             @enderror
                         </div>
                         <div class="col">
-                            <label for="endTime" class="col-md-4 col-form-label">End Time</label>
+                            <label for="endTime" class="col-md-4 col-form-label">End Time<span class="required">*</span></label>
                             <input id="endTime" 
                             type="time" 
                             class="form-control @error('endTime') is-invalid @enderror" 
@@ -226,11 +226,13 @@
                         </div>
                     </div>    
                 </div>   
-            </div>
-            <hr>
+         </div>
+         <div class="card">
+            <div class="card-header text-white bg-maroon">CATEGORY</div>
+            <div class="card-body">
             <div class="form-group row">
                 <div class="col">
-                    <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?</label>
+                    <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?<span class="required">*</span></label>
                 </div>
                 <div class="col" id="radioFundSourceGroup">
                     @foreach($fundSources as $source)
@@ -259,7 +261,7 @@
             <hr>
             <div class="form-group row">
                 <div class="col">
-                    <label for="radioEventRoleGroup" class="form-label @error('eventRole') text-danger @enderror">What was the Organization's Role in this Event?</label></div>
+                    <label for="radioEventRoleGroup" class="form-label @error('eventRole') text-danger @enderror">What was the Organization's Role in this Event?<span class="required">*</span></label></div>
                 <div class="col" id="radioEventRoleGroup">
                     @foreach($eventRoles as $role)
                     <div class="form-check">
@@ -287,7 +289,7 @@
             <hr>
                 <div class="form-group row">
                     <div class="col">
-                        <label for="radioEventCategoryGroup" class="form-label @error('eventCategory') text-danger @enderror">Event Category</label>
+                        <label for="radioEventCategoryGroup" class="form-label @error('eventCategory') text-danger @enderror">Event Category<span class="required">*</span></label>
                     </div>
                     <div class="col" id="radioEventCategoryGroup">
                         @foreach($eventCategories as $category)
@@ -316,7 +318,7 @@
                 <hr>
                 <div class="form-group row">
                     <div class="col">
-                        <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level</label></div>
+                        <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level<span class="required">*</span></label></div>
                     <div class="col" id="radioLevelGroup">
                         @foreach($levels as $level)
                         <div class="form-check">
@@ -343,7 +345,9 @@
                 @enderror 
             </div> 
         </div>
-    <hr>
+    </div>
+</div>
+
     <div class="flex-row my-2 text-center">
         <button class="btn btn-primary text-white" type="submit">Add Event</button>
     </div>      
