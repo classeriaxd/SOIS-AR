@@ -90,11 +90,11 @@ class EventImagesController extends Controller
             $eventImagesArray = session()->get('eventImagesArray');
             session()->keep(['eventImagesArray']);
             $eventImages['posters'] = EventImage::where('image_type', 0)
-                ->where('event_id', $event->event_id)
+                ->where('accomplished_event_id', $event->accomplished_event_id)
                 ->whereIn('event_image_id', $eventImagesArray)
                 ->get();
             $eventImages['evidences'] = EventImage::where('image_type', 1)
-                ->where('event_id', $event->event_id)
+                ->where('accomplished_event_id', $event->accomplished_event_id)
                 ->whereIn('event_image_id', $eventImagesArray)
                 ->get();
         }
@@ -121,7 +121,7 @@ class EventImagesController extends Controller
 
                 // Image Type > 0 = Poster | 1 = Evidence
                 $eventImageID = EventImage::insertGetId([
-                    'event_id' => $event->event_id,
+                    'accomplished_event_id' => $event->accomplished_event_id,
                     'image' => $dbPath . $file,
                     'image_type' => 0,
                     'caption' => NULL,
@@ -147,7 +147,7 @@ class EventImagesController extends Controller
 
                 // Image Type > 0 = Poster | 1 = Evidence
                 $eventImageID = EventImage::insertGetId([
-                    'event_id' => $event->event_id,
+                    'accomplished_event_id' => $event->accomplished_event_id,
                     'image' => $dbPath . $file,
                     'image_type' => 1,
                     'caption' => NULL,
@@ -179,7 +179,7 @@ class EventImagesController extends Controller
             {
                 if ($caption != NULL)
                 {
-                    EventImage::where('event_id', $event->event_id)
+                    EventImage::where('accomplished_event_id', $event->accomplished_event_id)
                         ->where('slug', $image)
                         ->update(['caption' => $caption ]);
                 }

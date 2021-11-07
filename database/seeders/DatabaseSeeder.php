@@ -24,11 +24,15 @@ class DatabaseSeeder extends Seeder
             OrganizationAssetSeeder::class,
             EventCategorySeeder::class,
             EventRoleSeeder::class,
+            EventClassificationSeeder::class,
+            EventNatureSeeder::class,
             EventDocumentTypeSeeder::class,
             //EventSeeder::class,
             SchoolYearSeeder::class,
             FundSourceSeeder::class,
             LevelSeeder::class,
+            TabularTableSeeder::class,
+            TabularColumnSeeder::class,
         ]);
     }
 }

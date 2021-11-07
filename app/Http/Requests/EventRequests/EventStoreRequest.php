@@ -41,10 +41,12 @@ class EventStoreRequest extends FormRequest
             'totalBeneficiary' => 'required|integer|min:1',
             'sponsors' => 'required|string|min:2|max:250',
             'budget' => 'nullable|numeric',
-            'eventRole' => 'required|integer|exists:event_roles,event_role_id',
-            'eventCategory' => 'required|integer|exists:event_categories,event_category_id',
-            'fundSource' => 'required|integer|exists:fund_sources,fund_source_id',
-            'level' => 'required|integer|exists:levels,level_id',
+            'eventRole' => 'required|integer|exists:App\Models\EventRole,event_role_id',
+            'eventCategory' => 'required|integer|exists:App\Models\EventCategory,event_category_id',
+            'eventClassification' => 'required|integer|exists:App\Models\EventClassification,event_classification_id',
+            'eventNature' => 'required|integer|exists:App\Models\EventNature,event_nature_id',
+            'fundSource' => 'required|integer|exists:App\Models\FundSource,fund_source_id',
+            'level' => 'required|integer|exists:App\Models\Level,level_id',
 
         ];
         return $rules;
@@ -64,6 +66,8 @@ class EventStoreRequest extends FormRequest
             'fundSource' => 'fund source',
             'eventRole' => 'event role',
             'eventCategory' => 'event category',
+            'eventNature' => 'event nature',
+            'eventClassification' => 'event classification',
             'totalBeneficiary' => 'total beneficiaries',
         ];
     }

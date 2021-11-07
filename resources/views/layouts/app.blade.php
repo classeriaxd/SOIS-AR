@@ -25,7 +25,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.css') }}" rel="stylesheet">
     <link href="{{ asset('css/sidebar.css') }}" rel="stylesheet">
-    @yield('style')
+
     @stack('scripts')
 </head>
 <body id="body-pd">
@@ -174,6 +174,7 @@
                                 <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                                     <i class="material-icons">people</i><span>Students/Members</span>
                                 </a>
+
                                 <ul class="collapse list-unstyled menu" id="pageSubmenu4">
                                     <li><a href="/s/accomplishments">Submissions</a></li>
                                 </ul>
@@ -319,7 +320,6 @@
                                                 </li>
                                             </ul>
                                         </nav>
-                                    
                                     </div>
                                     <div class="col-md-6">
                                         <p class="copyright d-flex justify-content-end">

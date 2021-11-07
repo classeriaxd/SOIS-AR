@@ -4,26 +4,26 @@ namespace App\Services\EventServices;
 
 use App\Models\Event;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class EventDeleteService
 {
     /**
+     * @param String $eventSlug
      * Service to Delete an event.
-     * Returns true on success.
-     *
-     * @return Boolean
+     * Returns message on success.
+     * @return Array
      */
-    public function destroy($eventSlug)
+    public function destroy($eventSlug): array
     {
-        if ($event = Event::where('slug', $eventSlug)->first())
+        try 
         {
-            if ($event->delete())
-                return true;
-            else
-               abort(404); 
+            $event = Event::where('slug', $eventSlug)->first();
+            $event->delete();
+            return ['success' => 'Event deleted Successfully'];
+        } 
+        catch (\Illuminate\Database\QueryException $e) 
+        {
+            return ['error' => 'Error in deleting Event:' . $e->getMessage()];
         }
-        else
-            abort(404);
     }
 }

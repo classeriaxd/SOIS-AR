@@ -19,7 +19,7 @@
             <strong>TAGUIG CITY BRANCH</strong><br>
             <strong><span style="text-transform: uppercase;">{{$organization->organization_name}}</span></strong></h2> 
             <br>
-            <h2 class="">
+            <h2>
                 @switch($rangeTitle)
                     @case(1)
                         SEMESTRAL ACCOMPLISHMENT REPORT OF

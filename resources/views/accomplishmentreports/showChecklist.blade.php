@@ -102,7 +102,11 @@
                                                     @foreach($events as $event)
                                                     <tr class="text-center">
                                                         <td scope="row">&nbsp;</td>
-                                                        <td scope="row">&nbsp;</td>
+                                                        <td scope="row">
+                                                            <span class="badge rounded-pill" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">{{$event->eventRole->event_role}}</span>
+                                                            |
+                                                            <span class="badge rounded-pill" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">{{$event->eventCategory->category}}</span>
+                                                        </td>
                                                         <td scope="row">{{ $event->title }}</td>
                                                         <td scope="row">
                                                             <table class="w-100">
