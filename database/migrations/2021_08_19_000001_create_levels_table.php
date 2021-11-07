@@ -18,6 +18,7 @@ class CreateLevelsTable extends Migration
             $table->string('level');
             $table->string('helper')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

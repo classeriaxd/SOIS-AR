@@ -17,18 +17,37 @@ class AccomplishmentReportExport implements
     ShouldAutoSize,
     WithEvents
 {
+    // Contains all query information
+    protected $table1; 
+    protected $table2; 
+    protected $table3; 
+    protected $table4; 
 
-    protected $table1; protected $table1Columns = 7;
-    protected $table2; protected $table2Columns = 7;
-    protected $table3; protected $table3Columns = 15;
-    protected $table4; protected $table4Columns = 15;
+    // Contains Table and Column Names
+    protected $table1Columns;
+    protected $table2Columns;
+    protected $table3Columns;
+    protected $table4Columns;
 
-    public function __construct($table1, $table2, $table3, $table4)
+    // Set Number of Tables
+    protected $totalTables = 4;
+
+    /**
+     * @param Collection $tables, Array $table1, Array $table2, Array $table3, Array $table4
+     * Catches required parameters given from calling the class
+     */ 
+    public function __construct($tables, $table1, $table2, $table3, $table4)
     {
+        // Set Protected class
+        $this->tableDetails = $tables;
         $this->table1 = $table1;
         $this->table2 = $table2;
         $this->table3 = $table3;
         $this->table4 = $table4;
+        $this->table1Columns = $tables[0];
+        $this->table2Columns = $tables[1];
+        $this->table3Columns = $tables[2];
+        $this->table4Columns = $tables[3];
     }
    
     public function view(): View
@@ -38,16 +57,27 @@ class AccomplishmentReportExport implements
             'table2' => $this->table2,
             'table3' => $this->table3,
             'table4' => $this->table4,
+
+            'table1Columns' => $this->table1Columns,
+            'table2Columns' => $this->table2Columns,
+            'table3Columns' => $this->table3Columns,
+            'table4Columns' => $this->table4Columns,
         ]);
     }
 
     public function registerEvents(): array
     {
-        $table1 = $this->table1; $table1Columns = $this->table1Columns;
-        $table2 = $this->table2; $table2Columns = $this->table2Columns;
-        $table3 = $this->table3; $table3Columns = $this->table3Columns;
-        $table4 = $this->table4; $table4Columns = $this->table4Columns;
+        // Get Values from Parameter
+        $table1 = $this->table1;
+        $table2 = $this->table2;
+        $table3 = $this->table3;
+        $table4 = $this->table4;
 
+        $table1Columns = $this->table1Columns->tabularColumns->count();
+        $table2Columns = $this->table2Columns->tabularColumns->count();
+        $table3Columns = $this->table3Columns->tabularColumns->count();
+        $table4Columns = $this->table4Columns->tabularColumns->count();
+        
         return [
             AfterSheet::class => function(AfterSheet $event) 
             use (
@@ -62,22 +92,28 @@ class AccomplishmentReportExport implements
             )
             {
                 $currentRow = 1;
-                for ($i = 1; $i <= 3; $i++) 
+
+                // Note: this loop required the variable format as above ^ ($table1, $table1Columns)
+                // Loops on each table -> table{$i}, table{$i}Columns
+                for ($i = 1; $i <= $this->totalTables; $i++) 
                 { 
-                    // Apply Styles to Headers
-                    // TABLE { $i }
+                    // Applies Style to the Headers
+    
                         // Get Row Total
                         $row = $currentRow;
                         // Get Column Total
                         $column = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(${"table" . $i . "Columns"});
+
                         // Header 1
                         $event->sheet->getStyle('A'. $row. ':' . $column . $row)->applyFromArray([
                             'font' => [
                                 'bold' => true,
                             'color' => [
+                                    // TEXT COLOR
                                     'rgb' => 'FFFFFF'],
                             ],
                             'fill' => [
+                                    // BACKGROUND COLOR 
                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                    'startColor' => [
                                        'argb' => 'FF800000',
@@ -88,6 +124,7 @@ class AccomplishmentReportExport implements
                             ],
                         ]);
 
+                        // Skip to next line to apply style to second header
                         $row += 1;
 
                         // Header 2
@@ -95,9 +132,11 @@ class AccomplishmentReportExport implements
                             'font' => [
                                 'bold' => true,
                             'color' => [
+                                    // TEXT COLOR
                                     'rgb' => 'FFFFFF'],
                             ],
                             'fill' => [
+                                    // BACKGROUND COLOR 
                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                    'startColor' => [
                                        'argb' => '203763',
@@ -107,13 +146,18 @@ class AccomplishmentReportExport implements
                                    ],
                             ],
                         ]);
+
+                    // Skip a line to have Break Space
                     if (${"table" . $i}->isNotEmpty()) 
                         $row += ${"table" . $i}->count() + 2;
                     else
                         $row += 2;
 
+                    // Set current row to total appended rows
                     $currentRow = $row;
                 }
+
+                // Set Paper Settings
                 $event->sheet->getDelegate()->getPageSetup()
                     ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)
                     ->setPaperSize(PageSetup::PAPERSIZE_LETTER)

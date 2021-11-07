@@ -8,6 +8,15 @@
   background-color: #f9f2f2;
 }
 
+.popover{
+    border: solid 1px #800000;
+}
+
+.popover-header {
+    background-color: #800000 !important;
+    color: white;
+}
+
 
 @import url('https://fonts.googleapis.com/css?family=Nova+Slim&display=swap');
 
@@ -507,10 +516,3 @@ font-size:14px;
 /*=============================================
 footer design end
 =========================================*/
-
-
-
-
-
-
-

@@ -48,6 +48,8 @@
                                     @elseif($notification->type == 4)
                                         {{-- Accomplishment Reports --}}
                                         {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                    @else
+                                        #
                                     @endif" 
                             class="text-decoration-none text-dark">
                                 <div class="row m-2 p-1 border border-dark">

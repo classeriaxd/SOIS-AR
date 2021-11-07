@@ -38,8 +38,7 @@ use PDF;
 
 /**
  * Handles all Accomplishment Report Requests, Services, and Exports
- * Libraries:
- * DomPDF, Carbon, LibMergePDF
+ * Libraries: DomPDF, Carbon, LibMergePDF
  */
 
 // Remaining tasks: showChecklist()
@@ -223,6 +222,8 @@ class AccomplishmentReportsController extends Controller
                     $query->orderBy('image_type', 'ASC')->get();},
             'eventDocuments' => function ($query) {
                     $query->orderBy('event_document_type_id', 'ASC')->get();},
+            'eventCategory:event_category_id,category,text_color,background_color', 
+            'eventRole:event_role_id,event_role,text_color,background_color', 
                 ])
             ->where('organization_id', $organization->organization_id)
             ->whereBetween('start_date', [$start_date, $end_date])
@@ -262,14 +263,19 @@ class AccomplishmentReportsController extends Controller
                         $query->orderBy('image_type', 'ASC')->get();},
                 'eventDocuments' => function ($query) {
                         $query->orderBy('event_document_type_id', 'ASC')->get();},
-                'eventLevel',
-                'eventFundSource',
+                'eventDocuments.documentType:event_document_type_id,document_type',
+                'eventLevel:level_id,level',
+                'eventFundSource:fund_source_id,fund_source',
+                'eventCategory:event_category_id,category,text_color,background_color', 
+                'eventRole:event_role_id,event_role,text_color,background_color', 
+                'eventNature:event_nature_id,nature',
+                'eventClassification:event_classification_id,classification',
                     ])
             ->where('organization_id', $organization->organization_id)
             ->whereBetween('start_date', [$request->input('start_date'), $request->input('end_date')])
             ->orderBy('event_role_id', 'ASC')
             ->get();
-
+        //dd($events);
         $studentAccomplishments = StudentAccomplishment::with([
                 'accomplishmentFiles' => function ($query) {
                         $query->orderBy('type', 'ASC')->get();},
@@ -283,6 +289,7 @@ class AccomplishmentReportsController extends Controller
 
         $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
 
+        // Tabular Format XLSX
         if ($request->input('ar_format') == 'tabular')
         {
             // Generate XLSX AR then Return the directory where it is saved
@@ -310,6 +317,7 @@ class AccomplishmentReportsController extends Controller
                 ->with('success', 'Accomplishment Report Generated and Approved. No approval process is required for Tabular Reports.');
         }
 
+        // Design Format PDF
         elseif ($request->input('ar_format') == 'design') 
         {
             // Generate PDF AR then Return the directory where it is saved

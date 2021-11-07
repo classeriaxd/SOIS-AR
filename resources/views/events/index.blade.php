@@ -5,6 +5,24 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
+            {{-- Success Alert --}}
+                @if (session()->has('success'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+            {{-- Error Alert --}}
+                @if (session()->has('error'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
@@ -38,8 +56,16 @@
                     <tr>
                         <td scope="row" class="text-center">{{ $i }}</td>
                         <td>{{ $event->title }}</td>
-                        <td>{{ $event->eventCategory->category }}</td>
-                        <td>{{ $event->eventRole->event_role }}</td>
+                        <td class="text-center">
+                            <span class="badge fs-6" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                                {{$event->eventCategory->category}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge fs-6" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                                {{$event->eventRole->event_role}}
+                            </span>
+                        </td>
                         <td>{{ $event->eventLevel->level }}</td>
                         <td> 
                             @if($event->start_date == $event->end_date)
@@ -83,12 +109,14 @@
 @endsection
 
 @push('scripts')
+    {{-- Import Datatables --}}
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 @endpush
 
 @section('scripts')
     <script type="module">
+        // Datatables JS
         const dataTable = new simpleDatatables.DataTable("#eventTable", {
             searchable: true,
             labels: {

@@ -17,6 +17,10 @@ class CreateEventCategoriesTable extends Migration
             $table->id('event_category_id');
             $table->string('category');
             $table->string('helper')->nullable();
+            $table->char('background_color', 10)->default('#1976D2');
+            $table->char('text_color', 10)->default('#FFF');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

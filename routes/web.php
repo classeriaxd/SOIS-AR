@@ -25,6 +25,149 @@ Auth::routes();
     Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        
+        // Admin Routes
+        Route::group([
+                'as' => 'admin.',
+                'prefix' => '/admin',], 
+            function () {
+                Route::get('/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
+
+            Route::group([
+                    'as' => 'maintenance.',
+                    'prefix' => '/maintenance',], 
+                function () {
+
+                // Event Category Maintenance
+                Route::resource('eventCategories', App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventCategories.',
+                        'prefix' => '/eventCategories/{category_id}',
+                        'where' => ['category_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+                }); 
+
+                // Event Role Maintenance
+                Route::resource('eventRoles', App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventRoles.',
+                        'prefix' => '/eventRoles/{role_id}',
+                        'where' => ['role_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Event Nature Maintenance
+                Route::resource('eventNatures', App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventNatures.',
+                        'prefix' => '/eventNatures/{nature_id}',
+                        'where' => ['nature_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'destroy'])->name('destroy');
+                }); 
+
+                // Event Classification Maintenance
+                Route::resource('eventClassifications', App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventClassifications.',
+                        'prefix' => '/eventClassifications/{classification_id}',
+                        'where' => ['classification_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Event Document Type Maintenance
+                Route::resource('eventDocumentTypes', App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'eventDocumentTypes.',
+                        'prefix' => '/eventDocumentTypes/{document_type_id}',
+                        'where' => ['document_type_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Fund Source Maintenance
+                Route::resource('fundSources', App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'fundSources.',
+                        'prefix' => '/fundSources/{fund_source_id}',
+                        'where' => ['fund_source_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Level Maintenance
+                Route::resource('levels', App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'levels.',
+                        'prefix' => '/levels/{level_id}',
+                        'where' => ['level_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'destroy'])->name('destroy');
+                });
+
+                // Tabular Table Maintenance
+                Route::resource('tabularTables', App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class)->only(['index', 'create', 'store']);
+                
+                Route::group([
+                        'as' => 'tabularTables.',
+                        'prefix' => '/tabularTables/{tabular_table_id}',
+                        'where' => ['tabular_table_id' => '^([1-9][0-9]*)$'],], 
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'edit'])->name('edit');
+                        Route::get('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'show'])->name('show');
+                        Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'update'])->name('update');
+                        Route::delete('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'destroy'])->name('destroy');
+
+                        // Tabular Column Maintenance
+                        Route::resource('tabularColumns', App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class)->only(['create', 'store']);
+                        
+                        Route::group([
+                                'as' => 'tabularColumns.',
+                                'prefix' => '/tabularColumns/{tabular_column_id}',
+                                'where' => ['tabular_column_id' => '^([1-9][0-9]*)$'],], 
+                            function () {
+                                Route::get('/edit', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'edit'])->name('edit');
+                                Route::get('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'show'])->name('show');
+                                Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'update'])->name('update');
+                                Route::delete('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'destroy'])->name('destroy');
+                        });
+                });
+
+                
+            });
+
+        });
 
         // Show and Review of Accomplishment report
         Route::group([
@@ -82,10 +225,10 @@ Auth::routes();
                         // Event
                         // --> /e/{event_slug}
 
-                        Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit']);
+                        Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit'])->name('edit');
                         Route::patch('', [App\Http\Controllers\EventsController::class, 'update'])->name('update');
                         Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
-                        Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show')->where(['newEvent' => '^[0-9]*$']);
+                        Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show')->where(['newEvent' => '^([1-9][0-9]*)$']);
 
                         // Event Images
                         Route::group([
@@ -120,7 +263,7 @@ Auth::routes();
                         Route::group([
                                 'as' => 'document.',
                                 'prefix' => '/document/{document_id}',
-                                'where' => ['document_id' => '^[0-9]*$'],],
+                                'where' => ['document_id' => '^([1-9][0-9]*)$'],],
                             function() {
                             // Event Documents
                             // --> /e/{event_slug}/document/{document_id}
@@ -180,7 +323,7 @@ Auth::routes();
         Route::group([
                 'as' => 'notification.',
                 'prefix' => '/u/notification/{notification_id}',
-                'where' => ['notification_id' => '^[0-9]*$'],],
+                'where' => ['notification_id' => '^([1-9][0-9]*)$'],],
             function () {
             // User Notification
             // --> /u/notification/{notification_id}

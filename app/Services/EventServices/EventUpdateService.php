@@ -9,17 +9,19 @@ use Carbon\Carbon;
 class EventUpdateService
 {
     /**
+     * @param Request $request, String $oldEventSlug
      * Service to Update an event.
      * Returns New Event Slug on success.
-     *
      * @return String
      */
-    public function update($request, $oldEventSlug)
+    public function update($request, $oldEventSlug): array
     {
         $newEventSlug = Str::slug($request->input('title'), '-') . '-' . Carbon::parse($request->input('startDate'))->format('Y') . '-' . Str::uuid();
         $eventData = [
             'event_role_id' => $request->input('eventRole'),
             'event_category_id' => $request->input('eventCategory'),
+            'event_classification_id' => $request->input('eventClassification'),
+            'event_nature_id' => $request->input('eventNature'),
             'fund_source_id' => $request->input('fundSource'),
             'level_id' => $request->input('level'),
             'title' => $request->input('title'),
@@ -38,9 +40,23 @@ class EventUpdateService
             'slug' => $newEventSlug,
         ];
 
-        if(Event::where('slug', $oldEventSlug)->update($eventData))
-            return $newEventSlug;
-        else 
-            abort(404);
+        try 
+        {
+            Event::where('slug', $oldEventSlug)->update($eventData);
+            $returnArray = array(
+                'eventSlug' => $newEventSlug, 
+                'message' => array('success' => 'Event updated sucessfully!'),
+            );
+            return $returnArray;
+        } 
+
+        catch (\Illuminate\Database\QueryException $e) 
+        {
+            $returnArray = array(
+                'eventSlug' => NULL, 
+                'message' => array('error' => 'Error in updating Event:' . $e->getMessage()),
+            );
+            return $returnArray;
+        }
     }
 }
