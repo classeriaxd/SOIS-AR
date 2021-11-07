@@ -4,7 +4,7 @@
 @section('content')
 
 
-<div class="container">
+<div class="container"> 
     <form action="/s/accomplishments" enctype="multipart/form-data" method="POST" id="studentAccomplishmentForm">
         @csrf
         <div class="row">
@@ -32,7 +32,7 @@
                 </div>
             <div class="col">
             <div class="card mb-3">
-                <div class="card-header text-white bg-maroon">DETAILS</div>
+                <div class="card-header text-white bg-maroon">DETAIL</div>
                 <div class="card-body">
                 <div class="form-group row">
                     <label for="title" class="col-md-4 col-form-label">Title<span class="required">*</span></label>
