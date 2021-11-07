@@ -1,6 +1,8 @@
 @extends('layouts.app')
-
+@section('style')
+  @endsection
 @section('content')
+
 
 <div class="container">
     <form action="/s/accomplishments" enctype="multipart/form-data" method="POST" id="studentAccomplishmentForm">
@@ -28,8 +30,12 @@
                         </ol>
                     </nav>
                 </div>
+            <div class="col">
+            <div class="card mb-3">
+                <div class="card-header text-white bg-maroon">DETAILS</div>
+                <div class="card-body">
                 <div class="form-group row">
-                    <label for="title" class="col-md-4 col-form-label">Title</label>
+                    <label for="title" class="col-md-4 col-form-label">Title<span class="required">*</span></label>
                     <input id="title" 
                     type="text" 
                     class="form-control typeahead @error('title') is-invalid @enderror" 
@@ -43,8 +49,9 @@
                         </span>
                     @enderror
                 </div>
+
                 <div class="form-group row">
-                    <label for="description" class="col-md-4 col-form-label">Description</label>    
+                    <label for="description" class="col-md-4 col-form-label">Description <span class="required">*</span></label>    
                     <textarea id="description" 
                     class="form-control @error('description') is-invalid @enderror" 
                     name="description"
@@ -56,8 +63,9 @@
                         </span>
                     @enderror
                 </div>
+                
                 <div class="form-group row">
-                    <label for="objective" class="col-md-4 col-form-label">Objective</label>
+                    <label for="objective" class="col-md-4 col-form-label">Objective<span class="required">*</span></label>
                     <textarea id="objective" 
                     class="form-control @error('objective') is-invalid @enderror" 
                     name="objective"
@@ -70,7 +78,7 @@
                     @enderror
                 </div>
                 <div class="form-group row">
-                    <label for="organizer" class="col-md-4 col-form-label">Organizer</label>
+                    <label for="organizer" class="col-md-4 col-form-label">Organizer<span class="required">*</span></label>
                     <input id="organizer" 
                     type="text" 
                     class="form-control @error('organizer') is-invalid @enderror" 
@@ -85,7 +93,7 @@
                     @enderror
                 </div>
                 <div class="form-group row">
-                    <label for="venue" class="col-md-4 col-form-label">Venue</label>
+                    <label for="venue" class="col-md-4 col-form-label">Venue<span class="required">*</span></label>
                     <input id="venue" 
                     type="text" 
                     class="form-control @error('venue') is-invalid @enderror" 
@@ -100,7 +108,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col">
-                        <label for="startDate" class="col-md-4 form-label">Start Date</label>
+                        <label for="startDate" class="col-md-4 form-label">Start Date<span class="required">*</span></label>
                         <input id="startDate" 
                         type="date" 
                         class="form-control @error('startDate') is-invalid @enderror" 
@@ -116,7 +124,7 @@
                         @enderror
                     </div>
                     <div class="col">
-                        <label for="endDate" class="col-md-4 form-label">End Date</label>
+                        <label for="endDate" class="col-md-4 form-label">End Date<span class="required">*</span></label>
                         <input id="endDate" 
                         type="date" 
                         class="form-control @error('endDate') is-invalid @enderror" 
@@ -134,7 +142,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col form-group">
-                        <label for="startTime" class="col-md-4 col-form-label">Start Time</label>
+                        <label for="startTime" class="col-md-4 col-form-label">Start Time<span class="required">*</span></label>
                         <input id="startTime" 
                         type="time" 
                         class="form-control @error('startTime') is-invalid @enderror" 
@@ -148,7 +156,7 @@
                         @enderror
                     </div>
                     <div class="col form-group">
-                        <label for="endTime" class="col-md-4 col-form-label">End Time</label>
+                        <label for="endTime" class="col-md-4 col-form-label">End Time<span class="required">*</span></label>
                         <input id="endTime" 
                         type="time" 
                         class="form-control @error('endTime') is-invalid @enderror" 
@@ -162,11 +170,19 @@
                         @enderror
                     </div>
                 </div>
+            </div>
+            </div>
+        </div>
+    </div>
                 <hr>
-            {{-- Evidences --}}
+                <div class="col">
+            <div class="card mb-3">
+            <div class="card-header text-center text-white bg-maroon" >
+                <h4>Evidences</h4>
+                <h6>Include a certificate and some screenshots of the event/accomplishment.</h6>
+            </div>
+                <div class="card-body">
                 <div class="text-center my-1">
-                    <h4>Evidences</h4>
-                    <h6>Include a certificate and some screenshots of the event/accomplishment.</h6>
                 </div>
                 <input type="file" 
                         class="filepond @error('evidence1') is-invalid @enderror"
@@ -180,7 +196,6 @@
                     </span>
                 @enderror
                 <div class="form-group row">
-                    <label for="caption1" class="col-md-4 col-form-label">Caption</label>
                     <input id="caption1" 
                     type="text" 
                     class="form-control @error('caption1') is-invalid @enderror" 
@@ -205,7 +220,6 @@
                     </span>
                 @enderror
                 <div class="form-group row">
-                    <label for="caption2" class="col-md-4 col-form-label">Caption</label>
                     <input id="caption2" 
                     type="text" 
                     class="form-control @error('caption2') is-invalid @enderror" 
@@ -227,9 +241,8 @@
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
-                @enderror
+                @enderror 
                 <div class="form-group row">
-                    <label for="caption3" class="col-md-4 col-form-label">Caption</label>
                     <input id="caption3" 
                     type="text" 
                     class="form-control @error('caption3') is-invalid @enderror" 
@@ -245,13 +258,13 @@
                 <div class="text-center">
                     <small>Only Images and PDF are allowed. Max size is 3MB. Up to 3 Files can be uploaded.</small>
                 </div> 
-                <div class=" form-group row justify-content-center mt-3">
-                    <button class="btn btn-primary">Add Accomplishment</button>
+                
+                <div class="flex-row my-2 text-center">
+                    <button class="btn btn-primary text-white fw-bold fs-6">Add Accomplishment</button>
                 </div>
             </div>
         </div>
     </form>
-    <hr>
 
     <div class="flex-row my-2 text-center">
         <a href="{{ route('home') }}"
