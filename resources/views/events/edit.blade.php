@@ -3,7 +3,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container">
     <form action="/e/{{ $event->slug }}" enctype="multipart/form-data" method="POST">
 	@csrf
@@ -227,139 +226,135 @@
                     </div>    
                 </div>   
             </div>
-			<div class="card">
-            <div class="card-header text-white bg-maroon">CATEGORY</div>
-            <div class="card-body">
-				<div class="form-group row">
-					<div class="col">
-						<label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?</label>
-					</div>
-					<div class="col" id="radioFundSourceGroup">
-						@foreach($fundSources as $source)
-						<div class="form-check">
-							<input type="radio" 
-							id="{{$source->fund_source}}" 
-							name="fundSource" 
-							class="form-check-input" 
-							value="{{$source->fund_source_id}}"
-							@if($event->fund_source_id == $source->fund_source_id) checked @endif
-							>
-							<label class="form-check-label" for="{{$source->fund_source}}">{{$source->fund_source}}</label>
-							<a role="button"
-								data-toggle="popover" 
-								title="{{$source->fund_source}}" 
-								data-content="{{$source->helper}}">
-								<i class="far fa-question-circle"></i>
-							</a>
-						</div>
-						@endforeach
-					</div>
-				</div>
-				@error('fundSource')
-				<div class="row text-center">
-					<span class="d-block invalid-feedback" role="alert">
-						<strong>{{ $message }}</strong>
-					</span>
-				</div>
-				@enderror
-				<hr>
-				<div class="form-group row">
-					<div class="col">
-						<label for="radioEventRoleGroup" class="form-label">What was the Organization's Role in this Event?</label></div>
-					<div class="col" id="radioEventRoleGroup">
-						@foreach($eventRoles as $role)
-						<div class="form-check">
-							<input type="radio" 
-							id="{{$role->event_role}}" 
-							name="eventRole" 
-							class="form-check-input" 
-							value="{{$role->event_role_id}}" 
-							@if($event->event_role_id  == $role->event_role_id) checked @endif>
-							<label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
-							<a role="button"
-								data-toggle="popover" 
-								title="{{$role->event_role}}" 
-								data-content="{{$role->helper}}">
-								<i class="far fa-question-circle"></i>
-							</a>
-						</div>
-						@endforeach
-					</div>
-				</div>
-				@error('eventRole')
-				<div class="row text-center">
-					<span class="d-block invalid-feedback" role="alert">
-						<strong>{{ $message }}</strong>
-					</span>
-				</div>
-				@enderror
-				<hr>
-				<div class="form-group row">
-					<div class="col">
-						<label for="radioEventCategoryGroup" class="form-label">Event Category</label>
-					</div>
-					<div class="col" id="radioEventCategoryGroup">
-						@foreach($eventCategories as $category)
-						<div class="form-check">
-							<input type="radio" 
-							id="{{$category->category}}" 
-							name="eventCategory" 
-							class="form-check-input" 
-							value="{{$category->event_category_id}}" 
-							@if($event->event_category_id  == $category->event_category_id) checked @endif>
-							<label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
-							<a role="button"
-								data-toggle="popover" 
-								title="{{$category->category}}" 
-								data-content="{{$category->helper}}">
-								<i class="far fa-question-circle"></i>
-							</a>
-						</div>
-						@endforeach
-					</div>
-				</div>
-				@error('eventCategory')
-				<div class="row text-center">
-					<span class="d-block invalid-feedback" role="alert">
-						<strong>{{ $message }}</strong>
-					</span>
-				</div>
-				@enderror
-				<hr>
-				<div class="form-group row">
-					<div class="col">
-						<label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level</label></div>
-					<div class="col" id="radioLevelGroup">
-						@foreach($levels as $level)
-						<div class="form-check">
-							<input type="radio" 
-							id="{{$level->level}}" 
-							name="level" c
-							lass="form-check-input" 
-							value="{{$level->level_id}}"
-							@if($event->level_id  == $level->level_id) checked @endif>
-							<label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
-							<a role="button"
-								data-toggle="popover" 
-								title="{{$level->level}}" 
-								data-content="{{$level->helper}}">
-								<i class="far fa-question-circle"></i>
-							</a>
-						</div>
-						@endforeach
-					</div>
-				</div>
-				<!--DIV-->
-				@error('level')
-				<div class="row text-center">
-					<span class="d-block invalid-feedback" role="alert">
-						<strong>{{ $message }}</strong>
-					</span>
-				</div>
-			<!--/div-->
-				@enderror
-			</div>
-		</div>
+            <hr>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?</label>
+                </div>
+                <div class="col" id="radioFundSourceGroup">
+                    @foreach($fundSources as $source)
+                    <div class="form-check">
+                        <input type="radio" 
+                        id="{{$source->fund_source}}" 
+                        name="fundSource" 
+                        class="form-check-input" 
+                        value="{{$source->fund_source_id}}"
+                        @if($event->fund_source_id == $source->fund_source_id) checked @endif
+                        >
+                        <label class="form-check-label" for="{{$source->fund_source}}">{{$source->fund_source}}</label>
+                        <a role="button"
+                            data-toggle="popover" 
+                            title="{{$source->fund_source}}" 
+                            data-content="{{$source->helper}}">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+                	</div>
+                    @endforeach
+                </div>
+            </div>
+            @error('fundSource')
+            <div class="row text-center">
+                <span class="d-block invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            </div>
+            @enderror
+            <hr>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="radioEventRoleGroup" class="form-label">What was the Organization's Role in this Event?</label></div>
+                <div class="col" id="radioEventRoleGroup">
+                    @foreach($eventRoles as $role)
+                    <div class="form-check">
+                        <input type="radio" 
+                        id="{{$role->event_role}}" 
+                        name="eventRole" 
+                        class="form-check-input" 
+                        value="{{$role->event_role_id}}" 
+                        @if($event->event_role_id  == $role->event_role_id) checked @endif>
+                        <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+                        <a role="button"
+                            data-toggle="popover" 
+                            title="{{$role->event_role}}" 
+                            data-content="{{$role->helper}}">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @error('eventRole')
+            <div class="row text-center">
+                <span class="d-block invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            </div>
+            @enderror
+            <hr>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="radioEventCategoryGroup" class="form-label">Event Category</label>
+                </div>
+                <div class="col" id="radioEventCategoryGroup">
+                    @foreach($eventCategories as $category)
+                    <div class="form-check">
+                        <input type="radio" 
+                        id="{{$category->category}}" 
+                        name="eventCategory" 
+                        class="form-check-input" 
+                        value="{{$category->event_category_id}}" 
+                        @if($event->event_category_id  == $category->event_category_id) checked @endif>
+                        <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+                        <a role="button"
+                            data-toggle="popover" 
+                            title="{{$category->category}}" 
+                            data-content="{{$category->helper}}">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @error('eventCategory')
+            <div class="row text-center">
+                <span class="d-block invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            </div>
+            @enderror
+            <hr>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level</label></div>
+                <div class="col" id="radioLevelGroup">
+                    @foreach($levels as $level)
+                    <div class="form-check">
+                        <input type="radio" 
+                        id="{{$level->level}}" 
+                        name="level" c
+                        lass="form-check-input" 
+                        value="{{$level->level_id}}"
+                        @if($event->level_id  == $level->level_id) checked @endif>
+                        <label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
+                        <a role="button"
+                            data-toggle="popover" 
+                            title="{{$level->level}}" 
+                            data-content="{{$level->helper}}">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+			<!--DIV-->
+            @error('level')
+            <div class="row text-center">
+                <span class="d-block invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            </div>
+		<!--/div-->
+            @enderror
     	</div>
     </div>
     
