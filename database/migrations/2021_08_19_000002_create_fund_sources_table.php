@@ -18,6 +18,7 @@ class CreateFundSourcesTable extends Migration
             $table->string('fund_source');
             $table->string('helper')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

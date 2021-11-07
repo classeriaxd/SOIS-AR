@@ -79,7 +79,7 @@
                 <div class="wrapper">
                     <div class="body-overlay"></div>
                     <!-- Sidebar  -->
-                    <nav class="sidebar" id="sidebar">
+                    <nav class="sidebar active" id="sidebar">
                         <div class="sidebar-header">
                             <h3><img src="/images/pupt_logo.png" class="img-fluid"/><span>SOIS-AR</span></h3>
                         </div>
@@ -174,6 +174,7 @@
                                 <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                                     <i class="material-icons">people</i><span>Students/Members</span>
                                 </a>
+
                                 <ul class="collapse list-unstyled menu" id="pageSubmenu4">
                                     <li><a href="/s/accomplishments">Submissions</a></li>
                                 </ul>
@@ -203,7 +204,7 @@
                         </ul> 
                     </nav>
 
-                    <div id="content">
+                    <div id="content" class="active">
                         <!-- Top Navbar -->
                         <div class="top-navbar">
                             <nav class="navbar navbar-expand-lg">
@@ -322,7 +323,6 @@
                                                 </li>
                                             </ul>
                                         </nav>
-                                    
                                     </div>
                                     <div class="col-md-6">
                                         <p class="copyright d-flex justify-content-end">
@@ -567,7 +567,7 @@
                 <div class="wrapper">
                     <div class="body-overlay"></div>
                     <!-- Sidebar  -->
-                    <nav class="sidebar" id="sidebar">
+                    <nav class="sidebar active" id="sidebar">
                         <div class="sidebar-header">
                             <h3><img src="/images/pupt_logo.png" class="img-fluid"/><span>SOIS-AR</span></h3>
                         </div>
@@ -653,7 +653,7 @@
                         </ul> 
                     </nav>
 
-                    <div id="content">
+                    <div id="content" class="active">
                         <!-- Top Navbar -->
                         <div class="top-navbar">
                             <nav class="navbar navbar-expand-lg">

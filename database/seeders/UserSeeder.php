@@ -237,6 +237,23 @@ class UserSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
             'status' => 0,
         ],
+            ['user_id' => '14',
+            'course_id' => NULL,
+            'role_id' => '1', 
+            'email' => 'admin@email.com', 
+            'password' => Hash::make('admin@email.com'),
+            'student_number' => NULL, 
+            'first_name' => 'I',
+            'middle_name' => 'Am',
+            'last_name' => 'Admin',
+            'gender' => '1',
+            'date_of_birth' => '2000-01-01',
+            'mobile_number' => '+639123456124',
+            'address' => 'Bulacan, Malolos',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'status' => 0,
+        ],
         ];
 
         DB::table('users')->insert($data);

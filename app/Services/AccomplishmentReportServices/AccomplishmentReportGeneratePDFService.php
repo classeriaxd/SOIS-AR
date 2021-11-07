@@ -44,6 +44,7 @@ class AccomplishmentReportGeneratePDFService
 
         foreach($sortedEvents as $event)
         {
+            //dd($event);
             if ($temp)
             {
                 // Create and Append Event Title Page

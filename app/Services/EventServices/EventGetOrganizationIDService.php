@@ -9,7 +9,6 @@ class EventGetOrganizationIDService
     /**
      * Service to get Organization ID of User.
      * Returns Organization ID on success.
-     *
      * @return Integer
      */
     public function getOrganizationID()

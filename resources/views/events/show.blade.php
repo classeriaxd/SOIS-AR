@@ -4,11 +4,61 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-10">
+            
+            {{-- Success Alert --}}
+                @if (session()->has('success'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+
+            {{-- Error Alert --}}
+                @if (session()->has('error'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+
             {{-- Title and Breadcrumbs --}}
             <div class="row">
                 {{-- Title --}}
                 <h2 class="display-2 text-center">{{ $event->title }}</h2>
-                <h3 class="text-center"><span class="badge bg-{{$event->category_color}}">{{$event->eventCategory->category}}</span>  <span class="badge bg-{{$event->role_color}}">{{$event->eventRole->event_role}}</span></h3>
+                <h3 class="text-center">
+                    <span class="badge" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                        {{$event->eventCategory->category}}
+                        @if($event->eventCategory->deleted_at != NULL)
+                        <a role="button"
+                            data-bs-toggle="popover"
+                            data-bs-container="body"
+                            data-bs-trigger="hover focus" 
+                            title="{{$event->eventCategory->category}}" 
+                            data-bs-content="This category has been deleted since {{date_format(date_create($event->eventCategory->deleted_at), 'F d, Y')}}."
+                            data-bs-placement="right">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </a>
+                        @endif
+                    </span>  
+                    <span class="badge" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                        {{$event->eventRole->event_role}}
+                        @if($event->eventRole->deleted_at != NULL)
+                        <a role="button"
+                            data-bs-toggle="popover"
+                            data-bs-container="body" 
+                            data-bs-trigger="hover focus"
+                            title="{{$event->eventRole->event_role}}" 
+                            data-bs-content="This event role has been deleted since {{date_format(date_create($event->eventRole->deleted_at), 'F d, Y')}}."
+                            data-bs-placement="right">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </a>
+                        @endif
+                    </span>
+                </h3>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center">
@@ -65,7 +115,7 @@
         				</div>
                         <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
-        					<a href="/e/{{$event->slug}}/edit">
+        					<a href="{{route('event.edit', ['event_slug' => $event->slug])}}">
         						<button class="btn btn-primary">Edit Event</button>
         					</a>
         					<form action="{{route('event.destroy', $event->slug)}}" method="POST">
@@ -82,9 +132,9 @@
         				<div class="card-body">
                             <h3 class="card-title text-center">Posters</h3>
                             <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
-                        @if($eventImages->where('image_type', 0)->count() > 0)
+                        @if($event->eventImages->where('image_type', 0)->count() > 0)
 
-                        @foreach($eventImages as $eventImage)
+                        @foreach($event->eventImages as $eventImage)
                             @if($eventImage->image_type == 0)
                                 <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
                             @endif
@@ -96,9 +146,10 @@
                             <hr>
                             <h3 class="card-title text-center">Evidences</h3>
                             <div class="row flex-row flex-nowrap pb-2 pl-1" style="overflow-x:auto;">
-                        @if($eventImages->where('image_type', 1)->count() > 0)
 
-                        @foreach($eventImages as $eventImage)
+                        @if($event->eventImages->where('image_type', 1)->count() > 0)
+
+                        @foreach($event->eventImages as $eventImage)
                             @if($eventImage->image_type == 1)
                                 <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
                             @endif
@@ -124,7 +175,7 @@
                 <div class="card w-50">
                     <h4 class="card-header card-title text-center">Event Documents</h4>
                     <div class="card-body text-center">
-                    @if($eventDocuments->count() > 0 )
+                    @if($event->eventDocuments->count() > 0 )
                     @php $i = 1; @endphp
                     <table class="table-striped table-bordered w-100">
                         <thead>
@@ -135,10 +186,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                    @foreach($eventDocuments as $document)
+                    @foreach($event->eventDocuments as $document)
                             <tr>
                                 <td>{{ $i }}</td>
-                                <td>{{ $document->document_type }}</td>
+                                <td>{{ $document->documentType->document_type }}</td>
                                 <td>{{ $document->title }}</td>
                             </tr>
                     @php $i += 1; @endphp
@@ -195,4 +246,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection

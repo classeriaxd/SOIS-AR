@@ -15,7 +15,7 @@ class CreateEventImagesTable extends Migration
     {
         Schema::create('event_images', function (Blueprint $table) {
             $table->id('event_image_id');
-            $table->foreignId('event_id');
+            $table->foreignId('accomplished_event_id');
             $table->unsignedTinyInteger('image_type');
             $table->string('image');
             $table->text('caption')->nullable();
@@ -23,7 +23,7 @@ class CreateEventImagesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('event_id')->references('event_id')->on('events');
+            $table->foreign('accomplished_event_id')->references('accomplished_event_id')->on('accomplished_events');
         });
     }
 
@@ -35,6 +35,6 @@ class CreateEventImagesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('event_images');
-        $table->dropForeign('event_id');
+        $table->dropForeign('accomplished_event_id');
     }
 }

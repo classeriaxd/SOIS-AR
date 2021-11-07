@@ -17,7 +17,7 @@ class StudentAccomplishmentUpdateService
         $accomplishmentData = [
             'level_id' => $request->input('level'),
             'fund_source_id' => $request->input('fundSource'),
-            'event_id' => $request->input('relatedEvent', NULL),
+            'accomplished_event_id' => $request->input('relatedEvent', NULL),
             'remarks' => $request->input('remarks'),
             'budget' => $request->input('budget', NULL),
             'activity_type' => $request->input('activityType'),
