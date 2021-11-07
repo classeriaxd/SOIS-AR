@@ -74,17 +74,7 @@ a:focus {
 material-icons start
 ==================================================*/
 
-@font-face {
-font-family: 'Material Icons';
-font-style: normal;
-font-weight: 400;
-src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
-src: local('Material Icons'),
-  local('MaterialIcons-Regular'),
-  url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),
-  url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
-  url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
-}
+
 
 
 .material-icons {
@@ -161,6 +151,10 @@ position: relative;
   color: #FFFFFF;
 }
 
+.container-fluid .navbar-brand:hover{
+  color: yellow;
+}
+
 .navbar button{
 background-color:transparent;
 border:none;
@@ -189,12 +183,11 @@ border:none;
 
 .navbar-brand h3{
   color:rgb(255, 255, 255);
-  font-size:17px;
   margin:0px;
   text-transform:uppercase;
   transition:all 0.5s ease;
   font-weight:600;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 
 .navbar-brand h3 img{
@@ -210,7 +203,6 @@ position: absolute;
   top: 5px;
   right: 10px;
 display: block;
-  font-size: 9px;
   border: 0px;
   font-size: 10px;
   background: #d9534f;
@@ -286,19 +278,38 @@ border:none!important;
   text-align: center;
 }
 
-/*
+.card-stats .card-content.trophy-icon .material-icons.trophy-icon {
+  font-size: 65px;
+}
+
+.card-stats .card-title.trophy-icon{
+  font-size: 85px;
+}
+
+.card-stats .card-content.trophy-icon {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.card-stats .card-footer .stats.trophy-icon {
+  line-height: 22px;
+  color: #555555;
+  font-size: 15px;
+  text-align: center;
+  display: block;
+}
+
 .card .card-header {
   padding: 15px 20px 0;
   z-index: 3;
-background-color:#fff!important;
-border-bottom:none;
+  background-color:#fff!important;
+  border-bottom:none;
 }
-*/
 
 .card .card-footer .stats .material-icons {
   position: relative;
   top: 4px;
-  font-size: 16px;
+  font-size: 22px;
 }
 
 .card-stats .card-header span {
@@ -328,7 +339,7 @@ background-color:#fff;
   border-top: 1px solid #eeeeee;
 }
 
-.text-info {
+.more-info {
   color: #03A9F4!important;
 }
 
@@ -364,6 +375,7 @@ background-color:#fff;
   line-height: 22px;
   color: #555555;
   font-size: 15px;
+  text-align: center;
 }
 
 .card .card-footer div {
@@ -373,9 +385,9 @@ background-color:#fff;
 .card .card-header-text h4{
   margin-top: 0;
   margin-bottom: 3px;
-font-size:19px;
+  font-size:19px;
   font-weight: 400;
-color: #222222;
+  color: #222222;
   text-decoration: none;
 
 }
@@ -414,10 +426,13 @@ color: #222222;
   height: 12px;
   border-radius: 100%;
 }
-.streamline .sl-primary:before, .streamline .sl-primary:last-child:after {
+/* .streamline .sl-primary:before, .streamline .sl-primary:last-child:after {
   background-color: #188ae2;
 }
 
+.streamline .sl-danger {
+  border-left-color: #ff5b5b;
+}
 
 .streamline .sl-danger:before, .streamline .sl-danger:last-child:after {
   background-color: #ff5b5b;
@@ -429,21 +444,16 @@ color: #222222;
 
 .streamline .sl-success:before, .streamline .sl-success:last-child:after {
   background-color: #10c469;
-}
+} */
 
-.streamline .sl-warning {
+.streamline .sl-activity-log {
   border-left-color: #f9c851;
 }
 
-.streamline .sl-warning:before, .streamline .sl-warning:last-child:after {
+.streamline .sl-activity-log:before, .streamline .sl-activity-log:last-child:after {
   background-color: #f9c851;
 }
 
-
-
-.streamline .sl-danger {
-  border-left-color: #ff5b5b;
-}
 .streamline .sl-item .sl-content {
   margin-left: 24px;
 }
