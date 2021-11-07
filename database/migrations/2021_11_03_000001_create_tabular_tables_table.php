@@ -16,9 +16,10 @@ class CreateTabularTablesTable extends Migration
         Schema::create('tabular_tables', function (Blueprint $table) {
             $table->id('tabular_table_id');
             $table->string('tabular_table_name');
-            $table->unsignedInteger('reference_table_number');
-            $table->text('description')->nullable();
+            $table->unsignedInteger('reference_table_number')->nullable()->default(NULL);
+            $table->text('description')->nullable()->default(NULL);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
