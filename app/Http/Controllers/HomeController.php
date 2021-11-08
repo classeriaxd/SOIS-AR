@@ -36,7 +36,7 @@ class HomeController extends Controller
             $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
 
             $loginAlert = $this->showLoginAlert();
-            
+            $loadHomeCSS = true;
             if ($orgCurrentPosition == 'Member')
             {
                 $accomplishments = StudentAccomplishment::where('user_id', $user_id)
@@ -45,7 +45,7 @@ class HomeController extends Controller
                 $approvedAccomplishmentCount = $accomplishments[2] ?? 0;
                 $pendingAccomplishmentCount = $accomplishments[1] ?? 0;
                 $disapprovedAccomplishmentCount = $accomplishments[3] ?? 0;
-                return view('home', compact('loginAlert', 'approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount'));
+                return view('home', compact('loginAlert', 'approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount', 'loadHomeCSS'));
 
             }
 
@@ -56,7 +56,7 @@ class HomeController extends Controller
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
 
-                return view('home', compact('loginAlert', 'pendingARSubmissionCount'));
+                return view('home', compact('loginAlert', 'pendingARSubmissionCount', 'loadHomeCSS'));
             }
 
             // Other Documentation Officers
@@ -68,7 +68,7 @@ class HomeController extends Controller
                 $pendingARSubmissionCount = AccomplishmentReport::where('status', 1)
                     ->where('organization_id', Auth::user()->course->organization_id)
                     ->count();
-                return view('home', compact('loginAlert', 'submissionCount', 'pendingARSubmissionCount'));
+                return view('home', compact('loginAlert', 'submissionCount', 'pendingARSubmissionCount', 'loadHomeCSS'));
             }
 
             else
