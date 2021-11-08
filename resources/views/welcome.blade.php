@@ -136,6 +136,8 @@
             <a href="#" class="text-primary">Privacy Statement.</a>
         </p>
     </footer>
+
     <script type="text/javascript" src="js/login.js"></script>
+    
 </body>
 </hmtl>
