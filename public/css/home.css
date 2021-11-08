@@ -1,0 +1,225 @@
+/*=======================================================
+ main-content inner design like card start
+ ===============================================*/
+
+
+ .card {
+    margin: 10px 0;
+  }
+  
+  .card {
+    border-radius: 0px!important;
+  }
+  
+  .card {
+    display: inline-block;
+    position: relative;
+  border:none!important;
+    width: 100%;
+    margin:15px 0;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+    border-radius: 6px;
+    color: rgba(0,0,0, 0.87);
+    background: #fff;
+  }
+  
+  .card-stats .card-header {
+    float: left;
+    text-align: center;
+  }
+  
+  .card-stats .card-content.trophy-icon .material-icons.trophy-icon {
+    font-size: 65px;
+  }
+  
+  .card-stats .card-title.trophy-icon{
+    font-size: 85px;
+  }
+  
+  .card-stats .card-content.trophy-icon {
+    text-align: center;
+    padding-top: 10px;
+  }
+  
+  .card-stats .card-footer .stats.trophy-icon {
+    line-height: 22px;
+    color: #555555;
+    font-size: 15px;
+    text-align: center;
+    display: block;
+  }
+  
+  .card .card-header {
+    padding: 15px 20px 0;
+    z-index: 3;
+    background-color:#fff!important;
+    border-bottom:none;
+  }
+  
+  .card .card-footer .stats .material-icons {
+    position: relative;
+    top: 4px;
+    font-size: 22px;
+  }
+  
+  .card-stats .card-header span {
+    font-size: 36px;
+    line-height: 56px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .icon.icon-warning {
+    color: #ff9800;
+  }
+  
+  .icon.icon-rose {
+    color: #e91e63;
+  }
+  .icon.icon-success {
+    color: #4caf50;
+  }
+  .icon.icon-info {
+    color: #00bcd4;
+  }
+  .card .card-footer {
+    margin: 0 7px 0px;
+    padding-top: 10px;
+  background-color:#fff;
+    border-top: 1px solid #eeeeee;
+  }
+  
+  .more-info {
+    color: #03A9F4!important;
+  }
+  
+  .card-stats .card-content {
+    text-align: right;
+    padding-top: 10px;
+  }
+  
+  .card .card-content {
+    padding: 15px 20px;
+    position: relative;
+  }
+  
+  .card .card-content .category {
+    margin-bottom: 0;
+  }
+  .card .category:not([class*="text-"]) {
+    color: #555555;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .card .card-title:not(.card-calendar .card-title) {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+  
+  .card-stats .card-title {
+    margin: 0;
+  }
+  
+  .card .card-footer .stats {
+    line-height: 22px;
+    color: #555555;
+    font-size: 15px;
+    text-align: center;
+  }
+  
+  .card .card-footer div {
+    display: inline-block;
+  }
+  
+  .card .card-header-text h4{
+    margin-top: 0;
+    margin-bottom: 3px;
+    font-size:19px;
+    font-weight: 400;
+    color: #222222;
+    text-decoration: none;
+  
+  }
+  
+  .table > thead > tr > th {
+    border-bottom-width: 1px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  
+  
+  .card .card-content {
+    padding: 15px 20px;
+    position: relative;
+  }
+  
+  .streamline .sl-primary {
+    border-left-color: #188ae2;
+  }
+  
+  .streamline .sl-item {
+    position: relative;
+    padding-bottom: 12px;
+    border-left: 1px solid #ccc;
+  }
+  
+  
+  
+  .streamline .sl-item:before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    background-color: #ccc;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+  }
+  /* .streamline .sl-primary:before, .streamline .sl-primary:last-child:after {
+    background-color: #188ae2;
+  }
+  
+  .streamline .sl-danger {
+    border-left-color: #ff5b5b;
+  }
+  
+  .streamline .sl-danger:before, .streamline .sl-danger:last-child:after {
+    background-color: #ff5b5b;
+  }
+  
+  .streamline .sl-success {
+    border-left-color: #10c469;
+  }
+  
+  .streamline .sl-success:before, .streamline .sl-success:last-child:after {
+    background-color: #10c469;
+  } */
+  
+  .streamline .sl-activity-log {
+    border-left-color: #f9c851;
+  }
+  
+  .streamline .sl-activity-log:before, .streamline .sl-activity-log:last-child:after {
+    background-color: #f9c851;
+  }
+  
+  .streamline .sl-item .sl-content {
+    margin-left: 24px;
+  }
+  
+  .streamline .sl-item .text-muted {
+    color: inherit;
+    opacity: .6;
+  font-size:12px;
+  }
+  
+  .streamline .sl-item p {
+  font-size:14px;
+  color:#333;
+  }
+  
+  
+  /*=======================================================
+   main-content inner design like card end
+   ===============================================*/
