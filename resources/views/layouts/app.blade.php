@@ -340,7 +340,7 @@
                 <div class="wrapper">
                     <div class="body-overlay"></div>
                     <!-- Sidebar  -->
-                    <nav class="sidebar" id="sidebar">
+                    <nav class="sidebar active" id="sidebar">
                         <div class="sidebar-header">
                             <h3><img src="/images/pupt_logo.png" class="img-fluid"/><span>SOIS-AR</span></h3>
                         </div>
@@ -430,7 +430,7 @@
                         </ul> 
                     </nav>
 
-                    <div id="content">
+                    <div id="content" class="active">
                         <!-- Top Navbar -->
                         <div class="top-navbar">
                             <nav class="navbar navbar-expand-lg">
