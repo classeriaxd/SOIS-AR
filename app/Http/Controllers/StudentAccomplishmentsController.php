@@ -205,7 +205,7 @@ class StudentAccomplishmentsController extends Controller
                     ->select('title',
                         DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'),
                         'slug',
-                        'event_id')
+                        'accomplished_event_id')
                     ->orderby('start_date', 'DESC')
                     ->limit(5)
                     ->get();

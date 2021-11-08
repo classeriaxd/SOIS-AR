@@ -32,9 +32,11 @@
                         </ol>
                     </nav>
                 </div>
-
+                <div class="card mb-3">
+            <div class="card-header text-white bg-maroon">Edit Tabular AR table</div>
+                <div class="card-body">
                 <div class="form-group row my-1">
-                    <label for="tabularTableName" class="col-md-4 col-form-label">Table Name</label>
+                    <label for="tabularTableName" class="col-md-4 col-form-label align-middle fw-bold fs-3">Table Name</label>
                     <input id="tabularTableName" 
                     type="text" 
                     class="form-control @error('tabularTableName') is-invalid @enderror" 
@@ -49,7 +51,7 @@
                 </div>
 
                 <div class="form-group row my-1">
-                    <label for="description" class="col-md-4 col-form-label">Description</label>    
+                    <label for="description" class="col-md-4 col-form-label align-middle fw-bold fs-3">Description</label>    
                     <textarea id="description" 
                     class="form-control @error('description') is-invalid @enderror" 
                     name="description"
@@ -62,7 +64,7 @@
                     @enderror
                 </div>
 
-                <div class="form-group row my-1">Reference Table No.</label>
+                <div class="form-group row my-1 fw-bold fs-3">Reference Table No.</label>
                     <input id="referenceTableNumber" 
                     type="text" 
                     class="form-control @error('referenceTableNumber') is-invalid @enderror" 
@@ -90,6 +92,7 @@
             </div>
         </div>
     </form>
+</div>
     <hr>
 
     <div class="flex-row my-2 text-center">

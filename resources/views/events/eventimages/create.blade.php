@@ -33,6 +33,9 @@
                     </nav>
                 </div>
                 <div class="row text-center">
+        <div class="col">
+            <div class="card mb-3">
+            <div class="card-header text-center text-white bg-maroon" >
                     <small>Only Images are allowed. Max size per file is 3MB. Up to 5 Images per category can be uploaded.</small>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center my-1">

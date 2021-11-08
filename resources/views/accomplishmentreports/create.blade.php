@@ -89,7 +89,7 @@
 		            		</div>
 		            		@if($schoolYears->count() > 0)
 		            		<div class="row mt-3">
-		            			<div class="col"><h6 class="text-center">Select Semester</h6></div>
+		            			<div class="col"><h6 class="text-center fw-bold fs-3">Select Semester</h6></div>
 		            		</div>
 		    				<div class="row text-center mt-3">
 								<div class="col">
@@ -127,7 +127,7 @@
 					<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Quarterly</h4>
 					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
 		    			<div class="card-body">
-		    				<h5 class="card-text text-center">{{ date('Y') }}</h5>
+		    				<h5 class="card-text text-center fw-bold fs-3">{{ date('Y') }}</h5>
 		    				<div class="row text-center">
 								<div class="col">
 		    						<button class="btn btn-primary text-white" name="first_quarter" value="first_quarter" type="submit" style="height:100%;">1st Quarter</button>
@@ -225,6 +225,7 @@
         				    @enderror
         				</div>
         				<div class="row text-center justify-content-center">
+						<div class="flex-row my-2 text-center">
         				    <button class="btn btn-primary text-white" type="submit">Submit Custom</button>
         				</div>
         			</div>

@@ -354,5 +354,4 @@
         var sortable2 = Sortable.create(dragArea2);
         var sortable3 = Sortable.create(dragArea3);
     </script>
-
 @endsection

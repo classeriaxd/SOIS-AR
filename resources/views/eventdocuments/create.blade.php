@@ -29,7 +29,10 @@
                         </ol>
                     </nav>
                 </div>
-
+                <div class="col">
+            <div class="card mb-3">
+                <div class="card-header text-white bg-maroon">Document</div>
+                <div class="card-body">
                 <div class="form-group row">
                     <label for="title" class="col-md-4 col-form-label">Title<span style="color:red">*</span></label>
                     <input id="title" 
@@ -59,7 +62,7 @@
                     @enderror
                 </div>
                 <div class="form-group row">
-                    <label for="document_type" class="form-label">Select Document Type<span style="color:red">*</span></label>
+                    <label for="document_type" class="form-label">Add Document Type<span style="color:red">*</span></label>
                     <select id="document_type" name="document_type"class="form-control" required>
                         <option value="" selected>Select a document type...</option>
                         @foreach($eventDocumentTypes as $documentType)
@@ -74,6 +77,7 @@
                     </div>
                     @enderror
                 </div>
+                <hr>
                 
                 <input type="file" 
                         class="filepond @error('document') is-invalid @enderror"
@@ -87,14 +91,14 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-                <hr>
                 <div class="row pt-4">
+                    <div class="flex-row my-2 text-center">
                     <button class="btn btn-primary text-white">Add Document</button>
                 </div>
             </div>
         </div>
+</div>
     </form>
-    <hr>
 
     <div class="flex-row my-2 text-center">
         <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
