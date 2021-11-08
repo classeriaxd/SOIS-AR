@@ -284,21 +284,69 @@
                         <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?<span class="required">*</span></label>
                     </div>
                         <div class="col" id="radioFundSourceGroup">
-                            @foreach($fundSources as $source)
+
+                            {{-- Show Fund Sources --}}
+                        @if($event->eventFundSource->deleted_at === NULL)
+                            @foreach($fundSources as $fundSource)
                             <div class="form-check">
-                                <input type="radio" id="{{$source->fund_source}}" name="fundSource" class="form-check-input" value="{{$source->fund_source_id}}">
-                                <label class="form-check-label" for="{{$source->fund_source}}">{{$source->fund_source}}</label>
+                                <input type="radio" id="{{$fundSource->fund_source}}" name="fundSource" class="form-check-input" value="{{$fundSource->fund_source_id}}">
+                                <label class="form-check-label" for="{{$fundSource->fund_source}}">{{$fundSource->fund_source}}</label>
                                 <a role="button"
                                     data-bs-toggle="popover" 
                                     data-bs-container="body"
                                     data-bs-trigger="hover focus"
-                                    title="{{$source->fund_source}}" 
-                                    data-bs-content="{{$source->helper}}"
+                                    title="{{$fundSource->fund_source}}" 
+                                    data-bs-content="{{$fundSource->helper}}"
                                     data-bs-placement="right">
                                     <i class="far fa-question-circle"></i>
                                 </a>
                             </div>
-                            @endforeach                       
+                            @endforeach      
+                    {{-- Show Deleted and Other Event Fund Sources --}}
+                        @else
+                            {{-- Show Deleted Fund Source --}}
+                            <div class="form-check text-danger">
+                                <input type="radio" 
+                                id="{{$event->eventFundSource->fund_source}}" 
+                                name="fundSource" 
+                                class="form-check-input" 
+                                value="{{$event->fund_source_id}}" 
+                                checked>
+                                <label class="form-check-label blink" for="{{$event->eventFundSource->fund_source}}">{{$event->eventFundSource->fund_source}}</label>
+                                <a role="button"
+                                    data-bs-toggle="popover"
+                                    data-bs-container="body" 
+                                    data-bs-trigger="hover focus"
+                                    title="{{$event->eventFundSource->fund_source}}" 
+                                    data-bs-content="{{$event->eventFundSource->helper . '.' . ' <b>This fund source has been deleted since ' . date_format(date_create($event->eventFundSource->deleted_at), 'F d, Y') . '.</b>'}}"
+                                    data-bs-html="true"
+                                    data-bs-placement="right">
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                            </div>
+
+                            {{-- Show Other Fund Sources --}}
+                            @foreach($fundSources as $fundSource)
+                                <div class="form-check">
+                                    <input type="radio" 
+                                    id="{{$fundSource->fund_source}}" 
+                                    name="fundSource" 
+                                    class="form-check-input" 
+                                    value="{{$fundSource->fund_source_id}}">
+                                    <label class="form-check-label" for="{{$fundSource->fund_source}}">{{$fundSource->fund_source}}</label>
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body" 
+                                        data-bs-trigger="hover focus"
+                                        title="{{$fundSource->fund_source}}" 
+                                        data-bs-content="{{$fundSource->helper}}"
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                        @endif
                         </div>
                     </div>
                     @error('fundSource')
@@ -316,7 +364,9 @@
                     <div class="col">
                         <label for="radioEventRoleGroup" class="form-label @error('eventRole') text-danger @enderror">What was the Organization's Role in this Event?<span class="required">*</span></label></div>
                     <div class="col" id="radioEventRoleGroup">
-                        @foreach($eventRoles as $role)
+                        {{-- Show Event Roles --}}
+                        @if($event->eventRole->deleted_at === NULL)
+                            @foreach($eventRoles as $role)
                         <div class="form-check">
                             <input type="radio" id="{{$role->event_role}}" name="eventRole" class="form-check-input" value="{{$role->event_role_id}}">
                             <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
@@ -331,6 +381,51 @@
                             </a>
                         </div>
                         @endforeach
+                        {{-- Show Deleted and Other Event Roles --}}
+                        @else
+                            {{-- Show Deleted Event Role --}}
+                            <div class="form-check text-danger">
+                                <input type="radio" 
+                                id="{{$event->eventRole->event_role}}" 
+                                name="eventRole" 
+                                class="form-check-input" 
+                                value="{{$event->event_role_id}}" 
+                                checked>
+                                <label class="form-check-label blink" for="{{$event->eventRole->event_role}}">{{$event->eventRole->event_role}}</label>
+                                <a role="button"
+                                    data-bs-toggle="popover"
+                                    data-bs-container="body"  
+                                    data-bs-trigger="hover focus"
+                                    title="{{$event->eventRole->event_role}}" 
+                                    data-bs-content="{{$event->eventRole->helper . '.' . ' <b>This role has been deleted since ' . date_format(date_create($event->eventRole->deleted_at), 'F d, Y') . '.</b>'}}"
+                                    data-bs-html="true"
+                                    data-bs-placement="right">
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                            </div>
+
+                            {{-- Show Other Event Roles --}}
+                            @foreach($eventRoles as $role)
+                                <div class="form-check">
+                                    <input type="radio" 
+                                    id="{{$role->event_role}}" 
+                                    name="eventRole" 
+                                    class="form-check-input" 
+                                    value="{{$role->event_role_id}}">
+                                    <label class="form-check-label" for="{{$role->event_role}}">{{$role->event_role}}</label>
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body"  
+                                        data-bs-trigger="hover focus"
+                                        title="{{$role->event_role}}" 
+                                        data-bs-content="{{$role->helper}}"
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                        @endif                
                     </div>
                 </div>
                 @error('eventRole')
@@ -347,7 +442,9 @@
                         <label for="radioEventCategoryGroup" class="form-label @error('eventCategory') text-danger @enderror">Event Category<span class="required">*</span></label>
                     </div>
                     <div class="col" id="radioEventCategoryGroup">
-                        @foreach($eventCategories as $category)
+                        {{-- Show Event Categories --}}
+                        @if($event->eventCategory->deleted_at === NULL)
+                            @foreach($eventCategories as $category)
                         <div class="form-check">
                             <input type="radio" id="{{$category->category}}" name="eventCategory" class="form-check-input" value="{{$category->event_category_id}}">
                             <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
@@ -362,6 +459,51 @@
                             </a>
                         </div>
                         @endforeach
+                        {{-- Show Deleted and Other Event Categories --}}
+                        @else
+                            {{-- Show Deleted Category --}}
+                            <div class="form-check text-danger">
+                                <input type="radio" 
+                                id="{{$event->eventCategory->category}}" 
+                                name="eventCategory" 
+                                class="form-check-input" 
+                                value="{{$event->event_category_id}}" 
+                                checked>
+                                <label class="form-check-label blink" for="{{$event->eventCategory->category}}">{{$event->eventCategory->category}}</label>
+                                <a role="button"
+                                    data-bs-toggle="popover"
+                                    data-bs-container="body"  
+                                    data-bs-trigger="hover focus"
+                                    title="{{$event->eventCategory->category}}" 
+                                    data-bs-content="{{$event->eventCategory->helper . '.' . ' <b>This category has been deleted since ' . date_format(date_create($event->eventCategory->deleted_at), 'F d, Y') . '.</b>'}}"
+                                    data-bs-html="true"
+                                    data-bs-placement="right">
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                            </div>
+
+                            {{-- Show Other Categories --}}
+                            @foreach($eventCategories as $category)
+                                <div class="form-check">
+                                    <input type="radio" 
+                                    id="{{$category->category}}" 
+                                    name="eventCategory" 
+                                    class="form-check-input" 
+                                    value="{{$category->event_category_id}}">
+                                    <label class="form-check-label" for="{{$category->category}}">{{$category->category}}</label>
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body" 
+                                        data-bs-trigger="hover focus"
+                                        title="{{$category->category}}" 
+                                        data-bs-content="{{$category->helper}}"
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                        @endif
                     </div>
                 </div>
                 @error('eventCategory')
@@ -380,7 +522,9 @@
                         <label for="radioEventClassificationGroup" class="form-label @error('eventClassification') text-danger @enderror">Event Classification<span class="required">*</span></label>
                     </div>
                     <div class="col" id="radioEventClassificationGroup">
-                        @foreach($eventClassifications as $classification)
+                        {{-- Show Event Classifications --}}
+                        @if($event->eventClassification->deleted_at === NULL)
+                            @foreach($eventClassifications as $classification)
                         <div class="form-check">
                             <input type="radio" id="{{$classification->classification}}" name="eventClassification" class="form-check-input" value="{{$classification->event_classification_id}}">
                             <label class="form-check-label" for="{{$classification->classification}}">{{$classification->classification}}</label>
@@ -395,6 +539,51 @@
                             </a>
                         </div>
                         @endforeach
+                        {{-- Show Deleted and Other Event Classifications --}}
+                        @else
+                            {{-- Show Deleted Classification --}}
+                            <div class="form-check text-danger">
+                                <input type="radio" 
+                                id="{{$event->eventClassification->classification}}" 
+                                name="eventClassification" 
+                                class="form-check-input" 
+                                value="{{$event->event_classification_id}}" 
+                                checked>
+                                <label class="form-check-label blink" for="{{$event->eventClassification->classification}}">{{$event->eventClassification->classification}}</label>
+                                <a role="button"
+                                    data-bs-toggle="popover"
+                                    data-bs-container="body"  
+                                    data-bs-trigger="hover focus"
+                                    title="{{$event->eventClassification->classification}}" 
+                                    data-bs-content="{{$event->eventClassification->helper . '.' . ' <b>This classification has been deleted since ' . date_format(date_create($event->eventClassification->deleted_at), 'F d, Y') . '.</b>'}}"
+                                    data-bs-html="true"
+                                    data-bs-placement="right">
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                            </div>
+
+                            {{-- Show Other Classifications --}}
+                            @foreach($eventClassifications as $classification)
+                                <div class="form-check">
+                                    <input type="radio" 
+                                    id="{{$classification->classification}}" 
+                                    name="eventClassification" 
+                                    class="form-check-input" 
+                                    value="{{$classification->event_classification_id}}">
+                                    <label class="form-check-label" for="{{$classification->classification}}">{{$classification->classification}}</label>
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body" 
+                                        data-bs-trigger="hover focus"
+                                        title="{{$classification->classification}}" 
+                                        data-bs-content="{{$classification->helper}}"
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                        @endif
                     </div>
                 </div>
                 @error('eventClassification')
@@ -405,6 +594,7 @@
                     </div>
                 @enderror
 
+
                 <hr>
 
                 {{-- Event Natures --}}
@@ -413,7 +603,9 @@
                         <label for="radioEventNatureGroup" class="form-label @error('eventNature') text-danger @enderror">Event Nature<span class="required">*</span></label>
                     </div>
                     <div class="col" id="radioEventNatureGroup">
-                        @foreach($eventNatures as $nature)
+                        {{-- Show Event Natures --}}
+                        @if($event->eventNature->deleted_at === NULL)
+                            @foreach($eventNatures as $nature)
                         <div class="form-check">
                             <input type="radio" id="{{$nature->nature}}" name="eventNature" class="form-check-input" value="{{$nature->event_nature_id}}">
                             <label class="form-check-label" for="{{$nature->nature}}">{{$nature->nature}}</label>
@@ -428,6 +620,51 @@
                             </a>
                         </div>
                         @endforeach
+                        {{-- Show Deleted and Other Event Natures --}}
+                        @else
+                            {{-- Show Deleted Nature --}}
+                            <div class="form-check text-danger">
+                                <input type="radio" 
+                                id="{{$event->eventNature->nature}}" 
+                                name="eventNature" 
+                                class="form-check-input" 
+                                value="{{$event->event_nature_id}}" 
+                                checked>
+                                <label class="form-check-label blink" for="{{$event->eventNature->nature}}">{{$event->eventNature->nature}}</label>
+                                <a role="button"
+                                    data-bs-toggle="popover"
+                                    data-bs-container="body"  
+                                    data-bs-trigger="hover focus"
+                                    title="{{$event->eventNature->nature}}" 
+                                    data-bs-content="{{$event->eventNature->helper . '.' . ' <b>This nature has been deleted since ' . date_format(date_create($event->eventNature->deleted_at), 'F d, Y') . '.</b>'}}"
+                                    data-bs-html="true"
+                                    data-bs-placement="right">
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                            </div>
+
+                            {{-- Show Other Natures --}}
+                            @foreach($eventNatures as $nature)
+                                <div class="form-check">
+                                    <input type="radio" 
+                                    id="{{$nature->nature}}" 
+                                    name="eventNature" 
+                                    class="form-check-input" 
+                                    value="{{$nature->event_nature_id}}">
+                                    <label class="form-check-label" for="{{$nature->nature}}">{{$nature->nature}}</label>
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body" 
+                                        data-bs-trigger="hover focus"
+                                        title="{{$nature->nature}}" 
+                                        data-bs-content="{{$nature->helper}}"
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                        @endif
                     </div>
                 </div>
                 @error('eventNature')
@@ -445,7 +682,9 @@
                     <div class="col">
                         <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level<span class="required">*</span></label></div>
                     <div class="col" id="radioLevelGroup">
-                        @foreach($levels as $level)
+                       {{-- Show Levels --}}
+                        @if($event->eventLevel->deleted_at === NULL)
+                            @foreach($levels as $level)
                         <div class="form-check">
                             <input type="radio" id="{{$level->level}}" name="level" class="form-check-input" value="{{$level->level_id}}">
                             <label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
@@ -460,6 +699,52 @@
                             </a>
                         </div>
                         @endforeach
+                        {{-- Show Deleted and Other Event Levels --}}
+                        @else
+                            {{-- Show Deleted Level --}}
+                            <div class="form-check text-danger">
+                                <input type="radio" 
+                                id="{{$event->eventLevel->level}}" 
+                                name="level" 
+                                class="form-check-input" 
+                                value="{{$event->level_id}}" 
+                                checked>
+                                <label class="form-check-label blink" for="{{$event->eventLevel->level}}">{{$event->eventLevel->level}}</label>
+                                <a role="button"
+                                    data-bs-toggle="popover"
+                                    data-bs-container="body" 
+                                    data-bs-trigger="hover focus"
+                                    title="{{$event->eventLevel->level}}" 
+                                    data-bs-content="{{$event->eventLevel->helper . '.' . ' <b>This level has been deleted since ' . date_format(date_create($event->eventLevel->deleted_at), 'F d, Y') . '.</b>'}}"
+                                    data-bs-html="true"
+                                    data-bs-placement="right">
+                                    <i class="far fa-question-circle"></i>
+                                </a>
+                            </div>
+
+                            {{-- Show Other Levels --}}
+                            @foreach($levels as $level)
+                                <div class="form-check">
+                                    <input type="radio" 
+                                    id="{{$level->level}}" 
+                                    name="level" 
+                                    class="form-check-input" 
+                                    value="{{$level->level_id}}">
+                                    <label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body" 
+                                        data-bs-trigger="hover focus"
+                                        title="{{$level->level}}" 
+                                        data-bs-content="{{$level->helper}}"
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                        @endif
+
                     </div>
                 </div>
                 @error('level')
@@ -476,8 +761,6 @@
 	    </div>
 
 	</form>
-
-	<hr>
 
 	<div class="flex-row my-1 text-center">
 	    <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
