@@ -78,7 +78,7 @@
         	<div class="row justify-content-center mb-1">
         		<div class="col-md-5">
         			<div class="card">
-        				<h4 class="card-header card-title text-center">Event Summary</h4>
+        				<h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Summary</h4>
         				<div class="card-body">
         					<h3 class="card-title text-center">Title: {{ $event->title }}</h3>
         					<p class="card-text">
@@ -128,7 +128,7 @@
         		</div>
         		 <div class="col-md-5">
         			<div class="card">
-    				    <h4 class="card-header card-title text-center">Event Gallery</h4>
+    				    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Gallery</h4>
         				<div class="card-body">
                             <h3 class="card-title text-center">Posters</h3>
                             <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
@@ -173,7 +173,7 @@
         	</div>
             <div class="row justify-content-center mt-2 mb-1">
                 <div class="card w-50">
-                    <h4 class="card-header card-title text-center">Event Documents</h4>
+                    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Documents</h4>
                     <div class="card-body text-center">
                     @if($event->eventDocuments->count() > 0 )
                     @php $i = 1; @endphp

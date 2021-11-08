@@ -25,8 +25,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.css') }}" rel="stylesheet">
     <link href="{{ asset('css/sidebar.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
 
+    @if($loadHomeCSS ?? false)
+    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
+    @endif
+    
     @stack('scripts')
 </head>
 <body id="body-pd">
