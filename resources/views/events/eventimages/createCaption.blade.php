@@ -49,6 +49,7 @@
                     <div class="col">
                         <img src="/storage/{{$poster->image}}" class="card-img-middle w-100" style="max-width:20vw; min-width: 20vw; max-height: 50vh; min-height: 50vh;">
                     </div>
+                    
                     <div class="col d-flex align-items-center">
                         <div class="form-group row w-100">
                             <label for="caption" class="col-form-label text-center">Caption</label>    

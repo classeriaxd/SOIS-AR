@@ -16,7 +16,7 @@ class Event extends Model
     protected $table = 'accomplished_events';
     protected $searchable = [
         'columns' => [
-            'accomplished_event.title' => 10,
+            'accomplished_events.title' => 10,
         ],];
     
     public function eventImages()

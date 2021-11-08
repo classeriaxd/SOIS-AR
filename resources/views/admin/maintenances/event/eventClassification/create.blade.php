@@ -31,9 +31,11 @@
                         </ol>
                     </nav>
                 </div>
-
+        <div class="card mb-3">
+                <div class="card-header text-white bg-maroon">Add Event Classification</div>
+                <div class="card-body">
                 <div class="form-group row my-1">
-                    <label for="classification" class="col-md-4 col-form-label">Event Classification</label>
+                    <label for="classification" class="col-md-4 col-form-label align-middle fw-bold fs-3">Event Classification</label>
                     <input id="classification" 
                     type="text" 
                     class="form-control @error('classification') is-invalid @enderror" 
@@ -49,7 +51,7 @@
                 </div>
 
                 <div class="form-group row my-1">
-                    <label for="helper" class="col-md-4 col-form-label">Helper/Description</label>    
+                    <label for="helper" class="col-md-4 col-form-label align-middle fw-bold fs-3">Helper/Description</label>    
                     <textarea id="helper" 
                     class="form-control @error('helper') is-invalid @enderror" 
                     name="helper"
@@ -69,6 +71,7 @@
             </div>
         </div>
     </form>
+</div>
     <hr>
 
     <div class="flex-row my-2 text-center">

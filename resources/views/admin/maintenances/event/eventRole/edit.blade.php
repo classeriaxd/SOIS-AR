@@ -32,9 +32,11 @@
                         </ol>
                     </nav>
                 </div>
-
+            <div class="card mb-3">
+                <div class="card-header text-white bg-maroon">Edit accomplishment</div>
+                <div class="card-body">
                 <div class="form-group row my-1">
-                    <label for="role" class="col-md-4 col-form-label">Event Role</label>
+                    <label for="role" class="col-md-4 col-form-label align-middle fw-bold fs-3">Event Role</label>
                     <input id="role" 
                     type="text" 
                     class="form-control @error('role') is-invalid @enderror" 
@@ -51,7 +53,7 @@
                 </div>
 
                 <div class="form-group row my-1">
-                    <label for="helper" class="col-md-4 col-form-label">Helper/Description</label>    
+                    <label for="helper" class="col-md-4 col-form-label align-middle fw-bold fs-3">Helper/Description</label>    
                     <textarea id="helper" 
                     class="form-control @error('helper') is-invalid @enderror" 
                     name="helper"
@@ -117,6 +119,7 @@
             </div>
         </div>
     </form>
+</div>
     <hr>
 
     <div class="flex-row my-2 text-center">
