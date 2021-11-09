@@ -26,68 +26,73 @@
                     </ol>
                 </nav>
             </div>
-            <div class="card w-100">
-                <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Maintenance</h5>
-                <div class="card-body">
-                    <div class="flex-row text-center my-1">
-                        <a href="{{ route('admin.maintenance.eventCategories.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Categories
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventRoles.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Roles
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventNatures.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Natures
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventClassifications.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Classifications
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Document Types
-                        </a>
-                    </div>
-                    <div class="flex-row text-center my-1">
-                        <a href="{{ route('admin.maintenance.levels.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Levels
-                        </a>
-                        <a href="{{ route('admin.maintenance.fundSources.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Fund Sources
-                        </a>
-                        <a href="#"
-                        role="button"
-                        class="btn btn-primary text-white disabled">
-                            School Years
-                        </a>
-                        <a href="#"
-                        role="button"
-                        class="btn btn-primary text-white disabled">
-                            Organization Document Types
-                        </a>
-                    </div>
-                    <div class="flex-row text-center my-1">
-                        <a href="{{ route('admin.maintenance.tabularTables.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Tabular AR Tables
-                        </a>
-                    </div>
-                    
+        <div class="row">
+            <p>Accomplished Event Count: {{ $eventCount ?? 0 }}</p>
+            <p>Organization Count: {{ $organizationCount ?? 0 }}</p>
+            <p>AR Count: {{ $accomplishmentReportCount ?? 0 }}</p>
+        </div>
+        <div class="card w-100">
+            <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Maintenance</h5>
+            <div class="card-body">
+                <div class="flex-row text-center my-1">
+                    <a href="{{ route('admin.maintenance.eventCategories.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Event Categories
+                    </a>
+                    <a href="{{ route('admin.maintenance.eventRoles.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Event Roles
+                    </a>
+                    <a href="{{ route('admin.maintenance.eventNatures.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Event Natures
+                    </a>
+                    <a href="{{ route('admin.maintenance.eventClassifications.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Event Classifications
+                    </a>
+                    <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Event Document Types
+                    </a>
                 </div>
+                <div class="flex-row text-center my-1">
+                    <a href="{{ route('admin.maintenance.levels.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Levels
+                    </a>
+                    <a href="{{ route('admin.maintenance.fundSources.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Fund Sources
+                    </a>
+                    <a href="#"
+                    role="button"
+                    class="btn btn-primary text-white disabled">
+                        School Years
+                    </a>
+                    <a href="#"
+                    role="button"
+                    class="btn btn-primary text-white disabled">
+                        Organization Document Types
+                    </a>
+                </div>
+                <div class="flex-row text-center my-1">
+                    <a href="{{ route('admin.maintenance.tabularTables.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Tabular AR Tables
+                    </a>
+                </div>
+                
             </div>
+        </div>
             
 
         </div>

@@ -29,4 +29,9 @@ class Organization extends Model
     {
         return $this->hasMany(OrganizationAsset::class, 'organization_id');
     }
+
+    public function asset()
+    {
+        return $this->hasOne(OrganizationAsset::class, 'organization_id');
+    }
 }

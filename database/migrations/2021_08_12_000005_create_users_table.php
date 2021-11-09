@@ -16,7 +16,8 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
             $table->foreignId('course_id')->nullable();
-            $table->foreignId('role_id');
+            $table->foreignId('role_id')->default(1);
+            $table->foreignId('gender_id')->nullable();
 
             $table->string('email')->unique();
             $table->string('password');
@@ -24,15 +25,19 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
-            $table->unsignedTinyInteger('gender');
+            $table->string('suffix')->nullable()->default(NULL);
             $table->date('date_of_birth');
             $table->string('mobile_number');
             $table->text('address');
+            $table->string('year_and_section')->nullable()->default(NULL);
+            $table->date('email_verified_at')->nullable()->default(NULL);
             $table->timestamps();
             $table->unsignedTinyInteger('status');
+            $table->text('two_factor_secret')->default(NULL)->nullable();
+            $table->text('two_factor_recovery_code')->default(NULL)->nullable();
 
+            $table->foreign('gender_id')->references('gender_id')->on('genders');
             $table->foreign('course_id')->references('course_id')->on('courses');
-            $table->foreign('role_id')->references('role_id')->on('roles');
         });
     }
 
@@ -45,6 +50,6 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('users');
         $table->dropForeign('course_id');
-        $table->dropForeign('role_id');
+        $table->dropForeign('gender_id');
     }
 }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AccomplishmentReport;
 use App\Models\Event;
+use App\Models\Organization;
 
 use Carbon\Carbon;
 use DateTime;
@@ -30,10 +32,21 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $eventCount = Event::count();
+        $organizationCount = Organization::count();
+        $accomplishmentReportCount = AccomplishmentReport::count();
         $loginAlert = $this->showLoginAlert();
-        return view('admin.home', compact('loginAlert',));
+        
+        return view('admin.home', 
+            compact(
+                'loginAlert',
+                'eventCount',
+                'organizationCount',
+                'accomplishmentReportCount',
+            ));
         
     }
+
     public function showLoginAlert()
     {
         $loginAlert = NULL;
@@ -46,8 +59,10 @@ class HomeController extends Controller
 
         return $loginAlert;
     }
+
     private function calendarSample()
     {
+        /*
         $calendarEvents = collect();
         $allEvents = Event::all();
         $calendarEventID = 1;
@@ -93,7 +108,9 @@ class HomeController extends Controller
             }
         }
         $calendarOptions = collect();
-        /*
+        // return view('', compact('calendarEvents'))
+        // paste in view
+        
         <div class="row">
             <div class="col">
                 <div id="calendar"></div>

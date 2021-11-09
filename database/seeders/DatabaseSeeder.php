@@ -15,19 +15,20 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            OrganizationTypeSeeder::class,
+            OrganizationAssetTypeSeeder::class,
             OrganizationSeeder::class,
             CourseSeeder::class,
+            GenderSeeder::class,
             UserSeeder::class,
             PositionTitleSeeder::class,
             UserPositionSeeder::class,
-            //OrganizationDocumentTypeSeeder::class,
             OrganizationAssetSeeder::class,
             EventCategorySeeder::class,
             EventRoleSeeder::class,
             EventClassificationSeeder::class,
             EventNatureSeeder::class,
             EventDocumentTypeSeeder::class,
-            //EventSeeder::class,
             SchoolYearSeeder::class,
             FundSourceSeeder::class,
             LevelSeeder::class,
@@ -35,4 +36,7 @@ class DatabaseSeeder extends Seeder
             TabularColumnSeeder::class,
         ]);
     }
+            //OrganizationDocumentTypeSeeder::class,
+            //EventSeeder::class,
+            //RoleUserSeeder::class,
 }

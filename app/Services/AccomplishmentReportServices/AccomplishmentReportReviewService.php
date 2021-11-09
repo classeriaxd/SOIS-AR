@@ -83,10 +83,14 @@ class AccomplishmentReportReviewService
             ->where('organization_id', $accomplishmentReport->organization_id)
             ->first();
 
-        $organization = Organization::with('assets')
+        // Get Organization Details including a single Logo
+        $organization = Organization::with([
+                'asset'=> function($query){
+                $query->where('organization_asset_type_id', 1)->first();}
+            ])
             ->where('organization_id', $accomplishmentReport->organization_id)
             ->first();
-        
+            
         // Create temporary folder directory
         $temporaryFolder = 'tmp/temporaryFolder-' . uniqid() . '-' . now()->timestamp;
         if (!is_dir(storage_path('/app/public/compiledDocuments/tmp/'))) {
