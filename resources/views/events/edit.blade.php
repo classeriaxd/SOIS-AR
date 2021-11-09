@@ -42,7 +42,6 @@
                             type="text" 
                             class="form-control @error('title') is-invalid @enderror" 
                             name="title"
-                            placeholder="Event Title" 
                             value="{{ $event->title }}" 
                             autofocus 
                             required>
@@ -60,8 +59,7 @@
                             <textarea id="description" 
                             class="form-control @error('description') is-invalid @enderror" 
                             name="description"
-                            placeholder="Description" 
-                            required>{{ old('description')}}</textarea>
+                            required>{{ $event->description }}</textarea>
 
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
@@ -76,7 +74,6 @@
                             <textarea id="objective" 
                             class="form-control @error('objective') is-invalid @enderror" 
                             name="objective" 
-                            placeholder="Objective" 
                             required>{{ $event->objective }}</textarea>
 
                             @error('objective')
@@ -100,7 +97,6 @@
                                 type="text" 
                                 class="form-control @error('venue') is-invalid @enderror" 
                                 name="venue"
-                                placeholder="Venue (Ex. Zoom or Facebook Live)"  
                                 value="{{ $event->venue }}">
 
                                 @error('venue')
@@ -117,8 +113,7 @@
                                 type="text" 
                                 class="form-control @error('activityType') is-invalid @enderror" 
                                 name="activityType" 
-                                placeholder="Type of Activity (Ex. Student Development-Intellectual)" 
-                                value="{{ $event->activityType }}">
+                                value="{{ $event->activity_type }}">
 
                                 @error('activityType')
                                     <span class="invalid-feedback" role="alert">
@@ -134,7 +129,6 @@
                                     type="text" 
                                     class="form-control @error('beneficiaries') is-invalid @enderror" 
                                     name="beneficiaries" 
-                                    placeholder="Beneficiaries (Ex. Students of PUP-Taguig Branch)" 
                                     value="{{ $event->beneficiaries }}">
 
                                     @error('beneficiaries')
@@ -151,8 +145,7 @@
                                 type="text" 
                                 class="form-control @error('totalBeneficiary') is-invalid @enderror" 
                                 name="totalBeneficiary" 
-                                placeholder="Total Number of Beneficiaries. (Ex. 1000)" 
-                                value="{{ $event->totalBeneficiary }}">
+                                value="{{ $event->total_beneficiary }}">
 
                                 @error('totalBeneficiary')
                                     <span class="invalid-feedback" role="alert">
@@ -168,7 +161,6 @@
                                 type="text" 
                                 class="form-control @error('sponsors') is-invalid @enderror" 
                                 name="sponsors" 
-                                placeholder="Sponsors" 
                                 value="{{ $event->sponsors }}">
 
                                 @error('sponsors')
@@ -185,7 +177,6 @@
                                 type="text" 
                                 class="form-control @error('budget') is-invalid @enderror" 
                                 name="budget" 
-                                placeholder="₱" 
                                 value="{{ $event->budget }}">
 
                                 @error('budget')

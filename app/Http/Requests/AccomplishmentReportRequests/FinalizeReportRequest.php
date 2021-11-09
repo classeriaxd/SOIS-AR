@@ -38,7 +38,7 @@ class FinalizeReportRequest extends FormRequest
         $range_title_array = ['Semestral', 'Quarterly', 'Custom'];
         $rules = [
             'start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
-            'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date|before_or_equal:now|after:1992-01-01',
+            'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date|after:1992-01-01',
             'ar_format' => 'required',
             'archive' => 'sometimes|accepted',
             'title' => 'required|string',

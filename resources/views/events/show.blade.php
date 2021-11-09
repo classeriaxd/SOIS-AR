@@ -116,12 +116,12 @@
                         <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
         					<a href="{{route('event.edit', ['event_slug' => $event->slug])}}">
-        						<button class="btn btn-primary">Edit Event</button>
+        						<button class="btn btn-primary text-white">Edit Event</button>
         					</a>
         					<form action="{{route('event.destroy', $event->slug)}}" method="POST">
         						@method('DELETE')
         						@csrf
-        						<button class="btn btn-danger">Delete Event</button>
+        						<button class="btn btn-danger text-white">Delete Event</button>
         					</form>  
         				</div>
         			</div>

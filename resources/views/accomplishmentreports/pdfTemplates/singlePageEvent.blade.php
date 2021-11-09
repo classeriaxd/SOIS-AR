@@ -70,7 +70,7 @@
             <p class="block-desc">{{ $event['sponsors'] }}</p>
 
             <p class="block-title">EVENT BUDGET</p>
-            <p class="block-desc">{{ ($event['budget'] == 0) ? $event['budget'] : '-'}}</p>
+            <p class="block-desc">{{ ($event['budget'] == 0 || $event['budget'] == NULL) ? '-' : $event['budget'] }}</p>
         </div>
     </div>
 
