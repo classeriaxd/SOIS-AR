@@ -9,7 +9,8 @@ class Organization extends Model
     protected $guarded = [];
     protected $primaryKey = 'organization_id';
     protected $table = 'organizations';
-    
+    protected $logo_id = 1;
+
     public function events()
     {
     	return $this->hasMany(Event::class, 'organization_id');
@@ -33,5 +34,10 @@ class Organization extends Model
     public function asset()
     {
         return $this->hasOne(OrganizationAsset::class, 'organization_id');
+    }
+
+    public function logo()
+    {
+        return $this->hasOne(OrganizationAsset::class, 'organization_id')->where('organization_asset_type_id', $this->logo_id)->limit(1);
     }
 }

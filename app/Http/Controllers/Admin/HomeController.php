@@ -36,6 +36,8 @@ class HomeController extends Controller
         $organizationCount = Organization::count();
         $accomplishmentReportCount = AccomplishmentReport::count();
         $loginAlert = $this->showLoginAlert();
+
+        
         
         return view('admin.home', 
             compact(

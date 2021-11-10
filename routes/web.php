@@ -166,6 +166,15 @@ Auth::routes();
 
                 
             });
+            
+            Route::group([
+                    'as' => 'events.',
+                    'prefix' => '/events',], 
+                function () {
+                    Route::get('/{event_slug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'show'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('show');
+                    Route::get('', [App\Http\Controllers\Admin\AdminEventsController::class, 'index'])->name('index');
+
+            });
 
         });
 

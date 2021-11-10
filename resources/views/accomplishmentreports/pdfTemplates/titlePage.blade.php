@@ -10,7 +10,7 @@
     <div class="page">
         <div class="intro-title-block vertical-center">
 
-            <img src="{{public_path('/storage/'. $organization->asset->file) }}">
+            <img src="{{public_path('/storage/'. $organization->logo->file) }}">
             <h2>Republic of the Philippines<br>
             <strong>POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</strong><br>
             <strong>TAGUIG CITY BRANCH</strong><br>

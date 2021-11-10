@@ -27,7 +27,11 @@
                 </nav>
             </div>
         <div class="row">
-            <p>Accomplished Event Count: {{ $eventCount ?? 0 }}</p>
+            <a href="{{ route('admin.events.index') }}">
+                <p class="text-primary border border-dark">Accomplished Event Count: {{ $eventCount ?? 0 }}</p>
+            </a>
+            
+
             <p>Organization Count: {{ $organizationCount ?? 0 }}</p>
             <p>AR Count: {{ $accomplishmentReportCount ?? 0 }}</p>
         </div>

@@ -84,10 +84,7 @@ class AccomplishmentReportReviewService
             ->first();
 
         // Get Organization Details including a single Logo
-        $organization = Organization::with([
-                'asset'=> function($query){
-                $query->where('organization_asset_type_id', 1)->first();}
-            ])
+        $organization = Organization::with('logo')
             ->where('organization_id', $accomplishmentReport->organization_id)
             ->first();
             
