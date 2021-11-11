@@ -40,4 +40,8 @@ class Organization extends Model
     {
         return $this->hasOne(OrganizationAsset::class, 'organization_id')->where('organization_asset_type_id', $this->logo_id)->limit(1);
     }
+    public function logos()
+    {
+        return $this->hasMany(OrganizationAsset::class, 'organization_id')->where('organization_asset_type_id', $this->logo_id)->limit(1);
+    }
 }

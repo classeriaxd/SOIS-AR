@@ -6,9 +6,13 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             {{-- Title and Breadcrumbs --}}
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mb-2">
                 {{-- Title --}}
-                <h2 class="display-7 text-left text-break">All Accomplished Events</h2>
+                <h2 class="display-7 text-left text-break">{{ $organization->organization_acronym }} Events</h2>
+
+                {{-- Organization Logo --}}
+                <img src="/storage/{{ $organizationLogo }}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb align-items-center">
                     <ol class="breadcrumb justify-content-center">
@@ -16,7 +20,7 @@
                             <a href="{{route('admin.home')}}" class="text-decoration-none">Home</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Events
+                            {{ $organization->organization_acronym }} Events
                         </li>
                     </ol>
                 </nav>
@@ -89,29 +93,7 @@
                 @endif
             </div>
 
-            {{-- Organizations --}}
-            <div class="row my-2">
-                <div class="col d-flex justify-content-evenly">
-                    @if($organizations->count() > 0)
-                        @foreach($organizations as $organization)
-                            <a href="{{ route('admin.events.organization.index', ['organization_slug' => $organization->organization_slug]) }}">
-                                <div class="card">
-                                    <img class="card-img-top" src="/storage/{{$organization->logo->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
-                                    <div class="card-body text-center bg-maroon text-white fw-bold">
-                                        <p class="card-title">
-                                           {{ $organization->organization_acronym }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        @endforeach
-                    @else
-                    <p class="text-center">
-                        No Organization Found. :(
-                    </p>
-                    @endif
-                </div>
-            </div>
+            
 
         </div>
     </div>
@@ -119,11 +101,19 @@
     <hr>
     
     <div class="flex-row my-2 text-center">
-        <a href="{{route('admin.home')}}"
+        <a href="{{route('admin.events.index')}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go Home
+            Go Back to Events
         </a>
+
+        <span>or</span>
+
+        <a href="{{route('admin.home')}}"
+            class="btn btn-secondary text-white"
+            role="button">
+                Go Home
+        </a>    
     </div>
 
 </div>

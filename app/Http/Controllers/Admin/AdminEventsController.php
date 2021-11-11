@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
+use App\Models\Organization;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -24,21 +25,48 @@ class AdminEventsController extends Controller
     public function index()
     {
         $events = Event::with(
-                'organization:organization_id,organization_acronym',
+                'organization:organization_id,organization_acronym,organization_slug',
                 'eventRole:event_role_id,event_role,background_color,text_color',
                 'eventCategory:event_category_id,category,background_color,text_color',
                 'eventLevel:level_id,level',)
             ->orderBy('start_date', 'DESC')
             ->paginate(30);
+
+        $organizations = Organization::with('logos:organization_id,file')
+            ->orderBy('organization_type_id', 'ASC')
+            ->get();
+
         return view($this->viewDirectory . 'index', 
             compact(
                 'events',
+                'organizations',
             ));
         
     }
-    public function show($event_slug)
+    public function organizationIndex($organization_slug)
     {
-        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(($organization = Organization::where('organization_slug', $organization_slug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
+        $organizationLogo = $organization->logo->file;
+        $events = Event::with(
+                'organization:organization_id,organization_acronym,organization_slug',
+                'eventRole:event_role_id,event_role,background_color,text_color',
+                'eventCategory:event_category_id,category,background_color,text_color',
+                'eventLevel:level_id,level',)
+            ->orderBy('start_date', 'DESC')
+            ->where('organization_id', $organization->organization_id)
+            ->paginate(30);
+        return view($this->viewDirectory . 'organizationIndex', 
+            compact(
+                'events',
+                'organization',
+                'organizationLogo',
+            ));
+    }
+    public function show($organization_slug, $event_slug)
+    {
+        abort_if(($organization_id = Organization::where('organization_slug', $organization_slug)->value('organization_id')) !== NULL ? false : true, 404);
+        abort_if(! Event::where('slug', $event_slug)->where('organization_id', $organization_id)->exists(), 404);
+        
         
         $event = Event::with(
                 'eventRole:event_role_id,event_role,background_color,text_color,deleted_at',
@@ -50,7 +78,7 @@ class AdminEventsController extends Controller
                 'eventImages:accomplished_event_id,event_image_id,image,caption,image_type',
                 'eventDocuments:accomplished_event_id,event_document_id,event_document_type_id,title,description,file',
                 'eventDocuments.documentType:event_document_type_id,document_type',
-                'organization:organization_id,organization_acronym',
+                'organization:organization_id,organization_acronym,organization_slug',
                 'organization.logo:organization_id,file',)
             ->where('slug', $event_slug)
             ->first();

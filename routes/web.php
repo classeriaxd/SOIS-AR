@@ -33,6 +33,7 @@ Auth::routes();
             function () {
                 Route::get('/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
 
+            // Maintenance Routes
             Route::group([
                     'as' => 'maintenance.',
                     'prefix' => '/maintenance',], 
@@ -167,11 +168,13 @@ Auth::routes();
                 
             });
             
+
             Route::group([
                     'as' => 'events.',
-                    'prefix' => '/events',], 
+                    'prefix' => '/events',],
                 function () {
-                    Route::get('/{event_slug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'show'])->where(['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('show');
+                    Route::get('/{organization_slug}/{event_slug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'show'])->where(['organization_slug' => '^[a-zA-Z0-9_-]{2,255}$', 'event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('show');
+                    Route::get('/{organization_slug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'organizationIndex'])->where(['organization_slug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('organization.index');
                     Route::get('', [App\Http\Controllers\Admin\AdminEventsController::class, 'index'])->name('index');
 
             });
