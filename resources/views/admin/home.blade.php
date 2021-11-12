@@ -30,10 +30,12 @@
             <a href="{{ route('admin.events.index') }}">
                 <p class="text-primary border border-dark">Accomplished Event Count: {{ $eventCount ?? 0 }}</p>
             </a>
-            
-
-            <p>Organization Count: {{ $organizationCount ?? 0 }}</p>
-            <p>AR Count: {{ $accomplishmentReportCount ?? 0 }}</p>
+            <a href="{{ route('admin.organizations.index') }}">
+                <p class="text-primary border border-dark">Organization Count: {{ $organizationCount ?? 0 }}</p>
+            </a>
+            <a href="{{ route('admin.accomplishmentReports.index') }}">
+                <p class="text-primary border border-dark">AR Count: {{ $accomplishmentReportCount ?? 0 }}</p>
+            </a>
         </div>
         <div class="card w-100">
             <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Maintenance</h5>

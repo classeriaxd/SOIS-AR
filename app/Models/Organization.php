@@ -16,6 +16,11 @@ class Organization extends Model
     	return $this->hasMany(Event::class, 'organization_id');
     }
 
+    public function accomplishmentReports()
+    {
+        return $this->hasMany(AccomplishmentReport::class, 'organization_id');
+    }
+
     public function courses()
     {
         return $this->hasMany(Courses::class, 'organization_id');
@@ -40,8 +45,14 @@ class Organization extends Model
     {
         return $this->hasOne(OrganizationAsset::class, 'organization_id')->where('organization_asset_type_id', $this->logo_id)->limit(1);
     }
+
     public function logos()
     {
         return $this->hasMany(OrganizationAsset::class, 'organization_id')->where('organization_asset_type_id', $this->logo_id)->limit(1);
+    }
+
+    public function unreadAccomplishmentReports()
+    {
+        return $this->hasMany(AccomplishmentReport::class, 'organization_id')->where('read_at', NULL);
     }
 }

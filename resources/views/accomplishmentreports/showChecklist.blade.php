@@ -262,16 +262,20 @@
                         <label for="radioARFormatGroup" class="form-label h5 align-middle">Select Format</label>
                     </div>
                     <div class="col" id="radioARFormatGroup">
-                        <div class="form-check">
-                            <input type="radio" id="tabular" name="ar_format" class="form-check-input" value="tabular" required autocomplete="off">
-                            <label class="form-check-label" for="tabular">Tabular</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="design" name="ar_format" class="form-check-input" value="design" required autocomplete="off">
-                            <label class="form-check-label" for="design">Design</label>
-                        </div>
+                        @foreach($accomplishmentReportTypes as $accomplishmentReportType)
+                            <div class="form-check">
+                                <input type="radio" id="{{$accomplishmentReportType->accomplishment_report_type}}" name="ar_format" class="form-check-input" value="{{$accomplishmentReportType->accomplishment_report_type_id}}" required autocomplete="off">
+                                <label class="form-check-label" for="{{$accomplishmentReportType->accomplishment_report_type}}">{{$accomplishmentReportType->accomplishment_report_type}}</label>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
+
+                @error('ar_format')
+                    <span class="invalid-feedback d-block" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
                 
                 <hr>
                 <div class="row justify-content-center my-1">

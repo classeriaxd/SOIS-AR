@@ -43,9 +43,9 @@ class AdminEventsController extends Controller
             ));
         
     }
-    public function organizationIndex($organization_slug)
+    public function organizationIndex($organizationSlug)
     {
-        abort_if(($organization = Organization::where('organization_slug', $organization_slug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
+        abort_if(($organization = Organization::where('organization_slug', $organizationSlug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
         $organizationLogo = $organization->logo->file;
         $events = Event::with(
                 'organization:organization_id,organization_acronym,organization_slug',
@@ -62,10 +62,10 @@ class AdminEventsController extends Controller
                 'organizationLogo',
             ));
     }
-    public function show($organization_slug, $event_slug)
+    public function show($organizationSlug, $eventSlug)
     {
-        abort_if(($organization_id = Organization::where('organization_slug', $organization_slug)->value('organization_id')) !== NULL ? false : true, 404);
-        abort_if(! Event::where('slug', $event_slug)->where('organization_id', $organization_id)->exists(), 404);
+        abort_if(($organization_id = Organization::where('organization_slug', $organizationSlug)->value('organization_id')) !== NULL ? false : true, 404);
+        abort_if(! Event::where('slug', $eventSlug)->where('organization_id', $organization_id)->exists(), 404);
         
         
         $event = Event::with(
@@ -80,7 +80,7 @@ class AdminEventsController extends Controller
                 'eventDocuments.documentType:event_document_type_id,document_type',
                 'organization:organization_id,organization_acronym,organization_slug',
                 'organization.logo:organization_id,file',)
-            ->where('slug', $event_slug)
+            ->where('slug', $eventSlug)
             ->first();
 
         return view($this->viewDirectory . 'show', 

@@ -168,15 +168,33 @@ Auth::routes();
                 
             });
             
-
+            // Admin Events View Routes
             Route::group([
                     'as' => 'events.',
                     'prefix' => '/events',],
                 function () {
-                    Route::get('/{organization_slug}/{event_slug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'show'])->where(['organization_slug' => '^[a-zA-Z0-9_-]{2,255}$', 'event_slug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('show');
-                    Route::get('/{organization_slug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'organizationIndex'])->where(['organization_slug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('organization.index');
+                    Route::get('/{organizationSlug}/{eventSlug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'show'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$', 'eventSlug' => '^[a-zA-Z0-9-_]{2,255}$'])->name('show');
+                    Route::get('/{organizationSlug}', [App\Http\Controllers\Admin\AdminEventsController::class, 'organizationIndex'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('organization.index');
                     Route::get('', [App\Http\Controllers\Admin\AdminEventsController::class, 'index'])->name('index');
+            });
 
+            // Admin Accomplishment Reports View Routes
+            Route::group([
+                    'as' => 'accomplishmentReports.',
+                    'prefix' => '/accomplishmentReports',],
+                function () {
+                    Route::get('/{organizationSlug}/{accomplishmentReportUUID}', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'show'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$', 'accomplishmentReportUUID' => '^[a-zA-Z0-9-]{36}$'])->name('show');
+                    Route::get('/{organizationSlug}', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'organizationIndex'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('organization.index');
+                    Route::get('', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'index'])->name('index');
+            });
+
+            // Admin Organizations View Routes
+            Route::group([
+                    'as' => 'organizations.',
+                    'prefix' => '/organizations',],
+                function () {
+                    Route::get('/{organizationSlug}', [App\Http\Controllers\Admin\AdminOrganizationsController::class, 'show'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('show');
+                    Route::get('', [App\Http\Controllers\Admin\AdminOrganizationsController::class, 'index'])->name('index');
             });
 
         });

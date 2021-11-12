@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             OrganizationTypeSeeder::class,
             OrganizationAssetTypeSeeder::class,
+            AccomplishmentReportTypeSeeder::class,
             OrganizationSeeder::class,
             CourseSeeder::class,
             GenderSeeder::class,

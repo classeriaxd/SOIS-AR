@@ -18,7 +18,7 @@
                             <a href="{{route('admin.events.index')}}" class="text-decoration-none">Events</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{route('admin.events.organization.index', ['organization_slug' => $event->organization->organization_slug])}}" class="text-decoration-none">{{ $event->organization->organization_acronym }}</a>
+                            <a href="{{route('admin.events.organization.index', ['organizationSlug' => $event->organization->organization_slug])}}" class="text-decoration-none">{{ $event->organization->organization_acronym }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {{ $event->title }}
@@ -236,7 +236,7 @@
             <hr>
 
             <div class="flex-row my-2 text-center">
-                <a href="{{route('admin.events.organization.index', ['organization_slug' => $event->organization->organization_slug])}}"
+                <a href="{{route('admin.events.organization.index', ['organizationSlug' => $event->organization->organization_slug])}}"
                     class="btn btn-secondary text-white"
                     role="button">
                         Go back to {{$event->organization->organization_acronym}} Events

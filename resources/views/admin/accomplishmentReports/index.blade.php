@@ -8,7 +8,7 @@
             {{-- Title and Breadcrumbs --}}
             <div class="d-flex justify-content-between align-items-center">
                 {{-- Title --}}
-                <h2 class="display-7 text-left text-break">All Accomplished Events</h2>
+                <h2 class="display-7 text-left text-break">All Accomplishment Reports</h2>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb align-items-center">
                     <ol class="breadcrumb justify-content-center">
@@ -16,57 +16,66 @@
                             <a href="{{route('admin.home')}}" class="text-decoration-none">Home</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Events
+                            Accomplishment Reports
                         </li>
                     </ol>
                 </nav>
             </div>
 
-            {{-- Event Table --}}
+            {{-- Accomplishment Reports Table --}}
             <div class="row my-2">
-                @if($events->isNotEmpty())
+                @if($accomplishmentReports->isNotEmpty())
 
                 <div class="d-flex justify-content-center">
-                        {{ $events->links() }}
+                        {{ $accomplishmentReports->links() }}
                 </div>
 
-                <table class="table table-striped table-hover table-bordered border border-dark" id="eventTable">
+                <table class="table table-striped table-hover table-bordered border border-dark" id="accomplishmentReportTable">
                     <thead class="text-white fw-bold bg-maroon">
                         <th class="text-center" scope="col">#</th>
                         <th class="text-center" scope="col">Org</th>
+                        <th class="text-center" scope="col">Type</th>
                         <th class="text-center" scope="col">Title</th>
-                        <th class="text-center" scope="col">Category</th>
-                        <th class="text-center" scope="col">Role</th>
-                        <th class="text-center" scope="col">Date</th>
+                        <th class="text-center" scope="col">Inclusive Date</th>
+                        <th class="text-center" scope="col">Status</th>
                         <th class="text-center" scope="col" data-sortable="false">Options</th>
                     </thead>
                     <tbody>
                         @php $i = 1; @endphp
-                        @foreach($events as $event)
+                        @foreach($accomplishmentReports as $accomplishmentReport)
                         <tr>
                             <td scope="row" class="text-center">{{ $i }}</td>
-                            <td class="text-center">{{ $event->organization->organization_acronym }}</td>
-                            <td class="text-break">{{ $event->title }}</td>
-                            <td class="text-center">
-                                <span class="badge fs-6" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
-                                    {{$event->eventCategory->category}}
-                                </span>
+                            <td class="text-center">{{ $accomplishmentReport->organization->organization_acronym }}</td>
+                            <td>
+                                @if($accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Tabular')
+                                    <i class="fas fa-file-excel fs-2"></i>|{{$accomplishmentReport->accomplishmentReportType->accomplishment_report_type}}
+                                @elseif($accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Design')
+                                    <i class="fas fa-file-pdf fs-2"></i>|{{$accomplishmentReport->accomplishmentReportType->accomplishment_report_type}}
+                                @endif
+                            </td>
+                            <td class="text-break">
+                                @if($accomplishmentReport->read_at == NULL)
+                                    <span class="badge bg-primary text-white rounded-pill fs-6">New</span>
+                                @endif 
+                                {{ $accomplishmentReport->title }} 
                             </td>
                             <td class="text-center">
-                                <span class="badge fs-6" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
-                                    {{$event->eventRole->event_role}}
-                                </span>
+                                {{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}
                             </td>
-                            <td> 
-                                @if($event->start_date == $event->end_date)
-                                    {{date_format(date_create($event->start_date), 'F d, Y')}}
-                                @else
-                                    {{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
+                            <td class="text-center">
+                                @if($accomplishmentReport->status == 1)
+                                    <span class="badge bg-warning text-dark rounded-pill fs-6">Pending</span>
+                                @elseif($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Design')
+                                    <span class="badge bg-success text-white rounded-pill fs-6">Approved</span>
+                                @elseif($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Tabular')
+                                    <span class="badge bg-success text-white rounded-pill fs-6">Automatically Approved</span>
+                                @elseif ($accomplishmentReport->status == 3)
+                                    <span class="badge bg-danger text-white rounded-pill fs-6">Disapproved</span>
                                 @endif
                             </td>
                             <td class="text-center">
-                                <a href="{{route('admin.events.show', ['organizationSlug' => $event->organization->organization_slug, 'eventSlug' => $event->slug])}}" 
-                                    class="btn btn-primary" 
+                                <a href="{{route('admin.accomplishmentReports.show', ['organizationSlug' => $accomplishmentReport->organization->organization_slug, 'accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" 
+                                    class="btn btn-primary text-white" 
                                     role="button" 
                                     target="_blank">
                                         <span class="fas fa-external-link-alt text-white"></span>
@@ -79,26 +88,26 @@
                 </table>
 
                 <div class="d-flex justify-content-center">
-                        {{ $events->links() }}
+                        {{ $accomplishmentReports->links() }}
                 </div>
 
                 @else
                 <p class="text-center">
-                    No Event Found. :(
+                    No Accomplishment Report Found. :(
                 </p>
                 @endif
             </div>
 
             {{-- Organizations --}}
             <div class="row">
-                <h2 class="display-7 text-center">View Events by Organization</h2>
+                <h2 class="display-7 text-center">View Accomplishment Reports by Organization</h2>
             </div>
             <div class="row my-2">
                 <div class="col d-flex justify-content-evenly">
                     @if($organizations->count() > 0)
 
                         @foreach($organizations as $organization)
-                            <a href="{{ route('admin.events.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
+                            <a href="{{ route('admin.accomplishmentReports.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
                                 <div class="card">
                                     <img class="card-img-top" src="/storage/{{$organization->logo->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
                                     <div class="card-body text-center bg-maroon text-white fw-bold">

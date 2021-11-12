@@ -8,6 +8,7 @@ use App\Models\{
     SchoolYear,
     StudentAccomplishment,
     AccomplishmentReport,
+    AccomplishmentReportType,
 };
 
 use App\Http\Requests\AccomplishmentReportRequests\{
@@ -79,7 +80,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function show($accomplishmentReportUUID, $newAccomplishmentReport = false)
     {
-        if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
+        if($accomplishmentReport = AccomplishmentReport::with('accomplishmentReportType')->where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
         {
             return view('accomplishmentreports.show', compact('accomplishmentReport','newAccomplishmentReport'));
         }
@@ -213,10 +214,8 @@ class AccomplishmentReportsController extends Controller
         //Fetch organization and assets
         $organization = Organization::where('organization_id', Auth::user()->course->organization_id)
             ->first();
-        //dd($start_date, $end_date);
-        // Get all Events within $start_date and $end_date, 
-        // then grabs all of their child Event Images and Documents
-        // Images Sorted on Image type, Documents on Document Type, Event on Organization's Role
+
+        // Get all Events within $start_date and $end_date, then grabs all of their child Event Images and Documents. Images Sorted on Image type, Documents on Document Type, Event on Organization's Role
         $events = Event::with([
             'eventImages' => function ($query) {
                     $query->orderBy('image_type', 'ASC')->get();},
@@ -239,10 +238,22 @@ class AccomplishmentReportsController extends Controller
             ->whereBetween('end_date', [$start_date, $end_date])
             ->where('status', 2)
             ->get();
-        //dd($studentAccomplishments);
+        
+        $accomplishmentReportTypes = AccomplishmentReportType::all();
+
         $loadJSWithoutDefer = true;
         return view('accomplishmentreports.showChecklist', 
-            compact('events', 'studentAccomplishments', 'range', 'rangeTitle', 'organization', 'start_date', 'end_date', 'loadJSWithoutDefer')); 
+            compact(
+                'events', 
+                'studentAccomplishments', 
+                'accomplishmentReportTypes', 
+                'range', 
+                'rangeTitle', 
+                'organization', 
+                'start_date', 
+                'end_date', 
+                'loadJSWithoutDefer'
+            )); 
     }
 
     /**
@@ -288,20 +299,17 @@ class AccomplishmentReportsController extends Controller
             ->get();
 
         $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
-
+        
         // Tabular Format XLSX
-        if ($request->input('ar_format') == 'tabular')
+        if ($request->input('ar_format') == 1)
         {
             // Generate XLSX AR then Return the directory where it is saved
             $accomplishmentReportGenerateXLSXService = new AccomplishmentReportGenerateXLSXService();
             $ARDirectory = $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
             $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
 
-            // Assign Report Type for Tabular
-            $accomplishmentReportType = 1;
-
             // Store Accomplishment Report
-            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization, $accomplishmentReportType);
+            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization);
 
             // Send Notification to Organization President
             $this->sendNotificationToPresident($accomplishmentReportUUID);
@@ -318,17 +326,14 @@ class AccomplishmentReportsController extends Controller
         }
 
         // Design Format PDF
-        elseif ($request->input('ar_format') == 'design') 
+        elseif ($request->input('ar_format') == 2) 
         {
             // Generate PDF AR then Return the directory where it is saved
             $accomplishmentReportGeneratePDFService = new AccomplishmentReportGeneratePDFService();
             $ARDirectory = $accomplishmentReportGeneratePDFService->generate($request, $events, $studentAccomplishments,);
 
-            // Assign Report Type for Design
-            $accomplishmentReportType = 2;
-
             // Store Accomplishment Report
-            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization, $accomplishmentReportType);
+            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization);
 
             // Send Notification to Organization President
             $this->sendNotificationToPresident($accomplishmentReportUUID);
@@ -351,9 +356,9 @@ class AccomplishmentReportsController extends Controller
         {
             $filePath = storage_path('/app/public/'. $accomplishmentReport->file);
 
-            if ($accomplishmentReport->accomplishment_report_type == 1) 
+            if ($accomplishmentReport->accomplishment_report_type_id == 1) 
                 $headers = ['Content-Type: application/vnd.ms-excel'];
-            else if ($accomplishmentReport->accomplishment_report_type == 2) 
+            else if ($accomplishmentReport->accomplishment_report_type_id == 2) 
                 $headers = ['Content-Type: application/pdf'];
             
             $fileName = Str::limit(Str::slug($accomplishmentReport->title, '-'), 20, '-') .'-AccomplishmentReport.' .  pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
