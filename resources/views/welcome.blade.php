@@ -78,7 +78,10 @@
                         </div>
                     </div>
                 </div>
+                
                 @guest
+
+                {{-- If user is not logged-in, show login page --}}
                 <div class="login-content">
                     <form method="POST" action="{{ route('login') }}">
                     @csrf
@@ -114,17 +117,27 @@
                         <button type="submit" class="btn" value="Continue">
                             {{ __('Continue') }}
                         </button>
-                        <a href="{{ route('password.request') }}">Forgot Password?</a>
                     </form>
                 </div>
+
                 @else
+
+                {{-- If logged-in and user opens landing page --}}
                 <div class="row">
                     <div class="col">
-                        <a href="/home">
-                            <button class="btn btn-primary">Home</button>  
-                        </a>
+                        @role('Admin')
+                            <a href="{{ route('admin.home') }}">
+                                <button class="btn btn-primary">Home</button>  
+                            </a>
+                        @else
+                            <a href="{{ route('home') }}">
+                                <button class="btn btn-primary">Home</button>  
+                            </a>
+                        @endrole
+                        
                     </div>
                 </div>
+
                 @endguest
         </div>
         

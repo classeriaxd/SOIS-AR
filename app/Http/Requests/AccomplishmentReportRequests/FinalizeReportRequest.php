@@ -39,7 +39,7 @@ class FinalizeReportRequest extends FormRequest
         $rules = [
             'start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
             'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date|after:1992-01-01',
-            'ar_format' => 'required',
+            'ar_format' => 'required|integer|exists:App\Models\AccomplishmentReportType,accomplishment_report_type_id',
             'archive' => 'sometimes|accepted',
             'title' => 'required|string',
             'description' => 'nullable|string',
@@ -60,6 +60,7 @@ class FinalizeReportRequest extends FormRequest
             'range_title.required' => 'Missing: Range Title',
             'range_title.in_array' => 'Unknown: Range Title',
             'ar_format.required' => 'Missing: AR Format',
+            'ar_format.exists' => 'Format Error',
         ];
     }
     /**

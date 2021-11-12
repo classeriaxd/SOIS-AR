@@ -15,4 +15,9 @@ class OrganizationAsset extends Model
         return $this->belongsTo(Organization::class, 'organization_id');
     }
 
+    public function assetType()
+    {
+        return $this->belongsTo(OrganizationAssetType::class, 'organization_asset_type_id');
+    }
+
 }

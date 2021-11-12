@@ -32,9 +32,9 @@ class HomeController extends Controller
             $userPositionTitles = Auth::user()->positionTitles;
             // Array because of Laravel Collection, maybe revise this sometime?
             $orgCurrentPositionArray = $userPositionTitles->where('organization_id', Auth::user()->course->organization_id)->pluck('position_title');
+            //dd(Auth::user()->course->organization_id);
             $orgCurrentPosition = $orgCurrentPositionArray[0];
             $document_officers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-
             $loginAlert = $this->showLoginAlert();
             $loadHomeCSS = true;
             if ($orgCurrentPosition == 'Member')

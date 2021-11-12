@@ -17,8 +17,18 @@ class AccomplishmentReport extends Model
         return $this->belongsTo(Organization::class, 'organization_id');
     }
 
+    public function accomplishmentReportType()
+    {
+        return $this->belongsTo(AccomplishmentReportType::class, 'accomplishment_report_type_id');
+    }
+
     public function creator()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'created_by', 'user_id');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by', 'user_id');
     }
 }
