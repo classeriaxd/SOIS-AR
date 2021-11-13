@@ -29,13 +29,9 @@
 
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-5">
-        			<div class="card h-100">
+        			<div class="card h-100 border-dark">
                         <div class="card-header text-center align-middle">
-                            <div class="display-5">Image</div>
-                        </div>
-                        <img src="/storage/{{$event->eventImage->image}}" class="card-img-middle w-100" style="width:500px;">
-                        <div class="card-footer text-center align-middle">
-                            <h5 class="display-5">
+                        <h5 class="display-5">
                                 @if($event->eventImage->image_type == 0)
                                     Poster
                                 @else
@@ -43,10 +39,13 @@
                                 @endif
                             </h5>
                         </div>
+                        <img src="/storage/{{$event->eventImage->image}}" class="rounded mx-auto d-block" style="max-width: 200px; height: 200px;">
+                        <div class="card-footer text-center align-middle">
+                        </div>
                     </div>  
         		</div>
                 <div class="col-md-5">
-                    <div class="card h-100">
+                    <div class="card h-100 border-dark">
                         <div class="card-header text-center align-middle">
                             <div class="display-5">Caption</div>
                         </div>

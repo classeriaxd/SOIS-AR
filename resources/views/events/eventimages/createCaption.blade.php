@@ -34,7 +34,7 @@
                 </div>
             @if(($eventImages['posters']->isNotEmpty()))
                 <div class="d-flex flex-row justify-content-center ">
-                    <h6 class="display-6 me-1">Posters</h6>
+                    <h6 class="display-6 me-1">Poster/s</h6>
                     <a role="button"
                         data-bs-toggle="popover" 
                         data-bs-container="body"
@@ -45,14 +45,19 @@
                     </a>
                 </div>
                 @foreach($eventImages['posters'] as $poster)
-                <div class="row border border-dark my-1">
-                    <div class="col">
-                        <img src="/storage/{{$poster->image}}" class="card-img-middle w-100" style="max-width:20vw; min-width: 20vw; max-height: 50vh; min-height: 50vh;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card border-dark">
+                    <div class="card-body">
+                        <img src="/storage/{{$poster->image}}" class="rounded mx-auto d-block" style="max-width:30vw; min-width: 20vw; max-height: 58vh; min-height: 50vh;">
                     </div>
-                    
-                    <div class="col d-flex align-items-center">
-                        <div class="form-group row w-100">
-                            <label for="caption" class="col-form-label text-center">Caption</label>    
+                </div>
+            </div> 
+            <div class="col">
+                <div class="card border-dark"  style="height: 26rem;">
+                <div class="card-header card-title text-center bg-maroon text-white fw-bold">Caption</div>
+                    <div class="card-body">
+                        <div class="form-group row h-50">  
                             <textarea id="caption" 
                             class="form-control @error('caption') is-invalid @enderror" 
                             name="{{'caption[' . $poster->slug . ']' }}"
@@ -84,23 +89,29 @@
                     </a>
                 </div>
                 @foreach($eventImages['evidences'] as $evidence)
-                <div class="row border border-dark my-1">
+                <div class="row">
                     <div class="col">
-                        <img src="/storage/{{$evidence->image}}" class="card-img-middle w-100" style="max-width:35vw; min-width: 35vw; max-height: 25vh; min-height: 25vh;">
-                    </div>
-                    <div class="col d-flex align-items-center">
-                        <div class="form-group row w-100">
-                            <label for="caption" class="col-form-label text-center">Caption</label>    
-                            <textarea id="caption" 
-                            class="form-control @error('caption') is-invalid @enderror" 
-                            name="{{'caption[' . $evidence->slug. ']' }}"
-                            placeholder="Evidence Caption">{{ old('caption')}}</textarea>
-                            @error('caption')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                         <div class="border border-dark my-1">
+                        <img src="/storage/{{$evidence->image}}" class="rounded mx-auto d-block" style="max-width:25vw; min-width: 20vw; max-height: 17vh; min-height: 15vh;">
                         </div>
+                    </div>
+                    <div class="col">
+                        <div class="card border-dark">
+                            <div class="card-header card-title text-center bg-maroon text-white fw-bold">Caption</div>
+                            <div class="card-body" style="width: 29rem;">
+                                <div class="form-group row w-100">   
+                                    <textarea id="caption" 
+                                    class="form-control @error('caption') is-invalid @enderror" 
+                                    name="{{'caption[' . $evidence->slug. ']' }}"
+                                    placeholder="Evidence Caption">{{ old('caption')}}</textarea>
+                                    @error('caption')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                         </div>
                     </div>
                 </div>
                 @endforeach
@@ -108,15 +119,13 @@
             @endif
 
             @if(($eventImages['evidences']->isNotEmpty()) || ($eventImages['posters']->isNotEmpty()))
-                <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Add Captions</button>
+                <div class="flex my-2 text-center">
+                    <button class="btn btn-primary text-white col-md-12" type="submit">Add Captions</button>
                 </div>
             @endif
             </div>
         </div>
     </form>
-
-    <hr>
 
     <div class="flex-row my-2 text-center">
         <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
