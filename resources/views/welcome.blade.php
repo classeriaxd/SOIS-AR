@@ -65,6 +65,9 @@
             <div class="banner-box">
                 <img src="/images/rec_logo.png" alt="REC Logo">
             </div>
+            <div class="banner-box">
+                <img src="/images/irock_logo.png" alt="iRock Logo">
+            </div>
         </div>
         <div class="container">
                 <div class="greeting"> 

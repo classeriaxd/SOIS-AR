@@ -4,15 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-        {{-- Login Alert --}}
-            @if ($loginAlert != NULL)
-                <div id="login_alert" style="position:fixed; top:0; right:0; width:20%;">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ $loginAlert }}
-                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
         @position_title('Officer')
             {{-- Title and Breadcrumbs --}}
             <div class="row">
