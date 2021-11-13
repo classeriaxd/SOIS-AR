@@ -9,11 +9,8 @@
 
     <div class="page">
         <div class="intro-title-block vertical-center">
-            @foreach($organization->assets as $asset)
-                @if($asset->type == 1)
-                    <img src="{{public_path('/storage/'.$asset->image) }}">
-                @endif
-            @endforeach
+
+            <img src="{{public_path('/storage/'. $organization->logo->file) }}">
             <h2>Republic of the Philippines<br>
             <strong>POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</strong><br>
             <strong>TAGUIG CITY BRANCH</strong><br>

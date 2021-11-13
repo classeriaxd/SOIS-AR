@@ -11,11 +11,11 @@ use Carbon\Carbon;
 class AccomplishmentReportStoreService
 {
     /**
-     * @param Request $request, Array $ARDirectory, Collection $organization, Integer $reportType, Array $alternateDirectory
+     * @param Request $request, Array $ARDirectory, Collection $organization
      * Service to Store an Accomplishment Report.
      * @return String
      */
-    public function store($request, $ARDirectory, $organization, $reportType)
+    public function store($request, $ARDirectory, $organization)
     {
         $rangeTitleRequest = $request->only('range_title');
         $rangeTitle = NULL;
@@ -40,13 +40,14 @@ class AccomplishmentReportStoreService
         $accomplishmentReportID = AccomplishmentReport::insertGetId([
             'accomplishment_report_uuid' => $accomplishmentReportUUID,
             'organization_id' => $organization->organization_id,
+            // Accomplishment Report Type - 1 = Tabular | 2 = Design
+            'accomplishment_report_type_id' => $request->input('ar_format'),
             'created_by' => Auth::user()->user_id,
             'title' => $request->input('title'),
             'description' => $request->input('description', NULL),
             'file' => '/compiledDocuments/accomplishmentReports/' . $ARDirectory['finalFolderName'] . '/' . $ARDirectory['finalFileName'],
             
-            // Accomplishment Report Type - 1 = Tabular | 2 = Design
-            'accomplishment_report_type' => $reportType,
+            
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),
             'range_title' => $rangeTitle,

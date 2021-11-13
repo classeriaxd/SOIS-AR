@@ -56,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('position_title', function ($position_title) {
             $allowedOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
             $presidentOfficerTitle = 'President';
-            $isAuth = false;
+
             $positionExists = false;
             if (Auth::check()) 
             {
@@ -93,8 +93,22 @@ class AppServiceProvider extends ServiceProvider
             }
 
             if ( $positionExists )
-                $isAuth = true;
-        return $isAuth;
+                return true;
+
+            return false;
+        });
+
+
+        Blade::if('role', function ($role) {
+            if (Auth::check())
+            {
+                if($role === Auth::user()->role->role)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         });
     }
 }

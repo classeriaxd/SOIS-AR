@@ -50,46 +50,51 @@
                     <div class="card">
                         <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $accomplishmentReport->title }}</h5>
                         <div class="card-body">
-                        @if($accomplishmentReport->status == 1)
-                            <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Status: PENDING</span></h6>
-                        @elseif ($accomplishmentReport->status == 2)
-                            <h6 class="text-center text-white font-weight-bold"><span class="bg-success rounded">Status: APPROVED</span></h6>
-                        @elseif ($accomplishmentReport->status == 3)
-                            <h6 class="text-center text-white font-weight-bold"><span class="bg-danger rounded">Status: DISAPPROVED</span></h6>
-                        @endif
+                            <h6 class="text-center">
+                                @if($accomplishmentReport->status == 1)
+                                    <span class="badge bg-warning text-dark rounded-pill fs-6 text-center">Pending</span>
+                                @elseif($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Design')
+                                    <span class="badge bg-success text-white rounded-pill fs-6 text-center">Approved</span>
+                                @elseif($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Tabular')
+                                    <span class="badge bg-success text-white rounded-pill fs-6 text-center">Automatically Approved</span>
+                                @elseif ($accomplishmentReport->status == 3)
+                                    <span class="badge bg-danger text-white rounded-pill fs-6 text-center">Disapproved</span>
+                                @endif
+                            </h6>
 
-                        <p class="text-center">{{ $accomplishmentReport->description }}</p>
-                        <p class="text-center">Inclusive Date<br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
+                            <p class="text-center"><span class="fw-bold">Description: </span>{{ $accomplishmentReport->description }}</p>
+                            <p class="text-center">Inclusive Date<br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
 
-                        @if ($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishment_report_type == 2)
-                        {{-- Download button for Design --}}
-                        <div class="flex-row text-center my-1">
-                            <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
-                                <button class="btn btn-primary text-white" type="submit">
-                                    <i class="fas fa-file-pdf"></i> Download Accomplishment Report
-                                </button>
-                            </form>
-                        </div>
-                        @endif
-
-                        <div class="flex-row text-center my-1">
-                            {{-- Tabular --}}
-                            @if($accomplishmentReport->accomplishment_report_type == 1)
-                            <p class="text-center">No preview for spreadsheet files, you can download the generated report instead.</p>  
-                            <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
-                                <button class="btn btn-primary text-white" type="submit">
-                                    <i class="fas fa-file-excel"></i> Download Spreadsheet
-                                </button>
-                            </form>
-
-                            {{-- Design --}}
-                            @elseif($accomplishmentReport->accomplishment_report_type == 2)
-                            <iframe src="{{'/storage/'.$accomplishmentReport->file}}#toolbar=0" width="100%" style="height:75vh;">
-                            </iframe>
+                            {{-- Download button for Design --}}
+                            @if ($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishment_report_type_id == 2)
+                            <div class="flex-row text-center my-1">
+                                <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
+                                    <button class="btn btn-primary text-white" type="submit">
+                                        <i class="fas fa-file-pdf"></i> Download Accomplishment Report
+                                    </button>
+                                </form>
+                            </div>
                             @endif
-                            
-                            <br>
-                        </div>
+
+                            {{-- Accomplishment Report File View --}}
+                            <div class="flex-row text-center my-1">
+                                {{-- Tabular --}}
+                                @if($accomplishmentReport->accomplishment_report_type_id == 1)
+                                <p class="text-center">No preview for spreadsheet files, you can download the generated report instead.</p>  
+                                <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
+                                    <button class="btn btn-primary text-white" type="submit">
+                                        <i class="fas fa-file-excel"></i> Download Spreadsheet
+                                    </button>
+                                </form>
+
+                                {{-- Design --}}
+                                @elseif($accomplishmentReport->accomplishment_report_type_id == 2)
+                                <iframe src="{{'/storage/'.$accomplishmentReport->file}}#toolbar=0" width="100%" style="height:75vh;">
+                                </iframe>
+                                @endif
+                                
+                                <br>
+                            </div>
 
                         </div>
                     </div>

@@ -260,14 +260,22 @@
 
                             <div class="form-group justify-content-center row my-1">
                                 <div class="col-md-8">
-                                        <label for="radioARFormatGroup" class="col-md-4 col-form-label">Select Format</label> <br>
-                                        <input type="radio" id="tabular" name="ar_format" class="form-check-input" value="tabular" required autocomplete="off">
-                                        <label for="tabular">Tabular</label>
-                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input type="radio" id="design" name="ar_format" class="form-check-input" value="design" required autocomplete="off">
-                                        <label for="design">Design</label>
+                                       <label for="radioARFormatGroup" class="col-md-4 col-form-label">Select Format</label> <br>
+                                       <div class="col" id="radioARFormatGroup">
+                                          @foreach($accomplishmentReportTypes as $accomplishmentReportType)
+                                              <div class="form-check">
+                                                  <input type="radio" id="{{$accomplishmentReportType->accomplishment_report_type}}" name="ar_format" class="form-check-input" value="{{$accomplishmentReportType->accomplishment_report_type_id}}" required autocomplete="off">
+                                                  <label class="form-check-label" for="{{$accomplishmentReportType->accomplishment_report_type}}">{{$accomplishmentReportType->accomplishment_report_type}}</label>
+                                              </div>
+                                          @endforeach
+                                       </div>
                                 </div>
                             </div>
+                            @error('ar_format')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                             <div class="flex-row my-2 text-center">
                                 <button class="btn btn-primary text-white" type="submit">Submit Checklist</button>
                             </div>
@@ -276,7 +284,13 @@
                             <input type="hidden" name="end_date" value="{{$end_date}}">
                             <input type="hidden" name="range_title" value="{{$rangeTitle}}">
                         </form>
-                    </div>
+                    </div>         
+                </div>
+              
+                <hr>
+                <div class="row justify-content-center my-1">
+                    <button class="btn btn-primary text-white" type="submit">Submit Checklist</button>
+
                 </div>
             </div>
         </div>
