@@ -226,69 +226,75 @@
                         </div>
                     </div>
                 </div>
-                <hr>
-                <h3 class="text-center">Report Details</h3>
-                <div class="form-group justify-content-center row my-1">
-                    <div class="col-md-8">
-                        <div class="form-group row">
-                            <label for="title" class="col-md-4 col-form-label">Title <span class="required">*</span></label>
-                            <input id="title" 
-                            type="text" 
-                            class="form-control"
-                            name="title"
-                            placeholder="Report Title" 
-                            required>
-                        </div>
-                    </div>  
-                </div>
-                <div class="form-group justify-content-center row my-1">
-                    <div class="col-md-8">
-                        <div class="form-group row">
-                            <label for="description" class="col-md-4 col-form-label">Description</label>    
-                            <textarea id="description" 
-                            class="form-control" 
-                            name="description" 
-                            placeholder="Report Description">
-                            </textarea>
-                        </div>
-                    </div>
-                    
-                </div>
 
-                <hr>
-
-                <div class="form-group row my-1">
-                    <div class="col text-right">
-                        <label for="radioARFormatGroup" class="form-label h5 align-middle">Select Format</label>
-                    </div>
-                    <div class="col" id="radioARFormatGroup">
-                        @foreach($accomplishmentReportTypes as $accomplishmentReportType)
-                            <div class="form-check">
-                                <input type="radio" id="{{$accomplishmentReportType->accomplishment_report_type}}" name="ar_format" class="form-check-input" value="{{$accomplishmentReportType->accomplishment_report_type_id}}" required autocomplete="off">
-                                <label class="form-check-label" for="{{$accomplishmentReportType->accomplishment_report_type}}">{{$accomplishmentReportType->accomplishment_report_type}}</label>
+        <div class="col">
+            <div class="card mb-3">
+                <div class="card-header text-white bg-maroon align-middle bg-maroon text-white fw-bold fs-3">Report Details</div>
+                    <div class="card-body">
+                            <!-- <h3 class="text-center">Report Details</h3> -->
+                            <div class="form-group justify-content-center row my-1">
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+                                        <label for="title" class="col-md-4 col-form-label">Title <span class="required">*</span></label>
+                                        <input id="title" 
+                                        type="text" 
+                                        class="form-control"
+                                        name="title"
+                                        placeholder="Report Title" 
+                                        required>
+                                    </div>
+                                </div>  
                             </div>
-                        @endforeach
-                    </div>
-                </div>
+                            <div class="form-group justify-content-center row my-1">
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+                                        <label for="description" class="col-md-4 col-form-label">Description</label>    
+                                        <textarea id="description" 
+                                        class="form-control" 
+                                        name="description" 
+                                        placeholder="Report Description">
+                                        </textarea>
+                                    </div>
+                                </div>                                
+                            </div>
 
-                @error('ar_format')
-                    <span class="invalid-feedback d-block" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-                
+                            <div class="form-group justify-content-center row my-1">
+                                <div class="col-md-8">
+                                       <label for="radioARFormatGroup" class="col-md-4 col-form-label">Select Format</label> <br>
+                                       <div class="col" id="radioARFormatGroup">
+                                          @foreach($accomplishmentReportTypes as $accomplishmentReportType)
+                                              <div class="form-check">
+                                                  <input type="radio" id="{{$accomplishmentReportType->accomplishment_report_type}}" name="ar_format" class="form-check-input" value="{{$accomplishmentReportType->accomplishment_report_type_id}}" required autocomplete="off">
+                                                  <label class="form-check-label" for="{{$accomplishmentReportType->accomplishment_report_type}}">{{$accomplishmentReportType->accomplishment_report_type}}</label>
+                                              </div>
+                                          @endforeach
+                                       </div>
+                                </div>
+                            </div>
+                            @error('ar_format')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            <div class="flex-row my-2 text-center">
+                                <button class="btn btn-primary text-white" type="submit">Submit Checklist</button>
+                            </div>
+                            @csrf
+                            <input type="hidden" name="start_date" value="{{$start_date}}">
+                            <input type="hidden" name="end_date" value="{{$end_date}}">
+                            <input type="hidden" name="range_title" value="{{$rangeTitle}}">
+                        </form>
+                    </div>         
+                </div>
+              
                 <hr>
                 <div class="row justify-content-center my-1">
                     <button class="btn btn-primary text-white" type="submit">Submit Checklist</button>
+
                 </div>
-                @csrf
-                <input type="hidden" name="start_date" value="{{$start_date}}">
-                <input type="hidden" name="end_date" value="{{$end_date}}">
-                <input type="hidden" name="range_title" value="{{$rangeTitle}}">
-            </form>
+            </div>
         </div>
 	</div>
-    <hr>
 
     <div class="flex-row my-2 text-center">
         <a href="{{ route('accomplishmentreports.create') }}"
@@ -358,4 +364,5 @@
         var sortable2 = Sortable.create(dragArea2);
         var sortable3 = Sortable.create(dragArea3);
     </script>
+
 @endsection
