@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-liquid">
 	<div class="row justify-content-center">
         <div class="col-md-10">
             
@@ -77,7 +77,7 @@
             
         	<div class="row justify-content-center mb-1">
         		<div class="col-md-5">
-        			<div class="card">
+        			<div class="card" style="height: 39rem;">
         				<h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Summary</h4>
         				<div class="card-body">
         					<h3 class="card-title text-center">Title: {{ $event->title }}</h3>
@@ -126,17 +126,17 @@
         				</div>
         			</div>
         		</div>
-        		 <div class="col-md-5">
+        		<div class="col-md-5">
         			<div class="card">
     				    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Gallery</h4>
-        				<div class="card-body">
+        				<div class="card-body" style="height: 30rem;">
                             <h3 class="card-title text-center">Posters</h3>
                             <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
                         @if($event->eventImages->where('image_type', 0)->count() > 0)
 
                         @foreach($event->eventImages as $eventImage)
                             @if($eventImage->image_type == 0)
-                                <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
+                                <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-height: 130px; width: 100px;">
                             @endif
                         @endforeach
                         @else
@@ -145,21 +145,22 @@
                             </div>
                             <hr>
                             <h3 class="card-title text-center">Evidences</h3>
-                            <div class="row flex-row flex-nowrap pb-2 pl-1" style="overflow-x:auto;">
+                        <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
 
-                        @if($event->eventImages->where('image_type', 1)->count() > 0)
+                            @if($event->eventImages->where('image_type', 1)->count() > 0)
 
-                        @foreach($event->eventImages as $eventImage)
-                            @if($eventImage->image_type == 1)
-                                <img src="/storage/{{$eventImage->image}}" class="w-300 pr-3" style="max-width: 200px;">
-                            @endif
-                        @endforeach
-                        @else
-                                <p class="text-center">No Image found. :(</p>
-                        @endif        
+                            @foreach($event->eventImages as $eventImage)
+                                @if($eventImage->image_type == 1)
+                                    <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-width: 130px; height: 100px;">
+                                @endif
+                            @endforeach
+                            @else
+                                    <p class="text-center">No Image found. :(</p>
+                            @endif        
                             </div>                  
                         </div>
-                        <h5 class="card-header card-text text-center border-top">Options</h5>
+        			</div>                   		
+                <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
                             <a href="{{route('event.image.create', ['event_slug' => $event->slug])}}">
                                 <button class="btn btn-primary text-white">Add Image</button>
@@ -168,12 +169,11 @@
                                 <button class="btn btn-primary text-white">View Event Gallery</button>
                             </a>	
         				</div>
-        			</div>
-        		</div>
-        	</div>
+                    </div>
+        	    </div>
             <div class="row justify-content-center mt-2 mb-1">
                 <div class="card w-50">
-                    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Documents</h4>
+                    <div class="card-header card-title text-center  text-black fw-bold">Event Documents</div>
                     <div class="card-body text-center">
                     @if($event->eventDocuments->count() > 0 )
                     @php $i = 1; @endphp

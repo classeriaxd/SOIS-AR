@@ -15,16 +15,8 @@
                             <div class="card-header text-center align-middle">
                                 <div class="display-5">Image</div>
                             </div>
-                            <img src="/storage/{{$event->eventImage->image}}" class="card-img-middle w-100" style="width:500px;">
-                            <div class="card-footer text-center align-middle">
-                                <h5 class="display-5">
-                                @if($event->eventImage->image_type == 0)
-                                    Poster
-                                @else
-                                    Evidence
-                                @endif
-                                </h5>
-                            </div>
+                            <br>
+                            <img src="/storage/{{$event->eventImage->image}}" class="rounded mx-auto d-block" style="max-width: 200px; height: 200px;">
                         </div>  
         		    </div>
                     <div class="col-md-5">
@@ -58,9 +50,7 @@
                                </div>
                             </div>
                 
-                            <div class="card-header text-center align-middle" style="border: 1px;">
-                                <div class="display-5">Options</div>
-                            </div>
+                          
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <button class="btn btn-primary text-white me-3" type="submit">Finalize Edit</button>
                             </div>
