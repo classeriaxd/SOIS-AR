@@ -183,6 +183,7 @@ Auth::routes();
                     'as' => 'accomplishmentReports.',
                     'prefix' => '/accomplishmentReports',],
                 function () {
+                    Route::get('/find/{accomplishmentReportUUID}', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'redirectFromNotification'])->where(['accomplishmentReportUUID' => '^[a-zA-Z0-9-]{36}$'])->name('redirectFromNotification');
                     Route::get('/{organizationSlug}/{accomplishmentReportUUID}', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'show'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$', 'accomplishmentReportUUID' => '^[a-zA-Z0-9-]{36}$'])->name('show');
                     Route::get('/{organizationSlug}', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'organizationIndex'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('organization.index');
                     Route::get('', [App\Http\Controllers\Admin\AdminAccomplishmentReportsController::class, 'index'])->name('index');
@@ -195,6 +196,20 @@ Auth::routes();
                 function () {
                     Route::get('/{organizationSlug}', [App\Http\Controllers\Admin\AdminOrganizationsController::class, 'show'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('show');
                     Route::get('', [App\Http\Controllers\Admin\AdminOrganizationsController::class, 'index'])->name('index');
+            });
+
+            
+
+            // Admin User Notification Routes
+            Route::group([
+                    'as' => 'notifications.',
+                    'prefix' => '/notifications',],
+                function () {
+                    Route::get('/create', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'create'])->name('create');
+                    Route::post('/store', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'store'])->name('store');
+                    Route::post('/all', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'markAllAsRead'])->name('markAllAsRead');
+                    Route::post('/{notification_id}', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'markAsRead'])->where(['notification_id' => '^([1-9][0-9]*)$'])->name('markAsRead');
+                    Route::get('', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'index'])->name('index');
             });
 
         });

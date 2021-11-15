@@ -36,17 +36,20 @@
                                 <span class="badge bg-warning text-dark rounded-pill fs-6 text-center">Pending</span>
                             @elseif($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Design')
                                 <span class="badge bg-success text-white rounded-pill fs-6 text-center">Approved</span>
+                                <p class="text-center"><span class="fw-bold">By: </span>{{$accomplishmentReport->reviewer->full_name}}</p>
                             @elseif($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Tabular')
                                 <span class="badge bg-success text-white rounded-pill fs-6 text-center">Automatically Approved</span>
+                                <p class="text-center"><span class="fw-bold">By: </span>SYSTEM</p>
                             @elseif ($accomplishmentReport->status == 3)
                                 <span class="badge bg-danger text-white rounded-pill fs-6 text-center">Disapproved</span>
+                                <p class="text-center"><span class="fw-bold">By: </span>{{$accomplishmentReport->reviewer->full_name}}</p>
                             @endif
                         </h6>
                         
 
                         <p class="text-center"><span class="fw-bold">Description: </span>{{ $accomplishmentReport->description }}</p>
-                        <p class="text-center">Inclusive Date<br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
-
+                        <p class="text-center"><span class="fw-bold">Inclusive Date</span><br>{{ date_format(date_create($accomplishmentReport->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishmentReport->end_date), 'F d, Y') }}</p>
+                        <p class="text-center"><span class="fw-bold">Created By: </span>{{$accomplishmentReport->creator->full_name}} </p>
                         {{-- Download button for Design --}}
                         @if ($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishment_report_type_id == 2)
                         <div class="flex-row text-center my-1">

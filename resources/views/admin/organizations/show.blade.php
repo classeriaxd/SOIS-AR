@@ -198,8 +198,3 @@
     </div>
 </div>
 @endsection
-
-@section('scripts')
-    {{-- Enable Popovers --}}
-    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
-@endsection

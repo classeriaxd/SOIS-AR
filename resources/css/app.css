@@ -16,3 +16,296 @@
     background-color: #800000 !important;
     color: white;
 }
+
+.breadcrumb {
+    margin-bottom: 0;
+}
+
+
+@import url('https://fonts.googleapis.com/css?family=Nova+Slim&display=swap');
+
+body, html {
+  line-height: 1.8;
+  font-family: 'Roboto', sans-serif;
+  color: #555e58;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  font-weight: 400;
+  margin:0px;
+  padding:0px;
+}
+
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
+  font-weight: 400;
+  line-height: 1.5em;
+}
+
+
+p {
+font-size: 15px;
+margin: 12px 0 0;
+line-height: 24px;
+}
+
+
+
+a{
+color: #333;
+font-weight: 400;
+}
+
+button:focus{
+box-shadow:none;
+outline:none;
+border:none;
+}
+
+button{
+cursor:pointer;
+}
+
+ul, ol {
+padding: 0;
+margin:0px;
+  list-style: none;
+}
+
+
+
+a,
+a:hover,
+a:focus {
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+
+
+/*=======================================================
+material-icons start
+==================================================*/
+
+
+@font-face {
+font-family: 'Material Icons';
+font-style: normal;
+font-weight: 400;
+src: local('Material Icons'),
+  local('MaterialIcons-Regular');
+}
+
+
+
+.material-icons {
+font-family: 'Material Icons';
+font-weight: normal;
+font-style: normal;
+font-size: 24px;  /* Preferred icon size */
+display: inline-block;
+line-height: 1;
+text-transform: none;
+letter-spacing: normal;
+word-wrap: normal;
+white-space: nowrap;
+direction: ltr;
+
+/* Support for all WebKit browsers. */
+-webkit-font-smoothing: antialiased;
+/* Support for Safari and Chrome. */
+text-rendering: optimizeLegibility;
+
+/* Support for Firefox. */
+-moz-osx-font-smoothing: grayscale;
+
+/* Support for IE. */
+font-feature-settings: 'liga';
+}
+
+/*=======================================================
+material-icons end
+==================================================*/
+
+
+
+.wrapper {
+position: relative;
+width:100%;
+overflow:auto;
+}
+
+
+/*=======================================================
+ main-content navbar-design start
+ ===============================================*/
+
+
+
+#content {
+position: relative;
+  transition: all 0.3s;
+background-color: #EEEEEE;
+}
+
+.top-navbar{
+width:100%;
+z-index:9;
+position:relative;
+}
+
+
+.main-content{
+padding:10px 20px 0px 20px;
+position: relative;
+  width: 100%;
+}
+
+
+
+.navbar{
+  background-color: #800000;
+  color: #FFFFFF;
+}
+
+.navbar-brand {
+  color: #FFFFFF;
+}
+
+.container-fluid .navbar-brand:hover{
+  color: yellow;
+}
+
+.navbar button{
+background-color:transparent;
+border:none;
+}
+.navbar button span{
+color:#fff;
+}
+
+#sidebarCollapse{
+border-radius:50%;
+width:45px;
+height:45px;
+text-align:center;
+line-height:45px;
+margin-right:20px;
+border:none;
+  color: #FFFFFF;
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+#sidebarCollapse span {
+  margin-top: 3px;
+  padding: 0px;
+  font-size: 35px;
+}
+
+.navbar-brand h3{
+  color:rgb(255, 255, 255);
+  margin:0px;
+  text-transform:uppercase;
+  transition:all 0.5s ease;
+  font-weight:600;
+  font-size: 1.5rem;
+}
+
+.navbar-brand h3 img{
+width:45px;
+margin-right:10px;
+}
+.navbar-nav > li > a {
+  color: #FFFFFF;
+}
+
+.navbar .notification {
+position: absolute;
+  top: 5px;
+  right: 10px;
+display: block;
+  border: 0px;
+  font-size: 10px;
+  background: #d9534f;
+  min-width: 15px;
+text-align: center;
+  padding: 1px 5px;
+  height: 15px;
+  border-radius: 2px;
+  line-height: 14px;
+}
+
+
+.navbar-nav > li.show .dropdown-menu {
+  transform: translate3d(0, 0, 0);
+opacity:1;
+visibility:visible;
+}
+
+
+.dropdown-menu li > a {
+  font-size: 13px;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 2px;
+font-weight: 400;
+  transition: all 150ms linear;
+}
+
+.navbar-nav > .active > a:focus {
+  color: #FFFFFF;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+
+.navbar-nav li a {
+  position: relative;
+  display: block;
+  padding: 10px 15px!important;
+}
+
+/*=======================================================
+ main-content navbar-design end
+ ===============================================*/
+
+/*=============================================
+footer design start
+=========================================*/
+
+.footer {
+  border-top: 1px solid #e7e7e7;
+}
+
+footer {
+  padding: 10px 0;
+position:relative;
+width:100%;
+}
+
+footer ul li {
+  display: inline-block;
+}
+
+footer ul li a {
+  color: inherit;
+  padding: 15px;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  border-radius: 3px;
+  text-decoration: none;
+  position: relative;
+  display: block;
+}
+
+
+footer .copyright {
+  padding: 15px;
+font-size:14px;
+  margin: 0;
+}
+
+
+/*=============================================
+footer design end
+=========================================*/

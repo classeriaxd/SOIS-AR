@@ -72,12 +72,13 @@ class AdminAccomplishmentReportsController extends Controller
         
         $accomplishmentReport = AccomplishmentReport::with(
                 'accomplishmentReportType',
+                'creator',
+                'reviewer',
                 'organization:organization_id,organization_acronym,organization_slug',
                 'organization.logo:organization_id,file',)
             ->where('accomplishment_report_uuid', $accomplishmentReportUUID)
             ->where('organization_id', $organization_id)
             ->first();
-
         if ($accomplishmentReport->read_at == NULL) 
         {
             $data = ['read_at' => Carbon::now(),];
@@ -87,6 +88,17 @@ class AdminAccomplishmentReportsController extends Controller
             compact(
                 'accomplishmentReport',
             ));
+    }
+
+    public function redirectFromNotification($accomplishmentReportUUID)
+    {
+        abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
+
+        $accomplishmentReport = AccomplishmentReport::with('organization:organization_id,organization_slug')
+            ->where('accomplishment_report_uuid', $accomplishmentReportUUID)
+            ->first();
+        return redirect()->action(
+            [AdminAccomplishmentReportsController::class, 'show'], ['organizationSlug' => $accomplishmentReport->organization->organization_slug, 'accomplishmentReportUUID' => $accomplishmentReportUUID]);
     }
 
 }

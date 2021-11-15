@@ -40,6 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['full_name'];
     
     protected $primaryKey = 'user_id';
 
@@ -66,5 +72,19 @@ class User extends Authenticatable
     public function studentAccomplishments()
     {
         return $this->hasMany(studentAccomplishments::class, 'user_id');
+    }
+
+    /**
+     * Get the user's full concatenated name.
+     * -- Must postfix the word 'Attribute' to the function name
+     * @return string
+     */
+
+    public function getFullNameAttribute()
+    {
+        if ($this->suffix === NULL)
+            return "{$this->last_name}, {$this->first_name} {$this->middle_name}";
+        else
+            return "{$this->last_name}, {$this->first_name} {$this->middle_name} {$this->suffix}";
     }
 }
