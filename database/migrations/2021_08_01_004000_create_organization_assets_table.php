@@ -16,12 +16,12 @@ class CreateOrganizationAssetsTable extends Migration
         Schema::create('organization_assets', function (Blueprint $table) {
             $table->id('organization_asset_id');
             $table->foreignId('organization_id');
-            $table->foreignId('organization_asset_type_id');
+            $table->foreignId('asset_type_id');
             $table->string('file');
             $table->timestamps();
 
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
-            $table->foreign('organization_asset_type_id')->references('organization_asset_type_id')->on('organization_asset_types');
+            $table->foreign('asset_type_id')->references('asset_type_id')->on('asset_types');
         });
     }
 
@@ -34,6 +34,6 @@ class CreateOrganizationAssetsTable extends Migration
     {
         Schema::dropIfExists('organization_assets');
         $table->dropForeign('organization_id');
-        $table->dropForeign('organization_asset_type_id');
+        $table->dropForeign('asset_type_id');
     }
 }

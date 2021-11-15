@@ -14,25 +14,38 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            RoleSeeder::class,
-            OrganizationTypeSeeder::class,
-            OrganizationAssetTypeSeeder::class,
-            AccomplishmentReportTypeSeeder::class,
-            OrganizationSeeder::class,
-            CourseSeeder::class,
+            AssetTypeSeeder::class,
             GenderSeeder::class,
-            UserSeeder::class,
-            PositionTitleSeeder::class,
-            UserPositionSeeder::class,
+            OrganizationTypeSeeder::class,
+            // PermissionSeeder::class,
+            RoleSeeder::class,
+            AccomplishmentReportTypeSeeder::class,
+            
+            
+            OrganizationSeeder::class,
+            
+            CourseSeeder::class,
+
             OrganizationAssetSeeder::class,
+            UserSeeder::class,
+
+            // PermissionRoleSeeder::class,
+            // PermissionUserSeeder::class,
+            RoleUserSeeder::class,
+
+            PositionCategorySeeder::class,
+            PositionTitleSeeder::class,
+            OfficerSeeder::class,
+            
+            LevelSeeder::class,
+            FundSourceSeeder::class,
             EventCategorySeeder::class,
             EventRoleSeeder::class,
-            EventClassificationSeeder::class,
             EventNatureSeeder::class,
+            EventClassificationSeeder::class,
             EventDocumentTypeSeeder::class,
             SchoolYearSeeder::class,
-            FundSourceSeeder::class,
-            LevelSeeder::class,
+            
             TabularTableSeeder::class,
             TabularColumnSeeder::class,
         ]);

@@ -25,6 +25,7 @@ class CreateOfficersTable extends Migration
             $table->string('signature')->nullable()->default(NULL);
             $table->unsignedTinyInteger('status');
             $table->timestamps();
+            
             $table->foreign('position_title_id')->references('position_title_id')->on('position_titles');
         });
     }

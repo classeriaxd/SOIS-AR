@@ -15,61 +15,44 @@ class RoleUserSeeder extends Seeder
     public function run()
     {
         $data = [
-            [  
+            [
+                // Super Admin  
                 'user_id' => 1,
                 'role_id' => 1,
             ],
             [  
+                // Homepage 
                 'user_id' => 2,
                 'role_id' => 2,
             ],
             [  
+                // Ar Officer
                 'user_id' => 3,
-                'role_id' => 2,
+                'role_id' => 3,
             ],
-            [  
+            [  // Ar presi
                 'user_id' => 4,
-                'role_id' => 2,
+                'role_id' => 4,
             ],
             [  
+                //membership
                 'user_id' => 5,
-                'role_id' => 2,
+                'role_id' => 5,
             ],
             [  
+                // gpoa
                 'user_id' => 6,
-                'role_id' => 2,
+                'role_id' => 6,
             ],
             [  
+                // finance
                 'user_id' => 7,
-                'role_id' => 2,
+                'role_id' => 7,
             ],
             [  
+                // normal member/user
                 'user_id' => 8,
-                'role_id' => 2,
-            ],
-            [  
-                'user_id' => 9,
-                'role_id' => 2,
-            ],
-            [  
-                'user_id' => 10,
-                'role_id' => 2,
-            ],
-            [  
-                'user_id' => 11,
-                'role_id' => 2,
-            ],
-            [  
-                'user_id' => 12,
-                'role_id' => 2,
-            ],
-            [  
-                'user_id' => 13,
-                'role_id' => 2,
-            ],
-            [  
-                'user_id' => 14,
-                'role_id' => 2,
+                'role_id' => 8,
             ],
 
             
