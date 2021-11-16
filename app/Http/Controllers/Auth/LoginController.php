@@ -30,7 +30,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // Redirect Super Admin Role
-        if ( ($user->roles->pluck('role'))->contains('Super Admin') ) 
+        if ( ($user->roles->pluck('role'))->containsStrict('Super Admin') ) 
             return redirect()->route('admin.home');
 
         // User | Officer | President | Other Admins

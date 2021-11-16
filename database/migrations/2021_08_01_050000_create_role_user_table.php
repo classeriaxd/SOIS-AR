@@ -16,9 +16,11 @@ class CreateRoleUserTable extends Migration
         Schema::create('role_user', function (Blueprint $table) {
             $table->foreignId('role_id');
             $table->foreignId('user_id');
+            $table->foreignId('organization_id')->nullable();
 
             $table->foreign('role_id')->references('role_id')->on('roles');
             $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('organization_id')->references('organization_id')->on('organizations');
         });
     }
 
@@ -32,5 +34,6 @@ class CreateRoleUserTable extends Migration
         Schema::dropIfExists('role_user');
         $table->dropForeign('role_id');
         $table->dropForeign('user_id');
+        $table->dropForeign('organization_id');
     }
 }

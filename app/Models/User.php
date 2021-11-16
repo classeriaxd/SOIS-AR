@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id');
     }
 
     public function notifications()
@@ -71,15 +71,18 @@ class User extends Authenticatable
 
     /**
      * Get the user's full concatenated name.
-     * -- Must postfix the word 'Attribute' to the function name
      * @return string
      */
 
     public function getFullNameAttribute()
     {
-        if ($this->suffix === NULL)
-            return "{$this->last_name}, {$this->first_name} {$this->middle_name}";
-        else
-            return "{$this->last_name}, {$this->first_name} {$this->middle_name} {$this->suffix}";
+        $name = "{$this->last_name}, {$this->first_name}";
+
+        if (! $this->middle_name === NULL)
+            $name .= " {$this->middle_name}";
+        if (! $this->suffix === NULL)
+            $name .= " {$this->suffix}";
+
+        return $name;
     }
 }

@@ -138,7 +138,7 @@
                             </a>
                         </li>
                         
-                        @position_title('Officer')
+                        @role('AR Officer Admin')
                             <li class="dropdown">
                                 <a href="#pageSubmenu1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                                     <i class="material-icons">summarize</i><span>Event Reports</span>
@@ -183,8 +183,9 @@
                                     <li><a href="/s/accomplishments">Submissions</a></li>
                                 </ul>
                             </li>
+                        @endrole
 
-                        @elseposition_title('Member')
+                        @role('User')
                             <li class="dropdown">
                                 <a href="#pageSubmenu1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                                     <i class="material-icons">stars</i><span>My Accomplishments</span>
@@ -194,8 +195,9 @@
                                     <li><a href="{{route('studentAccomplishment.index')}}">View List</a></li>
                                 </ul>
                             </li>
+                        @endrole
 
-                        @elseposition_title('President')
+                        @role('President')
                             <li class="dropdown">
                                 <a href="#pageSubmenu2" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                                     <i class="material-icons">pending_actions</i><span>Accomplishment Report</span>
@@ -204,8 +206,7 @@
                                     <li><a href="{{route('accomplishmentreports.index')}}">Submissions</a></li>
                                 </ul>
                             </li>
-                        
-                        @endposition_title
+                        @endrole
                             
                         <!-- Hidden Menu -->
                         <div class="small-screen navbar-display">
