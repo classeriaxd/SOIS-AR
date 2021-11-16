@@ -32,7 +32,7 @@ class HomeController extends Controller
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 
-        // Remap User Roles with Organization ID
+        // Remap User Roles into array with Organization ID
         $userRoles = array();
         foreach ($userRoleCollection as $role) 
         {
@@ -57,11 +57,11 @@ class HomeController extends Controller
             $organization_id = $userRoles[$userRoleKey]['organization_id'];
             
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization
-            $eventsCount = Event::where('organization_id', $organization_id)->count();
+            $eventCount = Event::where('organization_id', $organization_id)->count();
             $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organization_id)->count();
             $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organization_id)->count();
             $documentCount = NULL;
-            array_push($compactVariables, 'eventsCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
         }
 
         // If User has AR Officer Admin role...
@@ -71,11 +71,11 @@ class HomeController extends Controller
             $organization_id = $userRoles[$userRoleKey]['organization_id'];
 
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization
-            $eventsCount = Event::where('organization_id', $organization_id)->count();
+            $eventCount = Event::where('organization_id', $organization_id)->count();
             $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organization_id)->count();
             $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organization_id)->count();
             $documentCount = NULL;
-            array_push($compactVariables, 'eventsCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
         }
 
         // Show Login Alert on View once

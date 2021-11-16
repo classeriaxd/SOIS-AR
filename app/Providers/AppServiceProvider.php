@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
 
 use App\Models\User;
-use App\Models\PositionTitle;
 use App\Models\Notification;
 
 class AppServiceProvider extends ServiceProvider
@@ -53,59 +52,12 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // Blade::if('position_title', function ($position_title) {
-        //     $allowedOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-        //     $presidentOfficerTitle = 'President';
-
-        //     $positionExists = false;
-        //     if (Auth::check()) 
-        //     {
-        //         $user_position_titles = Auth::user()->positionTitles->pluck('position_title');
-        //         if ($position_title == 'Member')
-        //         {
-        //             foreach($user_position_titles as $title)
-        //             {
-        //                 if($position_title == $title)
-        //                 {
-        //                     $positionExists = true;
-        //                 }
-        //             }
-        //         }
-        //         else if ($position_title == 'President')
-        //         {
-        //             foreach($user_position_titles as $title)
-        //             {
-        //                 if($title == $presidentOfficerTitle)
-        //                     $positionExists = true;
-        //             }
-        //         }
-        //         else if ($position_title == 'Officer')
-        //         {
-        //             foreach($user_position_titles as $title)
-        //             {
-        //                 if(in_array($title, $allowedOfficers, true))
-        //                 {
-        //                     $positionExists = true;
-        //                 }
-        //             }
-        //         }
-                
-        //     }
-
-        //     if ( $positionExists )
-        //         return true;
-
-        //     return false;
-        // });
-
-
+        // @role() @elserole() @else @endrole on Blade Views
         Blade::if('role', function ($role) {
             if (Auth::check())
             {
                 if((Auth::user()->roles->pluck('role'))->containsStrict($role))
-                {
                     return true;
-                }
             }
 
             return false;

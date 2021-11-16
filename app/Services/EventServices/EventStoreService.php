@@ -6,20 +6,22 @@ use App\Models\Event;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
+use App\Services\EventServices\EventGetOrganizationIDService;
+
 class EventStoreService
 {
     /**
-     * @param Request $request, Integer $organizationID
+     * @param Request $request
      * Service to Store an event.
      * Returns Event Slug and Message on success.
      * @return Array
      */
-    public function store($request, $organizationID): array
+    public function store($request): array
     {
         try
         {
             $eventSlug = Event::create([
-                'organization_id' => $organizationID,
+                'organization_id' => (new EventGetOrganizationIDService())->getOrganizationID(),
                 'event_role_id' => $request->input('eventRole'),
                 'event_category_id' => $request->input('eventCategory'),
                 'event_classification_id' => $request->input('eventClassification'),

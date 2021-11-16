@@ -20,7 +20,7 @@ class EventIndexService
             )
             ->where('organization_id', Auth::user()->course->organization_id,)
             ->orderByRaw('MONTH(`start_date`) ASC, `start_date` ASC')
-            ->get();
+            ->paginate(30);
         return $events;
     }
 }
