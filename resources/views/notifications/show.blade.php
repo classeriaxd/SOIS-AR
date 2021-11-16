@@ -30,7 +30,7 @@
                         <div class="row mb-2">
                             <div class="col text-center">
                                 <form method="POST" action="{{route('notifications.markAllAsRead')}}">
-                                    <button type="submit" class="btn btn-primary text-white">Mark all as Read</button>
+                                    <button type="submit" class="btn btn-primary text-white"><i class="fas fa-book-open"></i> Mark all as Read</button>
                                     @csrf
                                 </form>
                             </div>
@@ -83,7 +83,7 @@
                     <a href="{{route('home')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                     </a>
             </div>
         </div>

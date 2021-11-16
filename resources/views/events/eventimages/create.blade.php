@@ -43,6 +43,7 @@
                     <a role="button"
                         data-bs-toggle="popover" 
                         data-bs-container="body"
+                        data-bs-trigger="hover focus"
                         title="Posters" 
                         data-bs-content="Posters that are made exclusively for this Event. Portrait Orientation is a must."
                         data-bs-placement="right">
@@ -70,6 +71,7 @@
                     <a role="button"
                         data-bs-toggle="popover" 
                         data-bs-container="body"
+                        data-bs-trigger="hover focus"
                         title="Evidences" 
                         data-bs-content="Evidences, Photographs, or Screenshots on the Event. Landscape Orientation is a must."
                         data-bs-placement="right">
@@ -91,7 +93,9 @@
                 @enderror
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Add Images</button>
+                    <button class="btn btn-primary text-white" type="submit">
+                        <i class="fas fa-plus"></i> Add Images
+                    </button>
                 </div>
             </div>
         </div>
@@ -103,7 +107,7 @@
         <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go back
+            <i class="fas fa-arrow-left"></i> Go back
         </a>
     </div>
 </div>

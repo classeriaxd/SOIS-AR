@@ -120,7 +120,7 @@
 
             @if(($eventImages['evidences']->isNotEmpty()) || ($eventImages['posters']->isNotEmpty()))
                 <div class="flex my-2 text-center">
-                    <button class="btn btn-primary text-white col-md-12" type="submit">Add Captions</button>
+                    <button class="btn btn-primary text-white col-md-12" type="submit"><i class="fas fa-plus"></i> Add Captions</button>
                 </div>
             @endif
             </div>
@@ -131,7 +131,7 @@
         <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go back
+            <i class="fas fa-arrow-left"></i> Skip and go back
         </a>
     </div>
 </div>
@@ -140,22 +140,6 @@
 
 
 @section('scripts')
-    <script type="text/javascript">
-        // Enable All Popovers on this Page //
-        // Requires Loading JS without Defer //
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-          return new bootstrap.Popover(popoverTriggerEl)
-        })
-        $('body').on('click', function (e) {
-            $('[data-bs-toggle="popover"]').each(function () {
-                //the 'is' for buttons that trigger popups
-                //the 'has' for icons within a button that triggers a popup
-                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                    $(this).popover('hide');
-                }
-            });
-        });
-        // https://stackoverflow.com/questions/11703093/how-to-dismiss-a-twitter-bootstrap-popover-by-clicking-outside //
-    </script>
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection
