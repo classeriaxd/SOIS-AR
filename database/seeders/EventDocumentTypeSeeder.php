@@ -33,6 +33,20 @@ class EventDocumentTypeSeeder extends Seeder
             ['document_type' => 'Event Evaluation',
                 'helper' => 'A document containing the Evaluation Result of the Event.',
             ],
+            ['document_type' => 'MOA',
+                'helper' => 'Memorandum of Agreement',
+            ],
+            ['document_type' => 'MOU',
+                'helper' => 'MOU',
+            ],
+            ['document_type' => 'Certificate of Recognition',
+                'helper' => 'Certificate of Recognition',
+            ],
+            ['document_type' => 'Certificate of Appreciation',
+                'helper' => 'Certificate of Appreciation',
+            ],
+
+
         ];
         DB::table('event_document_types')->insert($data);
     }

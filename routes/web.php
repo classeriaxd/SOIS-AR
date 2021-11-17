@@ -347,7 +347,7 @@ Auth::routes();
                 Route::get('/create', [App\Http\Controllers\StudentAccomplishmentsController::class, 'create'])->name('create');
                 Route::post('/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload']);
                 Route::get('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->name('index');
-                Route::post('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store']);
+                Route::post('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store'])->name('store');
         });
 
         Route::group([

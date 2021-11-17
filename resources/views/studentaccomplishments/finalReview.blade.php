@@ -5,23 +5,18 @@
 	<div class="row justify-content-center">
         <div class="col-md-12">
             {{-- Title and Breadcrumbs --}}
-            <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
                 {{-- Title --}}
-                <h4 class="display-5 text-center">Final Review</h4>
-                <p class="text-center">Final edits for the Accomplishment Submission</p>
+                <h2 class="display-7 text-left text-break">Final Review</h2>
                 {{-- Breadcrumbs --}}
-                <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb align-items-center">
                     <ol class="breadcrumb justify-content-center">
                         <li class="breadcrumb-item">
                             <a href="{{route('home')}}" class="text-decoration-none">Home</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a href="{{route('studentAccomplishment.index')}}" class="text-decoration-none">
-                                @position_title('Officer')
                                 Student Accomplishments
-                                @elseposition_title('Member')
-                                My Accomplishments
-                                @endposition_title
                             </a>
                         </li>
                         <li class="breadcrumb-item">
@@ -37,42 +32,83 @@
             </div>
             
             <form action="{{route('studentAccomplishment.approveSubmission',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST" id="approvedSubmissionForm">   
-            	<div class="row justify-content-center pb-1">
+            	@csrf
+                <div class="row justify-content-center pb-1">
+
+                    {{-- Accomplishment Details --}}
                     <div class="col-md-8">
                         <div class="card">
-                            <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $accomplishment->title }}</h5>
+                            <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Accomplishment Details</h5>
                             <div class="card-body">
-                            {{-- Accomplishment Details --}}
-                                <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Accomplishment Details</span></h6>
-                                <p class="text-center"><span class="fw-bold">TITLE: </span>{{ $accomplishment->title }}</p>
-                                <p class="text-center"><span class="fw-bold">DESCRIPTION: </span>{{ $accomplishment->description }}</p>
-                                <p class="text-center"><span class="fw-bold">OBJECTIVE: </span>{{ $accomplishment->objective }}</p>
-                                <p class="text-center"><span class="fw-bold">ORGANIZER: </span>{{ $accomplishment->organizer }}</p>
-                                <p class="text-center"><span class="fw-bold">VENUE: </span>{{ $accomplishment->venue }}</p>
-                                <p class="text-center">
-                                    <span class="fw-bold"> DATE: </span>
-                                    @if($accomplishment->start_date == $accomplishment->end_date){{date_format(date_create($accomplishment->start_date), 'F d, Y')}}
-                                    @else{{date_format(date_create($accomplishment->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishment->end_date), 'F d, Y')}}
-                                    @endif
-                                </p>
-                                <p class="text-center">
-                                    <span class="fw-bold"> TIME: </span>
-                                    @if($accomplishment->start_time == $accomplishment->end_time){{date_format(date_create($accomplishment->start_time), 'h:i A')}}
-                                    @else{{date_format(date_create($accomplishment->start_time), 'h:i A') . ' - ' . date_format(date_create($accomplishment->end_time), 'h:i A')}}
-                                    @endif
-                                </p>
 
-                                <hr>
-                            {{-- Student Details --}}
-                                <h6 class="text-center text-dark font-weight-bold"><span class="bg-warning rounded">Student Details</span></h6>
-                                <div class="text-center">
-                                    <p><span class="fw-bold">NAME: </span>{{ $accomplishment->student->last_name . ', ' . $accomplishment->student->first_name . ' ' . $accomplishment->student->middle_name }}</p>
-                                    <p><span class="fw-bold">STUDENT NUMBER: </span>{{ $accomplishment->student->student_number  }}</p>
-                                    <p><span class="fw-bold">EMAIL: </span>{{ $accomplishment->student->email }}</p>
+                                {{-- Title --}}
+                                <h3 class="card-title text-center fw-bold">
+                                    {{ $accomplishment->title }}
+                                </h3>
+
+                                {{-- Accomplishment Details --}}
+                                <div class="row">
+                                    {{-- Description and Objective Column --}}
+                                    <div class="col">
+                                        <p class="card-title text-center fw-bold">Description and Objective:</p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Description</span>
+                                            {{ $accomplishment->description }}
+                                        </p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Objective</span>
+                                            {{ $accomplishment->objective }}
+                                        </p>
+                                    </div>
+
+                                    {{-- Details Column --}}
+                                    <div class="col">
+                                        <p class="card-title text-center fw-bold">Details:</p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Organizer:</span>
+                                            {{ $accomplishment->organizer }}
+                                        </p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Venue:</span>
+                                            {{ $accomplishment->venue }}
+                                        </p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Date and Time:</span>
+                                            @if($accomplishment->start_date == $accomplishment->end_date){{date_format(date_create($accomplishment->start_date), 'F d, Y')}}
+                                            @else{{date_format(date_create($accomplishment->start_date), 'F d, Y') . ' - ' . date_format(date_create($accomplishment->end_date), 'F d, Y')}}
+                                            @endif
+                                             - 
+                                            @if($accomplishment->start_time == $accomplishment->end_time){{date_format(date_create($accomplishment->start_time), 'h:i A')}}
+                                            @else{{date_format(date_create($accomplishment->start_time), 'h:i A') . ' - ' . date_format(date_create($accomplishment->end_time), 'h:i A')}}
+                                            @endif
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <hr>
-                            {{-- Activity Type --}}
+
+                                {{-- Student Details --}}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="card-title text-center fw-bold">Student Details:</p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Full Name:</span>
+                                            {{ $accomplishment->student->full_name }}
+                                        </p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Student Number:</span>
+                                            {{ $accomplishment->student->student_number }}
+                                        </p>
+                                        <p class="text-center">
+                                            <span class="fw-bold">Email:</span>
+                                            {{ $accomplishment->student->email }}
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <hr>
+
+                                {{-- Activity Type --}}
                                 <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="activityType" class="col-form-label">Activity Type</label>
@@ -88,13 +124,14 @@
                                     </div>
                                 </div>
                                 @error('activityType')
-                                <div class="row">
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                </div>
+                                    <div class="row">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    </div>
                                 @enderror
-                            {{-- Beneficiaries --}}
+
+                                {{-- Beneficiaries --}}
                                 <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="beneficiaries" class="col-form-label">Beneficiaries</label>
@@ -110,13 +147,14 @@
                                     </div>
                                 </div>
                                 @error('beneficiaries')
-                                <div class="row">
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                </div>
+                                    <div class="row">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    </div>
                                 @enderror
-                            {{-- Budget --}}
+
+                                {{-- Budget --}}
                                 <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="budget" class="col-form-label">Budget</label>
@@ -132,14 +170,17 @@
                                     </div>
                                 </div>
                                 @error('budget')
-                                <div class="row">
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                </div>
+                                    <div class="row">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    </div>
                                 @enderror
-                            {{-- Fund Source --}}
-                                <div class="form-group row my-1 border border-dark">
+
+                                <hr>
+
+                                {{-- Fund Source --}}
+                                <div class="form-group row my-1">
                                     <div class="col">
                                         <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">Who funded this Event/Accomplishment?</label>
                                     </div>
@@ -154,9 +195,12 @@
                                             required>
                                             <label class="form-check-label" for="{{$source->fund_source}}">{{$source->fund_source}}</label>
                                             <a role="button"
-                                                data-toggle="popover" 
+                                                data-bs-toggle="popover"
+                                                data-bs-container="body" 
+                                                data-bs-trigger="hover focus"
+                                                data-bs-placement="right"
                                                 title="{{$source->fund_source}}" 
-                                                data-content="{{$source->helper}}">
+                                                data-bs-content="{{$source->helper}}">
                                                 <i class="far fa-question-circle"></i>
                                             </a>
                                         </div>
@@ -164,14 +208,17 @@
                                     </div>
                                 </div>
                                 @error('fundSource')
-                                <div class="row text-center">
-                                    <span class="d-block invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                </div>
+                                    <div class="row text-center">
+                                        <span class="d-block invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    </div>
                                 @enderror
-                            {{-- Level --}}
-                                <div class="form-group row justify-content-center my-1 border border-dark">
+
+                                <hr>
+
+                                {{-- Level --}}
+                                <div class="form-group row justify-content-center my-1">
                                     <div class="col">
                                         <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Accomplishment Level</label>
                                     </div>
@@ -186,9 +233,12 @@
                                             required>
                                             <label class="form-check-label" for="{{$level->level}}">{{$level->level}}</label>
                                             <a role="button"
-                                                data-toggle="popover" 
+                                                data-bs-toggle="popover"
+                                                data-bs-container="body" 
+                                                data-bs-trigger="hover focus"
+                                                data-bs-placement="right"
                                                 title="{{$level->level}}" 
-                                                data-content="{{$level->helper}}">
+                                                data-bs-content="{{$level->helper}}">
                                                 <i class="far fa-question-circle"></i>
                                             </a>
                                         </div>
@@ -196,14 +246,17 @@
                                     </div>
                                 </div>
                                 @error('level')
-                                <div class="row text-center">
-                                    <span class="d-block invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                </div>
+                                    <div class="row text-center">
+                                        <span class="d-block invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    </div>
                                 @enderror
-                            {{-- Related Event --}}
-                                <div class="form-group row justify-content-center my-1 border border-dark">
+
+                                <hr>
+
+                                {{-- Related Event --}}
+                                <div class="form-group row justify-content-center my-1">
                                     <div class="col">
                                         <label for="radioRelatedEventGroup" class="form-label @error('relatedEvent') text-danger @enderror">Related Event</label>
                                         <a role="button"
@@ -232,87 +285,116 @@
                                     </div>
                                 </div>
                                 @error('relatedEvent')
-                                <div class="row text-center">
-                                    <span class="d-block invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                </div>
-                                @enderror
-                                <hr>
-                                <h5 class="text-center text-dark font-weight-bold">Uploaded Evidences</h5>
-                                <h6 class="text-center">At least one evidence is required</h6>
-                                @php $i = 1; @endphp
-                                @foreach($accomplishment->accomplishmentFiles as $file)
-                                <div class="row">
-                                    <div class="form-check col text-center">
-                                        <div>
-                                            <h6>Evidence {{$i}}</h6>
-                                        </div>
-                                        @if($file->type == 1)
-                                        {{-- IMG --}}
-                                        <div>
-                                            <img src="{{'/storage/'.$file->file}}" style="max-width:600; max-height:300px;min-width:600; min-height:300px;">
-                                            <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
-                                        </div>
-                                        @elseif($file->type == 2)
-                                        {{-- PDF --}}
-                                        <div>
-                                            <iframe src="{{'/storage/'.$file->file}}#toolbar=0" width="100%" style="height:25vh;">
-                                            </iframe>
-                                            <p class="text-center">CAPTION: {{$file->caption  ?? 'NONE' }}</p>
-                                        </div>
-                                        @endif
-                                        <div class="d-flex flex-column align-items-center">
-                                            <label for="{{'evidence' . $i}}" class="@error('evidence'.$i) text-danger @enderror form-check-label">Include this evidence on final?
-                                            </label>
-                                            <input type="checkbox" 
-                                            class="form-check-input" 
-                                            name="{{'evidence' . $i}}" 
-                                            id="{{'evidence' . $i}}"
-                                            style="top: 1.2rem; width: 1.85rem; height: 1.85rem;" 
-                                            @if($i == 1) checked @endif 
-                                            onchange="atLeastOneCheckboxIsChecked('evidence{{$i}}')"
-                                            >
-
-                                            @error('evidence'.$i)
-                                                <span class="invalid-feedback d-block" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
+                                    <div class="row text-center">
+                                        <span class="d-block invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
                                     </div>
-                                </div>
-                                <hr>
+                                @enderror
 
-                                @php $i += 1;@endphp
-                                @endforeach
+                                {{-- Accomplishment Documents --}}
+                                <div class="row">
+                                    <p class="card-title text-center fw-bold">Uploaded Evidences</p>
+                                    @if($accomplishment->accomplishmentFiles->count() > 0)
+                                        @php $i = 1;@endphp
+                                        @foreach($accomplishment->accomplishmentFiles as $file)
+                                            {{-- If the file is an IMG... --}}
+                                            @if($file->type === 1)
+                                                <div class="row justify-content-center mb-3">
+                                                    <img class="border border-dark" src="{{'/storage/'.$file->file}}" style="max-width:600px; max-height:300px;min-width:600px; min-height:300px;">
+                                                    {{-- File Caption --}}
+                                                    <div class="row justify-content-center">
+                                                        <p class="card-text text-center">{{$file->caption}}</p>
+                                                    </div>
+                                                </div>
+
+                                            {{-- If the file is a PDF... --}}
+                                            @elseif($file->type === 2)
+                                                <div class="row justify-content-center mb-3">
+                                                    <iframe src="{{'/storage/'. $file->file}}#toolbar=0" width="100%" style="height:25vh;">
+                                                    </iframe>
+                                                    {{-- File Caption --}}
+                                                    <div class="row justify-content-center">
+                                                        <p class="card-text text-center">{{$file->caption}}</p>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            {{-- Accomplishment Document Type --}}
+                                            <div class="row">
+                                                {{--select class="form-select" name="documentType{{$i}}">
+                                                    @foreach($studentAccomplishmentDocumentTypes as $studentAccomplishmentDocumentType)
+
+                                                        <option value="{{$studentAccomplishmentDocumentType->SA_document_type_id}}"
+                                                            @if($studentAccomplishmentDocumentType->SA_document_type_id === $file->SA_document_type_id) selected @endif>
+                                                            {{$studentAccomplishmentDocumentType->document_type}}
+                                                        </option>
+                                                    @endforeach
+                                                </select>--}}
+                                                <p class="text-center">
+                                                    <span class="fw-bold">Document Type:</span>
+                                                    {{ $file->documentType->document_type }}
+                                                </p>
+                                            </div>
+
+                                            {{-- Accomplishment Document Checkbox --}}
+                                            <div class="d-flex flex-column align-items-center mb-2">
+                                                <label for="{{'evidence' . $i}}" class="@error('evidence'.$i) text-danger @enderror form-check-label">Include this evidence on final?
+                                                </label>
+                                                <input type="checkbox" 
+                                                    class="form-check-input" 
+                                                    name="{{'evidence' . $i}}" 
+                                                    id="{{'evidence' . $i}}"
+                                                    style="top: 1.2rem; width: 1.85rem; height: 1.85rem;" 
+                                                    @if($i == 1) checked @endif 
+                                                    onchange="atLeastOneCheckboxIsChecked('evidence{{$i}}')">
+                                            </div>
+                                            @error('evidence'.$i)
+                                                <span class="invalid-feedback d-block" role="alert"></span>
+                                            @enderror
+
+                                            <hr>
+                                        @php $i += 1;@endphp
+                                        @endforeach
+                                    @else
+                                        <p class="text-center card-text">No Files Found</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    {{-- Remarks and Decision Buttons --}}
                     <div class="col-md-4">
                         <div class="card mb-1 w-100">
-                            <div class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</div>
-                            <small class="text-center">Include comments for possible improvement for this submission.</small>
+                            <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</h5>
+                            <small class="text-center">Include comments for possible improvement for this submission.<br>These changes are FINAL.</small>
                             <div class="card-body">
                                 <textarea class="form-control" id="remarks" name="remarks" placeholder="Start Review here..." rows="9" required></textarea>
                             </div>
                         </div>
+
+                        {{-- Decision Buttons --}}
                         <div class="card card-body text-center">
                             <div class="row mt-2 justify-content-center">
                                 <div class="col">
-                                    <button class="btn btn-danger w-100 text-white" type="submit" name="decline" id="decline" value="decline">Decline</button>
+                                    <button class="btn btn-danger w-100 text-white" type="submit" name="decline" id="decline" value="decline">
+                                        <i class="fas fa-times"></i> Decline
+                                    </button>
                                 </div>
                             </div>
                             <hr>
                             <div class="row mb-2 justify-content-center">
                                 <div class="col">
-                                    <button class="btn btn-success w-100 text-white" type="submit" name="success" id="success" value="success">Finalize Review</button>
+                                    <button class="btn btn-success w-100 text-white" type="submit" name="success" id="success" value="success">
+                                        <i class="fas fa-check"></i> Finalize Review
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
             	</div>
-                @csrf
+                
             </form>
         	<hr>
 
@@ -342,13 +424,6 @@
             }
         }
     </script>
-    <script type="text/javascript">
-        // Enable Bootstrap Popovers
-        document.addEventListener("DOMContentLoaded", function(event) { 
-            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-              return new bootstrap.Popover(popoverTriggerEl)
-            });
-        });
-    </script>
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection

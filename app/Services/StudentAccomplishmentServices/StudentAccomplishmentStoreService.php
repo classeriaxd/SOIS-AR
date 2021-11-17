@@ -65,6 +65,7 @@ class StudentAccomplishmentStoreService
                 $type = 1;
             StudentAccomplishmentFile::create([
                 'student_accomplishment_id' => $accomplishmentID,
+                'SA_document_type_id' => $request->input('documentType1'),
                 'file' =>  $db_path . $file, 
                 'caption' => $caption,
                 'type' => $type
@@ -86,6 +87,7 @@ class StudentAccomplishmentStoreService
                 $type = 1;
             StudentAccomplishmentFile::create([
                 'student_accomplishment_id' => $accomplishmentID,
+                'SA_document_type_id' => $request->input('documentType2'),
                 'file' =>  $db_path . $file, 
                 'caption' => $caption,
                 'type' => $type
@@ -106,6 +108,7 @@ class StudentAccomplishmentStoreService
                 $type = 1;
             StudentAccomplishmentFile::create([
                 'student_accomplishment_id' => $accomplishmentID,
+                'SA_document_type_id' => $request->input('documentType3'),
                 'file' =>  $db_path . $file, 
                 'caption' => $caption,
                 'type' => $type

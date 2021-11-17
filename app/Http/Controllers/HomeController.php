@@ -42,13 +42,18 @@ class HomeController extends Controller
         // Array to store variables to send to View
         $compactVariables = array();
 
-        // Get Student Accomplishments Count
-        $studentAccomplishmentStatuses = StudentAccomplishment::where('user_id', Auth::user()->user_id)->pluck('status');
-        $statusesCount = array_count_values($studentAccomplishmentStatuses->toArray());
-            $approvedAccomplishmentCount = $statusesCount[2] ?? 0;
-            $pendingAccomplishmentCount = $statusesCount[1] ?? 0;
-            $disapprovedAccomplishmentCount = $statusesCount[3] ?? 0;
-            array_push($compactVariables, 'approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount');
+        // If User has a User/Member role...
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'User')) !== false ? true : false)
+        {
+            // Get Student Accomplishments Count
+            $studentAccomplishmentStatuses = StudentAccomplishment::where('user_id', Auth::user()->user_id)->pluck('status');
+            $statusesCount = array_count_values($studentAccomplishmentStatuses->toArray());
+                $approvedAccomplishmentCount = $statusesCount[2] ?? 0;
+                $pendingAccomplishmentCount = $statusesCount[1] ?? 0;
+                $disapprovedAccomplishmentCount = $statusesCount[3] ?? 0;
+                array_push($compactVariables, 'approvedAccomplishmentCount', 'pendingAccomplishmentCount', 'disapprovedAccomplishmentCount');
+        }
+        
 
         // If User has AR President Admin role...
         if ( ($userRoleKey = $this->hasRole($userRoles, 'AR President Admin')) !== false ? true : false)
@@ -67,7 +72,7 @@ class HomeController extends Controller
         // If User has AR Officer Admin role...
         if( ($userRoleKey = $this->hasRole($userRoles, 'AR Officer Admin')) !== false ? true : false)
         {
-            // Get the Organization from which the user is AR President Admin
+            // Get the Organization from which the user is AR Officer Admin
             $organization_id = $userRoles[$userRoleKey]['organization_id'];
 
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization

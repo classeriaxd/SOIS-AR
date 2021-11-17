@@ -29,12 +29,16 @@ class StudentAccomplishmentApproveRequest extends FormRequest
     {
         $rules = [
             'remarks' => 'required|string',
-            'level' => 'required|integer|exists:levels,level_id',
-            'fundSource' => 'required|integer|exists:fund_sources,fund_source_id',
+            'level' => 'required|integer|exists:App\Models\Level,level_id',
+            'fundSource' => 'required|integer|exists:App\Models\FundSource,fund_source_id',
             'budget' => 'sometimes|nullable|integer',
             'relatedEvent' => 'sometimes|nullable|integer|exists:App\Models\Event,accomplished_event_id',
             'beneficiaries' => 'required|string',
             'activityType' => 'required|string',
+
+            'documentType1' => 'sometimes|integer|exists:App\Models\studentAccomplishmentDocumentTypes,SA_document_type_id',
+            'documentType2' => 'sometimes|integer|exists:App\Models\studentAccomplishmentDocumentTypes,SA_document_type_id',
+            'documentType3' => 'sometimes|integer|exists:App\Models\studentAccomplishmentDocumentTypes,SA_document_type_id',
         ];
         return $rules;
     }

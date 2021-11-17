@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             EventNatureSeeder::class,
             EventClassificationSeeder::class,
             EventDocumentTypeSeeder::class,
+            StudentAccomplishmentDocumentTypeSeeder::class,
             SchoolYearSeeder::class,
             
             TabularTableSeeder::class,
