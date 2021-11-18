@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class StudentAccomplishmentDocumentTypeSeeder extends Seeder
 {
     /**
@@ -14,24 +14,43 @@ class StudentAccomplishmentDocumentTypeSeeder extends Seeder
      */
     public function run()
     {
+        $currentTime = Carbon::now();
         $data = [
-            ['document_type' => 'Certificate of Participation',
+            [
+                'document_type' => 'Certificate of Participation',
                 'helper' => 'A document that certifies that the student attended the event.',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
-            ['document_type' => 'Screenshot',
+            [
+                'document_type' => 'Screenshot',
                 'helper' => 'Screenshot of the event.',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
-            ['document_type' => 'Photograph',
+            [
+                'document_type' => 'Photograph',
                 'helper' => 'Photograph of the event.',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
-            ['document_type' => 'Narrative Report',
+            [
+                'document_type' => 'Narrative Report',
                 'helper' => 'A document containing the Narration of the actual Event.',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
-            ['document_type' => 'Event Attendance Sheet',
+            [
+                'document_type' => 'Event Attendance Sheet',
                 'helper' => 'A document containing the list of people who attended the Event.',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
-            ['document_type' => 'Event Evaluation',
+            [
+                'document_type' => 'Event Evaluation',
                 'helper' => 'A document containing the Evaluation Result of the Event.',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
         ];
         DB::table('SA_document_types')->insert($data);

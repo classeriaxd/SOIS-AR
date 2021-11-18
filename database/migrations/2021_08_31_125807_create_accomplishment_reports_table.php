@@ -32,6 +32,7 @@ class CreateAccomplishmentReportsTable extends Migration
             // status - 1 = PENDING | 2 = ACCEPTED | 3 = DECLINED
             $table->unsignedTinyInteger('status')->default(1);
             $table->foreignId('reviewed_by')->nullable()->default(NULL);
+            $table->timestamp('reviewed_at')->nullable()->default(NULL);
             $table->text('remarks')->nullable()->default(NULL);
             $table->timestamp('read_at')->nullable()->default(NULL);
             $table->timestamps();

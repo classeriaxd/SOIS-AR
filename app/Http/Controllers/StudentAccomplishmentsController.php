@@ -36,17 +36,12 @@ use App\Models\{
     FundSource,
     Event,
 };
-/**
- * Handles all Student Accomplishment Requests
- */ 
 
 class StudentAccomplishmentsController extends Controller
 {
-    // Student Accomplishment Status
-    // 1 - PENDING | 2 - APPROVED | 3 - DISAPPROVED
-
     protected $viewDirectory = 'studentAccomplishments.';
     protected $temporaryFolderDirectory = '/public/uploads/tmp/';
+
     /**
      * Show Index Page, depends on Position title for Submissions/Accomplishment
      * @return View
@@ -75,7 +70,6 @@ class StudentAccomplishmentsController extends Controller
                 ->orderBy('created_at', 'DESC')
                 ->paginate(30, ['*'], 'myAccomplishments');
                 array_push($compactVariables, 'studentAccomplishments');
-            //dd($studentAccomplishments);
         }
 
         // If User has AR Officer Admin role...
@@ -121,16 +115,17 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function store(StudentAccomplishmentStoreRequest $request)
     {
-        $studentAccomplishmentStoreService = new StudentAccomplishmentStoreService();
-        $accomplishmentUUID = $studentAccomplishmentStoreService->store($request);
-        $studentAccomplishmentStoreService->storeAccomplishmentFiles($request, $accomplishmentUUID);
-        
-        $studentAccomplishmentNotificationService = new StudentAccomplishmentNotificationService();
-        $studentAccomplishmentNotificationService->sendNotificationToOfficers(Auth::user()->full_name, Auth::user()->course->organization->organization_id, $accomplishmentUUID);
+        $returnArray = (new StudentAccomplishmentStoreService())->store($request);
+        $message = $returnArray['message'];
 
-        return redirect()->action(
-                [StudentAccomplishmentsController::class, 'show'], ['accomplishmentUUID' => $accomplishmentUUID])
-                ->with(['newAccomplishment' => true]);
+        if ($returnArray['accomplishmentUUID'] === NULL) 
+            return redirect()->action(
+                [StudentAccomplishmentsController::class, 'index'])
+                ->with($message);
+        else
+            return redirect()->action(
+                [StudentAccomplishmentsController::class, 'show'], ['accomplishmentUUID' => $returnArray['accomplishmentUUID'], 'newAccomplishment' => true])
+                ->with($message);
     }
 
     /**
@@ -168,46 +163,41 @@ class StudentAccomplishmentsController extends Controller
     {
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
 
-        $accomplishment = StudentAccomplishment::with(['level', 
-            'fundSource', 
-            'event', 
-            'student',
-            'accomplishmentFiles' => function($query){
-                $query->orderBy('updated_at', 'DESC')->get();
-            }])
-        ->where('accomplishment_uuid', $accomplishmentUUID)->first();
+        $accomplishment = StudentAccomplishment::with(
+                'level', 
+                'fundSource', 
+                'event', 
+                'student',
+                'accomplishmentFiles',)
+            ->where('accomplishment_uuid', $accomplishmentUUID)->first();
 
         // Go back to Show if Status is not Pending
         if($accomplishment->status != 1)
-        {
             return redirect()->action(
                 [StudentAccomplishmentsController::class, 'show'], ['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);
-        }
 
         return view($this->viewDirectory . 'initialReview', compact('accomplishment'));
 
     }
 
-    public function getSubmissionDecision($accomplishmentUUID)
+    /**
+     * @param Request $request, String $accomplishmentUUID
+     * Function to get the Submission from initalReview Function
+     * @return Redirect
+     */ 
+    public function getSubmissionDecision(Request $request, $accomplishmentUUID)
     {
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
-        /*
-         * Get POST Request from initialReview
-         */
+
         $accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)
             ->first();
 
         if(request()->has('decline'))
         {
-            $data = request()->validate([
-                'remarks' => 'required|string',
-            ]);
+            $data = $request->validate([
+                'remarks' => 'required|string',]);
 
             $this->declineSubmission($accomplishment, $data['remarks']);
-
-            return redirect()->action(
-                [StudentAccomplishmentsController::class, 'index']
-            );
         }
 
         else if(request()->has('success'))
@@ -216,87 +206,88 @@ class StudentAccomplishmentsController extends Controller
             );
     }
 
+    /**
+     * @param String $accomplishmentUUID
+     * Function to show the Final Review Page including the details that only the Documentation Officer can fill up
+     * @return View if status is pending, Redirect if not
+     */ 
     public function finalReview($accomplishmentUUID)
     {
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
-        /*
-         * Show Final Review Page
-         */
+
         $accomplishment = StudentAccomplishment::with([ 
             'student',
             'accomplishmentFiles.documentType' => function($query){
                 $query->orderBy('updated_at', 'DESC')->get();}])
             ->where('accomplishment_uuid', $accomplishmentUUID)->first();
 
+        // Go back to show if Status is not Pending
         if($accomplishment->status != 1)
-
-            return redirect()->route('studentAccomplishment.show',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);
-        else
-        {
-            $relatedEvents = Event::search($accomplishment->title)
-                ->select('title',
-                    DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'),
-                    'slug',
-                    'accomplished_event_id')
-                ->orderby('start_date', 'DESC')
-                ->limit(5)
-                ->get();
-            $studentAccomplishmentDocumentTypes = StudentAccomplishmentDocumentType::all();
-            $levels = Level::all();
-            $fundSources = FundSource::all();
-            return view($this->viewDirectory . 'finalReview', 
-                compact(
-                    'accomplishment', 
-                    'studentAccomplishmentDocumentTypes', 
-                    'levels', 
-                    'fundSources', 
-                    'relatedEvents'));
-        }
+            return redirect()->action(
+                [StudentAccomplishmentsController::class, 'show'], ['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);
         
-            
+        // Get Additional Data for Student Accomplishment
+        $relatedEvents = Event::search($accomplishment->title)
+            ->select('title',
+                DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'),
+                'slug',
+                'accomplished_event_id')
+            ->orderby('start_date', 'DESC')
+            ->limit(5)
+            ->get();
+        $studentAccomplishmentDocumentTypes = StudentAccomplishmentDocumentType::all();
+        $levels = Level::all();
+        $fundSources = FundSource::all();
+
+        return view($this->viewDirectory . 'finalReview', 
+            compact(
+                'accomplishment', 
+                'studentAccomplishmentDocumentTypes', 
+                'levels', 
+                'fundSources', 
+                'relatedEvents'));
     }
+
+    /**
+     * @param Collection $accomplishment, String $remarks
+     * Function to Decline the Student Accomplishment Submission
+     * @return Redirect
+     */ 
     public function declineSubmission(StudentAccomplishment $accomplishment, $remarks)
     {
-        /*
-         * Decline a Student Accomplishment Submission
-         * Get action redirect from getSubmissionDecision and approveDecision
-         */
-        
-        $studentAccomplishmentUpdateService = new StudentAccomplishmentUpdateService();
-        $studentAccomplishmentUpdateService->decline($accomplishment, $remarks);
+        $message = (new StudentAccomplishmentUpdateService())->decline($accomplishment, $remarks);
 
-        $studentAccomplishmentNotificationService = new StudentAccomplishmentNotificationService();
-        $studentAccomplishmentNotificationService->sendNotificationToMember($accomplishment->user_id, $accomplishment->accomplishment_uuid, 'declined');
+        return redirect()->action(
+            [StudentAccomplishmentsController::class, 'index'])
+            ->with($message);
 
     }
+
+    /**
+     * @param Request $request, String $accomplishmentUUID
+     * Function to Decline the Student Accomplishment Submission
+     * @return Redirect
+     */ 
     public function approveSubmission(StudentAccomplishmentApproveRequest $request, $accomplishmentUUID)
     {
-        dd($request);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
-        /*
-         * Get POST Request from finalReview
-         */
+
+        // Get Accomplishment Data
         $accomplishment = StudentAccomplishment::withCount('accomplishmentFiles')
             ->where('accomplishment_uuid', $accomplishmentUUID)->first();
 
+        // If Documentation Officer declines that submission...
         if($request->has('decline'))
-        {
             $this->declineSubmission($accomplishment, $request->input('remarks'));
-            return redirect()->route('studentAccomplishment.index');
-        }
+
+        // If Documentation Officer accepts that submission...
         else if($request->has('success'))
         {
-            $studentAccomplishmentFileUpdateService = new StudentAccomplishmentFileUpdateService();
-            $studentAccomplishmentFileUpdateService->update($accomplishment, $request);
-            
-            $studentAccomplishmentUpdateService = new StudentAccomplishmentUpdateService();
-            $studentAccomplishmentUpdateService->approve($accomplishment, $request);
-
-            $studentAccomplishmentNotificationService = new StudentAccomplishmentNotificationService();
-            $studentAccomplishmentNotificationService->sendNotificationToMember($accomplishment->user_id, $accomplishment->accomplishment_uuid, 'approved');
+            $message = (new StudentAccomplishmentUpdateService())->approve($accomplishment, $request);
 
             return redirect()->action(
-                [StudentAccomplishmentsController::class, 'index']);
+                [StudentAccomplishmentsController::class, 'index'])
+                ->with($message);
         }
 
     }

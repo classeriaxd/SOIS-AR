@@ -38,6 +38,7 @@ class CreateStudentAccomplishmentsTable extends Migration
             // Status: 1 - PENDING | 2 - APPROVED | 3 - DISAPPROVED
             $table->unsignedTinyInteger('status')->default(1);
             $table->foreignId('reviewed_by')->nullable()->default(NULL);
+            $table->timestamp('reviewed_at')->nullable()->default(NULL);
             $table->string('remarks')->nullable()->default(NULL);
             $table->timestamps();
             $table->softDeletes();

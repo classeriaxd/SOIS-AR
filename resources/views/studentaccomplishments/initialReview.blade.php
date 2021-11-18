@@ -143,6 +143,7 @@
                     </div>
                 </div>
 
+                {{-- Remarks and Decision Buttons --}}
                 <div class="col-4">
                     <form action="{{route('studentAccomplishment.submissionDecision',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST">
                         {{-- Remarks Card --}}

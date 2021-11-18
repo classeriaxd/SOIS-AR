@@ -4,6 +4,25 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-12">
+            {{-- Success Alert --}}
+                @if (session()->has('success'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+            {{-- Error Alert --}}
+                @if (session()->has('error'))
+                    <div class="flex-row text-center" id="success_alert">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+
             {{-- Title and Breadcrumbs --}}
             <div class="d-flex justify-content-between align-items-center">
                 {{-- Title --}}
@@ -58,7 +77,7 @@
                                 @elseif($accomplishment->status == 3)
                                     <span class="badge rounded-pill fs-6 bg-danger text-white">Disapproved</span>
                                     <br>
-                                    By: {{ $accomplishment->reviewer->full_name }}
+                                    By: {{ $accomplishment->reviewer->full_name . '(' . date_format(date_create($accomplishment->reviewed_at), 'F d, Y') . ')'}}
                                 @endif
                             </div>
                             
@@ -137,6 +156,18 @@
                                 </div>
                             </div>
 
+                            {{-- Show Remarks if Disapproved --}}
+                            @if($accomplishment->status == 3)
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="card-title text-center fw-bold">REMARKS</p>
+                                        <p class="text-center">{{ $accomplishment->remarks }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
                             {{-- Accomplishment Documents --}}
                             @if($accomplishment->accomplishmentFiles->count() > 0)
                                 <hr>
@@ -148,23 +179,28 @@
                                         @if($file->type == 1)
                                         
                                             <div class="row justify-content-center mb-2">
-                                                <img src="{{'/storage/'.$file->file}}" style="max-width:600px; max-height:300px;min-width:600px; min-height:300px;">
-                                                <br>
+                                                <img src="{{'/storage/'.$file->file}}" style="max-width:600px; max-height:300px;min-width:600px; min-height:300px;" class="border border-dark">
+                                                {{-- Document Type and File Caption --}}
+                                                <div class="row justify-content-center">
+                                                    <p class="text-center fw-bold">{{$file->documentType->document_type}}</p>
+                                                    <p class="text-center">{{$file->caption}}</p>
+                                                </div>
                                             </div>
 
                                         {{-- If the file is a PDF... --}}
                                         @elseif($file->type == 2)
                                             <div class="row justify-content-center mb-2">
-                                                <iframe src="{{'/storage/'.$file->file}}#toolbar=0" width="100%" style="height:25vh;">
+                                                <iframe src="{{'/storage/'.$file->file}}#toolbar=0" width="100%" style="height:25vh;" class="border border-dark">
                                                 </iframe>
-                                                <br>
+                                                {{-- Document Type and File Caption --}}
+                                                <div class="row justify-content-center">
+                                                    <p class="text-center fw-bold">{{$file->documentType->document_type}}</p>
+                                                    <p class="text-center">{{$file->caption}}</p>
+                                                </div>
                                             </div>
                                         @endif
 
-                                        {{-- File Caption --}}
-                                        <div class="row justify-content-center">
-                                            <p class="text-center">{{$file->caption}}</p>
-                                        </div>
+                                        
                                     @endforeach
                                 </div>
                             @endif
