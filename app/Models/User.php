@@ -73,7 +73,6 @@ class User extends Authenticatable
      * Get the user's full concatenated name.
      * @return string
      */
-
     public function getFullNameAttribute()
     {
         $name = "{$this->last_name}, {$this->first_name}";

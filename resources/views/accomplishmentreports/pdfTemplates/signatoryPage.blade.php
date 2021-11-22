@@ -13,37 +13,48 @@
                 <p class="prep-org">{{$organization->organization_name}}<br>CENTRAL BODY</p>
             </div>
             <br>
+
+            {{-- Prepared by: --}}
             <div class="prep-prepared">
                 <p class="prep-text">Prepared by:</p>
                 @foreach($documentationSignatory as $signatory)
-                    @foreach($signatory->users as $user)
-                        @if($user->count() > 0)
-                @if($signature)                    
-                <p class="prep-signature">signature</p>
-                @else
-                <p class="prep-signature">&nbsp;</p>
-                @endif
-                <p class="prep-officer">{{ $user->full_name }}</p>
-                <p class="prep-officer-title">{{ $organization->organization_acronym . $signatory->position_title }}</p>
-                        @endif
-                    @endforeach
-                @endforeach
 
+                    {{-- Signature --}}
+                    @if($signature)
+                        @if($signatory->signature !== NULL)
+                            <img src="{{ public_path('/storage/'. $signatory->signature) }}" class="prep-signature">
+                        @else
+                            <p class="prep-signature"></p>
+                        @endif
+                    @else
+                         <p class="prep-signature"></p>
+                    @endif
+                    
+                    {{-- Details --}}
+                    <p class="prep-officer">{{ $signatory->full_name }}</p>
+                    <p class="prep-officer-title">{{ $organization->organization_acronym . ' ' . $signatory->positionTitle->position_title }}</p>
+                @endforeach
             </div>
+
             <br>
+
+            {{-- Approved by: --}}
             <div class="prep-approved">
                 <p class="prep-text">Approved by:</p>
-                @foreach($presidentSignatory->users as $user)
-                    @if($user->count() > 0)
-                @if($signature)                    
-                <p class="prep-signature">signature</p>
-                @else
-                <p class="prep-signature">&nbsp;</p>
-                @endif
-                <p class="prep-officer">{{ $user->full_name }}</p>
-                <p class="prep-officer-title">{{ $organization->organization_acronym . $signatory->position_title }}</p>
+                {{-- Signature --}}
+                    @if($signature)
+                        @if($presidentSignatory->signature !== NULL)
+                            <img src="{{ public_path('/storage/'. $presidentSignatory->signature) }}" class="prep-signature">
+                        @else
+                            <p class="prep-signature"></p>
+                        @endif                  
+                    @else
+                        <p class="prep-signature"></p>
                     @endif
-                @endforeach
+
+                {{-- Details --}}
+                <p class="prep-officer">{{ $presidentSignatory->full_name }}</p>
+                <p class="prep-officer-title">{{ $organization->organization_acronym . ' ' . $presidentSignatory->positionTitle->position_title }}</p>
             </div>
         </div>
     </div>

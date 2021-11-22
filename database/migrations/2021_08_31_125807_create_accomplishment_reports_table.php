@@ -17,20 +17,21 @@ class CreateAccomplishmentReportsTable extends Migration
             $table->id('accomplishment_report_id');
             // Accomplishment Report Type - 1 = Tabular | 2 = Design
             $table->foreignId('accomplishment_report_type_id');
-            
-            
             $table->uuid('accomplishment_report_uuid')->unique();
             $table->foreignId('organization_id');
             $table->foreignId('created_by');
             $table->string('title');
             $table->text('description')->nullable()->default(NULL);
             $table->string('file');
+
             // range title - 1 = Semestral | 2 = Quarterly | 3 = Custom
             $table->unsignedTinyInteger('range_title');
             $table->date('start_date');
             $table->date('end_date');
+
             // status - 1 = PENDING | 2 = ACCEPTED | 3 = DECLINED
             $table->unsignedTinyInteger('status')->default(1);
+            
             $table->foreignId('reviewed_by')->nullable()->default(NULL);
             $table->timestamp('reviewed_at')->nullable()->default(NULL);
             $table->text('remarks')->nullable()->default(NULL);

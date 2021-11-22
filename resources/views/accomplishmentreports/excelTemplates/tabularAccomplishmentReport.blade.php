@@ -6,6 +6,7 @@
 <body>
     <table>
         <tbody>
+            {{-- Excel Table Format for Tabular AR  --}}
 
             {{-- TABLE VII. Students Awards/ Recognitions from  Reputable Organizations --}}
             <tr>
@@ -29,23 +30,37 @@
             </tr>
             @php $i = 1; @endphp
             @foreach($table1 as $accomplishment)
-            <tr>
-                {{-- # --}}
-                <td>{{ $i }}</td>
-                {{-- Name of Award --}}
-                <td>{{ $accomplishment['title'] }}</td>
-                {{-- Certifying Body --}}
-                <td>{{ $accomplishment['organizer'] }}</td>
-                {{-- Place --}}
-                <td>{{ $accomplishment['venue'] }}</td>
-                {{-- Date(mm/dd/yyyy) --}}
-                <td>{{ date_format(date_create($accomplishment['end_date']), 'm-d-Y') }}</td>
-                {{-- Level --}}
-                <td>{{ $accomplishment['level']->level }}</td>
-                {{-- Description of Supporting Documents Submitted --}}
-                <td> - </td>
-            </tr>
-            @php $i += 1; @endphp
+                <tr>
+                    {{-- # --}}
+                    <td>{{ $i }}</td>
+                    {{-- Name of Award --}}
+                    <td>{{ $accomplishment['title'] }}</td>
+                    {{-- Certifying Body --}}
+                    <td>{{ $accomplishment['organizer'] }}</td>
+                    {{-- Place --}}
+                    <td>{{ $accomplishment['venue'] }}</td>
+                    {{-- Date(mm/dd/yyyy) --}}
+                    <td>{{ date_format(date_create($accomplishment['end_date']), 'm-d-Y') }}</td>
+                    {{-- Level --}}
+                    <td>{{ $accomplishment['level']->level }}</td>
+                    {{-- Description of Supporting Documents Submitted --}}
+                    <td>
+                        @if($accomplishment['accomplishmentFiles']->count() > 0)
+                            @php $documentTitleTypes = ''; @endphp
+                            @foreach($accomplishment['accomplishmentFiles'] as $document)
+                                @php $documentTitleTypes .= $document->documentType->document_type; @endphp
+                                @if(! $loop->last)
+                                    @php $documentTitleTypes .= ', '; @endphp
+                                    
+                                @endif
+                            @endforeach
+                            {{ $documentTitleTypes }}
+                        @else
+                        -
+                        @endif
+                    </td>
+                </tr>
+                @php $i += 1; @endphp
             @endforeach
 
         {{-- ROW BREAK --}}
@@ -73,41 +88,42 @@
             <th scope="col">{{ $table2Columns->tabularColumns[6]->tabular_column_name }}</th>
         </tr>
 
-            @php $i = 1; @endphp
-            @foreach($table2 as $communityOutreach)
-        <tr>
-            {{-- # --}}
-            <td>{{ $i }}</td>
-            {{-- Title of Program --}}
-            <td>{{ $communityOutreach['title'] }}</td>
-            {{-- Place --}}
-            <td>{{ $communityOutreach['venue'] }}</td>
-            {{-- Date(mm/dd/yyy) --}}
-            <td>{{ date_format(date_create($communityOutreach['end_date']), 'm-d-Y') }}</td>
-            {{-- Level --}}
-            <td>{{ $communityOutreach['eventLevel']->level }}</td>
-            {{-- Number of Beneficiaries --}}
-            <td>{{ $communityOutreach['total_beneficiary'] }}</td>
-            {{-- Description of Supporting Documents Submitted --}}
-            <td>
-                @if($communityOutreach['eventDocuments']->count() > 0)
-                @php $documentTitleTypes = ''; @endphp
-                    @foreach($communityOutreach['eventDocuments'] as $document)
-                    @php $documentTitleTypes .= $document->documentType->document_type; @endphp
-                    @if(! $loop->last)
-                        @php $documentTitleTypes .= ', '; @endphp
-                        
-                    @endif
-                @endforeach
+        {{-- TABLE VIII ROWS --}}
+        @php $i = 1; @endphp
+        @foreach($table2 as $communityOutreach)
+            <tr>
+                {{-- # --}}
+                <td>{{ $i }}</td>
+                {{-- Title of Program --}}
+                <td>{{ $communityOutreach['title'] }}</td>
+                {{-- Place --}}
+                <td>{{ $communityOutreach['venue'] }}</td>
+                {{-- Date(mm/dd/yyy) --}}
+                <td>{{ date_format(date_create($communityOutreach['end_date']), 'm-d-Y') }}</td>
+                {{-- Level --}}
+                <td>{{ $communityOutreach['eventLevel']->level }}</td>
+                {{-- Number of Beneficiaries --}}
+                <td>{{ $communityOutreach['total_beneficiary'] }}</td>
+                {{-- Description of Supporting Documents Submitted --}}
+                <td>
+                    @if($communityOutreach['eventDocuments']->count() > 0)
+                    @php $documentTitleTypes = ''; @endphp
+                        @foreach($communityOutreach['eventDocuments'] as $document)
+                        @php $documentTitleTypes .= $document->documentType->document_type; @endphp
+                        @if(! $loop->last)
+                            @php $documentTitleTypes .= ', '; @endphp
+                            
+                        @endif
+                    @endforeach
 
-                {{ $documentTitleTypes }}
-                @else
-                -
-                @endif
-            </td>
-        </tr>
+                    {{ $documentTitleTypes }}
+                    @else
+                    -
+                    @endif
+                </td>
+            </tr>
             @php $i += 1; @endphp
-            @endforeach 
+        @endforeach 
 
         {{-- ROW BREAK --}}
         <tr></tr>
@@ -149,8 +165,9 @@
             <th scope="col">{{ $table3Columns->tabularColumns[14]->tabular_column_name }}</th>
         </tr>
 
-            @php $i = 1; @endphp
-            @foreach($table3 as $trainingAndSeminar)
+        {{-- TABLE IX ROWS --}}
+        @php $i = 1; @endphp
+        @foreach($table3 as $trainingAndSeminar)
             <tr>
                 {{-- # --}}
                 <td>{{ $i }}</td>
@@ -189,7 +206,7 @@
                 {{-- Description of Supporting Documents Submitted (MOA/MOU, Certificate of Recognitions/Appreciations) --}}
                 <td>
                     @if($trainingAndSeminar['eventDocuments']->count() > 0)
-                    @php $documentTitleTypes = ''; @endphp
+                        @php $documentTitleTypes = ''; @endphp
                         @foreach($trainingAndSeminar['eventDocuments'] as $document)
                             @php $documentTitleTypes .= $document->documentType->document_type; @endphp
                             @if(! $loop->last)
@@ -205,7 +222,7 @@
                 </td>
             </tr>
             @php $i += 1; @endphp
-            @endforeach 
+        @endforeach 
 
         {{-- ROW BREAK --}}
         <tr></tr>
@@ -247,8 +264,9 @@
             <th scope="col">{{ $table4Columns->tabularColumns[14]->tabular_column_name }}</th>
         </tr>
 
-            @php $i = 1; @endphp
-            @foreach($table4 as $otherStudentActivity)
+        {{-- TABLE X ROWS --}}
+        @php $i = 1; @endphp
+        @foreach($table4 as $otherStudentActivity)
             <tr>
                 {{-- # --}}
                 <td>{{ $i }}</td>
@@ -287,7 +305,7 @@
                 {{-- Description of Supporting Documents Submitted (MOA/MOU, Certificate of Recognitions/Appreciations) --}}
                 <td>
                     @if($otherStudentActivity['eventDocuments']->count() > 0)
-                    @php $documentTitleTypes = ''; @endphp
+                        @php $documentTitleTypes = ''; @endphp
                         @foreach($otherStudentActivity['eventDocuments'] as $document)
                             @php $documentTitleTypes .= $document->documentType->document_type; @endphp
                             @if(! $loop->last)
@@ -303,12 +321,12 @@
                 </td>
             </tr>
             @php $i += 1; @endphp
-            @endforeach 
+        @endforeach 
 
         </tbody>
-
     </table>
-
 </body>
 </html>
 
+{{-- For Maintenance, you'd have to edit this thing almost entirely, goodluck :)))) --}}
+{{-- Some data are on Collection, some are on Array, please dd() to review --}}

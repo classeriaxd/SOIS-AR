@@ -5,12 +5,13 @@ namespace App\Services\AccomplishmentReportServices;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
 use iio\libmergepdf\Merger;
 use PDF;
 
 class AccomplishmentReportGeneratePDFService
 {
+    protected $viewDirectory = 'accomplishmentreports.pdfTemplates.';
+    protected $temporaryFolderDirectory = '/app/public/compiledDocuments/tmp/';
     /**
      * Service to generate PDF Accomplishment Report.
      * Returns Array of Final File Name and Folder Name
@@ -21,12 +22,12 @@ class AccomplishmentReportGeneratePDFService
 
         // Get all Keys from Form
         $allKeys= $request->except(['start_date', 'end_date', '_token', 'ar_format', 'range_title']);
-        if (count($allKeys) == 0) 
-        {
-            return redirect()->action(
-                [AccomplishmentReportsController::class, 'index'])
-                ->with('error', 'No Report Selected!');
-        }
+        
+        // Redirect if there is no event/accomplishment selected
+            if (count($allKeys) == 0) 
+                return redirect()->action(
+                    [AccomplishmentReportsController::class, 'index'])
+                    ->with('error', 'No Report Selected!');
 
         // Get Sorted Events and Accomplishments
         $sortedEvents = $this->sortAndCompileReport($allKeys, $events, 'events');
@@ -38,29 +39,37 @@ class AccomplishmentReportGeneratePDFService
 
         // Create Event PDF, save it to File, then add to array
         // After that get all documents, then add to array
-        // temp is true for Title Page
         $compiledDocuments = array();
-        $temp = true;
-
+        $appendTitlePage = true;
         foreach($sortedEvents as $event)
         {
-            //dd($event);
-            if ($temp)
+            if ($appendTitlePage)
             {
                 // Create and Append Event Title Page
                 $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.eventTitlePage')
+                $dompdf = PDF::loadView($this->viewDirectory . 'eventTitlePage')
                     ->setPaper('letter', 'portrait')
-                    ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                $temp = false;
+                    ->save(storage_path($this->temporaryFolderDirectory .  $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                $appendTitlePage = false;
             }
-            //dd($event);
             $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-            $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageEvent', compact('event'))
+            $dompdf = PDF::loadView($this->viewDirectory . 'singlePageEvent', compact('event'))
                 ->setPaper('letter', 'portrait')
-                ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
+                ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+
+            // If Event Images is checked
+            if (isset($event['event_images']))
+            {
+                $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
+                $dompdf = PDF::loadView($this->viewDirectory . 'singlePageEventImage', compact('event'))
+                    ->setPaper('letter', 'portrait')
+                    ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+            }
+
+            // If Event Documents is checked
             if (isset($event['event_documents']))
             {
                 foreach ($event['event_documents'] as $document) 
@@ -70,23 +79,28 @@ class AccomplishmentReportGeneratePDFService
             }
         }
 
-        $temp = true;
+        // Create Student Accomplishment PDF, save it to File, then add to array
+        // After that get all documents, then add to array
+        $appendTitlePage = true;
 
         foreach ($sortedAccomplishments as $accomplishment)
         {
-            if($temp)
+            if($appendTitlePage)
             {
                 // Create and Append Accomplishment Title Page
                 $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.accomplishmentTitlePage')->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                $temp = false;
+                $dompdf = PDF::loadView($this->viewDirectory . 'accomplishmentTitlePage')->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                $appendTitlePage = false;
             }
+
             $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-            $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageAccomplishment', compact('accomplishment'))
+            $dompdf = PDF::loadView($this->viewDirectory . 'singlePageAccomplishment', compact('accomplishment'))
                 ->setPaper('letter', 'portrait')
-                ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
+                ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+
+            // If Accomplishment Evidences/Files is checked
             if (isset($accomplishment['accomplishment_files']))
             {
                 foreach ($accomplishment['accomplishment_files'] as $file) 
@@ -96,10 +110,10 @@ class AccomplishmentReportGeneratePDFService
                     elseif($file['type'] == 1)
                     {
                         $fileName2 = uniqid() . '-' . now()->timestamp . '.pdf';
-                        $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageAccomplishmentImage', compact('file'))
+                        $dompdf = PDF::loadView($this->viewDirectory . 'singlePageAccomplishmentImage', compact('file'))
                             ->setPaper('letter', 'portrait')
-                            ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName2));
-                        array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName2));
+                            ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName2));
+                        array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName2));
                     }
                 }
             }

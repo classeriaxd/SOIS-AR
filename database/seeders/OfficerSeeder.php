@@ -16,6 +16,7 @@ class OfficerSeeder extends Seeder
     {
         $term_start = Carbon::parse('First day of October 2021')->format('Y-m-d');
         $term_end = Carbon::parse('Last day of September 2022')->format('Y-m-d');
+        $currentTime = Carbon::now();
         $data = [
             [
                 // 1
@@ -26,8 +27,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => NULL,
                 'last_name' => 'Amaguin',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
             
             [
@@ -39,8 +42,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Olarte',
                 'last_name' => 'Cabiades',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
 
             [
@@ -52,8 +57,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Peña',
                 'last_name' => 'Exala',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
 
             [
@@ -65,8 +72,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Gisulga',
                 'last_name' => 'Etin',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
 
             [
@@ -78,8 +87,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Sabando',
                 'last_name' => 'Ross',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
 
             [
@@ -91,8 +102,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Aquino',
                 'last_name' => 'Dolor',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
   
             [
@@ -104,8 +117,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Sana',
                 'last_name' => 'Babac',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
  
             [
@@ -117,8 +132,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Parco',
                 'last_name' => 'Nierva',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
   
             [
@@ -130,8 +147,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Arcangel',
                 'last_name' => 'Rediga',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
  
             [
@@ -143,8 +162,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => NULL,
                 'last_name' => 'Taganas',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
  
             [
@@ -156,8 +177,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Galido',
                 'last_name' => 'Dionisio',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
    
             [
@@ -169,8 +192,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Candare',
                 'last_name' => 'Paduano',
                 'suffix' => 'Jr.',
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
    
             [
@@ -182,8 +207,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Hernandez',
                 'last_name' => 'Dimaano',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
   
             [
@@ -195,8 +222,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Moral',
                 'last_name' => 'Encina',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
   
             [
@@ -208,8 +237,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Boridor',
                 'last_name' => 'Galopo',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
   
             [
@@ -221,8 +252,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Del Valle',
                 'last_name' => 'Sandigan',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
  
             [
@@ -234,8 +267,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Tinio',
                 'last_name' => 'Cruz',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
   
             [
@@ -247,8 +282,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Amorado',
                 'last_name' => 'Amoranto',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
 
             [
@@ -260,8 +297,10 @@ class OfficerSeeder extends Seeder
                 'middle_name' => 'Lidasan',
                 'last_name' => 'Ramos',
                 'suffix' => NULL,
-                'signature' => NULL,
+                'signature' => '/organization_assets/signature/sample_signature.png',
                 'status' => 1,
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
             ],
         ];
         DB::table('officers')->insert($data);

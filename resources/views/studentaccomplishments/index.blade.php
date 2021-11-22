@@ -15,7 +15,7 @@
                 @endif
             {{-- Error Alert --}}
                 @if (session()->has('error'))
-                    <div class="flex-row text-center" id="success_alert">
+                    <div class="flex-row text-center" id="error_alert">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
                             <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
