@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             {{-- Success Alert --}}
                 @if (session()->has('success'))
                     <div class="flex-row text-center" id="success_alert">
@@ -47,7 +47,7 @@
 
             {{-- Accomplishment Report Show Page --}}
         	<div class="row justify-content-center pb-1">
-        		<div class="col-md-8">
+        		<div class="col-md-12">
                     {{-- Review button for AR Presidents --}}
                     @role('AR President Admin')
                         @if($accomplishmentReport->status == 1 && $accomplishmentReport->accomplishmentReportType->accomplishment_report_type == 'Design')

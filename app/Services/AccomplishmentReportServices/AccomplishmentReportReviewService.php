@@ -52,6 +52,8 @@ class AccomplishmentReportReviewService
 
         $accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
 
+        (new AccomplishmentReportNotificationService)->sendNotificationToSuperAdmin($accomplishmentReportUUID, 'Tabular', $accomplishmentReport->organization_id);
+
         $accomplishmentReport->update([
                 'status' => 2,
                 'reviewed_by' => Auth::user()->user_id,
@@ -154,8 +156,8 @@ class AccomplishmentReportReviewService
             $this->deleteDirectory(Str::of(storage_path('/app/public/' . $accomplishmentReport->file))->dirname());
 
             // Send Notification to Officer
+            // This method chains to notify the Super Admin
             (new AccomplishmentReportNotificationService())->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'approved');
-            (new AccomplishmentReportNotificationService())->sendNotificationToSuperAdmin($)
 
             $returnArray = array( 
                 'message' => array('success' => 'Accomplishment Report has been approved! Notification sent to Documentation Officers.'),
@@ -191,8 +193,7 @@ class AccomplishmentReportReviewService
                 ]);
 
             // Send Notification to Officer
-            $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-            $accomplishmentReportNotificationService->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'declined');
+            (new AccomplishmentReportNotificationService())->sendNotificationToOfficer($accomplishmentReport->organization_id, $accomplishmentReport->accomplishment_report_uuid, 'declined');
 
             $returnArray = array(
                 'reviewed' => true, 

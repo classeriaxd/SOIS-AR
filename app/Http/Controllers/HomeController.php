@@ -42,6 +42,11 @@ class HomeController extends Controller
         // Array to store variables to send to View
         $compactVariables = array();
 
+        // If User is Super Admin role then redirect
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'Super Admin')) !== false ? true : false)
+            return redirect()->action(
+                [Admin\HomeController::class, 'index']);
+
         // If User has a User/Member role...
         if ( ($userRoleKey = $this->hasRole($userRoles, 'User')) !== false ? true : false)
         {
