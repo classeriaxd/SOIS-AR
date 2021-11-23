@@ -15,7 +15,7 @@ class CreateOrganizationDocumentsTable extends Migration
     {
         Schema::create('organization_documents', function (Blueprint $table) {
             $table->id('organization_document_id');
-            $table->foreignId('organization_id')->unique();
+            $table->foreignId('organization_id');
             $table->foreignId('organization_document_type_id');
             $table->string('file');
             $table->string('title');
