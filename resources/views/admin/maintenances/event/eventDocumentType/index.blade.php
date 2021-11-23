@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.maintenance.eventDocumentTypes.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Event Document Type
+                        <i class="fas fa-plus"></i> Add Event Document Type
                 </a>
             </div>
             
@@ -88,7 +88,7 @@
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                 </a>
             </div>
         </div>

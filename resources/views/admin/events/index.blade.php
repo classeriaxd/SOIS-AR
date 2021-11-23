@@ -126,7 +126,7 @@
         <a href="{{route('admin.home')}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go Home
+            <i class="fas fa-home"></i> Go Home
         </a>
     </div>
 

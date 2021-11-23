@@ -108,9 +108,6 @@
 
 
 @section('scripts')
-
-
-
     <script type="text/javascript">
         {{-- LOGIN ALERT TIMEOUT --}}
         window.setTimeout(function() {

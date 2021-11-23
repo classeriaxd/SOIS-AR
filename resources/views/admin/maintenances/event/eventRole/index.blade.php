@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.maintenance.eventRoles.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Event Role
+                        <i class="fas fa-plus"></i> Add Event Role
                 </a>
             </div>
             
@@ -96,7 +96,7 @@
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                 </a>
             </div>
         </div>
@@ -106,9 +106,6 @@
 
 
 @section('scripts')
-
-
-
     <script type="text/javascript">
         {{-- LOGIN ALERT TIMEOUT --}}
         window.setTimeout(function() {

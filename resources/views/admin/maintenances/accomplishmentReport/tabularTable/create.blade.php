@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white">Add Table</button>
+                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Table</button>
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@
         <a href="{{ route('admin.maintenance.tabularTables.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 

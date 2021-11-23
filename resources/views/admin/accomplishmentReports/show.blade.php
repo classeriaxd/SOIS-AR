@@ -91,14 +91,15 @@
                 <a href="{{route('admin.accomplishmentReports.organization.index', ['organizationSlug' => $accomplishmentReport->organization->organization_slug])}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go back to {{$accomplishmentReport->organization->organization_acronym}} Accomplishment Reports
+                        <i class="fas fa-arrow-left"></i> Go back to {{$accomplishmentReport->organization->organization_acronym}} Accomplishment Reports
                 </a>
+                
                 <span>or</span>
                 
                 <a href="{{route('admin.accomplishmentReports.index')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go back to All Accomplishment Reports
+                        <i class="fas fa-arrow-left"></i> Go back to All Accomplishment Reports
                 </a>            
             </div>
 

@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.maintenance.eventNatures.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Event Nature
+                        <i class="fas fa-plus"></i> Add Event Nature
                 </a>
             </div>
             

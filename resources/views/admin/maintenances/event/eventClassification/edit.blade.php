@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Update Event Classification</button>
+                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-edit"></i> Update Event Classification</button>
                 </div>
 
             </div>

@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Update Document Type</button>
+                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-edit"></i> Update Document Type</button>
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
         <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 

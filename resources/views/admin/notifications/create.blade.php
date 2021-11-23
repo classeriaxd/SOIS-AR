@@ -106,7 +106,7 @@
                                 
                                 <div class="form-group flex-row text-center">
                                     @csrf
-                                    <button class="btn btn-primary text-white" type="submit">Send Notification</button>
+                                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-paper-plane"></i> Send Notification</button>
                                 </div>
                             </form>
 
@@ -118,11 +118,11 @@
         	<hr>
 
         	<div class="flex-row my-2 text-center">
-                    <a href="{{route('admin.home')}}"
-                    class="btn btn-secondary text-white"
-                    role="button">
-                        Go Home
-                    </a>
+                <a href="{{route('admin.home')}}"
+                class="btn btn-secondary text-white"
+                role="button">
+                    <i class="fas fa-home"></i> Go Home
+                </a>
             </div>
         </div>
     </div>

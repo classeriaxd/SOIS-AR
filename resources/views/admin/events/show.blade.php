@@ -239,14 +239,14 @@
                 <a href="{{route('admin.events.organization.index', ['organizationSlug' => $event->organization->organization_slug])}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go back to {{$event->organization->organization_acronym}} Events
+                        <i class="fas fa-arrow-left"></i> Go back to {{$event->organization->organization_acronym}} Events
                 </a>
                 <span>or</span>
                 
                 <a href="{{route('admin.events.index')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go back to All Events
+                        <i class="fas fa-arrow-left"></i> Go back to All Events
                 </a>            
             </div>
 
