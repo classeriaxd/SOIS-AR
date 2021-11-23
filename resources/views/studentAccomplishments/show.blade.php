@@ -73,7 +73,7 @@
                                 @elseif($accomplishment->status == 2)
                                     <span class="badge rounded-pill fs-6 bg-success text-white">Approved</span>
                                     <br>
-                                    By: {{ $accomplishment->reviewer->full_name '(' . date_format(date_create($accomplishment->reviewed_at), 'F d, Y') . ')'}}
+                                    By: {{ $accomplishment->reviewer->full_name . '(' . date_format(date_create($accomplishment->reviewed_at), 'F d, Y') . ')'}}
                                 @elseif($accomplishment->status == 3)
                                     <span class="badge rounded-pill fs-6 bg-danger text-white">Disapproved</span>
                                     <br>

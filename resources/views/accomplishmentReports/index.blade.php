@@ -99,7 +99,7 @@
                                         </tbody>
                                     </table>
                                 @else
-                                    <p class="text-center">No Accomplishment Reports found :(. You can create one <a href="{{route('accomplishmentReports.create')}}"><u>here</u></a>.</p>
+                                    <p class="text-center">No Accomplishment Reports found :(. You can create one <a href="{{route('accomplishmentreports.create')}}"><u>here</u></a>.</p>
                                 @endif
 
                                 {{-- Organization Accomplishment Reports Table Pager --}}

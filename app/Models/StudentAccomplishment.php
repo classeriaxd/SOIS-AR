@@ -24,7 +24,7 @@ class StudentAccomplishment extends Model
     }
     public function reviewer()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'reviewed_by', 'user_id');
     }
     public function event()
     {

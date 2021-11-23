@@ -173,7 +173,9 @@ class AccomplishmentReportsController extends Controller
     }
 
     /**
-     * Get request from Index, then Show Checklist Page
+     * @param Request $request
+     * Function to show checklist from Create Page
+     * @return View
      */
     public function showChecklist(Request $request)
     {
