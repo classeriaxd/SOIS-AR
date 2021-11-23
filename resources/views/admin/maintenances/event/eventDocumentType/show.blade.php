@@ -63,7 +63,7 @@
         <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 
@@ -85,13 +85,13 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                         <button type="button" 
                             class="btn btn-danger text-white" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteEventDocumentTypeModal"
                             data-bs-dismiss="modal">
-                            Proceed
+                            <i class="fas fa-check"></i> Proceed
                         </button>
                     </div>
                 </div>
@@ -160,8 +160,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white">Proceed</button>
+                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

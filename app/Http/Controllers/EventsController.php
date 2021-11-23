@@ -26,7 +26,6 @@ use App\Services\EventServices\{
     EventStoreService,
     EventUpdateService,
     EventDeleteService,
-    EventGetOrganizationIDService,
 };
 
 class EventsController extends Controller
@@ -39,8 +38,7 @@ class EventsController extends Controller
     {
         $orgAcronym = Auth::user()->course->organization->organization_acronym;
         $events = (new EventIndexService())->index();
-        $simpleDataTables = true;
-        return view('events.index', compact('events', 'orgAcronym', 'simpleDataTables'));
+        return view('events.index', compact('events', 'orgAcronym'));
     }
 
     /**
@@ -64,6 +62,7 @@ class EventsController extends Controller
     public function edit($event_slug)
     {
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = Event::with(
                 'eventCategory:event_category_id,category,deleted_at', 
                 'eventRole:event_role_id,event_role,deleted_at', 
@@ -73,12 +72,12 @@ class EventsController extends Controller
                 'eventClassification:event_classification_id,classification,deleted_at',)
             ->where('slug', $event_slug)->first();
 
-        $eventCategories = EventCategory::onlyCategoryColumns()->get();
-        $eventClassifications = EventClassification::onlyClassificationColumns()->get();
-        $eventNatures = EventNature::onlyNatureColumns()->get();
-        $eventRoles = EventRole::onlyEventRoleColumns()->get();
-        $fundSources = FundSource::onlyFundSourceColumns()->get();
-        $levels = Level::onlyLevelColumns()->get();
+        $eventCategories = EventCategory::all();
+        $eventClassifications = EventClassification::all();
+        $eventNatures = EventNature::all();
+        $eventRoles = EventRole::all();
+        $fundSources = FundSource::all();
+        $levels = Level::all();
         
         return view('events.edit',compact(
             'event', 
@@ -136,12 +135,12 @@ class EventsController extends Controller
      */ 
     public function create()
     {
-        $eventCategories = EventCategory::onlyCategoryColumns()->get();
-        $eventClassifications = EventClassification::onlyClassificationColumns()->get();
-        $eventNatures = EventNature::onlyNatureColumns()->get();
-        $eventRoles = EventRole::onlyEventRoleColumns()->get();
-        $fundSources = FundSource::onlyFundSourceColumns()->get();
-        $levels = Level::onlyLevelColumns()->get();
+        $eventCategories = EventCategory::all();
+        $eventClassifications = EventClassification::all();
+        $eventNatures = EventNature::all();
+        $eventRoles = EventRole::all();
+        $fundSources = FundSource::all();
+        $levels = Level::all();
 
     	return view('events.create', compact(
             'eventCategories', 
@@ -159,8 +158,7 @@ class EventsController extends Controller
      */
     public function store(EventStoreRequest $request)
     {
-        $organizationID = (new EventGetOrganizationIDService())->getOrganizationID();
-        $returnArray = (new EventStoreService())->store($request, $organizationID);
+        $returnArray = (new EventStoreService())->store($request);
         $message = $returnArray['message'];
 
         if ($returnArray['eventSlug'] == NULL) {

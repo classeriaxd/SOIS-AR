@@ -40,6 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['full_name'];
     
     protected $primaryKey = 'user_id';
 
@@ -48,14 +54,9 @@ class User extends Authenticatable
         return $this->belongsTo(Course::class, 'course_id');
     }
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
-
-    public function positionTitles()
-    {
-        return $this->belongsToMany(PositionTitle::class, 'users_position_titles');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id');
     }
 
     public function notifications()
@@ -66,5 +67,21 @@ class User extends Authenticatable
     public function studentAccomplishments()
     {
         return $this->hasMany(studentAccomplishments::class, 'user_id');
+    }
+
+    /**
+     * Get the user's full concatenated name.
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        $name = "{$this->last_name}, {$this->first_name}";
+
+        if (! $this->middle_name === NULL)
+            $name .= " {$this->middle_name}";
+        if (! $this->suffix === NULL)
+            $name .= " {$this->suffix}";
+
+        return $name;
     }
 }

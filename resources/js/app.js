@@ -20,6 +20,7 @@ window.Vue = require('vue').default;
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('read-notification', require('./components/Notification/ReadNotification.vue').default);
+Vue.component('admin-read-notification', require('./components/Notification/AdminReadNotification.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

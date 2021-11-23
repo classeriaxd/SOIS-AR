@@ -135,7 +135,7 @@
         <a href="{{route('admin.home')}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go Home
+            <i class="fas fa-home"></i> Go Home
         </a>
     </div>
 
@@ -153,12 +153,12 @@
         // Simple-DataTables
         // https://github.com/fiduswriter/Simple-DataTables
         window.addEventListener('DOMContentLoaded', event => {
-            const dataTable = new simpleDatatables.DataTable("#eventTable", {
+            const dataTable = new simpleDatatables.DataTable("#accomplishmentReportTable", {
                 perPage: 30,
                 searchable: true,
                 labels: {
                     placeholder: "Search Events...",
-                    noRows: "No events to display",
+                    noRows: "No accomplishment reports to display in this page or try in the next page.",
                 },
             });
         });

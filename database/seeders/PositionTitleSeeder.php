@@ -16,650 +16,136 @@ class PositionTitleSeeder extends Seeder
     {
         $data = [
             [
-                'organization_id' => '1',
+                // 1
+                'organization_id' => 2,
+                'position_category_id' => 1,
                 'position_title' => 'President',
             ],
             
             [
-                'organization_id' => '1',
+                // 2
+                'organization_id' => 2,
+                'position_category_id' => 2,
                 'position_title' => 'Vice President for Internal Affairs',
             ],
 
             [
-                'organization_id' => '1',
+                // 3
+                'organization_id' => 2,
+                'position_category_id' => 2,
                 'position_title' => 'Vice President for External Affairs',
             ],
 
             [
-                'organization_id' => '1',
+                // 4
+                'organization_id' => 2,
+                'position_category_id' => 3,
                 'position_title' => 'Vice President for Records',
             ],
 
             [
-                'organization_id' => '1',
+                // 5
+                'organization_id' => 2,
+                'position_category_id' => 3,
                 'position_title' => 'Assistant Vice President for Records',
             ],
 
             [
-                'organization_id' => '1',
+                // 6
+                'organization_id' => 2,
+                'position_category_id' => 4,
                 'position_title' => 'Vice President for Research and Documentation',
             ],
 
             [
-                'organization_id' => '1',
+                // 7
+                'organization_id' => 2,
+                'position_category_id' => 4,
                 'position_title' => 'Assistant Vice President for Research and Documentation ',
             ],
 
             [
-                'organization_id' => '1',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '1',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '1',
+                // 8
+                'organization_id' => 2,
+                'position_category_id' => 5,
                 'position_title' => 'Vice President for Finance',
             ],
 
             [
-                'organization_id' => '1',
+                // 9
+                'organization_id' => 2,
+                'position_category_id' => 5,
                 'position_title' => 'Assitant Vice President for Finance',
             ],
 
             [
-                'organization_id' => '1',
+                // 10
+                'organization_id' => 2,
+                'position_category_id' => 6,
                 'position_title' => 'Vice President for Audit',
             ],
 
             [
-                'organization_id' => '1',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '1',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '1',
-                'position_title' => 'Vice President for Academics',
-            ],
-
-            [
-                'organization_id' => '1',
-                'position_title' => 'Member',
-            ],
-
-///////////////////////////////////////////////////////
-            [
-                'organization_id' => '2',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for Internal Affairs',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '2',
+                // 11
+                'organization_id' => 2,
+                'position_category_id' => 7,
                 'position_title' => 'Vice President for Communications',
             ],
 
             [
-                'organization_id' => '2',
+                // 12
+                'organization_id' => 2,
+                'position_category_id' => 7,
                 'position_title' => 'Assistant Vice President for Communications',
             ],
 
             [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '2',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '2',
+                // 13
+                'organization_id' => 2,
+                'position_category_id' => 8,
                 'position_title' => 'Vice President for Academics',
             ],
 
             [
-                'organization_id' => '2',
-                'position_title' => 'Member',
-            ],
-
-///////////////////////////////////////////////////////
-            [
-                'organization_id' => '3',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Internal Affairs',
+                // 14
+                'organization_id' => 2,
+                'position_category_id' => 8,
+                'position_title' => 'Assistant Vice President for Academics',
             ],
 
             [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '3',
+                // 15
+                'organization_id' => 2,
+                'position_category_id' => 9,
                 'position_title' => 'Vice President for Arts',
             ],
 
             [
-                'organization_id' => '3',
-                'position_title' => 'Vice Presient for Sport',
+                // 16
+                'organization_id' => 2,
+                'position_category_id' => 9,
+                'position_title' => 'Assistant Vice President for Arts',
             ],
 
             [
-                'organization_id' => '3',
-                'position_title' => 'Vice President for Academics',
+                // 17
+                'organization_id' => 2,
+                'position_category_id' => 10,
+                'position_title' => 'Vice Presient for Sports',
             ],
 
             [
-                'organization_id' => '3',
-                'position_title' => 'Member',
+                // 18
+                'organization_id' => 2,
+                'position_category_id' => 10,
+                'position_title' => 'Assistant Vice Presient for Sports',
             ],
 
-///////////////////////////////////////////////////////
             [
-                'organization_id' => '4',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Internal Affairs',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Vice President for Academics',
-            ],
-
-            [
-                'organization_id' => '4',
-                'position_title' => 'Member',
-            ],
-
-///////////////////////////////////////////////////////
-            [
-                'organization_id' => '5',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Internal Affairs',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Vice President for Academics',
-            ],
-
-            [
-                'organization_id' => '5',
-                'position_title' => 'Member',
-            ],
-
-///////////////////////////////////////////////////////
-            [
-                'organization_id' => '6',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Internal Affairs',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Vice President for Academics',
-            ],
-
-            [
-                'organization_id' => '6',
-                'position_title' => 'Member',
-            ],
-
-///////////////////////////////////////////////////////
-            [
-                'organization_id' => '7',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Internal Affairs',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Vice President for Academics',
-            ],
-
-            [
-                'organization_id' => '7',
-                'position_title' => 'Member',
-            ],
-
-///////////////////////////////////////////////////////
-            [
-                'organization_id' => '8',
-                'position_title' => 'President',
-            ],
-            
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Internal Affairs',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for External Affairs',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Assistant Vice President for Records',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Research and Documentation',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Assistant Vice President for Research and Documentation ',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Assistant Vice President for Communications',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Assitant Vice President for Finance',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Audit',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Arts',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice Presient for Sport',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Vice President for Academics',
-            ],
-
-            [
-                'organization_id' => '8',
-                'position_title' => 'Member',
+                // 19
+                'organization_id' => 2,
+                'position_category_id' => 11,
+                'position_title' => 'Computer Society Representative',
             ],
         ];
         DB::table('position_titles')->insert($data);

@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.maintenance.fundSources.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Fund Source
+                        <i class="fas fa-plus"></i> Add Fund Source
                 </a>
             </div>
             
@@ -89,7 +89,7 @@
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                 </a>
             </div>
         </div>

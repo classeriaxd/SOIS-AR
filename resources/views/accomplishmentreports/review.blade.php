@@ -74,8 +74,9 @@
                                         data-bs-toggle="popover"
                                         data-bs-container="body"
                                         title="E-Signatures" 
-                                        data-bs-content="E-Signature Content"
-                                        data-bs-placement="bottom">
+                                        data-bs-content="If theres an e-signature included in the system, include that above the names of the signatories."
+                                        data-bs-trigger="hover focus"
+                                        data-bs-placement="right">
                                         <i class="far fa-question-circle"></i>
                                     </a>
                                 </div>
@@ -114,13 +115,6 @@
 </div>
 @endsection
 @section('scripts')
-    <script type="text/javascript">
-        // Enable Bootstrap Popovers
-        document.addEventListener("DOMContentLoaded", function(event) { 
-            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-              return new bootstrap.Popover(popoverTriggerEl)
-            });
-        });
-    </script>
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection

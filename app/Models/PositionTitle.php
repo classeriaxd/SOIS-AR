@@ -15,8 +15,13 @@ class PositionTitle extends Model
         return $this->belongsTo(Organization::class, 'organization_id');
     }
 
-    public function users()
+    public function positionCategory()
     {
-        return $this->belongsToMany(User::class, 'users_position_titles');
+        return $this->belongsTo(PositionCategory::class, 'position_category_id');
+    }
+
+    public function officers()
+    {
+        return $this->hasMany(Officer::class, 'position_title_id');
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Auth;
 class StudentAccomplishmentFileUpdateService
 {
     /**
+     * @param Collection $accomplishment, Request $request
      * Service to Update Student Accomplishment Files.
-     *
      * @return void
      */
     public function update(StudentAccomplishment $accomplishment, $request)

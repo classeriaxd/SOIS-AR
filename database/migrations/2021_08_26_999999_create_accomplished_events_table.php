@@ -34,7 +34,7 @@ class CreateAccomplishedEventsTable extends Migration
             $table->string('beneficiaries');
             $table->unsignedInteger('total_beneficiary');
             $table->string('sponsors');
-            $table->unsignedInteger('budget')->default(0);
+            $table->unsignedInteger('budget')->nullable()->default(NULL);
             $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();

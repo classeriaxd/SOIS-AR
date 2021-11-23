@@ -29,16 +29,14 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        // Admin
-        if ( $user->role_id == 1 ) 
-        {
+        // Redirect Super Admin Role
+        if ( ($user->roles->pluck('role'))->containsStrict('Super Admin') ) 
             return redirect()->route('admin.home');
-        }
-        // User
-        else if ($user->role_id == 2)
-        {
+
+        // User | Officer | President | Other Admins
+        else
             return redirect()->route('home');
-        }
+        
     }
 
     /**

@@ -126,7 +126,7 @@
         <a href="{{route('admin.home')}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go Home
+            <i class="fas fa-home"></i> Go Home
         </a>
     </div>
 
@@ -149,7 +149,7 @@
                 searchable: true,
                 labels: {
                     placeholder: "Search Events...",
-                    noRows: "No events to display",
+                    noRows: "No events to display in this page or try in the next page.",
                 },
             });
         });

@@ -8,15 +8,17 @@
 <body>
 
     <div class="page">
-        <div class="event-img-block">
-            <p class="block-title">Image</p>
-        </div>
-        <div class="event-img-block">
-            <div class="img-block">
-                <img src="{{ public_path('/storage/'.$file['file']) }}">
+        <div class="vertical-center">
+            <div class="event-img-block">
+                <p class="block-title">Image</p>
             </div>
-            <div class="info-block">
-                <p class="block-desc">{{ $file['caption'] }}</p>
+            <div class="event-img-block">
+                <div class="img-block">
+                    <img src="{{ public_path('/storage/'.$file['file']) }}">
+                </div>
+                <div class="info-block">
+                    <p class="block-desc">{{ $file['caption'] }}</p>
+                </div>
             </div>
         </div>
     </div>

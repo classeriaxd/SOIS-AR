@@ -219,19 +219,6 @@
                     </div>
                 </div>
             </div>
-            @if($newEvent)
-            
-            	<hr>
-
-                <div class="flex-row my-2 text-center">
-                    <a href="{{route('event.create')}}"
-                        class="btn btn-primary text-white"
-                        role="button">
-                            Create Another Event
-                    </a>
-                </div>
-
-            @endif
 
             <hr>
 
@@ -239,8 +226,18 @@
                 <a href="{{route('event.index')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Back
+                        <i class="fas fa-arrow-left"></i> Go Back
                 </a>
+                @if($newEvent)
+
+                    <span>or</span>
+
+                    <a href="{{route('event.create')}}"
+                        class="btn btn-primary text-white"
+                        role="button">
+                            <i class="fas fa-clipboard-list"></i> Create Another Event
+                    </a>
+                @endif
             </div>
 
         </div>

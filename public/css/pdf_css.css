@@ -70,8 +70,6 @@
     margin-bottom: 20px;
 }
 
-
-
 .event-prep-block .prep-org
 {
     text-transform: uppercase;
@@ -86,6 +84,11 @@
 .event-prep-block .prep-officer-title
 {
     font-style: italic;
+}
+.event-prep-block .prep-signature
+{
+    max-width: 150px;
+    max-height: 150px;
 }
 
 .event-desc-block .block-desc

@@ -68,11 +68,11 @@
         <a href="{{ route('admin.maintenance.levels.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 
-    {{-- Level Delete Reminder Modal --}}
+    {{-- Tabular Column Delete Reminder Modal --}}
         <div class="modal fade" id="deleteTabularColumnReminderModal" tabindex="-1" aria-labelledby="deleteTabularColumnReminderLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -90,20 +90,20 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                         <button type="button" 
                             class="btn btn-danger text-white" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteTabularColumnModal"
                             data-bs-dismiss="modal">
-                            Proceed
+                            <i class="fas fa-check"></i> Proceed
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-    {{-- Level Delete Modal --}}
+    {{-- Tabular Column Delete Modal --}}
         <div class="modal fade" id="deleteTabularColumnModal" tabindex="-1" aria-labelledby="deleteTabularColumnLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -165,8 +165,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white">Proceed</button>
+                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

@@ -11,9 +11,24 @@ class EventGetOrganizationIDService
      * Returns Organization ID on success.
      * @return Integer
      */
-    public function getOrganizationID()
+    public function getOrganizationID(): int
     {
-        $organizationID = Auth::user()->positionTitles->whereIn('position_title', ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'])->pluck('organization_id')->first();
+        // Pluck all User Roles
+        $userRoleCollection = Auth::user()->roles;
+
+        // Remap User Roles into array with Organization ID
+        $userRoles = array();
+        foreach ($userRoleCollection as $role) 
+        {
+            array_push($userRoles, ['role' => $role->role, 'organization_id' => $role->pivot->organization_id]);
+        }
+        
+        // Get Organization ID from role "AR Officer Admin"
+        $userRoleKey = array_search('AR Officer Admin', array_column($userRoles, 'role'));
+
+        $organizationID = $userRoles[$userRoleKey]['organization_id'];
+
         return $organizationID;
+
     }
 }

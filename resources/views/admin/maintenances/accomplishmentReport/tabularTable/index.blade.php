@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.maintenance.tabularTables.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Table
+                        <i class="fas fa-plus"></i> Add Table
                 </a>
             </div>
             
@@ -91,7 +91,7 @@
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                 </a>
             </div>
         </div>

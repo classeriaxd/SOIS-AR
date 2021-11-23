@@ -44,6 +44,10 @@ class StudentAccomplishmentStoreRequest extends FormRequest
             'caption1' => 'nullable|string',
             'caption2' => 'nullable|string',
             'caption3' => 'nullable|string',
+
+            'documentType1' => 'required|numeric|exists:App\Models\StudentAccomplishmentDocumentType,SA_document_type_id',
+            'documentType2' => 'required_with:evidence2|numeric|exists:App\Models\StudentAccomplishmentDocumentType,SA_document_type_id',
+            'documentType3' => 'required_with:evidence3|numeric|exists:App\Models\StudentAccomplishmentDocumentType,SA_document_type_id',
         ];
         return $rules;
     }
@@ -59,7 +63,12 @@ class StudentAccomplishmentStoreRequest extends FormRequest
             'endDate' => 'end date',
             'startTime' => 'start time',
             'endTime' => 'end time',
-            'evidence1' => 'evidence',
+            'evidence1' => 'evidence 1',
+            'evidence2' => 'evidence 2',
+            'evidence3' => 'evidence 3',
+            'documentType1' => 'document type 1',
+            'documentType2' => 'document type 2',
+            'documentType3' => 'document type 3',
         ];
     }
 }

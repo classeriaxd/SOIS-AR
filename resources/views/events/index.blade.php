@@ -40,6 +40,11 @@
                 </nav>
             </div>
             @if($events->isNotEmpty())
+
+            <div class="d-flex justify-content-center">
+                {{ $events->links() }}
+            </div>
+
             <table class="table table-striped table-hover table-bordered border border-dark" id="eventTable">
                 <thead class="text-white fw-bold bg-maroon">
                     <th class="text-center" scope="col">#</th>
@@ -87,9 +92,14 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="d-flex justify-content-center">
+                {{ $events->links() }}
+            </div>
+                
             @else
             <p class="text-center">
-                No Event Found. :(
+                No Event Found. :( You can create one <a href="{{route('event.create')}}" style="color:blue;"><u>here</u></a>.
             </p>
             @endif
         </div>
@@ -101,7 +111,15 @@
         <a href="{{route('home')}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go Home
+            <i class="fas fa-home"></i> Go Home
+        </a>
+
+        <span>or</span>
+
+        <a href="{{route('event.create')}}"
+        class="btn btn-primary text-white"
+        role="button">
+            <i class="fas fa-clipboard-list"></i> Create Event
         </a>
     </div>
 
@@ -122,7 +140,7 @@
             labels: {
             placeholder: "Search Events...",
             perPage: "Show {select} events per page",
-            noRows: "No events to display",
+            noRows: "No events to display or try the next page",
             info: "Showing {start} to {end} of {rows} events (Page {page} of {pages} pages)",
             },
         })

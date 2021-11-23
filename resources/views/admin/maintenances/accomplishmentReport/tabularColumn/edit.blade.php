@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Update Tabular Column</button>
+                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-edit"></i> Update Tabular Column</button>
                 </div>
             </div>
         </div>

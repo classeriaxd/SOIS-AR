@@ -2,110 +2,120 @@
 
 namespace App\Services\NotificationServices;
 
-use App\Models\PositionTitle;
 use App\Models\Notification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Organization;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class AccomplishmentReportNotificationService
 {
     /**
-     * Function to Send Notification to Organization President
-     * about new Accomplishment Report
-     * 
-     * sender = String
-     * recieverOrganizationId = int
-     * accomplishmentReportUUID = String
-     * type = String (System,Event,SA,AR)
+     * @param String $sender, Integer $recieverOrganizationID, String $accomplishmentReportUUID, Integer $type
+     * Function to Send Notification to Organization President about new Accomplishment Report
+     * @return void
      */ 
-    public function sendNotificationToPresident($sender, $recieverOrganizationId, $accomplishmentReportUUID, $type = 4)
+    public function sendNotificationToPresident($sender, $recieverOrganizationID, $accomplishmentReportUUID, $type = 4)
     {
-        $validPositions = ['President'];
-        $recievingPositions = PositionTitle::where('organization_id', $recieverOrganizationId)
-            ->whereIn('position_title', $validPositions)
-            ->pluck('position_title_id');
-        $recievingUsers = array();
-        foreach($recievingPositions as $reciever)
-        {
-            $recievingUserId = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
-            if ($recievingUserId != NULL) 
-                array_push($recievingUsers,$recievingUserId);
-        }
+        $recievingOfficers = User::whereHas(
+                'roles', function(Builder $query) use($recieverOrganizationID) {
+                    $query->where('role', 'AR President Admin')
+                        ->where('organization_id', $recieverOrganizationID);},)
+            ->get();
 
-        if (count($recievingUsers) > 0)
+        if ($recievingOfficers->count() > 0)
         {
-            foreach($recievingUsers as $reciever)
+            foreach ($recievingOfficers as $recievingOfficer) 
             {
-                if ($reciever != NULL)
-                {
-                    $notificationTitle = "New Accomplishment Report Submission";
-                    $notificationDescription = 'An Officer named ' . $sender . ' sent an Accomplishment Report Submission. Please review it!';
-                    $notificationType = $type;
-                    $notificationLink = $accomplishmentReportUUID;
-                    Notification::create([
-                        'user_id' => $reciever,
-                        'title' => $notificationTitle,
-                        'description' => $notificationDescription,
-                        'type' => $notificationType,
-                        'link' => $notificationLink,
-                    ]);
-                }
+                Notification::create([
+                    'user_id' => $recievingOfficer->user_id,
+                    'title' => 'New Accomplishment Report Submission',
+                    'description' => 'An Officer named ' . $sender . ' sent an Accomplishment Report Submission. Please review it!',
+                    'type' => $type,
+                    'link' => $accomplishmentReportUUID,
+                ]);
             }
         }
     }
+
     /**
-     * Function to Send Notification to Documentation Officer
-     * about Accomplishment Report status
-     * 
-     * sender = String
-     * recieverOrganizationId = int
-     * accomplishmentReportUUID = String
-     * status = String(approved,declined)
-     * type = String (System,Event,SA,AR)
+     * @param Integer $recieverOrganizationID, String $accomplishmentReportUUID, String $status, Integer $type
+     * Function to Send Notification to Documentation Officer about Accomplishment Report status
+     * @return void
      */ 
-    public function sendNotificationToOfficer($recieverOrganizationId, $accomplishmentReportUUID, $status, $type = 4)
+    public function sendNotificationToOfficer($recieverOrganizationID, $accomplishmentReportUUID, $status, $type = 4)
     {
-        $validPositions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-        $recievingPositions = PositionTitle::where('organization_id', $recieverOrganizationId)
-            ->whereIn('position_title', $validPositions)
-            ->pluck('position_title_id');
-        $recievingUsers = array();
-        foreach($recievingPositions as $reciever)
-        {
-            $recievingUserId = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
-            if ($recievingUserId != NULL) 
-                array_push($recievingUsers,$recievingUserId);
-        }
+        $recievingOfficers = User::whereHas(
+                'roles', function(Builder $query) use($recieverOrganizationID) {
+                    $query->where('role', 'AR Officer Admin')
+                        ->where('organization_id', $recieverOrganizationID);},)
+            ->get();
 
-        $notificationType = $type;
-        $notificationLink = $accomplishmentReportUUID;
-
-        if (count($recievingUsers) > 0)
+        if ($recievingOfficers->count() > 0)
         {
-            foreach($recievingUsers as $reciever)
+            foreach ($recievingOfficers as $recievingOfficer) 
             {
-                if ($reciever != NULL)
+                if($status == 'approved')
                 {
-                    if($status == 'approved')
-                    {
-                        $notificationTitle = "AR Submission approved!";
-                        $notificationDescription = "Your Accomplishment Report Submission has been approved.";
+                    $this->sendNotificationToSuperAdmin($accomplishmentReportUUID, 'Design', $recieverOrganizationID);
+                    $notificationTitle = "AR Submission approved!";
+                    $notificationDescription = "Your Accomplishment Report Submission has been approved.";
 
-                    }
-                    else if($status == 'declined')
-                    {
-                        $notificationTitle = "AR Submission declined.";
-                        $notificationDescription = "Your Accomplishment Report Submission has been declined.";
-                    }
-                    
-                    Notification::create([
-                        'user_id' => $reciever,
-                        'title' => $notificationTitle,
-                        'description' => $notificationDescription,
-                        'type' => $notificationType,
-                        'link' => $notificationLink,
-                    ]);
                 }
+                else if($status == 'declined')
+                {
+                    $notificationTitle = "AR Submission declined.";
+                    $notificationDescription = "Your Accomplishment Report Submission has been declined.";
+                }
+
+                Notification::create([
+                    'user_id' => $recievingOfficer->user_id,
+                    'title' => $notificationTitle,
+                    'description' => $notificationDescription,
+                    'type' => $type,
+                    'link' => $accomplishmentReportUUID,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param String $accomplishmentUUID, String $accomplishmentReportType, Integer $organizationID, Integer $type
+     * Function to send a notification to Super Admin on Approved Accomplishment Reports
+     * @return void
+     */ 
+    public function sendNotificationToSuperAdmin($accomplishmentReportUUID, $accomplishmentReportType, $organizationID, $type = 4)
+    {
+        $recievingOfficers = User::whereHas(
+                'roles', function(Builder $query){
+                    $query->where('role', 'Super Admin');},)
+            ->get();
+
+        $organization = Organization::where('organization_id', $organizationID)->first();
+
+        if ($recievingOfficers->count() > 0)
+        {
+            foreach ($recievingOfficers as $recievingOfficer) 
+            {
+                if($accomplishmentReportType == 'Tabular')
+                {
+                    $notificationTitle = $organization->organization_acronym . ' has submitted a Tabular Accomplishment Report';
+                    $notificationDescription = "This accomplishment report has been automatically approved by the SYSTEM.";
+
+                }
+                else if($accomplishmentReportType == 'Design')
+                {
+                    $notificationTitle = $organization->organization_acronym . ' has submitted a Design Accomplishment Report';
+                    $notificationDescription = "This accomplishment report has been approved by " . $organization->organization_acronym . ' President.';
+                }
+
+                Notification::create([
+                    'user_id' => $recievingOfficer->user_id,
+                    'title' => $notificationTitle,
+                    'description' => $notificationDescription,
+                    'type' => $type,
+                    'link' => $accomplishmentReportUUID,
+                ]);
             }
         }
     }

@@ -96,22 +96,19 @@
                                     <li>
                                         @if($notifications->count() > 0)
                                         @foreach($notifications as $notification)
-                                        <read-notification 
-                                        v-bind:notification_id= "{{$notification->notification_id}}" 
-                                        :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                        <admin-read-notification 
+                                        v-bind:read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                         title= "{{ $notification->title }}"
                                         description= "{{ $notification->description }}"
+                                        route= "{{route('admin.notifications.markAsRead', ['notification_id' => $notification->notification_id])}}"
                                         link= " 
-                                            @if($notification->type == 3)
-                                                {{-- Student Accomplishments --}}
-                                                {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
-                                            @elseif($notification->type == 4)
+                                            @if($notification->type == 4)
                                                 {{-- Accomplishment Reports --}}
-                                                {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                                {{route('admin.accomplishmentReports.redirectFromNotification', ['accomplishmentReportUUID' => $notification->link])}}
                                             @endif
                                         "
                                         >
-                                        </read-notification>
+                                        </admin-read-notification>
                                         @php
                                             if($loop->index == 4):
                                                 break;
@@ -124,7 +121,7 @@
                                         @endif
                                         <div class="row">
                                             <div class="col text-center">
-                                                <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
+                                                <a class="dropdown-item" href="{{route('admin.notifications.index')}}">See All Notifications</a>  
                                             </div>
                                         </div>
                                     </li>
@@ -233,22 +230,19 @@
                                                 <li>
                                                     @if($notifications->count() > 0)
                                                     @foreach($notifications as $notification)
-                                                    <read-notification 
-                                                    v-bind:notification_id= "{{$notification->notification_id}}" 
-                                                    :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                                    <admin-read-notification 
+                                                    v-bind:read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                                     title= "{{ $notification->title }}"
                                                     description= "{{ $notification->description }}"
+                                                    route= "{{route('admin.notifications.markAsRead', ['notification_id' => $notification->notification_id])}}"
                                                     link= " 
-                                                        @if($notification->type == 3)
-                                                            {{-- Student Accomplishments --}}
-                                                            {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
-                                                        @elseif($notification->type == 4)
+                                                        @if($notification->type == 4)
                                                             {{-- Accomplishment Reports --}}
-                                                            {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                                            {{route('admin.accomplishmentReports.redirectFromNotification', ['accomplishmentReportUUID' => $notification->link])}}
                                                         @endif
                                                     "
                                                     >
-                                                    </read-notification>
+                                                    </admin-read-notification>
                                                     @php
                                                         if($loop->index == 4):
                                                             break;
@@ -261,7 +255,7 @@
                                                     @endif
                                                     <div class="row">
                                                         <div class="col text-center">
-                                                            <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
+                                                            <a class="dropdown-item" href="{{route('admin.notifications.index')}}">See All Notifications</a>  
                                                         </div>
                                                     </div>
                                                 </li>

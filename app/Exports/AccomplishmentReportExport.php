@@ -17,6 +17,8 @@ class AccomplishmentReportExport implements
     ShouldAutoSize,
     WithEvents
 {
+    protected $viewDirectory = 'accomplishmentReports.excelTemplates.';
+
     // Contains all query information
     protected $table1; 
     protected $table2; 
@@ -52,7 +54,7 @@ class AccomplishmentReportExport implements
    
     public function view(): View
     {
-        return view('accomplishmentreports.excelTemplates.tabularAccomplishmentReport', [
+        return view($this->viewDirectory . 'tabularAccomplishmentReport', [
             'table1' => $this->table1,
             'table2' => $this->table2,
             'table3' => $this->table3,
