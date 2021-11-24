@@ -26,6 +26,7 @@ use App\Services\EventServices\{
     EventStoreService,
     EventUpdateService,
     EventDeleteService,
+    EventGetOrganizationIDService,
 };
 
 class EventsController extends Controller
@@ -36,8 +37,14 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $orgAcronym = Auth::user()->course->organization->organization_acronym;
-        $events = (new EventIndexService())->index();
+        // ONLY Docu Officer Allowed
+        $orgAcronym = Organization::where('organization_id', (new EventGetOrganizationIDService)->getOrganizationID())->value('organization_acronym');
+        $events = Event::with('eventRole',
+                'eventCategory',
+                'eventLevel',)
+            ->where('organization_id', (new EventGetOrganizationIDService)->getOrganizationID(),)
+            ->orderByRaw('MONTH(`start_date`) ASC, `start_date` ASC')
+            ->paginate(30);
         return view('events.index', compact('events', 'orgAcronym'));
     }
 

@@ -317,7 +317,7 @@
                     
                     {{-- Document Count Card --}}
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <a href="#">
+                        <a href="{{route('organizationDocuments.index', ['organizationSlug' => $organization->organization_slug])}}">
                             <div class="card card-stats">
                                 <div class="card-header">
                                     <div class="icon icon-info">
@@ -330,7 +330,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <a href="#">More info
+                                        <a href="{{route('organizationDocuments.index', ['organizationSlug' => $organization->organization_slug])}}">More info
                                             <i class="material-icons more-info">arrow_circle_right</i>
                                         </a>
                                     </div>

@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AccomplishmentReportTypeSeeder::class,
             
-            
             OrganizationSeeder::class,
             
             CourseSeeder::class,
 
             OrganizationAssetSeeder::class,
+            OrganizationDocumentTypeSeeder::class,
             UserSeeder::class,
 
             // PermissionRoleSeeder::class,
@@ -51,7 +51,4 @@ class DatabaseSeeder extends Seeder
             TabularColumnSeeder::class,
         ]);
     }
-            //OrganizationDocumentTypeSeeder::class,
-            //EventSeeder::class,
-            //RoleUserSeeder::class,
 }

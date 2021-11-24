@@ -8,18 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrganizationDocument extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
     protected $guarded = [];
-    protected $primaryKey = 'org_id';
+    protected $primaryKey = 'organization_document_id';
     protected $table = 'organization_documents';
-    
 
-    public function organization()
-    {
-        return $this->belongsTo(Organization::class, 'organization_id');
-    }
     public function documentType()
     {
-        return $this->belongsTo(OrganizationDocumentType::class, 'orgdoctype_id');
+        return $this->belongsTo(OrganizationDocumentType::class, 'organization_document_type_id');
     }
 }

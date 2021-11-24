@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use App\Models\StudentAccomplishment;
 use App\Models\AccomplishmentReport;
 use App\Models\Event;
+use App\Models\Organization;
 
 class HomeController extends Controller
 {
@@ -85,7 +86,8 @@ class HomeController extends Controller
             $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organization_id)->count();
             $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organization_id)->count();
             $documentCount = NULL;
-            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
+            $organization = Organization::where('organization_id', $organization_id)->first();
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount','organization');
         }
 
         // Show Login Alert on View once

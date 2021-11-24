@@ -5,6 +5,8 @@ namespace App\Services\EventServices;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 
+use App\Services\EventServices\EventGetOrganizationIDService;
+
 class EventIndexService
 {
     /**
@@ -18,7 +20,7 @@ class EventIndexService
                 'eventCategory',
                 'eventLevel',
             )
-            ->where('organization_id', Auth::user()->course->organization_id,)
+            ->where('organization_id', (new EventGetOrganizationIDService)->getOrganizationID(),)
             ->orderByRaw('MONTH(`start_date`) ASC, `start_date` ASC')
             ->paginate(30);
         return $events;

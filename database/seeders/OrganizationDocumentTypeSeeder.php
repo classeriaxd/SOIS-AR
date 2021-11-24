@@ -18,16 +18,19 @@ class OrganizationDocumentTypeSeeder extends Seeder
             [
                 'organization_id' => 2,
                 'type' => 'Constitution',
+                'slug' => 'constitutions',
             ],
 
             [
                 'organization_id' => 2,
                 'type' => 'Resolution',
+                'slug' => 'resolutions',
             ],
 
             [
                 'organization_id' => 2,
                 'type' => 'Memorandum Order',
+                'slug' => 'memorandum_orders',
             ],
             
         ];
