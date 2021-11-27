@@ -19,6 +19,7 @@ class CreateOrganizationDocumentsTable extends Migration
             $table->string('file');
             $table->string('title');
             $table->string('description');
+            $table->date('effective_date');
             $table->timestamps();
             $table->softDeletes();
 

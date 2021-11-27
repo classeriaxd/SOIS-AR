@@ -31,6 +31,7 @@ class OrganizationDocumentStoreRequest extends FormRequest
             'title' => 'required|string',
             'description' => 'required|string',
             'document' => 'string|regex:/^[a-zA-Z0-9]{13}\-[0-9]{10}+$/',
+            'effective_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
         ];
         return $rules;
     }

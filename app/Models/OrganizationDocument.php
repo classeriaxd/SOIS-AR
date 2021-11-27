@@ -17,4 +17,8 @@ class OrganizationDocument extends Model
     {
         return $this->belongsTo(OrganizationDocumentType::class, 'organization_document_type_id');
     }
+    public function constitution()
+    {
+        return $this->hasOne(OrganizationDocument::class, 'organization_document_type_id')->where('type', 'Constitution')->limit(1);
+    }
 }

@@ -40,7 +40,7 @@
             <div class="card">
                 <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{$organizationDocument->title}}</h5>
                 <div class="card-body">
-                    <iframe src="/storage{{$organizationDocument->file}}#toolbar=0" width="100%" style="height:50vh;">
+                    <iframe src="/storage{{$organizationDocument->file}}#toolbar=0" width="100%" style="height:70vh;">
                     </iframe>
 
                     <div class="flex-row my-2 text-center">

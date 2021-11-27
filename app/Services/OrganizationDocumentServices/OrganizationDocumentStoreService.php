@@ -40,6 +40,7 @@ class OrganizationDocumentStoreService
                     'title' => $request->input('title', NULL),
                     'description' => $request->input('description', NULL),
                     'file' =>  $db_path . $file, 
+                    'effective_date' => $request->input('effective_date'),
                 ]);
             }
 

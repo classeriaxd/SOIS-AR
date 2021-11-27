@@ -213,7 +213,27 @@ Auth::routes();
             });
 
         });
+        
+        // Documentation Officer Maintenance routes
+        Route::group([
+                'as' => 'maintenances.',
+                'prefix' => '/maintenances'], 
+            function () {
 
+            // Event Category Maintenance
+            Route::resource('organizationDocumentTypes', App\Http\Controllers\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
+            
+            Route::group([
+                    'as' => 'organizationDocumentTypes.',
+                    'prefix' => '/organizationDocumentTypes/{organizationDocumentTypeSlug}',
+                    'where' => ['organizationDocumentTypeSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
+                function () {
+                    Route::get('/edit', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'edit'])->name('edit');
+                    Route::get('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'show'])->name('show');
+                    Route::patch('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'update'])->name('update');
+                    Route::delete('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+            });
+        });
         // Organization Documents
         Route::group([
                 'as' => 'organizationDocuments.',

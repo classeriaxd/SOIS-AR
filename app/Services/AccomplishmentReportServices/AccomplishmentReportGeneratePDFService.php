@@ -8,18 +8,20 @@ use Illuminate\Support\Facades\Storage;
 use iio\libmergepdf\Merger;
 use PDF;
 
+use App\Models\OrganizationDocumentType;
+
 class AccomplishmentReportGeneratePDFService
 {
     protected $viewDirectory = 'accomplishmentreports.pdfTemplates.';
     protected $temporaryFolderDirectory = '/app/public/compiledDocuments/tmp/';
     /**
+     * @param Request $request, Integer $organizationID, Collection $events, Collection $studentAccomplishments, Collection $organizationConstitution
      * Service to generate PDF Accomplishment Report.
      * Returns Array of Final File Name and Folder Name
      * @return array
      */
-    public function generate($request, $events, $studentAccomplishments)
+    public function generate($request, $organizationID, $events, $studentAccomplishments, $organizationConstitution)
     {
-
         // Get all Keys from Form
         $allKeys= $request->except(['start_date', 'end_date', '_token', 'ar_format', 'range_title']);
         
@@ -36,10 +38,58 @@ class AccomplishmentReportGeneratePDFService
         // Create Folder and Directory
         $temporaryFolder = 'temporaryFolder-' . uniqid() . '-' . now()->timestamp;
         $this->createDirectory('/app/public/compiledDocuments/tmp', $temporaryFolder);
-
-        // Create Event PDF, save it to File, then add to array
-        // After that get all documents, then add to array
         $compiledDocuments = array();
+
+        //**********************************************//
+        //********** ORGANIZATION CONSTITUTION *********//
+        //**********************************************//
+        // Append Constitution if Checked
+        if ($request->has('constitution')) 
+        {
+            array_push($compiledDocuments, storage_path('/app/public/' . $organizationConstitution->file));
+        }
+
+        //********************************************//
+        //********** ORGANIZATION DOCUMENTS **********//
+        //********************************************//
+        if ($request->has('organizationDocument')) 
+        {
+            // Collect all Organization Document ID from Request
+            $idArray = array();
+            foreach ($request->input('organizationDocument') as $key => $value) 
+            {
+                // Validate Array Values, forget all non-ID friendly numbers and non-integer
+                if ((preg_match('/^([1-9][0-9]*)$/', $value)) === 1 )
+                    array_push($idArray, $value);
+            }
+            // Requery Organization Documents based on Array Values checked in the checklist
+
+            $startDate = $request->input('start_date'); $endDate = $request->input('end_date');
+            $organizationDocumentTypes = OrganizationDocumentType::with([
+                'organizationDocuments' => function ($query) use($startDate, $endDate, $idArray){
+                    $query->whereBetween('effective_date', [$startDate, $endDate])
+                        ->whereIn('organization_document_id', $idArray)
+                        ->orderBy('effective_date', 'DESC')
+                        ->orderBy('created_at', 'DESC');},])
+                ->whereNotIn('type', ['Constitution'])
+                ->where('organization_id', $organizationID)
+                ->get();
+
+            // Append each Organization Documents
+            foreach ($organizationDocumentTypes as $organizationDocumentType) 
+            {
+                foreach ($organizationDocumentType->organizationDocuments as $document) 
+                {
+                    array_push($compiledDocuments, storage_path('/app/public/' . $document->file));
+                }
+            }
+        }
+        
+
+        //*****************************************//
+        //********** ACCOMPLISHED EVENTS **********//
+        //*****************************************//
+        // Create Event PDF, save it to File, then add to array, After that get all documents, then add to array
         $appendTitlePage = true;
         foreach($sortedEvents as $event)
         {
@@ -79,8 +129,11 @@ class AccomplishmentReportGeneratePDFService
             }
         }
 
-        // Create Student Accomplishment PDF, save it to File, then add to array
-        // After that get all documents, then add to array
+
+        //*********************************************//
+        //********** STUDENT ACCOMPLISHMENTS **********//
+        //*********************************************//
+        // Create Student Accomplishment PDF, save it to File, then add to array, After that get all documents, then add to array
         $appendTitlePage = true;
 
         foreach ($sortedAccomplishments as $accomplishment)
@@ -134,10 +187,9 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
-     * Function to Sort and Compile Report using Key Array and Report Collection
-     * keys = array()
-     * reportCollection = collection()
-     * reportType = String (events, accomplishments)
+     * @param Array $keys, Collection $collection, String $reportType
+     * Function to Sort and Compile Report using Key Array and Report Collectio
+     * WORKS ONLY FOR EVENTS AND STUDENT ACCOMPLISHMENTS
      * @return Collection
      */ 
     private function sortAndCompileReport($keys, $reportCollection, $reportType)
@@ -199,10 +251,9 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
+     * @param Array $choiceKeyArray, Integer $rowCount, String $category
      * Function to Group Keys using a given key array
-     * choiceKeyArray = array() 
-     * rowCount = int
-     * category = String
+     * WORKS FOR sortAndCompileReport FUNCTION ONLY
      * @return array
      */ 
     private function groupKeysWithAttributes($choiceKeyArray, $rowCount, $category)
@@ -253,10 +304,9 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
+     * Array $documents, String $fileName, String $folderName
      * Function to Merge PDF using documents array.
-     * documents = array()
-     * fileName = String
-     * folderName = String
+     * https://github.com/hanneskod/libmergepdf
      * @return void
      */
     private function mergePDF($documents, $fileName, $folderName)

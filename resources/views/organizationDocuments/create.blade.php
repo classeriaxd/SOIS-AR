@@ -68,6 +68,24 @@
                             @enderror
                         </div>
 
+                        {{-- Effective Date --}}
+                        <div class="form-group row">
+                            <label for="effective_date" class="col-md-4 form-label">Effective Date<span class="required">*</span></label>
+                            <input id="effective_date" 
+                                type="date" 
+                                class="form-control @error('effective_date') is-invalid @enderror" 
+                                name="effective_date" 
+                                value="{{ old('effective_date') }}" 
+                                min="1992-01-01" 
+                                max="{{date('Y-m-d')}}"
+                                required>
+                            @error('effective_date')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
                         {{-- Document Upload --}}
                         <div class="d-flex flex-row justify-content-center align-items-center my-1">
                             <h6 class="display-6 my-1">Document</h6>

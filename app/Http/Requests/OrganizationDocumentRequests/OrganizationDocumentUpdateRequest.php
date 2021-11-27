@@ -30,6 +30,7 @@ class OrganizationDocumentUpdateRequest extends FormRequest
         $rules = [
             'title' => 'required|string',
             'description' => 'required|string',
+            'effective_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
         ];
         return $rules;
     }

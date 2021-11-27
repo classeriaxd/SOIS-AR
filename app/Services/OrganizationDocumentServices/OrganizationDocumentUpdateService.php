@@ -21,6 +21,7 @@ class OrganizationDocumentUpdateService
             $documentData = [
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
+                'effective_date' => $request->input('effective_date'),
             ];
             $organizationDocument->update($documentData);
             $returnArray = array(
