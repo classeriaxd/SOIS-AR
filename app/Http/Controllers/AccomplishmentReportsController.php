@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use iio\libmergepdf\Merger;
 use PDF;
+use App\Services\PermissionServices\PermissionCheckingService;
 /**
  * Handles all Accomplishment Report Requests, Services, and Exports
  * Libraries: DomPDF, Carbon, LibMergePDF
@@ -50,6 +51,7 @@ use PDF;
 class AccomplishmentReportsController extends Controller
 {
     protected $viewDirectory = 'accomplishmentReports.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
@@ -58,6 +60,7 @@ class AccomplishmentReportsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     /**
@@ -66,6 +69,8 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Accomplishment_Report'), 403);
+
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 
@@ -120,6 +125,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Accomplishment_Report'), 403);
         $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')
             ->orderBy('year_start', 'DESC')
             ->get();
@@ -134,6 +140,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function show($accomplishmentReportUUID, $newAccomplishmentReport = false)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Accomplishment_Report'), 403);
         abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
 
         $accomplishmentReport = AccomplishmentReport::with('accomplishmentReportType', 'reviewer')
@@ -149,6 +156,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function review($accomplishmentReportUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Accomplishment_Report'), 403);
         abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
 
         $accomplishmentReport = AccomplishmentReport::with('accomplishmentReportType')->where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
@@ -168,6 +176,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function finalizeReview(FinalizeReviewRequest $request, $accomplishmentReportUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Accomplishment_Report'), 403);
         abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
 
         $returnArray = (new AccomplishmentReportReviewService())->reviewAccomplishmentReport($accomplishmentReportUUID, $request);
@@ -184,6 +193,7 @@ class AccomplishmentReportsController extends Controller
      */
     public function showChecklist(Request $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Accomplishment_Report'), 403);
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 
@@ -339,6 +349,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function finalizeReport(FinalizeReportRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Accomplishment_Report'), 403);
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 
@@ -423,7 +434,6 @@ class AccomplishmentReportsController extends Controller
         }
         else
             abort(403);
-
     }
 
     /**
@@ -433,6 +443,7 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function downloadAccomplishmentReport($accomplishmentReportUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Download_Accomplishment_Report'), 403);
         abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
 
         $accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();

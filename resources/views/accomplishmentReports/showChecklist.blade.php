@@ -109,45 +109,56 @@
                                     {{-- Organization Document Types Row --}}
                                     @if($organizationDocumentTypes->isNotEmpty())
                                         @foreach($organizationDocumentTypes as $organizationDocumentType)
-                                        <tr>
-                                            {{-- New Row per Organization Document Type --}}
-                                            <td scope="row" colspan="6">
-                                                <table class="w-100 table-bordered">
-                                                    <tr class="table-primary">
-                                                        <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
-                                                        <td scope="col" style="width: 20%;" class="align-middle">
-                                                            {{ $organizationDocumentType->type }}
-                                                            <input type="checkbox" onchange="organizationDocumentToggleChildren(this, '{{$organizationDocumentType->slug}}')" style="height: 1.3rem; width: 1.3rem;" class="align-middle">
-                                                        </td>
-                                                        <td scope="col" style="width: 25%;">&nbsp;</td>
-                                                        <td scope="col" style="width: 20%;">&nbsp;</td>
-                                                        <td scope="col" style="width: 10%;">&nbsp;</td>
-                                                        <td scope="col" class="text-center" style="width: 20%;">Go to {{ $organizationDocumentType->type }}</td>
-                                                    </tr>
-                                                    <tbody>
-                                                        {{-- New Row per Organization Document --}}
-                                                        @foreach($organizationDocumentType->organizationDocuments as $document)
-                                                            @php $j = 0; @endphp
-                                                            <tr class="text-center">
-                                                                <td scope="row">&nbsp;</td>
-                                                                <td scope="row">&nbsp;</td>
-                                                                <td scope="row">{{ $document->title }} <br> <span class="fw-bold">Effective Date: </span>{{ date_format(date_create($document->effective_date), 'F d, Y') }}</td>
-                                                                <td scope="row">
-                                                                    {{ $organizationDocumentType->type }}
-                                                                </td>
-                                                                <td scope="row">
-                                                                    <input type="checkbox" id="child{{$organizationDocumentType->slug . $j}}" name="organizationDocument[]" value="{{$document->organization_document_id}}">
-                                                                </td>
-                                                                <td scope="row">
-                                                                    <a class="btn btn-primary text-white" href="{{route('organizationDocuments.show',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,'organizationDocumentID' => $document->organization_document_id])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
-                                                                </td>
-                                                            </tr>
-                                                            @php $j += 1; @endphp
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
+                                        @if($organizationDocumentType->organizationDocuments->isNotEmpty())
+                                            <tr>
+                                                {{-- New Row per Organization Document Type --}}
+                                                <td scope="row" colspan="6">
+                                                    <table class="w-100 table-bordered">
+                                                        <tr class="table-primary">
+                                                            <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
+                                                            <td scope="col" style="width: 20%;" class="align-middle">
+                                                                {{ $organizationDocumentType->type }}
+                                                                <input type="checkbox" onchange="organizationDocumentToggleChildren(this, '{{$organizationDocumentType->slug}}')" style="height: 1.3rem; width: 1.3rem;" class="align-middle">
+                                                            </td>
+                                                            <td scope="col" style="width: 25%;">&nbsp;</td>
+                                                            <td scope="col" style="width: 20%;">&nbsp;</td>
+                                                            <td scope="col" style="width: 10%;">&nbsp;</td>
+                                                            <td scope="col" class="text-center" style="width: 20%;">Go to {{ $organizationDocumentType->type }}</td>
+                                                        </tr>
+                                                        <tbody>
+                                                            {{-- New Row per Organization Document --}}
+                                                            @foreach($organizationDocumentType->organizationDocuments as $document)
+                                                                @php $j = 0; @endphp
+                                                                <tr class="text-center">
+                                                                    <td scope="row">&nbsp;</td>
+                                                                    <td scope="row">&nbsp;</td>
+                                                                    <td scope="row">{{ $document->title }} <br> <span class="fw-bold">Effective Date: </span>{{ date_format(date_create($document->effective_date), 'F d, Y') }}</td>
+                                                                    <td scope="row">
+                                                                        {{ $organizationDocumentType->type }}
+                                                                    </td>
+                                                                    <td scope="row">
+                                                                        <input type="checkbox" id="child{{$organizationDocumentType->slug . $j}}" name="organizationDocument[]" value="{{$document->organization_document_id}}">
+                                                                    </td>
+                                                                    <td scope="row">
+                                                                        <a class="btn btn-primary text-white" href="{{route('organizationDocuments.show',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,'organizationDocumentID' => $document->organization_document_id])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
+                                                                    </td>
+                                                                </tr>
+                                                                @php $j += 1; @endphp
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td scope="row" class="text-center">{{ $i }}</td>
+                                                <td scope="row">NO<span class="text-uppercase"> {{ $organizationDocumentType->type }} </span>FOUND</td>
+                                                <td scope="row">&nbsp;</td>
+                                                <td scope="row">&nbsp;</td>
+                                                <td scope="row">&nbsp;</td>
+                                                <td scope="row">&nbsp;</td>
+                                            </tr>
+                                        @endif
                                         @php $i += 1; @endphp
                                         @endforeach
                                     @else
