@@ -13,6 +13,7 @@ use App\Models\{
     EventNature,
     Level,
     FundSource,
+    Organization,
 };
 
 use App\Http\Requests\EventRequests\{
@@ -28,16 +29,28 @@ use App\Services\EventServices\{
     EventDeleteService,
     EventGetOrganizationIDService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 class EventsController extends Controller
 {
+    protected $permissionChecker;
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
+    }
+
     /**
      * Shows the Index Page of all Events
      * @return View
      */
     public function index()
     {
-        // ONLY Docu Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event'), 403);
         $orgAcronym = Organization::where('organization_id', (new EventGetOrganizationIDService)->getOrganizationID())->value('organization_acronym');
         $events = Event::with('eventRole',
                 'eventCategory',
@@ -55,6 +68,7 @@ class EventsController extends Controller
      */
     public function show($event_slug, $newEvent = false)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $event = (new EventShowService())->show($event_slug);
@@ -68,6 +82,7 @@ class EventsController extends Controller
      */
     public function edit($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Event'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $event = Event::with(
@@ -104,6 +119,7 @@ class EventsController extends Controller
      */
     public function update(EventUpdateRequest $request, $event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Event'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
         
         $returnArray = (new EventUpdateService())->update($request, $event_slug);
@@ -127,6 +143,7 @@ class EventsController extends Controller
      */ 
     public function destroy($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Event'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $message = (new EventDeleteService())->destroy($event_slug);
@@ -142,6 +159,7 @@ class EventsController extends Controller
      */ 
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event'), 403);
         $eventCategories = EventCategory::all();
         $eventClassifications = EventClassification::all();
         $eventNatures = EventNature::all();
@@ -165,6 +183,7 @@ class EventsController extends Controller
      */
     public function store(EventStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event'), 403);
         $returnArray = (new EventStoreService())->store($request);
         $message = $returnArray['message'];
 

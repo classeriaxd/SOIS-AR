@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             AssetTypeSeeder::class,
             GenderSeeder::class,
             OrganizationTypeSeeder::class,
-            // PermissionSeeder::class,
+            PermissionSeeder::class,
             RoleSeeder::class,
             AccomplishmentReportTypeSeeder::class,
             
@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             OrganizationDocumentTypeSeeder::class,
             UserSeeder::class,
 
-            // PermissionRoleSeeder::class,
-            // PermissionUserSeeder::class,
+            PermissionRoleSeeder::class,
+            PermissionUserSeeder::class,
             RoleUserSeeder::class,
 
             PositionCategorySeeder::class,

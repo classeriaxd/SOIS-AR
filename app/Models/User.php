@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id');
     }
 
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'permission_user', 'user_id', 'permission_id');
+    }
+
     public function notifications()
     {
         return $this->hasMany(Notification::class, 'user_id');

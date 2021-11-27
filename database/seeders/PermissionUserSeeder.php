@@ -14,13 +14,51 @@ class PermissionUserSeeder extends Seeder
      */
     public function run()
     {
+        $AROfficerUserID = 3;
+        $ARPresidentUserID = 4;
+        $MemberUserID = 8;
         $data = [
-            [
-                // format
-                'permission_id' => 1,
-                'user_id' => 1,
-            ],
+                // AR Officer (2 role Officer + Member) Initial Permissions
+                ['user_id' => 3, 'permission_id' => 1,],
+                ['user_id' => 3, 'permission_id' => 2,],
+                ['user_id' => 3, 'permission_id' => 3,],
+                ['user_id' => 3, 'permission_id' => 4,],
+                ['user_id' => 3, 'permission_id' => 5,],
+                ['user_id' => 3, 'permission_id' => 6,],
+                ['user_id' => 3, 'permission_id' => 7,],
+                ['user_id' => 3, 'permission_id' => 8,],
+                ['user_id' => 3, 'permission_id' => 9,],
+                ['user_id' => 3, 'permission_id' => 10,],
+                ['user_id' => 3, 'permission_id' => 11,],
+                ['user_id' => 3, 'permission_id' => 12,],
+                ['user_id' => 3, 'permission_id' => 13,],
+                ['user_id' => 3, 'permission_id' => 14,],
+                ['user_id' => 3, 'permission_id' => 16,],
+                ['user_id' => 3, 'permission_id' => 17,],
+                ['user_id' => 3, 'permission_id' => 18,],
+                ['user_id' => 3, 'permission_id' => 19,],
+                ['user_id' => 3, 'permission_id' => 20,],
+                ['user_id' => 3, 'permission_id' => 21,],
+                ['user_id' => 3, 'permission_id' => 22,],
+                ['user_id' => 3, 'permission_id' => 23,],
+                ['user_id' => 3, 'permission_id' => 24,],
+                ['user_id' => 3, 'permission_id' => 25,],
+                ['user_id' => 3, 'permission_id' => 26,],
+                ['user_id' => 3, 'permission_id' => 27,],
+                ['user_id' => 3, 'permission_id' => 29,],
+                ['user_id' => 3, 'permission_id' => 28,],
+                ['user_id' => 3, 'permission_id' => 30,],
 
+                // AR President Initial Permissions
+                ['user_id' => 4, 'permission_id' => 15,],
+                ['user_id' => 4, 'permission_id' => 16,],
+                ['user_id' => 4, 'permission_id' => 17,],
+                ['user_id' => 4, 'permission_id' => 18,],
+                ['user_id' => 4, 'permission_id' => 19,],
+
+                // Member Initial Permission
+                ['user_id' => 8, 'permission_id' => 28,],
+                ['user_id' => 8, 'permission_id' => 30,],
             
         ];
         DB::table('permission_user')->insert($data);
