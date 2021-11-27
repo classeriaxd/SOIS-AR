@@ -45,7 +45,7 @@
                         <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">{{ $organizationDocumentType->type }}</h5>
                         <div class="card-body">
                             <table class="table table-striped table-hover table-bordered border border-dark" id="documentTable">
-                                @if($organizationDocumentType->organizationDocumentsForDisplay->isNotEmpty())
+                                @if($organizationDocumentType->organizationDocuments->isNotEmpty())
                                     <thead class="text-white fw-bold bg-maroon">
                                         <th class="text-center" scope="col">#</th>
                                         <th class="text-center" scope="col">Title</th>
@@ -54,7 +54,10 @@
                                     </thead>
                                     <tbody>
                                         @php $i = 1; @endphp
-                                        @foreach($organizationDocumentType->organizationDocumentsForDisplay as $document)
+                                        @foreach($organizationDocumentType->organizationDocuments as $document)
+                                            @if($loop->index == 3)
+                                            @break
+                                            @endif
                                         <tr>
                                             <td scope="row" class="text-center">{{ $i }}</td>
                                             <td>{{ $document->title }}</td>

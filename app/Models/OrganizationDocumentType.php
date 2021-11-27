@@ -16,10 +16,6 @@ class OrganizationDocumentType extends Model
     {
         return $this->hasMany(OrganizationDocument::class, 'organization_document_type_id');
     }
-    public function organizationDocumentsForDisplay()
-    {
-        return $this->hasMany(OrganizationDocument::class, 'organization_document_type_id')->limit(3);
-    }
     public function organization()
     {
         return $this->belongsTo(Organization::class, 'organization_id');

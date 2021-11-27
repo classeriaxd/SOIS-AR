@@ -21,28 +21,42 @@ use App\Http\Requests\OrganizationDocumentRequests\{
     OrganizationDocumentStoreRequest,
     OrganizationDocumentUpdateRequest,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 class OrganizationDocumentsController extends Controller
 {
     protected $viewDirectory = 'organizationDocuments.';
     protected $temporaryFolderDirectory = '/public/uploads/tmp/';
+    protected $permissionChecker;
+
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
+    }
 
     public function index($organizationSlug)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
 
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
-        $organizationDocumentTypes = OrganizationDocumentType::with('organizationDocumentsForDisplay:organization_document_type_id,organization_document_id,title,created_at')
+        $organizationDocumentTypes = OrganizationDocumentType::with([
+                'organizationDocuments' => function($query){
+                    $query->limit(15);
+                },])
             ->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())
             ->get();
-
         return view($this->viewDirectory . 'index', compact('organization', 'organizationDocumentTypes'));
     }
 
     public function documentTypeIndex($organizationSlug, $organizationDocumentTypeSlug)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
 
@@ -64,7 +78,7 @@ class OrganizationDocumentsController extends Controller
 
     public function create($organizationSlug, $organizationDocumentTypeSlug)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
 
@@ -79,7 +93,7 @@ class OrganizationDocumentsController extends Controller
 
     public function store(OrganizationDocumentStoreRequest $request, $organizationSlug, $organizationDocumentTypeSlug)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->exists(), 404);
 
@@ -102,7 +116,7 @@ class OrganizationDocumentsController extends Controller
 
     public function show($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID, $newDocument = false)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
 
@@ -121,7 +135,7 @@ class OrganizationDocumentsController extends Controller
 
     public function edit($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
 
@@ -140,7 +154,7 @@ class OrganizationDocumentsController extends Controller
 
     public function update(OrganizationDocumentUpdateRequest $request, $organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
 
@@ -171,7 +185,7 @@ class OrganizationDocumentsController extends Controller
 
     public function destroy($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
     {
-        // Only Documentation Officer Allowed
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Organization_Document'), 403);
         abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
 

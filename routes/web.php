@@ -214,6 +214,7 @@ Auth::routes();
 
         });
         
+        /*
         // Documentation Officer Maintenance routes
         Route::group([
                 'as' => 'maintenances.',
@@ -234,6 +235,8 @@ Auth::routes();
                     Route::delete('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
             });
         });
+        */
+        
         // Organization Documents
         Route::group([
                 'as' => 'organizationDocuments.',
