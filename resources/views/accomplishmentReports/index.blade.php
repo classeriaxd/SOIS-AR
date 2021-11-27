@@ -191,10 +191,10 @@
                     role="button">
                         <i class="fas fa-home"></i> Home
                 </a>
-                @role('AR President Admin')
+                @role('AR Officer Admin')
                     <span>or</span>
 
-                    <a href="{{route('home')}}"
+                    <a href="{{route('accomplishmentreports.create')}}"
                         class="btn btn-primary text-white"
                         role="button">
                             <i class="fas fa-clipboard-list"></i> Create Accomplishment Report

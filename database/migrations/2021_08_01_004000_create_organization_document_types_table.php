@@ -17,6 +17,7 @@ class CreateOrganizationDocumentTypesTable extends Migration
             $table->id('organization_document_type_id');
             $table->foreignId('organization_id');
             $table->string('type');
+            $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();
 

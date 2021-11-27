@@ -34,24 +34,6 @@ class StudentAccomplishmentDocumentTypeSeeder extends Seeder
                 'created_at' => $currentTime,
                 'updated_at' => $currentTime,
             ],
-            [
-                'document_type' => 'Narrative Report',
-                'helper' => 'A document containing the Narration of the actual Event.',
-                'created_at' => $currentTime,
-                'updated_at' => $currentTime,
-            ],
-            [
-                'document_type' => 'Event Attendance Sheet',
-                'helper' => 'A document containing the list of people who attended the Event.',
-                'created_at' => $currentTime,
-                'updated_at' => $currentTime,
-            ],
-            [
-                'document_type' => 'Event Evaluation',
-                'helper' => 'A document containing the Evaluation Result of the Event.',
-                'created_at' => $currentTime,
-                'updated_at' => $currentTime,
-            ],
         ];
         DB::table('SA_document_types')->insert($data);
     }

@@ -28,8 +28,8 @@
                 </div>
 
                 <div class="row text-center">
-                    <p>All Events and Accomplishment for</p>
-                    <p>{{ $range }}</p>
+                    <h4>All Events and Accomplishment for</h4>
+                    <h4>{{ $range }}</h4>
                 </div>
 
                 {{-- Checklist Page --}}
@@ -45,9 +45,9 @@
                                         <th scope="col" style="width: 5%;">#</th>
                                         <th scope="col" style="width: 20%;">Page</th>
                                         <th scope="col" style="width: 25%;">Entry</th>
-                                        <th scope="col" style="width: 20%;">Supporting<br>Documents</th>
+                                        <th scope="col" style="width: 20%;">Supporting<br>Documents/Details</th>
                                         <th scope="col" style="width: 10%;">Toggle<br>Single</th>
-                                        <th scope="col" style="width: 20%;">Toggle Select All</th>
+                                        <th scope="col" style="width: 20%;">Option</th>
                                     </tr>                       
                                 </thead>
                                 <tbody>
@@ -75,6 +75,104 @@
                                     </tr>
                                     @php $i += 1; @endphp
 
+                                    {{-- Organization Constitution Row --}}
+                                    @if($organizationConstitution !== NULL)
+                                        <tr>
+                                            <td scope="row" class="text-center">{{ $i }}</td>
+                                            <td scope="row" class="align-middle">
+                                                Constitution <input type="checkbox" id="constitution" name="constitution" style="height: 1.3rem; width: 1.3rem;" class="align-middle CheckParentConstitution">
+                                            </td>
+                                            <td scope="row" class="text-center">{{ $organizationConstitution->title }} <br> <span class="fw-bold">Effective Date: </span>{{ date_format(date_create($organizationConstitution->effective_date), 'F d, Y') }}</td>
+                                            <td scope="row" class="text-center">
+                                                Constitution 
+                                            </td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row" class="text-center">
+                                                Go to Constitution
+                                                <br>
+                                                <a class="btn btn-primary text-white" href="{{route('organizationDocuments.show',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationConstitution->documentType->slug,'organizationDocumentID' => $organizationConstitution->organization_document_id])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
+                                            </td>
+                                        </tr>
+                                        @php $i += 1; @endphp
+                                    @else
+                                        <tr>
+                                            <td scope="row" class="text-center">{{ $i }}</td>
+                                            <td scope="row">NO CONSTITUTION FOUND</td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row">&nbsp;</td>
+                                        </tr>
+                                        @php $i += 1; @endphp
+                                    @endif
+
+                                    {{-- Organization Document Types Row --}}
+                                    @if($organizationDocumentTypes->isNotEmpty())
+                                        @foreach($organizationDocumentTypes as $organizationDocumentType)
+                                        @if($organizationDocumentType->organizationDocuments->isNotEmpty())
+                                            <tr>
+                                                {{-- New Row per Organization Document Type --}}
+                                                <td scope="row" colspan="6">
+                                                    <table class="w-100 table-bordered">
+                                                        <tr class="table-primary">
+                                                            <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
+                                                            <td scope="col" style="width: 20%;" class="align-middle">
+                                                                {{ $organizationDocumentType->type }}
+                                                                <input type="checkbox" onchange="organizationDocumentToggleChildren(this, '{{$organizationDocumentType->slug}}')" style="height: 1.3rem; width: 1.3rem;" class="align-middle">
+                                                            </td>
+                                                            <td scope="col" style="width: 25%;">&nbsp;</td>
+                                                            <td scope="col" style="width: 20%;">&nbsp;</td>
+                                                            <td scope="col" style="width: 10%;">&nbsp;</td>
+                                                            <td scope="col" class="text-center" style="width: 20%;">Go to {{ $organizationDocumentType->type }}</td>
+                                                        </tr>
+                                                        <tbody>
+                                                            {{-- New Row per Organization Document --}}
+                                                            @foreach($organizationDocumentType->organizationDocuments as $document)
+                                                                @php $j = 0; @endphp
+                                                                <tr class="text-center">
+                                                                    <td scope="row">&nbsp;</td>
+                                                                    <td scope="row">&nbsp;</td>
+                                                                    <td scope="row">{{ $document->title }} <br> <span class="fw-bold">Effective Date: </span>{{ date_format(date_create($document->effective_date), 'F d, Y') }}</td>
+                                                                    <td scope="row">
+                                                                        {{ $organizationDocumentType->type }}
+                                                                    </td>
+                                                                    <td scope="row">
+                                                                        <input type="checkbox" id="child{{$organizationDocumentType->slug . $j}}" name="organizationDocument[]" value="{{$document->organization_document_id}}">
+                                                                    </td>
+                                                                    <td scope="row">
+                                                                        <a class="btn btn-primary text-white" href="{{route('organizationDocuments.show',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,'organizationDocumentID' => $document->organization_document_id])}}" role="button" target="_blank"><span class="fas fa-external-link-alt"></span></a>
+                                                                    </td>
+                                                                </tr>
+                                                                @php $j += 1; @endphp
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td scope="row" class="text-center">{{ $i }}</td>
+                                                <td scope="row">NO<span class="text-uppercase"> {{ $organizationDocumentType->type }} </span>FOUND</td>
+                                                <td scope="row">&nbsp;</td>
+                                                <td scope="row">&nbsp;</td>
+                                                <td scope="row">&nbsp;</td>
+                                                <td scope="row">&nbsp;</td>
+                                            </tr>
+                                        @endif
+                                        @php $i += 1; @endphp
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td scope="row" class="text-center">{{ $i }}</td>
+                                            <td scope="row">NO ORGANIZATION DOCUMENT TYPES FOUND</td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row">&nbsp;</td>
+                                            <td scope="row">&nbsp;</td>
+                                        </tr>
+                                        @php $i += 1; @endphp
+                                    @endif
+
                                     {{-- Events Row --}}
                                     @if($events->count() > 0)
                                         <tr>
@@ -82,9 +180,9 @@
                                                 <table class="w-100 table-bordered">
                                                     <tr class="table-primary">
                                                         <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
-                                                        <td scope="col" style="width: 20%;">
+                                                        <td scope="col" style="width: 20%;" class="align-middle">
                                                             Events
-                                                            <input type="checkbox" id="parentEvent" onchange="eventToggleChildAndGrandchild(this)">
+                                                            <input type="checkbox" id="parentEvent" onchange="eventToggleChildAndGrandchild(this)" style="height: 1.3rem; width: 1.3rem;" class="align-middle CheckParentEvent">
                                                         </td>
                                                         <td scope="col" style="width: 25%;">&nbsp;</td>
                                                         <td scope="col" style="width: 20%;">&nbsp;</td>
@@ -163,9 +261,9 @@
                                                 <table class="w-100 table-bordered">
                                                     <tr class="table-primary">
                                                         <th scope="col" class="text-center" style="width: 5%;">{{ $i }}</td>
-                                                        <td scope="col" style="width: 20%;">
+                                                        <td scope="col" style="width: 20%;" class="align-middle"> 
                                                             Student<br>Accomplishments
-                                                            <input type="checkbox" id="parentAccomplishment" onchange="accomplishmentToggleChildAndGrandchild(this)">
+                                                            <input type="checkbox" id="parentAccomplishment" onchange="accomplishmentToggleChildAndGrandchild(this)" style="height: 1.3rem; width: 1.3rem;" class="align-middle">
                                                         </td>
                                                         <td scope="col" style="width: 25%;">&nbsp;</td>
                                                         <td scope="col" style="width: 20%;">&nbsp;</td>
@@ -311,6 +409,14 @@
 @section('scripts')
     <script type="text/javascript">
         // Checkbox JS
+        function organizationDocumentToggleChildren(parent, documentType)
+        {
+            const parentState = (parent.checked == true) ? true : false;
+            const children = document.querySelectorAll('input[id*="child'+documentType+'"]');
+            children.forEach((checkbox) => {
+                checkbox.checked = parentState;
+            });
+        }
         function eventToggleChildAndGrandchild(parent)
         {
             const parentState = (parent.checked == true) ? true : false;

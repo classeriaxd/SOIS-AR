@@ -36,11 +36,23 @@ use App\Models\{
     FundSource,
     Event,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 class StudentAccomplishmentsController extends Controller
 {
     protected $viewDirectory = 'studentAccomplishments.';
     protected $temporaryFolderDirectory = '/public/uploads/tmp/';
+    protected $permissionChecker;
+
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
+    }
 
     /**
      * Show Index Page, depends on Position title for Submissions/Accomplishment
@@ -48,6 +60,7 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Student_Accomplishment'), 403);
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 
@@ -95,6 +108,8 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Student_Accomplishment'), 403);
+
         $filePondJS = true;
         $typeAheadJS = true;
         $loadJSWithoutDefer = true;
@@ -115,6 +130,8 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function store(StudentAccomplishmentStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Student_Accomplishment'), 403);
+
         $returnArray = (new StudentAccomplishmentStoreService())->store($request);
         $message = $returnArray['message'];
 
@@ -135,6 +152,7 @@ class StudentAccomplishmentsController extends Controller
      */
     public function show($accomplishmentUUID, $newAccomplishment = false)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Student_Accomplishment'), 403);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
 
         $accomplishment = StudentAccomplishment::with(
@@ -161,6 +179,7 @@ class StudentAccomplishmentsController extends Controller
      */
     public function initialReview($accomplishmentUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Student_Accomplishment'), 403);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
 
         $accomplishment = StudentAccomplishment::with(
@@ -187,6 +206,7 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function getSubmissionDecision(Request $request, $accomplishmentUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Student_Accomplishment'), 403);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
 
         $accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)
@@ -213,6 +233,7 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function finalReview($accomplishmentUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Student_Accomplishment'), 403);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
 
         $accomplishment = StudentAccomplishment::with([ 
@@ -270,6 +291,7 @@ class StudentAccomplishmentsController extends Controller
      */ 
     public function approveSubmission(StudentAccomplishmentApproveRequest $request, $accomplishmentUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Student_Accomplishment'), 403);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
 
         // Get Accomplishment Data

@@ -18,13 +18,26 @@ use App\Http\Requests\EventDocumentRequests\{
     EventDocumentStoreRequest,
 };
 
-
 use iio\libmergepdf\Merger;
+
+use App\Services\PermissionServices\PermissionCheckingService;
 
 class EventDocumentsController extends Controller
 {
+    protected $permissionChecker;
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
+    }
+
     public function create($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Document'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $filePondJS = true;
@@ -34,77 +47,70 @@ class EventDocumentsController extends Controller
     }
     public function store(EventDocumentStoreRequest $request, $event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Document'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
-        if($event = Event::where('slug', $event_slug)->first())
+        $event = Event::where('slug', $event_slug)->first();
+        $tempPath = '/public/uploads/tmp/';
+        $finalPath = '/public/uploads/events/documents/';
+        $dbPath = '/uploads/events/documents/';
+
+        if($request->has('document'))
         {
-            $tempPath = '/public/uploads/tmp/';
-            $finalPath = '/public/uploads/events/documents/';
-            $dbPath = '/uploads/events/documents/';
+            $file = TemporaryFile::where('folder', $request->input('document'))->value('filename');
+            Storage::move($tempPath . $request->input('document') . '/' . $file, $finalPath . $file);
+            $this->deleteDirectory($tempPath . $request->input('document'));
+            TemporaryFile::where('folder', $request->input('document'))->delete();
 
-            if($request->has('document'))
-            {
-                $file = TemporaryFile::where('folder', $request->input('document'))->value('filename');
-                Storage::move($tempPath . $request->input('document') . '/' . $file, $finalPath . $file);
-                $this->deleteDirectory($tempPath . $request->input('document'));
-                TemporaryFile::where('folder', $request->input('document'))->delete();
-
-                EventDocument::create([
-                    'accomplished_event_id' => $event->accomplished_event_id,
-                    'event_document_type_id' => $request->input('document_type'),
-                    'title' => $request->input('title', NULL),
-                    'description' => $request->input('description', NULL),
-                    'file' =>  $dbPath . $file, 
-                ]);
-            }
-            return redirect()->action(
-                [EventsController::class, 'show'], ['event_slug' => $event->slug]
-            );
+            EventDocument::create([
+                'accomplished_event_id' => $event->accomplished_event_id,
+                'event_document_type_id' => $request->input('document_type'),
+                'title' => $request->input('title', NULL),
+                'description' => $request->input('description', NULL),
+                'file' =>  $dbPath . $file, 
+            ]);
         }
-        else
-            abort(404);
+        return redirect()->action(
+            [EventsController::class, 'show'], ['event_slug' => $event->slug]
+        );
+       
     }
     public function index($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event_Document'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
-        if($event = Event::where('slug', $event_slug)->first())
-        {
-            $eventDocuments = DB::table('event_documents as documents')
-                ->join('event_document_types as types','documents.event_document_type_id','=','types.event_document_type_id')
-                ->where('documents.accomplished_event_id', $event->accomplished_event_id)
-                ->whereNull('documents.deleted_at')
-                ->orderBy('documents.event_document_type_id', 'ASC')
-                ->select('types.document_type as document_type', 'documents.title as title', 'documents.file as file', 'documents.event_document_id as event_document_id')
-                ->get();
-            return view('eventdocuments.index', compact('event', 'eventDocuments'));
-        }
-        else 
-            abort(404);
+        $event = Event::where('slug', $event_slug)->first();
+        $eventDocuments = DB::table('event_documents as documents')
+            ->join('event_document_types as types','documents.event_document_type_id','=','types.event_document_type_id')
+            ->where('documents.accomplished_event_id', $event->accomplished_event_id)
+            ->whereNull('documents.deleted_at')
+            ->orderBy('documents.event_document_type_id', 'ASC')
+            ->select('types.document_type as document_type', 'documents.title as title', 'documents.file as file', 'documents.event_document_id as event_document_id')
+            ->get();
+        return view('eventdocuments.index', compact('event', 'eventDocuments'));
+
     }
+
     public function destroy($event_slug, $document_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Event_Document'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
         abort_if(! EventDocument::where('event_document_id', $document_id)->exists(), 404);
 
-        if($event = Event::where('slug', $event_slug)->first())
-        {
-            if($document = EventDocument::where('event_document_id', $document_id)
-                ->where('accomplished_event_id', $event->accomplished_event_id)->first())
-            {
-                $document->delete();
-            }
-            else
-                abort(404);
-
-            return redirect()->action(
-                [EventsController::class, 'show'], ['event_slug' => $event->slug]);
-        }
-        else
-            abort(404);
+        $event = Event::where('slug', $event_slug)->first();
+        $document = EventDocument::where('event_document_id', $document_id)
+            ->where('accomplished_event_id', $event->accomplished_event_id)
+            ->first();
+        $document->delete();
+        
+        return redirect()->action(
+            [EventsController::class, 'show'], ['event_slug' => $event->slug]);
     }
+
     public function downloadDocument($event_slug, $document_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Download_Event_Document'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
         abort_if(! EventDocument::where('event_document_id', $document_id)->exists(), 404);
 
@@ -129,41 +135,42 @@ class EventDocumentsController extends Controller
         else
             return NULL;
     }
+
     public function downloadAllDocument($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Download_Event_Document'), 403);
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
-        if ($event = Event::with('eventDocuments')->where('slug', $event_slug)->first())
+        $event = Event::with('eventDocuments')->where('slug', $event_slug)->first();
+        if ($event->eventDocuments->count() > 0)
         {
-            if ($event->eventDocuments->count() > 0)
+            $documentArray = array();
+            foreach($event->eventDocuments as $document)
             {
-                $documentArray = array();
-                foreach($event->eventDocuments as $document)
-                {
-                    $filePath = storage_path('/app/public/'. $document->file);
-                    array_push($documentArray, $filePath);
-                }
-                $merger = new Merger;
-                $merger->addIterator($documentArray);
-                $mergedPDF = $merger->merge();
-                $fileName = Str::limit(Str::slug($event->title, '-'), 20, '-') . '-docu-compiled-' . date('MdY') . '.pdf';
-                $filePath = storage_path('/app/public/compiledDocuments/' . $fileName);
-                file_put_contents($filePath, $mergedPDF);
-
-                // Send Download Response
-                $headers = ['Content-Type: application/pdf'];
-                return response()->download($filePath, $fileName, $headers)->deleteFileAfterSend(true);
+                $filePath = storage_path('/app/public/'. $document->file);
+                array_push($documentArray, $filePath);
             }
-            else
-                return redirect()->action(
-                    [EventsController::class, 'show'], ['event_slug' => $event->slug]);
+            $merger = new Merger;
+            $merger->addIterator($documentArray);
+            $mergedPDF = $merger->merge();
+            $fileName = Str::limit(Str::slug($event->title, '-'), 20, '-') . '-docu-compiled-' . date('MdY') . '.pdf';
+            $filePath = storage_path('/app/public/compiledDocuments/' . $fileName);
+            file_put_contents($filePath, $mergedPDF);
+
+            // Send Download Response
+            $headers = ['Content-Type: application/pdf'];
+            return response()->download($filePath, $fileName, $headers)->deleteFileAfterSend(true);
         }
         else
-            abort(404);
+            return redirect()->action(
+                [EventsController::class, 'show'], ['event_slug' => $event->slug]);
     }
 
-    /* FilePond JS
-     * Upload Functions
+    /**
+     * @param Request $request
+     * Function for FilePond JS File Upload 
+     * https://pqina.nl/filepond/
+     * @return text/plain JSON Response
      */
     public function upload(Request $request)
     {
@@ -185,6 +192,13 @@ class EventDocumentsController extends Controller
         }
         return 'not uploaded';
     }
+
+    /**
+     * @param Request $request
+     * Function for FilePond JS Reverting File Upload 
+     * https://pqina.nl/filepond/docs/api/server/#revert
+     * @return empty JSON Response
+     */
     public function undoUpload(Request $request)
     {
          if ($request->getContent())

@@ -20,10 +20,26 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 
+use App\Services\PermissionServices\PermissionCheckingService;
+
 class EventImagesController extends Controller
 {
+    protected $permissionChecker;
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
+    }
+
     public function index($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = Event::with('eventImages')
             ->where('slug', $event_slug)->first();
         return view('events.eventimages.index',compact('event'));
@@ -31,16 +47,24 @@ class EventImagesController extends Controller
 
     public function show($event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         $event = Event::with([
             'eventImage' => function ($query) use ($eventImage_slug) {
                 $query->where('slug', $eventImage_slug);},
             ])
-        ->where('slug', $event_slug)->first();
+            ->where('slug', $event_slug)->first();
         return view('events.eventimages.show',compact('event'));
     }
 
     public function edit($event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         $event = Event::with([
             'eventImage' => function ($query) use ($eventImage_slug) {
                 $query->where('slug', $eventImage_slug);},
@@ -52,6 +76,10 @@ class EventImagesController extends Controller
 
     public function update(EventImageUpdateRequest $request, $event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         EventImage::where('slug', $eventImage_slug)
             ->update([
                 'caption' => $request->input('caption', NULL),
@@ -65,6 +93,10 @@ class EventImagesController extends Controller
 
     public function destroy($event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         $event = Event::where('slug', $event_slug)->first();
         $eventImage = EventImage::where('slug', $eventImage_slug)->delete();
         return redirect()->action(
@@ -75,13 +107,20 @@ class EventImagesController extends Controller
     
     public function create($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = Event::where('slug', $event_slug)->first();
         $filePondJS = true;
         $loadJSWithoutDefer = true;
         return view('events.eventimages.create', compact('event', 'filePondJS', 'loadJSWithoutDefer'));
     }
+
     public function createCaption($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = Event::where('slug', $event_slug)->first();
         $eventImages['posters'] = collect();
         $eventImages['evidences'] = collect();
@@ -101,8 +140,12 @@ class EventImagesController extends Controller
         $loadJSWithoutDefer = true;
         return view('events.eventimages.createCaption', compact('event','eventImages', 'loadJSWithoutDefer'));
     }
+
     public function store(EventImageStoreRequest $request, $event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = Event::where('slug', $event_slug)->first();
     	$insertedImages = array();
         $currentTime = Carbon::now();
@@ -158,6 +201,7 @@ class EventImagesController extends Controller
                 array_push($insertedImages, $eventImageID);
             }
         }
+
         if(count($insertedImages) > 0)
         {   
             session()->flash('eventImagesArray', $insertedImages);
@@ -170,8 +214,12 @@ class EventImagesController extends Controller
                 [EventsController::class, 'show'], ['event_slug' => $event->slug]
             );
     }
+
     public function storeCaption(EventImageStoreCaptionRequest $request, $event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         if($request->has('caption'))
         {
             $event = Event::where('slug', $event_slug)->first();
@@ -190,8 +238,11 @@ class EventImagesController extends Controller
         );
     }
 
-    /* FilePond JS
-     * Upload Functions
+    /**
+     * @param Request $request
+     * Function for FilePond JS File Upload 
+     * https://pqina.nl/filepond/
+     * @return text/plain JSON Response
      */
     public function upload(Request $request)
     {
@@ -232,9 +283,15 @@ class EventImagesController extends Controller
                 return $folder;
             }
         }
-        
         return 'not uploaded';
     }
+
+    /**
+     * @param Request $request
+     * Function for FilePond JS Reverting File Upload 
+     * https://pqina.nl/filepond/docs/api/server/#revert
+     * @return empty JSON Response
+     */
     public function undoUpload(Request $request)
     {
          if ($request->getContent())
@@ -251,9 +308,10 @@ class EventImagesController extends Controller
          }
          return 'file not deleted';
     }
+
     /**
+     * @param String $folderPath
      * Private Function to delete temporary directories.
-     *
      * @return void
      */
     private function deleteDirectory($folderPath)

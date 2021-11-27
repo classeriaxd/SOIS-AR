@@ -213,6 +213,59 @@ Auth::routes();
             });
 
         });
+        
+        /*
+        // Documentation Officer Maintenance routes
+        Route::group([
+                'as' => 'maintenances.',
+                'prefix' => '/maintenances'], 
+            function () {
+
+            // Event Category Maintenance
+            Route::resource('organizationDocumentTypes', App\Http\Controllers\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
+            
+            Route::group([
+                    'as' => 'organizationDocumentTypes.',
+                    'prefix' => '/organizationDocumentTypes/{organizationDocumentTypeSlug}',
+                    'where' => ['organizationDocumentTypeSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
+                function () {
+                    Route::get('/edit', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'edit'])->name('edit');
+                    Route::get('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'show'])->name('show');
+                    Route::patch('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'update'])->name('update');
+                    Route::delete('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+            });
+        });
+        */
+        
+        // Organization Documents
+        Route::group([
+                'as' => 'organizationDocuments.',
+                'prefix' => '/documents/{organizationSlug}',
+                'where' => ['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
+            function () {
+                Route::delete('/upload/revert', [App\Http\Controllers\OrganizationDocumentsController::class, 'undoUpload']);
+                Route::post('/upload', [App\Http\Controllers\OrganizationDocumentsController::class, 'upload']);
+                Route::get('', [App\Http\Controllers\OrganizationDocumentsController::class, 'index'])->name('index');
+                Route::group([
+                        'prefix' => '/{organizationDocumentTypeSlug}',
+                        'where' => ['organizationDocumentTypeSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
+                    function () {
+                        Route::group([
+                                'prefix' => '/{organizationDocumentID}',
+                                'where' => ['organizationDocumentID' => '^([1-9][0-9]*)$'],], 
+                            function () {
+                                Route::get('/edit', [App\Http\Controllers\OrganizationDocumentsController::class, 'edit'])->name('edit');
+                                Route::post('/update', [App\Http\Controllers\OrganizationDocumentsController::class, 'update'])->name('update');
+                                Route::delete('/destroy', [App\Http\Controllers\OrganizationDocumentsController::class, 'destroy'])->name('destroy');
+                                Route::get('/{newDocument?}', [App\Http\Controllers\OrganizationDocumentsController::class, 'show'])->name('show');
+                        });
+
+                        Route::get('/create', [App\Http\Controllers\OrganizationDocumentsController::class, 'create'])->name('create');
+                        Route::post('/store', [App\Http\Controllers\OrganizationDocumentsController::class, 'store'])->name('store');
+                        Route::get('', [App\Http\Controllers\OrganizationDocumentsController::class, 'documentTypeIndex'])->name('documentTypeIndex');
+                });
+                
+        });
 
         // Show and Review of Accomplishment report
         Route::group([
@@ -389,27 +442,3 @@ Auth::routes();
         });
 
     });
-
-
-    
-    
-
-
-
-
-
-
-//Notice
-    // Route::get('/n/{notice_uuid}', [App\Http\Controllers\MeetingNoticesController::class, 'show'])->where(['notice_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth')->name('meetingNotice.show');
-    // Route::get('/n/{notice_uuid}/edit', [App\Http\Controllers\MeetingNoticesController::class, 'edit'])->where(['notice_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth');//->name('show');
-    // Route::patch('/n/{notice_uuid}', [App\Http\Controllers\MeetingNoticesController::class, 'update'])->where(['notice_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth');
-    // Route::delete('/n/{notice_uuid}', [App\Http\Controllers\MeetingNoticesController::class, 'destroy'])->where(['notice_uuid' => '^[a-zA-Z0-9-]{36}$'])->middleware('auth');
-    // Route::get('/n', [App\Http\Controllers\MeetingNoticesController::class, 'index'])->name('meetingnotices.index')->middleware('auth');
-    // Route::get('/n/create', [App\Http\Controllers\MeetingNoticesController::class, 'create'])->middleware('auth');
-    // Route::post('/n', [App\Http\Controllers\MeetingNoticesController::class, 'store'])->middleware('auth');
-
-    // Route::get('/o/documents/create', [App\Http\Controllers\DocumentManagementController::class, 'create'])->middleware('auth');
-    // Route::post('/o/documents', [App\Http\Controllers\DocumentManagementController::class, 'store'])->middleware('auth');
-
-
-

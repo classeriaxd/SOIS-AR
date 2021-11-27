@@ -15,16 +15,174 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $currentTime = Carbon::now()
+        $currentTime = Carbon::now();
         $data = [
-            // format
-        [
-            'name' => 'HOMEPAGE-Add_Event', 'description' => 'Optional',
-            'created_at' => $currentTime,
-            'updated_at' => $currentTime,
-        ],
-            
+            // EventsController
+                [
+                    // 1
+                    'name' => 'AR-Create_Event', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 2
+                    'name' => 'AR-Edit_Event', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 3
+                    'name' => 'AR-Delete_Event', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 4
+                    'name' => 'AR-View_Event', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // EventImagesController
+                [
+                    // 5
+                    'name' => 'AR-Create_Event_Image', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 6
+                    'name' => 'AR-Edit_Event_Image', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 7
+                    'name' => 'AR-Delete_Event_Image', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 8
+                    'name' => 'AR-View_Event_Image', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // EventDocumentsController
+                [
+                    // 9
+                    'name' => 'AR-Create_Event_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 10
+                    'name' => 'AR-Download_Event_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 11
+                    'name' => 'AR-Edit_Event_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 12
+                    'name' => 'AR-Delete_Event_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 13
+                    'name' => 'AR-View_Event_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // AccomplishmentReportsController
+                [
+                    // 14
+                    'name' => 'AR-Create_Accomplishment_Report', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 15
+                    'name' => 'AR-Review_Accomplishment_Report', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 16
+                    'name' => 'AR-Download_Accomplishment_Report', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 17
+                    'name' => 'AR-View_Accomplishment_Report', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // NotificationsController
+                [
+                    // 18
+                    'name' => 'AR-View_Notification', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 19
+                    'name' => 'AR-Read_Notification', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // OrganizationDocumentsController
+                [
+                    // 20
+                    'name' => 'AR-Create_Organization_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 21
+                    'name' => 'AR-Edit_Organization_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 22
+                    'name' => 'AR-Delete_Organization_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 23
+                    'name' => 'AR-View_Organization_Document', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // OrganizationDocumentTypesController
+                [
+                    // 24
+                    'name' => 'AR-Create_Organization_Document_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 25
+                    'name' => 'AR-Edit_Organization_Document_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 26
+                    'name' => 'AR-Delete_Organization_Document_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 27
+                    'name' => 'AR-View_Organization_Document_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // StudentAccomplishmentsController
+                [
+                    // 28
+                    'name' => 'AR-Create_Student_Accomplishment', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 29
+                    'name' => 'AR-Review_Student_Accomplishment', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+                [
+                    // 30
+                    'name' => 'AR-View_Student_Accomplishment', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
         ];
-        DB::table('permission')->insert($data);
+        DB::table('permissions')->insert($data);
     }
 }

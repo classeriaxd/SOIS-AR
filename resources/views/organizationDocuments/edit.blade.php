@@ -5,7 +5,7 @@
     {{-- Title and Breadcrumbs --}}
     <div class="d-flex justify-content-between align-items-center">
         {{-- Title --}}
-        <h2 class="display-7 text-left text-break">Upload {{ $organizationDocumentType->type }}</h2>
+        <h2 class="display-7 text-left text-break">Edit {{ $organizationDocumentType->type }}</h2>
         {{-- Breadcrumbs --}}
         <nav aria-label="breadcrumb align-items-center">
             <ol class="breadcrumb justify-content-center">
@@ -18,19 +18,22 @@
                 <li class="breadcrumb-item">
                     <a href="{{route('organizationDocuments.documentTypeIndex',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,])}}" class="text-decoration-none">{{ $organizationDocumentType->type }}</a>
                 </li>
+                <li class="breadcrumb-item">
+                    <a href="{{route('organizationDocuments.show',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug, 'organizationDocumentID' => $organizationDocument->organization_document_id])}}" class="text-decoration-none">{{ $organizationDocument->title }}</a>
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Upload Document
+                    Edit Document
                 </li>
             </ol>
         </nav>
     </div>
 
     {{-- Organization Document Create Form --}}
-    <form action="{{route('organizationDocuments.store',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,])}}" enctype="multipart/form-data" method="POST" id="organizationDocumentCreateForm">
+    <form action="{{route('organizationDocuments.update',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,'organizationDocumentID' => $organizationDocument->organization_document_id])}}" enctype="multipart/form-data" method="POST" id="organizationDocumentEditForm">
         <div class="row">
             <div class="col">
                 <div class="card mb-2">
-                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">New Document</h5>
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Edit Document</h5>
                     <div class="card-body">
 
                         {{-- Document Title --}}
@@ -40,9 +43,7 @@
                                 type="text" 
                                 class="form-control @error('title') is-invalid @enderror" 
                                 name="title"
-                                placeholder="Document Title" 
-                                value="{{ old('title') }}" 
-                                autofocus 
+                                value="{{ $organizationDocument->title }}"
                                 required>
 
                             @error('title')
@@ -58,8 +59,7 @@
                             <textarea id="description" 
                                 class="form-control @error('description') is-invalid @enderror" 
                                 name="description"
-                                placeholder="Description" 
-                                required>{{ old('description') ?? ''}}</textarea>
+                                required>{{ $organizationDocument->description }}</textarea>
 
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
@@ -75,7 +75,7 @@
                                 type="date" 
                                 class="form-control @error('effective_date') is-invalid @enderror" 
                                 name="effective_date" 
-                                value="{{ old('effective_date') }}" 
+                                value="{{ $organizationDocument->effective_date }}" 
                                 min="1992-01-01" 
                                 max="{{date('Y-m-d')}}"
                                 required>
@@ -84,32 +84,25 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
 
-                        {{-- Document Upload --}}
+                        {{-- Document Preview --}}
                         <div class="d-flex flex-row justify-content-center align-items-center my-1">
                             <h6 class="display-6 my-1">Document</h6>
                         </div>
-                        <input type="file" 
-                            class="filepond @error('document') is-invalid @enderror" 
-                            name="document" 
-                            id="document" 
-                            accept="application/pdf" 
-                            data-max-file-size="3MB"
-                            data-max-files="1">
-                        @error('document')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <div class="row">
+                            <div class="col">
+                                <iframe src="/storage{{$organizationDocument->file}}#toolbar=0" width="100%" style="height:50vh;">
+                                </iframe>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-
-           <div class="flex-row my-2 text-center">
-                @csrf
+            @csrf
+            <div class="row my-2 text-center">
                 <button class="btn btn-primary text-white col-md-12" type="submit">
-                    <i class="fas fa-plus"></i> Add Document
+                    <i class="fas fa-edit"></i> Update Document
                 </button>
             </div> 
         </div>     
@@ -118,57 +111,20 @@
     <hr>
 
     <div class="flex-row my-1 text-center">
-        <a href="{{route('organizationDocuments.documentTypeIndex',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,])}}"
+        <a href="{{route('organizationDocuments.show',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug, 'organizationDocumentID' => $organizationDocument->organization_document_id])}}"
             class="btn btn-secondary text-white"
             role="button">
-                <i class="fas fa-arrow-left"></i> Go Back to {{ $organizationDocumentType->type }} Documents
+                <i class="fas fa-arrow-left"></i> Go Back to {{ $organizationDocument->title }}
         </a>
 
         <span>or</span>
 
-        <a href="{{route('home')}}"
+        <a href="{{route('organizationDocuments.documentTypeIndex',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,])}}"
             class="btn btn-secondary text-white"
             role="button">
-            <i class="fas fa-home"></i> Go Home
+            <i class="fas fa-arrow-left"></i> Go Back to {{ $organizationDocumentType->type }}
         </a>
     </div>
 
 </div>
-@endsection
-
-@if($filePondJS ?? false)
-    @push('scripts')
-        {{-- FilePond CSS --}}
-        <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet">
-    @endpush
-
-    @push('footer-scripts')
-        {{-- FilePond JS --}}
-        <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
-        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-    @endpush
-@endif
-
-@section('scripts')
-    <script type="module">
-        FilePond.registerPlugin(FilePondPluginFileValidateType);
-
-        // Get a reference to the file input element
-        const mainInputElement = document.getElementById('document');
-        FilePond.create( mainInputElement, {
-          acceptedFileTypes: ['application/pdf'],
-          labelFileTypeNotAllowed: 'Only PDF Documents [PDF] are allowed.',
-          labelIdle: 'Drop a PDF here or <span class="filepond--label-action"> Browse </span>',
-          });
-
-        FilePond.setOptions({
-            server: {
-                url: '/documents/{{ $organization->organization_slug }}/upload',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                revert: '/revert',
-            }
-        });
-    </script>
 @endsection

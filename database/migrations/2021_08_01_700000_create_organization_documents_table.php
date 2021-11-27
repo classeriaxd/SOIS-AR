@@ -15,15 +15,14 @@ class CreateOrganizationDocumentsTable extends Migration
     {
         Schema::create('organization_documents', function (Blueprint $table) {
             $table->id('organization_document_id');
-            $table->foreignId('organization_id');
             $table->foreignId('organization_document_type_id');
             $table->string('file');
             $table->string('title');
             $table->string('description');
+            $table->date('effective_date');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('organization_id')->references('organization_id')->on('organizations');
             $table->foreign('organization_document_type_id')->references('organization_document_type_id')->on('organization_document_types');
         });
     }
@@ -36,7 +35,6 @@ class CreateOrganizationDocumentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('organization_documents');
-        $table->dropForeign('organization_id');
         $table->dropForeign('organization_document_type_id');
     }
 }

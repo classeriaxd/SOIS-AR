@@ -198,7 +198,7 @@
                             </li>
                         @endrole
 
-                        @role('President')
+                        @role('AR President Admin')
                             <li class="dropdown">
                                 <a href="#pageSubmenuPresident1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                                     <i class="material-icons">pending_actions</i><span>Accomplishment Reports</span>

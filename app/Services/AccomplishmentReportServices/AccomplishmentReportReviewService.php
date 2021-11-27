@@ -70,11 +70,7 @@ class AccomplishmentReportReviewService
     {
         try 
         {
-            $signatoryDocumentationOfficers = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-            $signatoryPresident = ['President'];
-
             $signature = false;
-
             if($request->has('esignature'))
                 $signature = true;
 
@@ -91,6 +87,7 @@ class AccomplishmentReportReviewService
                     'positionTitle.positionCategory', function(Builder $query) {
                         $query->where('position_category', 'Documentation');},)
                 ->with('positionTitle:position_title_id,position_title')
+                //->whereBetween('term_start', [$accomplishmentReport->start_date, $accomplishmentReport->end_date])
                 ->get();
             $presidentSignatory = Officer::whereHas(
                     'positionTitle', function(Builder $query) use($organizationID) {
@@ -99,8 +96,9 @@ class AccomplishmentReportReviewService
                     'positionTitle.positionCategory', function(Builder $query) {
                         $query->where('position_category', 'President');},)
                 ->with('positionTitle:position_title_id,position_title')
+                //->whereBetween('term_start', [$accomplishmentReport->start_date, $accomplishmentReport->end_date])
                 ->first();
-
+                //dd($documentationSignatory);
             // Get Organization Details including a single Logo
             $organization = Organization::with('logo')
                 ->where('organization_id', $organizationID)

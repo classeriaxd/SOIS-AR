@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <a href="{{route('event.index')}}">More info
+                                        <a href="#">More info
                                             <i class="material-icons more-info">arrow_circle_right</i>
                                         </a>
                                     </div>
@@ -51,7 +51,7 @@
 
                     {{-- Student Accomplishment Count Card --}}
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <a href="{{route('studentAccomplishment.index')}}">
+                        <a href="#">
                             <div class="card card-stats">
                                 <div class="card-header">
                                     <div class="icon icon-success">
@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <a href="{{route('studentAccomplishment.index')}}">More info
+                                        <a href="#">More info
                                             <i class="material-icons more-info">arrow_circle_right</i>
                                         </a>
                                     </div>
@@ -126,7 +126,9 @@
                         <div class="col-lg-7 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
-                                    <h4 class="card-title">Accomplished Reports</h4>
+                                    <h4 class="card-title">
+                                        Accomplished Reports <i class="fas fa-tools"></i>
+                                    </h4>
                                     <p class="category">Latest added reports</p>
                                 </div>
                                 <div class="card-content table-responsive">
@@ -192,7 +194,9 @@
                         <div class="col-lg-5 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
-                                    <h4 class="card-title">Activity Log</h4>
+                                    <h4 class="card-title">
+                                        Activity Log <i class="fas fa-tools"></i>
+                                    </h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="streamline">
@@ -317,7 +321,7 @@
                     
                     {{-- Document Count Card --}}
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <a href="#">
+                        <a href="{{route('organizationDocuments.index', ['organizationSlug' => $organization->organization_slug])}}">
                             <div class="card card-stats">
                                 <div class="card-header">
                                     <div class="icon icon-info">
@@ -330,7 +334,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <a href="#">More info
+                                        <a href="{{route('organizationDocuments.index', ['organizationSlug' => $organization->organization_slug])}}">More info
                                             <i class="material-icons more-info">arrow_circle_right</i>
                                         </a>
                                     </div>

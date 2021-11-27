@@ -9,6 +9,10 @@ use Illuminate\Support\Arr;
 use App\Models\StudentAccomplishment;
 use App\Models\AccomplishmentReport;
 use App\Models\Event;
+use App\Models\Organization;
+use App\Models\OrganizationDocument;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class HomeController extends Controller
 {
@@ -64,13 +68,16 @@ class HomeController extends Controller
         if ( ($userRoleKey = $this->hasRole($userRoles, 'AR President Admin')) !== false ? true : false)
         {
             // Get the Organization from which the user is AR President Admin
-            $organization_id = $userRoles[$userRoleKey]['organization_id'];
+            $organizationID = $userRoles[$userRoleKey]['organization_id'];
             
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization
-            $eventCount = Event::where('organization_id', $organization_id)->count();
-            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organization_id)->count();
-            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organization_id)->count();
-            $documentCount = NULL;
+            $eventCount = Event::where('organization_id', $organizationID)->count();
+            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)->count();
+            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)->count();
+            $documentCount = OrganizationDocument::whereHas(
+                    'documentType.organization', function(Builder $query) use($organizationID){
+                        $query->where('organization_id', $organizationID);},)
+                ->count();
             array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
         }
 
@@ -78,14 +85,18 @@ class HomeController extends Controller
         if( ($userRoleKey = $this->hasRole($userRoles, 'AR Officer Admin')) !== false ? true : false)
         {
             // Get the Organization from which the user is AR Officer Admin
-            $organization_id = $userRoles[$userRoleKey]['organization_id'];
+            $organizationID = $userRoles[$userRoleKey]['organization_id'];
 
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization
-            $eventCount = Event::where('organization_id', $organization_id)->count();
-            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organization_id)->count();
-            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organization_id)->count();
-            $documentCount = NULL;
-            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
+            $eventCount = Event::where('organization_id', $organizationID)->count();
+            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)->count();
+            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)->count();
+            $documentCount = OrganizationDocument::whereHas(
+                    'documentType.organization', function(Builder $query) use($organizationID){
+                        $query->where('organization_id', $organizationID);},)
+                ->count();
+            $organization = Organization::where('organization_id', $organizationID)->first();
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount','organization');
         }
 
         // Show Login Alert on View once

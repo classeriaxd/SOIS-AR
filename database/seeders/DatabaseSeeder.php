@@ -17,20 +17,20 @@ class DatabaseSeeder extends Seeder
             AssetTypeSeeder::class,
             GenderSeeder::class,
             OrganizationTypeSeeder::class,
-            // PermissionSeeder::class,
+            PermissionSeeder::class,
             RoleSeeder::class,
             AccomplishmentReportTypeSeeder::class,
-            
             
             OrganizationSeeder::class,
             
             CourseSeeder::class,
 
             OrganizationAssetSeeder::class,
+            OrganizationDocumentTypeSeeder::class,
             UserSeeder::class,
 
-            // PermissionRoleSeeder::class,
-            // PermissionUserSeeder::class,
+            PermissionRoleSeeder::class,
+            PermissionUserSeeder::class,
             RoleUserSeeder::class,
 
             PositionCategorySeeder::class,
@@ -51,7 +51,4 @@ class DatabaseSeeder extends Seeder
             TabularColumnSeeder::class,
         ]);
     }
-            //OrganizationDocumentTypeSeeder::class,
-            //EventSeeder::class,
-            //RoleUserSeeder::class,
 }
