@@ -40,27 +40,26 @@
         	@endif
 
         	{{-- Title and Breadcrumbs --}}
-        	<div class="row">
-        	    {{-- Title --}}
-        	    <h4 class="display-5 text-center">Organization Report</h4>
-        	    <p class="text-center">Choose from Semestral, Quarterly, & Custom</p>
-        	    {{-- Breadcrumbs --}}
-        	    <nav aria-label="breadcrumb">
-        	        <ol class="breadcrumb justify-content-center">
-        	            <li class="breadcrumb-item">
-        	                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-        	            </li>
-        	            <li class="breadcrumb-item">
-        	                <a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
+			<div class="d-flex justify-content-between align-items-center">
+                {{-- Title --}}
+                <h2 class="display-7 text-left text-break">Organization Report</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb align-items-center">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+						<a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+							<a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
         	                    Accomplishment Reports
         	                </a>
-        	            </li>
-        	            <li class="breadcrumb-item active" aria-current="page">
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
         	                Create Accomplishment Report
         	            </li>
-        	        </ol>
-        	    </nav>
-        	</div>
+                    </ol>
+                </nav>	
+        	</div> 
 
         	<hr>
 

@@ -3,27 +3,23 @@
 @section('content')
 <div class="container-fluid">
 	{{-- Title and Breadcrumbs --}}
-    <div class="row">
-    	{{-- Title --}}
-    	<h4 class="display-5 text-center">Edit Event</h4>
-    	<p class="text-center">{{ $event->title }}</p>
-    	{{-- Breadcrumbs --}}
-	    <nav aria-label="breadcrumb">
-	        <ol class="breadcrumb justify-content-center">
-	            <li class="breadcrumb-item">
-	                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-	            </li>
-	            <li class="breadcrumb-item">
-	                <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
-	            </li>
-	            <li class="breadcrumb-item">
-	                <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none">{{ $event->title }}</a>
-	            </li>
-	            <li class="breadcrumb-item active" aria-current="page">
-	                Edit
-	            </li>
-	        </ol>
-	    </nav>
+    <div class="d-flex justify-content-between align-items-center">
+        {{-- Title --}}
+        <h2 class="display-7 text-left text-break">Edit Event</h2>
+        {{-- Breadcrumbs --}}
+        <nav aria-label="breadcrumb align-items-center">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item">
+                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Edit
+                </li>
+            </ol>
+        </nav>
     </div>
     <form action="{{route('event.update', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventUpdateForm">
 		@csrf

@@ -14,21 +14,21 @@
                     </div>
                 @endif
             {{-- Title and Breadcrumbs --}}
-            <div class="row">
+			<div class="d-flex justify-content-between align-items-center">
                 {{-- Title --}}
-                <h4 class="display-5 text-center">Accomplishment Reports</h4>
+                <h2 class="display-7 text-left text-break">Accomplishment Reports</h2>
                 {{-- Breadcrumbs --}}
-                <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb align-items-center">
                     <ol class="breadcrumb justify-content-center">
                         <li class="breadcrumb-item">
-                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+						<a href="{{route('home')}}" class="text-decoration-none">Home</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Accomplishment Reports
-                        </li>
+        	                Create Accomplishment Report
+        	            </li>
                     </ol>
-                </nav>
-            </div>
+                </nav>	
+        	</div>    
         	<div class="row justify-content-center pb-1">
         		<div class="col-md-8">
                     <div class="card my-2">

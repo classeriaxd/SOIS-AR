@@ -10,26 +10,26 @@
         <div class="row">
             <div class="col-md-12">
                 {{-- Title and Breadcrumbs --}}
-                <div class="row">
+                <div class="d-flex justify-content-between align-items-center">
                     {{-- Title --}}
-                    <h4 class="display-5 text-center">Add Accomplishment</h4>
+                    <h4 class="display-7 text-left text-break">Add Accomplishment</h4>
                     {{-- Breadcrumbs --}}
-                    <nav aria-label="breadcrumb">
+                    <nav aria-label="breadcrumb align-items-center">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item">
                                 <a href="{{route('home')}}" class="text-decoration-none">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="{{route('studentAccomplishment.index')}}" class="text-decoration-none">
-                                    My Accomplishments
-                                </a>
-                            </li>
+                                    <a href="{{route('studentAccomplishment.index')}}" class="text-decoration-none">
+                                        My Accomplishments
+                                    </a>
+                                </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Create Accomplishment
+                                Create Accomplishment Report
                             </li>
                         </ol>
-                    </nav>
-                </div>
+                    </nav>	
+                </div> 
             <div class="col">
             <div class="card mb-3">
                 <div class="card-header text-white bg-maroon">DETAIL</div>
