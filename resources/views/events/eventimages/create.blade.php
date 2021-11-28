@@ -7,30 +7,31 @@
         <div class="row">
             <div class="col-8 offset-2">
                 {{-- Title and Breadcrumbs --}}
-                <div class="d-flex justify-content-between align-items-center">
-                {{-- Title --}}
-                <h2 class="display-7 text-left text-break">New Event Image</h2>
-                {{-- Breadcrumbs --}}
-                <nav aria-label="breadcrumb align-items-center">
-                    <ol class="breadcrumb justify-content-center">
-                        <li class="breadcrumb-item">
-                        <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none">{{ $event->title }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            <a href="{{route('event.image.index', ['event_slug' => $event->slug,])}}" class="text-decoration-none">Images</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Create Images
-                        </li>
-                    </ol>
-                </nav>
-            </div>
+                <div class="row">
+                    {{-- Title --}}
+                    <h2 class="display-2 text-center">New Event Image</h2>
+                    <h6 class="display-6 text-center">{{$event->title}}</h6>
+                    {{-- Breadcrumbs --}}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item">
+                                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none">{{ $event->title }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <a href="{{route('event.image.index', ['event_slug' => $event->slug,])}}" class="text-decoration-none">Images</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Create Images
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
                 <div class="row text-center">
         <div class="col">
             <div class="card mb-3">

@@ -3,65 +3,70 @@
 @section('content')
 <div class="container">
 	<div class="row justify-content-center">
-        <div class="col-md-10">
-        	{{-- Error/Success Messages --}}
-        	@if (session('success'))
-        	<div id="success_alert">
-        	    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        	        {{ session('success') }}
-        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        	            <span aria-hidden="true">&times;</span>
-        	        </button>
-        	    </div>
-        	</div>
-        	@elseif(session('error'))
-        	<div id="error_alert">
-        	    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        	        {{session('error')}}
-        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        	            <span aria-hidden="true">&times;</span>
-        	        </button>
-        	    </div>
-        	</div>
-        	@elseif(session('errors'))
-        	<div id="error_alert">
-        	    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        		@foreach ($errors->all() as $error)
-        	    	{{ $error }}
-        	    	@if(!($loop->last))
-        	    	<br>
-        	    	@endif
-				@endforeach
-        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        	            <span aria-hidden="true">&times;</span>
-        	        </button>
-        	    </div>
-        	</div>
-        	@endif
+        <div class="col-md-12">
+        	{{-- Success Message --}}
+	        	@if (session()->has('success'))
+		        	<div class="flex-row text-center" id="success_alert">
+		        	    <div class="alert alert-success alert-dismissible fade show" role="alert">
+		        	        {{ session('success') }}
+                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+		        	    </div>
+		        	</div>
+	        	@endif
+        	{{-- Error Message --}}
+	        	@if (session()->has('error'))
+		        	<div class="flex-row text-center" id="error_alert">
+		        	    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+		        	        {{session('error')}}
+		        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		        	            <span aria-hidden="true">&times;</span>
+		        	        </button>
+		        	    </div>
+		        	</div>
+	        	@endif
+	        {{-- Multi-Error Message --}}
+	        	@if(session('errors'))
+		        	<div class="flex-row text-center" id="errors_alert">
+		        	    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+			        		@foreach ($errors->all() as $error)
+			        	    	{{ $error }}
+			        	    	@if(!($loop->last))
+			        	    		<br>
+			        	    	@endif
+							@endforeach
+		        	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		        	            <span aria-hidden="true">&times;</span>
+		        	        </button>
+		        	    </div>
+		        	</div>
+        		@endif
 
         	{{-- Title and Breadcrumbs --}}
-			<div class="d-flex justify-content-between align-items-center">
-                {{-- Title --}}
-                <h2 class="display-7 text-left text-break">Organization Report</h2>
-                {{-- Breadcrumbs --}}
-                <nav aria-label="breadcrumb align-items-center">
-                    <ol class="breadcrumb justify-content-center">
-                        <li class="breadcrumb-item">
-						<a href="{{route('home')}}" class="text-decoration-none">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-							<a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
+        	<div class="d-flex justify-content-between align-items-center">
+        	    {{-- Title --}}
+        	    <h2 class="display-7 text-left text-break">Organization Report</h2>
+
+        	    {{-- Breadcrumbs --}}
+        	    <nav aria-label="breadcrumb align-items-center">
+        	        <ol class="breadcrumb justify-content-center">
+        	            <li class="breadcrumb-item">
+        	                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+        	            </li>
+        	            <li class="breadcrumb-item">
+        	                <a href="{{route('accomplishmentreports.index')}}" class="text-decoration-none">
         	                    Accomplishment Reports
         	                </a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
+        	            </li>
+        	            <li class="breadcrumb-item active" aria-current="page">
         	                Create Accomplishment Report
         	            </li>
-                    </ol>
-                </nav>	
-        	</div> 
+        	        </ol>
+        	    </nav>
+        	</div>
 
         	<hr>
+
+        	<h2 class="display-7 text-center">Choose from Semestral, Quarterly, or Custom</h2>
 
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">

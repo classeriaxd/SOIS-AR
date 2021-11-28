@@ -7,27 +7,28 @@
         <div class="row">
             <div class="col-8 offset-2">
                 {{-- Title and Breadcrumbs --}}
-                <div class="d-flex justify-content-between align-items-center">
-                {{-- Title --}}
-                <h2 class="display-7 text-left text-break">New Event Documents</h2>
-                {{-- Breadcrumbs --}}
-                <nav aria-label="breadcrumb align-items-center">
-                    <ol class="breadcrumb justify-content-center">
-                        <li class="breadcrumb-item">
-                        <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
-                        </li>
-                        <li class="breadcrumb-item">
+                <div class="row">
+                    {{-- Title --}}
+                    <h5 class="display-5 text-center">New Event Document</h5>
+                    <h6 class="text-center">{{ $event->title }}</h6>
+                    {{-- Breadcrumbs --}}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item">
+                                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+                            </li>
+                            <li class="breadcrumb-item">
                                 <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none"> {{ $event->title }}</a>
                             </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Add Documents
-                        </li>
-                    </ol>
-                </nav>
-            </div>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Add Documents
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
                 <div class="col">
             <div class="card mb-3">
                 <div class="card-header text-white bg-maroon">Document</div>

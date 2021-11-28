@@ -7,21 +7,21 @@
             {{-- Title and Breadcrumbs --}}
             <div class="d-flex justify-content-between align-items-center">
                 {{-- Title --}}
-                <h2 class="display-7 text-left text-break">Supporting Documents</h2>
+                <h2 class="display-7 text-left text-break">Supporting Documents - {{ $event->title }}</h2>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb align-items-center">
                     <ol class="breadcrumb justify-content-center">
                         <li class="breadcrumb-item">
-                        <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                            <a href="{{route('home')}}" class="text-decoration-none">Home</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
                         </li>
                         <li class="breadcrumb-item">
-                                <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none"> {{ $event->title }}</a>
-                            </li>
+                            <a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none"> {{ $event->title }}</a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                          Documents
+                            Documents
                         </li>
                     </ol>
                 </nav>

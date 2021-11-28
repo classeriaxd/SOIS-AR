@@ -7,24 +7,25 @@ $(document).ready(function () {
 });	
 </script>
 <div class="container">
-	{{-- Title and Breadcrumbs --}}
-	<div class="row">
-		{{-- Title --}}
+{{-- Title --}}
 		<h2 class="display-2 text-center">{{ $event->title }}</h2>
 		{{-- Breadcrumbs --}}
-		<nav aria-label="breadcrumb align-items-center">
-            <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item">
-                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    Create
-                </li>
-            </ol>
-        </nav>
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb justify-content-center">
+				<li class="breadcrumb-item">
+					<a href="{{route('home')}}" class="text-decoration-none">Home</a>
+				</li>
+				<li class="breadcrumb-item">
+					<a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
+				</li>
+				<li class="breadcrumb-item">
+					<a href="{{route('event.show', ['event_slug' => $event->slug])}}" class="text-decoration-none">{{ $event->title }}</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">
+					Images
+				</li>
+			</ol>
+		</nav>
 	</div>
 	<div class="card my-2 w-100">
 		<h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Gallery</h4>

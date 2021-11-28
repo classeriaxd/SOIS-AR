@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb align-items-center">
             <ol class="breadcrumb justify-content-center">
                 <li class="breadcrumb-item">
-                <a href="{{route('home')}}" class="text-decoration-none">Home</a>
+                    <a href="{{route('home')}}" class="text-decoration-none">Home</a>
                 </li>
                 <li class="breadcrumb-item">
                     <a href="{{route('event.index')}}" class="text-decoration-none">Events</a>
