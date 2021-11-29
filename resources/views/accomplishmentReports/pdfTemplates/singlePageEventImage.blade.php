@@ -22,10 +22,19 @@
                         @endif
 
                         {{-- Image --}}
+                        {{-- Image Type > 0 = Poster | 1 = Evidence --}}
+
                         <div class="event-img-block">
-                            <div class="img-block">
-                                <img src="{{ public_path('/storage/'. $eventImage['image']) }}">
-                            </div>
+                            @if($eventImage['image_type'] == 0)
+                                <div class="img-block">
+                                    <img class="img-poster" src="{{ public_path('/storage/'. $eventImage['image']) }}">
+                                </div>
+                            @elseif($eventImage['image_type'] == 1)
+                                <div class="img-block">
+                                    <img class="img-evidence" src="{{ public_path('/storage/'. $eventImage['image']) }}">
+                                </div>
+                            @endif
+                            
                             <div class="info-block">
                                 <p class="block-desc">{{ $eventImage['caption'] }}</p>
                             </div>

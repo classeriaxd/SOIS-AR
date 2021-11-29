@@ -135,14 +135,24 @@
     max-width: 676px;
 }
 
-.event-img-block .img-block img
+img .img-poster
+{
+    min-height: 672px;
+    max-height: 672px;
+    min-width: 480px;
+    max-width: 480px;
+    border: 1px solid black;
+    object-fit: contain;
+}
+
+img .img-evidence
 {
     min-width: 672px;
     max-width: 672px;
     min-height: 480px;
     max-height: 480px;
     border: 1px solid black;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .badge {
