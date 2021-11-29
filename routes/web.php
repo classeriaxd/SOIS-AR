@@ -289,14 +289,6 @@ Auth::routes();
                 Route::get('/create', [App\Http\Controllers\AccomplishmentReportsController::class, 'create'])->name('create');
                 Route::get('/tabular', [App\Http\Controllers\AccomplishmentReportsController::class, 'tabularAR']);
                 Route::get('', [App\Http\Controllers\AccomplishmentReportsController::class, 'index'])->name('index');
-
-                // Fallback for POST-only Routes
-                Route::any('/create/checklist', function () {
-                    abort(404);
-                });
-                Route::any('/create/finalize', function () {
-                    abort(404);
-                });
         });
 
         // Events
