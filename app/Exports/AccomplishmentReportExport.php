@@ -141,10 +141,10 @@ class AccomplishmentReportExport implements
                                     // BACKGROUND COLOR 
                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                    'startColor' => [
-                                       'argb' => '203763',
+                                       'rgb' => '203763',
                                    ],
                                    'endColor' => [
-                                       'argb' => '203763',
+                                       'rgb' => '203763',
                                    ],
                             ],
                         ]);

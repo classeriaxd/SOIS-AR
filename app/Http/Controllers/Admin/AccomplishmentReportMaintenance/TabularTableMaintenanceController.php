@@ -19,7 +19,7 @@ use App\Http\Controllers\Controller as Controller;
 
 class TabularTableMaintenanceController extends Controller
 {
-    protected $viewDirectory = 'admin.maintenances.accomplishmentreport.tabularTable.';
+    protected $viewDirectory = 'admin.maintenances.accomplishmentReport.tabularTable.';
 
     /**
      * Create a new controller instance.
