@@ -243,8 +243,8 @@ Auth::routes();
                 'prefix' => '/documents/{organizationSlug}',
                 'where' => ['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
             function () {
-                Route::delete('/upload/revert', [App\Http\Controllers\OrganizationDocumentsController::class, 'undoUpload']);
-                Route::post('/upload', [App\Http\Controllers\OrganizationDocumentsController::class, 'upload']);
+                Route::delete('/upload/revert', [App\Http\Controllers\OrganizationDocumentsController::class, 'undoUpload'])->name('documents.undoUpload');
+                Route::post('/upload', [App\Http\Controllers\OrganizationDocumentsController::class, 'upload'])->name('documents.upload');
                 Route::get('', [App\Http\Controllers\OrganizationDocumentsController::class, 'index'])->name('index');
                 Route::group([
                         'prefix' => '/{organizationDocumentTypeSlug}',
@@ -307,10 +307,10 @@ Auth::routes();
                 // Event
                 // --> /e
 
-                Route::delete('/images/upload/revert', [App\Http\Controllers\EventImagesController::class, 'undoUpload']);
-                Route::post('/images/upload', [App\Http\Controllers\EventImagesController::class, 'upload']);
-                Route::delete('/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload']);
-                Route::post('/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload']);
+                Route::delete('/images/upload/revert', [App\Http\Controllers\EventImagesController::class, 'undoUpload'])->name('images.undoUpload');
+                Route::post('/images/upload', [App\Http\Controllers\EventImagesController::class, 'upload'])->name('images.upload');
+                Route::delete('/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->name('documents.undoUpload');
+                Route::post('/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->name('documents.upload');
                 Route::get('/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
                 Route::get('/create', [App\Http\Controllers\EventsController::class, 'create'])->name('create');
                 Route::post('', [App\Http\Controllers\EventsController::class, 'store'])->name('store');
@@ -396,9 +396,9 @@ Auth::routes();
             // Student Accomplishment
             // --> /s/accomplishments
 
-                Route::delete('/upload/revert', [App\Http\Controllers\StudentAccomplishmentsController::class, 'undoUpload']);
+                Route::delete('/upload/revert', [App\Http\Controllers\StudentAccomplishmentsController::class, 'undoUpload'])->name('documents.undoUpload');
+                Route::post('/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload'])->name('documents.upload');
                 Route::get('/create', [App\Http\Controllers\StudentAccomplishmentsController::class, 'create'])->name('create');
-                Route::post('/upload', [App\Http\Controllers\StudentAccomplishmentsController::class, 'upload']);
                 Route::get('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'index'])->name('index');
                 Route::post('', [App\Http\Controllers\StudentAccomplishmentsController::class, 'store'])->name('store');
         });

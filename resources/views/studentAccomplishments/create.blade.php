@@ -396,14 +396,16 @@
 
         FilePond.setOptions({
             server: {
-                url: '/s/accomplishments/upload',
+                url: '{{route('studentAccomplishment.documents.upload')}}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                revert: '/revert',
+                revert: '{{route('studentAccomplishment.documents.undoUpload')}}',
             }
         });
     </script>
+
+    {{-- Bloodhound TypeAhead --}}
     <script type="text/javascript" defer>
         jQuery(document).ready(function($) {
             // Set the Options for "Bloodhound" suggestion engine

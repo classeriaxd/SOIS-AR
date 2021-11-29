@@ -150,6 +150,7 @@
 @endif
 
 @section('scripts')
+    {{-- FilePondJS Upload --}}
     <script type="module">
         FilePond.registerPlugin(FilePondPluginFileValidateType);
 
@@ -163,11 +164,11 @@
 
         FilePond.setOptions({
             server: {
-                url: '/documents/{{ $organization->organization_slug }}/upload',
+                url: '{{route('organizationDocuments.documents.upload',['organizationSlug' => $organization->organization_slug])}}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                revert: '/revert',
+                revert: '{{route('organizationDocuments.documents.undoUpload',['organizationSlug' => $organization->organization_slug])}}',
             }
         });
     </script>

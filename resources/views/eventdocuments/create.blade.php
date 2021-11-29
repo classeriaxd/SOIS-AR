@@ -125,6 +125,7 @@
 @endif
 
 @section('scripts')
+    {{-- FilePondJS Upload --}}
     <script type="module">
         FilePond.registerPlugin(FilePondPluginFileValidateType);
         FilePond.registerPlugin(FilePondPluginFileValidateSize);
@@ -143,11 +144,11 @@
 
         FilePond.setOptions({
             server: {
-                url: '/e/documents/upload',
+                url: '{{ route('event.documents.upload') }}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                revert: '/revert',
+                revert: '{{ route('event.documents.undoUpload') }}',
             }
         });
     </script>
