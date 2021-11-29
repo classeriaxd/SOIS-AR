@@ -42,7 +42,10 @@ class EventImagesController extends Controller
 
         $event = Event::with('eventImages')
             ->where('slug', $event_slug)->first();
-        return view('events.eventimages.index',compact('event'));
+        $posters = $event->eventImages->where('image_type', 0);
+        $evidences = $event->eventImages->where('image_type', 1);
+
+        return view('events.eventimages.index',compact('event','posters','evidences'));
     }
 
     public function show($event_slug, $eventImage_slug)

@@ -4,13 +4,12 @@
 <div class="container">
     <form action="{{route('event.image.store', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageForm">
         @csrf
-        <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
             <div class="col-8 offset-2">
                 {{-- Title and Breadcrumbs --}}
                 <div class="row">
                     {{-- Title --}}
                     <h2 class="display-2 text-center">New Event Image</h2>
-                    <h6 class="display-6 text-center">{{$event->title}}</h6>
                     {{-- Breadcrumbs --}}
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
@@ -45,7 +44,7 @@
                         data-bs-container="body"
                         data-bs-trigger="hover focus"
                         title="Posters" 
-                        data-bs-content="Posters that are made exclusively for this Event. Portrait Orientation is a must."
+                        data-bs-content="Posters that are made exclusively for this Event. Landscape Orientation is a must."
                         data-bs-placement="right">
                         <i class="far fa-question-circle"></i>
                     </a>
@@ -191,11 +190,11 @@
 
         FilePond.setOptions({
             server: {
-                url: '/e/images/upload',
+                url: '{{ route('event.images.upload') }}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                revert: '/revert',
+                revert: '{{ route('event.images.undoUpload') }}',
             }
         });
     </script>

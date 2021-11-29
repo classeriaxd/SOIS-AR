@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-liquid">
 	<div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             
             {{-- Success Alert --}}
                 @if (session()->has('success'))
@@ -75,9 +75,11 @@
                 </nav>
             </div>
             
+            {{-- Event Details and Images --}}
         	<div class="row justify-content-center mb-1">
+                {{-- Event Details Column --}}
         		<div class="col-md-5">
-        			<div class="card" style="height: 39rem;">
+        			<div class="card">
         				<h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Summary</h4>
         				<div class="card-body">
         					<h3 class="card-title text-center">Title: {{ $event->title }}</h3>
@@ -116,106 +118,121 @@
                         <h5 class="card-header card-text text-center border-top">Options</h5>
         				<div class="card-body d-flex flex-row justify-content-around">
         					<a href="{{route('event.edit', ['event_slug' => $event->slug])}}">
-        						<button class="btn btn-primary text-white">Edit Event</button>
+        						<button class="btn btn-primary text-white">
+                                    <i class="fas fa-edit"></i> Edit Event
+                                </button>
         					</a>
         					<form action="{{route('event.destroy', $event->slug)}}" method="POST">
         						@method('DELETE')
         						@csrf
-        						<button class="btn btn-danger text-white">Delete Event</button>
+        						<button class="btn btn-danger text-white">
+                                    <i class="fas fa-trash"></i> Delete Event
+                                </button>
         					</form>  
         				</div>
         			</div>
         		</div>
+
+                {{-- Event Images Column --}}
         		<div class="col-md-5">
         			<div class="card">
     				    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Gallery</h4>
-        				<div class="card-body" style="height: 30rem;">
+        				<div class="card-body">
                             <h3 class="card-title text-center">Posters</h3>
                             <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
-                        @if($event->eventImages->where('image_type', 0)->count() > 0)
-
-                        @foreach($event->eventImages as $eventImage)
-                            @if($eventImage->image_type == 0)
-                                <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-height: 130px; width: 100px;">
-                            @endif
-                        @endforeach
-                        @else
-                                <p class="text-center">No Image found. :(</p>
-                        @endif
-                            </div>
-                            <hr>
-                            <h3 class="card-title text-center">Evidences</h3>
-                        <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
-
-                            @if($event->eventImages->where('image_type', 1)->count() > 0)
-
-                            @foreach($event->eventImages as $eventImage)
-                                @if($eventImage->image_type == 1)
-                                    <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-width: 130px; height: 100px;">
+                                @if($event->eventImages->where('image_type', 0)->count() > 0)
+                                    @foreach($event->eventImages as $eventImage)
+                                        @if($eventImage->image_type == 0)
+                                            <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-height: 130px; width: 100px;">
+                                        @endif
+                                    @endforeach
+                                @else
+                                        <p class="text-center">No Image found. :(</p>
                                 @endif
-                            @endforeach
-                            @else
-                                    <p class="text-center">No Image found. :(</p>
-                            @endif        
-                            </div>                  
-                        </div>
-        			</div>                   		
-                <h5 class="card-header card-text text-center border-top">Options</h5>
-        				<div class="card-body d-flex flex-row justify-content-around">
-                            <a href="{{route('event.image.create', ['event_slug' => $event->slug])}}">
-                                <button class="btn btn-primary text-white">Add Image</button>
-                            </a>
-                            <a href="{{route('event.image.index', ['event_slug' => $event->slug])}}">
-                                <button class="btn btn-primary text-white">View Event Gallery</button>
-                            </a>	
-        				</div>
+                            </div>
+
+                            <hr>
+
+                            <h3 class="card-title text-center">Evidences</h3>
+                            <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
+
+                                @if($event->eventImages->where('image_type', 1)->count() > 0)
+
+                                @foreach($event->eventImages as $eventImage)
+                                    @if($eventImage->image_type == 1)
+                                        <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-width: 130px; height: 100px;">
+                                    @endif
+                                @endforeach
+                                @else
+                                        <p class="text-center">No Image found. :(</p>
+                                @endif        
+                                </div>                  
+                            </div>
+
+                            <h5 class="card-header card-text text-center border-top">Options</h5>
+                            <div class="card-body d-flex flex-row justify-content-around">
+                                <a href="{{route('event.image.create', ['event_slug' => $event->slug])}}">
+                                    <button class="btn btn-primary text-white">
+                                        <i class="fas fa-plus"></i> Add Image
+                                    </button>
+                                </a>
+                                <a href="{{route('event.image.index', ['event_slug' => $event->slug])}}">
+                                    <button class="btn btn-primary text-white">
+                                        <i class="fas fa-th"></i> View Event Gallery
+                                    </button>
+                                </a>    
+                            </div>
                     </div>
-        	    </div>
+    			</div>                   		        
+    	    </div>
+
+            {{-- Event Documents --}}
             <div class="row justify-content-center mt-2 mb-1">
                 <div class="card w-50">
-                    <div class="card-header card-title text-center  text-black fw-bold">Event Documents</div>
+                    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Documents</h4>
+
                     <div class="card-body text-center">
-                    @if($event->eventDocuments->count() > 0 )
-                    @php $i = 1; @endphp
-                    <table class="table-striped table-bordered w-100">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Document Type</th>
-                                <th scope="col">Title</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                    @foreach($event->eventDocuments as $document)
-                            <tr>
-                                <td>{{ $i }}</td>
-                                <td>{{ $document->documentType->document_type }}</td>
-                                <td>{{ $document->title }}</td>
-                            </tr>
-                    @php $i += 1; @endphp
+                        @if($event->eventDocuments->count() > 0 )
+                            @php $i = 1; @endphp
+                            <table class="table-striped table-bordered w-100">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Document Type</th>
+                                        <th scope="col">Title</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($event->eventDocuments as $document)
+                                            <tr>
+                                                <td>{{ $i }}</td>
+                                                <td>{{ $document->documentType->document_type }}</td>
+                                                <td>{{ $document->title }}</td>
+                                            </tr>
+                                    @php $i += 1; @endphp
 
-                    @endforeach
-                        </tbody>
-                    </table>
-                    @else
-                        <p class="text-center">No Document found. :(</p>
-                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p class="text-center">No Document found. :(</p>
+                        @endif
+
                     </div>
-                    <h5 class="card-header card-text text-center border-top">Options</h5>
 
+                    <h5 class="card-header card-text text-center border-top">Options</h5>
                     <div class="card-body d-flex justify-content-around">
                         <a href="{{route('event.document.create',['event_slug' => $event->slug,])}}"
                             class="btn btn-primary text-white"
                             role="button">
-                            Add Document
+                            <i class="fas fa-plus"></i> Add Document
                         </a>
 
                         <a href="{{route('event.document.index',['event_slug' => $event->slug,])}}"
                             class="btn btn-primary text-white"
                             role="button">
-                            View All Event Documents
+                            <i class="fas fa-th"></i> View All Event Documents
                         </a>
-                        
                     </div>
                 </div>
             </div>
