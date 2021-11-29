@@ -10,7 +10,7 @@ class StudentAccomplishmentDocumentType extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'SA_document_types';
+    protected $table = 'sa_document_types';
     protected $primaryKey = 'SA_document_type_id';
     protected $guarded = [];
 
