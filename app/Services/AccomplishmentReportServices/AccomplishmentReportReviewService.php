@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AccomplishmentReportReviewService
 {
-    protected $templateDirectory = 'accomplishmentreports.pdfTemplates.';
+    protected $templateDirectory = 'accomplishmentReports.pdfTemplates.';
     protected $compiledDocumentDirectory = '/app/public/compiledDocuments/';
     protected $finalCompiledDocumentDirectory = '/app/public/compiledDocuments/accomplishmentReports/';
     /**
