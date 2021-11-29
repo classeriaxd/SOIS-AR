@@ -12,7 +12,7 @@ use App\Models\OrganizationDocumentType;
 
 class AccomplishmentReportGeneratePDFService
 {
-    protected $viewDirectory = 'accomplishmentreports.pdfTemplates.';
+    protected $viewDirectory = 'accomplishmentReports.pdfTemplates.';
     protected $temporaryFolderDirectory = '/app/public/compiledDocuments/tmp/';
     /**
      * @param Request $request, Integer $organizationID, Collection $events, Collection $studentAccomplishments, Collection $organizationConstitution
