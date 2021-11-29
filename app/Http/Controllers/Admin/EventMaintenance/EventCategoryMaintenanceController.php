@@ -13,36 +13,41 @@ use App\Services\Admin\EventMaintenance\EventCategory\{
     EventCategoryUpdateService,
     EventCategoryDeleteService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 use App\Http\Controllers\Controller as Controller;
 
 class EventCategoryMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventCategory.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventCategories = EventCategory::all();
         return view($this->viewDirectory . 'index', compact('eventCategories',));
     }
     
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         return view($this->viewDirectory . 'create',);
     }
 
     public function store(EventCategoryStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventCategoryStoreService())->store($request);
         
         return redirect()->action(
@@ -52,6 +57,7 @@ class EventCategoryMaintenanceController extends Controller
 
     public function edit($category_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
         return view($this->viewDirectory . 'edit', compact('eventCategory'));
@@ -59,6 +65,7 @@ class EventCategoryMaintenanceController extends Controller
 
     public function update(EventCategoryUpdateRequest $request, $category_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
         $message = (new EventCategoryUpdateService())->update($eventCategory, $request);
@@ -71,6 +78,7 @@ class EventCategoryMaintenanceController extends Controller
 
     public function show($category_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventCategory = $this->checkIfCategoryExists($category_id);
         
         return view($this->viewDirectory . 'show', compact('eventCategory'));
@@ -78,6 +86,7 @@ class EventCategoryMaintenanceController extends Controller
 
     public function destroy(EventCategoryDeleteRequest $request, $category_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
         $message = (new EventCategoryDeleteService())->delete($eventCategory, $request);

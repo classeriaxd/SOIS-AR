@@ -13,23 +13,27 @@ use App\Http\Requests\Admin\NotificationStoreRequest
 use App\Services\Admin\NotificationStoreService;
 use Carbon\Carbon;
 
+use App\Services\PermissionServices\PermissionCheckingService;
 use App\Http\Controllers\Controller as Controller;
 
 class AdminNotificationsController extends Controller
 {
     protected $viewDirectory = 'admin.notifications.';
+    protected $permissionChecker;
+
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
         $organizations = Organization::select('organization_id', 'organization_acronym', 'organization_name')
             ->orderBy('organization_type_id', 'ASC')
             ->orderBy('organization_name', 'ASC')
@@ -40,6 +44,7 @@ class AdminNotificationsController extends Controller
 
     public function store(NotificationStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
         $message = (new NotificationStoreService())->store($request);
 
         return redirect()->action(
@@ -48,6 +53,7 @@ class AdminNotificationsController extends Controller
     }
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
         $allNotifications = Notification::where('user_id', Auth::user()->user_id)
             ->orderBy('created_at', 'DESC')
             ->orderBy('read_at', 'ASC')
@@ -59,7 +65,7 @@ class AdminNotificationsController extends Controller
 
     public function markAllAsRead()
     {
-        
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
         $allUnreadNotifications = Notification::where('user_id', Auth::user()->user_id)
             ->whereNull('read_at')
             ->get();
@@ -76,6 +82,7 @@ class AdminNotificationsController extends Controller
     // Vue Function: AdminReadNotification Component
     public function markAsRead($notification_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
         abort_if(($notification = Notification::where('notification_id', $notification_id)->first()) !== NULL ? false : true, 404);
         
         $data = ['read_at' => Carbon::now(),];

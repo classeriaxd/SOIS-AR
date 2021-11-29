@@ -182,6 +182,46 @@ class PermissionSeeder extends Seeder
                     'name' => 'AR-View_Student_Accomplishment', 
                     'created_at' => $currentTime, 'updated_at' => $currentTime,
                 ],
+
+            // View Home
+                [
+                    // 31
+                    'name' => 'AR-View_Home', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // View Admin Home
+                [
+                    // 32
+                    'name' => 'AR-Super-Admin-View_Admin_Home', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+
+            // Admin //
+            // Manage Accomplishment Report Maintenance
+                [
+                    // 33
+                    'name' => 'AR-Super-Admin-Manage_Accomplishment_Report', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // Manage Event Maintenance
+                [
+                    // 34
+                    'name' => 'AR-Super-Admin-Manage_Event', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // Admin Organization Views
+                [
+                    // 35
+                    'name' => 'AR-Super-Admin-Manage_Organization', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // Admin Notification
+                [
+                    // 36
+                    'name' => 'AR-Super-Admin-Manage_Notification', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
         ];
         DB::table('permissions')->insert($data);
     }

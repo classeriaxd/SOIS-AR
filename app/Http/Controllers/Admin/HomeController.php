@@ -11,18 +11,21 @@ use App\Models\Organization;
 use Carbon\Carbon;
 use DateTime;
 
+use App\Services\PermissionServices\PermissionCheckingService;
 use App\Http\Controllers\Controller as Controller;
 
 class HomeController extends Controller
 {
+    protected $permissionChecker;
+
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     /**
@@ -32,12 +35,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-View_Admin_Home'), 403);
         $eventCount = Event::count();
         $organizationCount = Organization::count();
         $accomplishmentReportCount = AccomplishmentReport::count();
         $loginAlert = $this->showLoginAlert();
-
-        
         
         return view('admin.home', 
             compact(

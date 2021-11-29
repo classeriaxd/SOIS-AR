@@ -14,36 +14,41 @@ use App\Services\Admin\AccomplishmentReportMaintenance\TabularTable\{
     TabularTableUpdateService,
     TabularTableDeleteService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 use App\Http\Controllers\Controller as Controller;
 
 class TabularTableMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.accomplishmentReport.tabularTable.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTables = TabularTable::all();
         return view($this->viewDirectory . 'index', compact('tabularTables',));
     }
     
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         return view($this->viewDirectory . 'create',);
     }
 
     public function store(TabularTableStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $message = (new TabularTableStoreService())->store($request);
 
         return redirect()->action(
@@ -53,6 +58,7 @@ class TabularTableMaintenanceController extends Controller
 
     public function edit($tabular_table_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         return view($this->viewDirectory . 'edit', compact('tabularTable'));
@@ -60,6 +66,7 @@ class TabularTableMaintenanceController extends Controller
 
     public function update(TabularTableUpdateRequest $request, $tabular_table_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         $message = (new TabularTableUpdateService())->update($tabularTable, $request);
@@ -72,6 +79,7 @@ class TabularTableMaintenanceController extends Controller
 
     public function show($tabular_table_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         $tabularColumns = TabularColumn::where('tabular_table_id', $tabular_table_id)->get();
@@ -80,6 +88,7 @@ class TabularTableMaintenanceController extends Controller
 
     public function destroy(TabularTableDeleteRequest $request, $tabular_table_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         $message = (new TabularTableDeleteService())->delete($tabularTable, $request);

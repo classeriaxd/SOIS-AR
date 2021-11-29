@@ -27,7 +27,7 @@
                 <div class="row">
                     {{-- Event Count Card --}}
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <a href="{{route('event.index')}}">
+                        <a href="#">
                             <div class="card card-stats">
                                 <div class="card-header">
                                     <div class="icon icon-warning">
@@ -348,7 +348,9 @@
                         <div class="col-lg-7 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
-                                    <h4 class="card-title">Accomplished Reports</h4>
+                                    <h4 class="card-title">
+                                        Accomplished Reports <i class="fas fa-tools"></i>
+                                    </h4>
                                     <p class="category">Latest added reports</p>
                                 </div>
                                 <div class="card-content table-responsive">
@@ -414,7 +416,9 @@
                         <div class="col-lg-5 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
-                                    <h4 class="card-title">Activity Log</h4>
+                                    <h4 class="card-title">
+                                        Activity Log <i class="fas fa-tools"></i>
+                                    </h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="streamline">
@@ -528,7 +532,9 @@
                     <div class="col-lg-5 col-md-12">
                         <div class="card" style="min-height: 485px">
                             <div class="card-header card-header-text">
-                                <h4 class="card-title">Activity Log</h4>
+                                <h4 class="card-title">
+                                    Activity Log <i class="fas fa-tools"></i>
+                                </h4>
                             </div>
                             <div class="card-content">
                                 <div class="streamline">

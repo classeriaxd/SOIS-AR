@@ -13,17 +13,20 @@ use App\Models\Organization;
 use App\Models\OrganizationDocument;
 
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\PermissionServices\PermissionCheckingService;
 
 class HomeController extends Controller
 {
+    protected $permissionChecker;
+
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     /**
@@ -33,6 +36,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Home'), 403);
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 

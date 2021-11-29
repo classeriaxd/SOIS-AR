@@ -13,36 +13,41 @@ use App\Services\Admin\EventMaintenance\EventNature\{
     EventNatureUpdateService,
     EventNatureDeleteService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 use App\Http\Controllers\Controller as Controller;
 
 class EventNatureMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventNature.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventNatures = EventNature::all();
         return view($this->viewDirectory . 'index', compact('eventNatures',));
     }
     
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         return view($this->viewDirectory . 'create',);
     }
 
     public function store(EventNatureStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventNatureStoreService())->store($request);
 
         return redirect()->action(
@@ -52,6 +57,7 @@ class EventNatureMaintenanceController extends Controller
 
     public function edit($nature_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventNature = $this->checkIfNatureExists($nature_id);
 
         return view($this->viewDirectory . 'edit', compact('eventNature'));
@@ -59,6 +65,7 @@ class EventNatureMaintenanceController extends Controller
 
     public function update(EventNatureUpdateRequest $request, $nature_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventNature = $this->checkIfNatureExists($nature_id);
 
         $message = (new EventNatureUpdateService())->update($eventNature, $request);
@@ -71,6 +78,7 @@ class EventNatureMaintenanceController extends Controller
 
     public function show($nature_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventNature = $this->checkIfNatureExists($nature_id);
         
         return view($this->viewDirectory . 'show', compact('eventNature'));
@@ -78,6 +86,7 @@ class EventNatureMaintenanceController extends Controller
 
     public function destroy(EventNatureDeleteRequest $request, $nature_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventNature = $this->checkIfNatureExists($nature_id);
 
         $message = (new EventNatureDeleteService())->delete($eventNature, $request);

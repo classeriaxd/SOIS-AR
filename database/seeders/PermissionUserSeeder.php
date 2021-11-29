@@ -48,6 +48,7 @@ class PermissionUserSeeder extends Seeder
                 ['user_id' => 3, 'permission_id' => 29,],
                 ['user_id' => 3, 'permission_id' => 28,],
                 ['user_id' => 3, 'permission_id' => 30,],
+                ['user_id' => 3, 'permission_id' => 31,],
 
                 // AR President Initial Permissions
                 ['user_id' => 4, 'permission_id' => 15,],
@@ -55,10 +56,19 @@ class PermissionUserSeeder extends Seeder
                 ['user_id' => 4, 'permission_id' => 17,],
                 ['user_id' => 4, 'permission_id' => 18,],
                 ['user_id' => 4, 'permission_id' => 19,],
+                ['user_id' => 4, 'permission_id' => 31,],
 
-                // Member Initial Permission
+                // Member Initial Permissions
                 ['user_id' => 8, 'permission_id' => 28,],
                 ['user_id' => 8, 'permission_id' => 30,],
+                ['user_id' => 8, 'permission_id' => 31,],
+
+                // Super Admin Initial Permissions
+                ['user_id' => 1, 'permission_id' => 32,],
+                ['user_id' => 1, 'permission_id' => 33,],
+                ['user_id' => 1, 'permission_id' => 34,],
+                ['user_id' => 1, 'permission_id' => 35,],
+                ['user_id' => 1, 'permission_id' => 36,],
             
         ];
         DB::table('permission_user')->insert($data);

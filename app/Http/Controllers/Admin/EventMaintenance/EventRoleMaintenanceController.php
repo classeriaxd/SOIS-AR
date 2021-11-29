@@ -13,36 +13,41 @@ use App\Services\Admin\EventMaintenance\EventRole\{
     EventRoleUpdateService,
     EventRoleDeleteService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 use App\Http\Controllers\Controller as Controller;
 
 class EventRoleMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventRole.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventRoles = EventRole::all();
         return view($this->viewDirectory . 'index', compact('eventRoles',));
     }
     
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         return view($this->viewDirectory . 'create',);
     }
 
     public function store(EventRoleStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventRoleStoreService())->store($request);
 
         return redirect()->action(
@@ -52,6 +57,7 @@ class EventRoleMaintenanceController extends Controller
 
     public function edit($role_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventRole = $this->checkIfRoleExists($role_id);
 
         return view($this->viewDirectory . 'edit', compact('eventRole'));
@@ -59,6 +65,7 @@ class EventRoleMaintenanceController extends Controller
 
     public function update(EventRoleUpdateRequest $request, $role_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventRole = $this->checkIfRoleExists($role_id);
 
         $message = (new EventRoleUpdateService())->update($eventRole, $request);
@@ -71,6 +78,7 @@ class EventRoleMaintenanceController extends Controller
 
     public function show($role_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventRole = $this->checkIfRoleExists($role_id);
         
         return view($this->viewDirectory . 'show', compact('eventRole'));
@@ -78,6 +86,7 @@ class EventRoleMaintenanceController extends Controller
 
     public function destroy(EventRoleDeleteRequest $request, $role_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventRole = $this->checkIfRoleExists($role_id);
 
         $message = (new EventRoleDeleteService())->delete($eventRole, $request);

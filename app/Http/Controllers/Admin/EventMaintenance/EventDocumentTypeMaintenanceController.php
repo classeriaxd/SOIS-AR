@@ -13,36 +13,41 @@ use App\Services\Admin\EventMaintenance\EventDocumentType\{
     EventDocumentTypeUpdateService,
     EventDocumentTypeDeleteService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 use App\Http\Controllers\Controller as Controller;
 
 class EventDocumentTypeMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventDocumentType.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $documentTypes = EventDocumentType::all();
         return view($this->viewDirectory . 'index', compact('documentTypes',));
     }
     
     public function create()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         return view($this->viewDirectory . 'create',);
     }
 
     public function store(EventDocumentTypeStoreRequest $request)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventDocumentTypeStoreService())->store($request);
 
         return redirect()->action(
@@ -52,6 +57,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
     public function edit($document_type_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $documentType = $this->checkIfDocumentTypeExists($document_type_id);
 
         return view($this->viewDirectory . 'edit', compact('documentType'));
@@ -59,6 +65,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
     public function update(EventDocumentTypeUpdateRequest $request, $document_type_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $documentType = $this->checkIfDocumentTypeExists($document_type_id);
 
         $message = (new EventDocumentTypeUpdateService())->update($documentType, $request);
@@ -71,6 +78,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
     public function show($document_type_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $documentType = $this->checkIfDocumentTypeExists($document_type_id);
         
         return view($this->viewDirectory . 'show', compact('documentType'));
@@ -78,6 +86,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
     public function destroy(EventDocumentTypeDeleteRequest $request, $document_type_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $documentType = $this->checkIfDocumentTypeExists($document_type_id);
 
         $message = (new EventDocumentTypeDeleteService())->delete($documentType, $request);
