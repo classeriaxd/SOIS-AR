@@ -90,7 +90,7 @@ class AccomplishmentReportExport implements
                 $table1Columns,
                 $table2Columns,
                 $table3Columns,
-                $table4Columns,
+                $table4Columns
             )
             {
                 $currentRow = 1;
