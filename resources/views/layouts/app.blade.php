@@ -145,8 +145,8 @@
                                     <i class="material-icons">summarize</i><span>Event Reports</span>
                                 </a>
                                 <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer1">
-                                    <li><a href="{{route('event.create')}}">Create Report</a></li>
-                                    <li><a href="{{route('event.index')}}">View Report</a></li>
+                                    <li><a href="{{route('event.create')}}">Create Event</a></li>
+                                    <li><a href="{{route('event.index')}}">View Events</a></li>
                                 </ul>
                             </li>
 
@@ -159,17 +159,6 @@
                                 <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer2">
                                     <li><a href="{{route('accomplishmentreports.create')}}">Create AR</a></li>
                                     <li><a href="{{route('accomplishmentreports.index')}}">Submissions</a></li>
-                                </ul>
-                            </li>
-                            
-                            {{-- Organization Documents --}}
-                            <li class="dropdown" disabled>
-                                <a href="#pageSubmenuOfficer3" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">picture_as_pdf</i><span>Documents</span>
-                                </a>
-                                <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer3">
-                                    <li><a href="#">Upload Document</a></li>
-                                    <li><a href="#">View Document</a></li>
                                 </ul>
                             </li>
                             
