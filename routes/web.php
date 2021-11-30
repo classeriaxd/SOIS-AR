@@ -34,8 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
         function () {
             Route::get('/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
             
-            Route::get('/initialize', function () {
+            Route::get('/sois-ar/initializeStorageLink/', function () {
                 \Illuminate\Support\Facades\Artisan::call('storage:link');
+                return redirect()->route('admin.home');
             });
 
         // Maintenance Routes
@@ -219,28 +220,36 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
     
-    /*
+    
     // Documentation Officer Maintenance routes
     Route::group([
             'as' => 'maintenances.',
-            'prefix' => '/maintenances'], 
+            'prefix' => '/maintenances/{organizationSlug}',
+            'where' => ['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
         function () {
 
-        // Event Category Maintenance
-        Route::resource('organizationDocumentTypes', App\Http\Controllers\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
-        
         Route::group([
                 'as' => 'organizationDocumentTypes.',
-                'prefix' => '/organizationDocumentTypes/{organizationDocumentTypeSlug}',
-                'where' => ['organizationDocumentTypeSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
+                'prefix' => '/organizationDocumentTypes',], 
             function () {
-                Route::get('/edit', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'edit'])->name('edit');
-                Route::get('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'show'])->name('show');
-                Route::patch('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'update'])->name('update');
-                Route::delete('', [App\Http\Controllers\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+                
+                Route::get('/create', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'create'])->name('create');
+                Route::post('/store', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'store'])->name('store');
+                Route::get('', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'index'])->name('index');
+                Route::group([
+                        'prefix' => '/{organizationDocumentTypeSlug}',
+                        'where' => ['organizationDocumentTypeSlug' => '^[a-zA-Z0-9_-]{2,255}$',],], 
+
+                    function () {
+                        Route::get('/edit', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'edit'])->name('edit');
+                        Route::patch('/update', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'update'])->name('update');
+                        Route::delete('/delete', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'destroy'])->name('destroy');
+                        Route::get('', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'show'])->name('show');
+                });
+                
         });
     });
-    */
+    
     
     // Organization Documents
     Route::group([
