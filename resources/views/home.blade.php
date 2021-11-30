@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <p class="category"><strong>Documents</strong></p>
+                                    <p class="category"><strong>Organization Documents</strong></p>
                                     <h3 class="card-title">{{ $documentCount ?? 0 }}</h3>
                                 </div>
                                 <div class="card-footer">
@@ -329,7 +329,7 @@
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <p class="category"><strong>Documents</strong></p>
+                                    <p class="category"><strong>Organization Documents</strong></p>
                                     <h3 class="card-title">{{ $documentCount ?? 0 }}</h3>
                                 </div>
                                 <div class="card-footer">

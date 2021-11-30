@@ -128,7 +128,7 @@
                 {{-- If logged-in and user opens landing page --}}
                 <div class="row">
                     <div class="col">
-                        @role('Admin')
+                        @role('Super Admin')
                             <a href="{{ route('admin.home') }}">
                                 <button class="btn btn-primary">Home</button>  
                             </a>
