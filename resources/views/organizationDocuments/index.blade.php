@@ -122,6 +122,14 @@
         role="button">
             <i class="fas fa-home"></i> Go Home
         </a>
+
+        <span>or</span>
+
+        <a href="{{route('maintenances.organizationDocumentTypes.create', ['organizationSlug' => $organization->organization_slug])}}"
+            class="btn btn-primary text-white"
+            role="button">
+           <i class="fas fa-th"></i> Go to Organization Document Types
+        </a>
     </div>
 
 </div>

@@ -1,101 +1,127 @@
 <?php
 
 namespace App\Http\Controllers;
-/*
+
+use App\Models\Organization;
 use App\Models\OrganizationDocumentType;
 use App\Http\Requests\OrganizationDocumentRequests\OrganizationDocumentTypeMaintenanceRequests\{
     OrganizationDocumentTypeStoreRequest,
     OrganizationDocumentTypeUpdateRequest,
-    OrganizationDocumentTypeDeleteRequest,
 };
 use App\Services\OrganizationDocumentServices\OrganizationDocumentTypeMaintenanceServices\{
     OrganizationDocumentTypeStoreService,
     OrganizationDocumentTypeUpdateService,
     OrganizationDocumentTypeDeleteService,
 };
-*/
+use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\EventServices\EventGetOrganizationIDService;
 
-class OrganizationDocumentTypeController extends Controller
-{/**
-    protected $viewDirectory = '';
+class OrganizationDocumentTypesController extends Controller
+{
+    protected $viewDirectory = 'organizationDocuments.organizationDocumentTypes.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
-     *
+     */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
+        
     }
 
-    public function index()
+    public function index($organizationSlug)
     {
-        $eventCategories = EventCategory::all();
-        return view($this->viewDirectory . 'index', compact('eventCategories',));
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
+
+        $organizationDocumentTypes = OrganizationDocumentType::where('organization_id', $organization->organization_id)->get();
+        return view($this->viewDirectory . 'index', compact('organization','organizationDocumentTypes',));
     }
     
-    public function create()
+    public function create($organizationSlug)
     {
-        return view($this->viewDirectory . 'create',);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
+
+        return view($this->viewDirectory . 'create', compact('organization'));
     }
 
-    public function store(EventCategoryStoreRequest $request)
+    public function store(OrganizationDocumentTypeStoreRequest $request, $organizationSlug)
     {
-        $message = (new EventCategoryStoreService())->store($request);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+
+        $message = (new OrganizationDocumentTypeStoreService())->store($request, $organizationSlug);
         
         return redirect()->action(
-            [EventCategoryMaintenanceController::class, 'index'])
+            [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
             ->with($message);
     }
 
-    public function edit($category_id)
+    public function edit($organizationSlug, $organizationDocumentTypeSlug)
     {
-        $eventCategory = $this->checkIfCategoryExists($category_id);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
 
-        return view($this->viewDirectory . 'edit', compact('eventCategory'));
+        abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
+        $organizationDocumentType = OrganizationDocumentType::where('organization_id', $organization->organization_id)->where('slug', $organizationDocumentTypeSlug)->first();
+
+        return view($this->viewDirectory . 'edit', compact('organization', 'organizationDocumentType'));
     }
 
-    public function update(EventCategoryUpdateRequest $request, $category_id)
+    public function update(OrganizationDocumentTypeUpdateRequest $request, $organizationSlug, $organizationDocumentTypeSlug)
     {
-        $eventCategory = $this->checkIfCategoryExists($category_id);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
 
-        $message = (new EventCategoryUpdateService())->update($eventCategory, $request);
+        abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
+
+        $message = (new OrganizationDocumentTypeUpdateService())->update($request, $organization, $organizationDocumentTypeSlug);
 
         return redirect()->action(
-            [EventCategoryMaintenanceController::class, 'index'])
+            [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
             ->with($message);
-
     }
 
-    public function show($category_id)
+    public function show($organizationSlug, $organizationDocumentTypeSlug)
     {
-        $eventCategory = $this->checkIfCategoryExists($category_id);
-        
-        return view($this->viewDirectory . 'show', compact('eventCategory'));
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
+
+        abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
+        $organizationDocumentType = OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->first();
+
+        return view($this->viewDirectory . 'show', compact('organization', 'organizationDocumentType'));
     }
 
-    public function destroy(EventCategoryDeleteRequest $request, $category_id)
+    public function destroy($organizationSlug, $organizationDocumentTypeSlug)
     {
-        $eventCategory = $this->checkIfCategoryExists($category_id);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
 
-        $message = (new EventCategoryDeleteService())->delete($eventCategory, $request);
+        abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
+
+        $message = (new OrganizationDocumentTypeDeleteService())->delete($organization, $organizationDocumentTypeSlug);
 
         return redirect()->action(
-            [EventCategoryMaintenanceController::class, 'index'])
+            [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
             ->with($message);
     }
-
-    /**
-     * @param Integer $category_id
-     * Function to check if a category id exists, sends 404 if not
-     * @return Collection
-     *
-    private function checkIfCategoryExists($category_id)
-    {
-        abort_if(! $eventCategory = EventCategory::where('event_category_id', $category_id)->first(), 404);
-
-        return $eventCategory;
-    }
-*/
 }

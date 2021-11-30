@@ -157,7 +157,23 @@ class UserSeeder extends Seeder
                 'updated_at' => $currentTime,
                 'status' => $status,       
             ],
-            
+            [
+                // 9 qar AVP Docu
+                'course_id' => 11,
+                'gender_id' => 1,
+                'email' => 'bryantpaulbabac07302001@gmail.com', 
+                'password' => Hash::make('bryantpaulbabac07302001@gmail.com'),
+                'student_number' => '2020-00197-TG-0', 
+                'first_name' => 'Bryant Paul',
+                'middle_name' => 'Sana',
+                'last_name' => 'Babac',
+                'date_of_birth' => '2001-07-30',
+                'mobile_number' => '+639667344635',
+                'address' => 'Imus City, Cavite',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => $status,
+            ],
             
             
         ];
