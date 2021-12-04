@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\EventRole\{
     EventRoleStoreService,
     EventRoleUpdateService,
     EventRoleDeleteService,
+    EventRoleRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,8 @@ class EventRoleMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventRoles = EventRole::all();
-        return view($this->viewDirectory . 'index', compact('eventRoles',));
+        $deletedEventRoles = EventRole::onlyTrashed()->get();
+        return view($this->viewDirectory . 'index', compact('eventRoles','deletedEventRoles'));
     }
     
     public function create()
@@ -96,6 +98,19 @@ class EventRoleMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($role_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $eventRole = $this->checkIfRoleExists($role_id);
+
+        $message = (new EventRoleRestoreService())->restore($eventRole);
+
+        return redirect()->action(
+            [EventRoleMaintenanceController::class, 'index'])
+            ->with($message);
+
+    }
+
     /**
      * @param Integer $role_id
      * Function to check if a category id exists, sends 404 if not
@@ -103,7 +118,7 @@ class EventRoleMaintenanceController extends Controller
      */ 
     private function checkIfRoleExists($role_id)
     {
-        abort_if(! $eventRole = EventRole::where('event_role_id', $role_id)->first(), 404);
+        abort_if(! $eventRole = EventRole::withTrashed()->where('event_role_id', $role_id)->first(), 404);
 
         return $eventRole;
     }

@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'restore'])->name('restore');
             }); 
 
             // Event Role Maintenance
@@ -71,6 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Event Nature Maintenance
@@ -85,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'restore'])->name('restore');
             }); 
 
             // Event Classification Maintenance
@@ -99,6 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Event Document Type Maintenance
@@ -113,6 +117,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Fund Source Maintenance
@@ -127,6 +132,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Level Maintenance
@@ -141,6 +147,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Tabular Table Maintenance
@@ -155,6 +162,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'restore'])->name('restore');
 
                     // Tabular Column Maintenance
                     Route::resource('tabularColumns', App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class)->only(['create', 'store']);
@@ -168,6 +176,7 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'show'])->name('show');
                             Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'update'])->name('update');
                             Route::delete('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'destroy'])->name('destroy');
+                            Route::post('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'restore'])->name('restore');
                     });
             });
 

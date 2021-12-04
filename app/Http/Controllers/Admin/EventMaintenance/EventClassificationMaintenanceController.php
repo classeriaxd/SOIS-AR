@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\EventClassification\{
     EventClassificationStoreService,
     EventClassificationUpdateService,
     EventClassificationDeleteService,
+    EventClassificationRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,8 @@ class EventClassificationMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventClassifications = EventClassification::all();
-        return view($this->viewDirectory . 'index', compact('eventClassifications',));
+        $deletedEventClassifications = EventClassification::onlyTrashed()->get();
+        return view($this->viewDirectory . 'index', compact('eventClassifications', 'deletedEventClassifications'));
     }
     
     public function create()
@@ -96,6 +98,19 @@ class EventClassificationMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($classification_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $eventClassification = $this->checkIfClassificationExists($classification_id);
+
+        $message = (new EventClassificationRestoreService())->restore($eventClassification);
+
+        return redirect()->action(
+            [EventClassificationMaintenanceController::class, 'index'])
+            ->with($message);
+
+    }
+
     /**
      * @param Integer $classification_id
      * Function to check if a classification id exists, sends 404 if not
@@ -103,7 +118,7 @@ class EventClassificationMaintenanceController extends Controller
      */ 
     private function checkIfClassificationExists($classification_id)
     {
-        abort_if(! $eventClassification = EventClassification::where('event_classification_id', $classification_id)->first(), 404);
+        abort_if(! $eventClassification = EventClassification::withTrashed()->where('event_classification_id', $classification_id)->first(), 404);
 
         return $eventClassification;
     }

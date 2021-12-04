@@ -50,6 +50,8 @@
                 </a>
             </div>
 
+            {{-- Classifications Table --}}
+            @if($eventClassifications->isNotEmpty())
             <div class="card w-100">
                 <table class="w-100 table table-bordered table-striped table-hover border border-dark">
                     <thead class="align-middle bg-maroon text-white fw-bold fs-6">
@@ -83,6 +85,45 @@
                     </tbody>
                 </table>
             </div>
+            @else
+                <p class="text-center">No Classifications found. :(</p>
+            @endif
+
+            {{-- Deleted Classifications Table --}}
+            @if($deletedEventClassifications->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Event Categories</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Classification</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedEventClassifications as $classification)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $classification->classification }}</td>
+                                <td style="width: 50%;">{{ $classification->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventClassifications.show', ['classification_id' => $classification->event_classification_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
             
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"

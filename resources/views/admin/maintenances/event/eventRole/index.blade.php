@@ -50,47 +50,95 @@
                 </a>
             </div>
             
-            <div class="card w-100">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Role</th>
-                        <th>Helper</th>
-                        <th>Color Scheme</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($eventRoles as $role)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $role->event_role }}</td>
-                            <td style="width: 50%;">{{ $role->helper }}</td>
-                            <td class="text-center align-middle">
-                                <span class="badge rounded-pill fs-6"
-                                    style="background-color: {{$role->background_color}}; color: {{$role->text_color}};" >
-                                    {{ $role->event_role }}
-                            </span>
-                            </td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.eventRoles.show', ['role_id' => $role->event_role_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.eventRoles.edit', ['role_id' => $role->event_role_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>    
+            {{-- Event Roles Table --}}
+            @if($eventRoles->isNotEmpty())
+                <div class="card w-100">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Role</th>
+                            <th>Helper</th>
+                            <th>Color Scheme</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($eventRoles as $role)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $role->event_role }}</td>
+                                <td style="width: 50%;">{{ $role->helper }}</td>
+                                <td class="text-center align-middle">
+                                    <span class="badge rounded-pill fs-6"
+                                        style="background-color: {{$role->background_color}}; color: {{$role->text_color}};" >
+                                        {{ $role->event_role }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.eventRoles.show', ['role_id' => $role->event_role_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventRoles.edit', ['role_id' => $role->event_role_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
 
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Event Roles found. :(</p>
+            @endif
+
+            {{-- Deleted Event Roles Table --}}
+            @if($deletedEventRoles->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Event Roles</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Role</th>
+                            <th>Helper</th>
+                            <th>Color Scheme</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedEventRoles as $role)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $role->event_role }}</td>
+                                <td style="width: 50%;">{{ $role->helper }}</td>
+                                <td class="text-center align-middle">
+                                    <span class="badge rounded-pill fs-6"
+                                        style="background-color: {{$role->background_color}}; color: {{$role->text_color}};" >
+                                        {{ $role->event_role }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventRoles.show', ['role_id' => $role->event_role_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
             
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"

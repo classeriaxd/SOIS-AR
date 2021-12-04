@@ -50,40 +50,80 @@
                 </a>
             </div>
             
-            <div class="card w-100">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Document Type</th>
-                        <th>Helper</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($documentTypes as $documentType)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $documentType->document_type }}</td>
-                            <td style="width: 50%;">{{ $documentType->helper }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.eventDocumentTypes.show', ['document_type_id' => $documentType->event_document_type_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.eventDocumentTypes.edit', ['document_type_id' => $documentType->event_document_type_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+            {{-- Document Types Table --}}
+            @if($documentTypes->isNotEmpty())
+                <div class="card w-100">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Document Type</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($documentTypes as $documentType)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $documentType->document_type }}</td>
+                                <td style="width: 50%;">{{ $documentType->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.eventDocumentTypes.show', ['document_type_id' => $documentType->event_document_type_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventDocumentTypes.edit', ['document_type_id' => $documentType->event_document_type_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Document Types found. :(</p>
+            @endif
 
+            {{-- Deleted Document Types Table --}}
+            @if($deletedDocumentTypes->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Event Document Types</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Document Type</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedDocumentTypes as $documentType)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $documentType->document_type }}</td>
+                                <td style="width: 50%;">{{ $documentType->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventDocumentTypes.show', ['document_type_id' => $documentType->event_document_type_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"
