@@ -367,7 +367,8 @@ Route::group(['middleware' => 'auth'], function () {
 
                             Route::get('/edit', [App\Http\Controllers\EventImagesController::class, 'edit'])->name('edit');
                             Route::patch('', [App\Http\Controllers\EventImagesController::class, 'update'])->name('update');
-                            Route::delete('', [App\Http\Controllers\EventImagesController::class, 'destroy'])->name('destroy');
+                            Route::delete('/destroy', [App\Http\Controllers\EventImagesController::class, 'destroy'])->name('destroy');
+                            Route::post('/restore', [App\Http\Controllers\EventImagesController::class, 'restore'])->name('restore');
                             Route::get('', [App\Http\Controllers\EventImagesController::class, 'show'])->name('show');
                         });
                     });
@@ -381,8 +382,8 @@ Route::group(['middleware' => 'auth'], function () {
                         // Event Documents
                         // --> /e/{event_slug}/document/{document_id}
 
-                                Route::delete('', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
-                                Route::post('', [App\Http\Controllers\EventDocumentsController::class, 'restore'])->name('restore');
+                                Route::delete('/destroy', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
+                                Route::post('/restore', [App\Http\Controllers\EventDocumentsController::class, 'restore'])->name('restore');
                                 Route::get('/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadDocument'])->name('download');
                     });
 

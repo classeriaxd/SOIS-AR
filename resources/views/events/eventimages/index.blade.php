@@ -4,6 +4,25 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-12">
+        	{{-- Success Alert --}}
+        	    @if (session()->has('success'))
+        	        <div class="flex-row text-center" id="success_alert">
+        	            <div class="alert alert-success alert-dismissible fade show" role="alert">
+        	                {{ session('success') }}
+        	                <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+        	            </div>
+        	        </div>
+        	    @endif
+        	{{-- Error Alert --}}
+        	    @if (session()->has('error'))
+        	        <div class="flex-row text-center" id="error_alert">
+        	            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        	                {{ session('error') }}
+        	                <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+        	            </div>
+        	        </div>
+        	    @endif
+
         	{{-- Title and Breadcrumbs --}}
         	<div class="d-flex justify-content-between align-items-center">
         	    {{-- Title --}}
@@ -45,10 +64,14 @@
 		        						@foreach($posters as $poster)
 	        								<div class="carousel-item @if($loop->first)active @endif">
 	        									<a href="{{route('event.image.show', ['event_slug' => $event->slug, 'eventImage_slug' => $poster->slug])}}">
-	        									<img src="/storage/{{$poster->image}}" class="d-block" style="max-width: 350px; max-height: 350px; margin:auto"> 
-	        									<div class="carousel-caption d-none d-md-block">
-	        										<p class="card-text fw-bold badge bg-primary text-wrap" style="color:white;">{{$poster->caption}}</p>
-	        									</div>	
+		        									<img src="/storage/{{$poster->image}}" class="d-block" style="max-width: 350px; max-height: 350px; margin:auto"> 
+		        									<div class="carousel-caption">
+		        										<div class="d-flex justify-content-center">
+		        											<p class="bg-primary bg-opacity-50 text-white p-1 rounded-pill">
+		        												{{$poster->caption ?? 'No Caption Provided'}}
+		        											</p>
+		        										</div>
+		        									</div>	
 	        									</a>
 	        								</div>	
 		        						@endforeach
@@ -83,10 +106,14 @@
 		        						@foreach($evidences as $evidence)
 		        								<div class="carousel-item @if($loop->first)active @endif">	
 		        									<a href="{{route('event.image.show', ['event_slug' => $event->slug, 'eventImage_slug' => $evidence->slug])}}">
-		        									<img src="/storage/{{$evidence->image}}" class="d-block" style="max-width: 500px; max-height: 350px; margin:auto"> 
-		        									<div class="carousel-caption d-none d-md-block">
-		        										<p class="card-text fw-bold badge bg-primary text-wrap" style="color:white;">{{$poster->caption}}</p>
-		        									</div>
+			        									<img src="/storage/{{$evidence->image}}" class="d-block" style="max-width: 500px; max-height: 350px; margin:auto"> 
+			        									<div class="carousel-caption">
+			        										<div class="d-flex justify-content-center">
+			        											<p class="bg-primary bg-opacity-50 text-white p-1 rounded-pill">
+			        												{{$evidence->caption ?? 'No Caption Provided'}}
+			        											</p>
+			        										</div>
+			        									</div>
 		        									</a>
 		        								</div>
 		        						@endforeach
@@ -108,6 +135,58 @@
         			</div>
         		</div>
         	</div>
+
+        	{{-- Deleted Event Images Table --}}
+        	@if($deletedEventImages->isNotEmpty())
+
+        	    <div class="card w-100 mt-4 mb-2" id="deletedEventImages">
+        	        <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Event Images</h5>
+
+        	        <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+        	            <thead class="align-middle bg-maroon text-white fw-bold fs-6 text-center">
+        	                <th>#</th>
+        	                <th>Image</th>
+        	                <th>Type</th>
+        	                <th>Caption</th>
+        	                <th>Option</th>
+        	            </thead>
+        	            <tbody>
+        	            @php $i = 1; @endphp
+        	            @foreach($deletedEventImages as $image)
+        	                <tr>
+        	                    <td>{{ $i }}</td>
+        	                    <td>
+        	                    	@if($image->image_type == 0)
+        	                    		<img src="/storage/{{$image->image}}" class="d-block" style="max-width: 150px; max-height: 150px; margin:auto">
+        	                    	@elseif($image->image_type == 1)
+        	                    		<img src="/storage/{{$image->image}}" class="d-block" style="max-width: 300px; max-height: 150px; margin:auto">
+        	                    	@endif
+        	                    </td>
+        	                    <td class="text-center">
+        	                    	@if($image->image_type == 0)
+        	                    		Poster
+        	                    	@elseif($image->image_type == 1)
+        	                    		Evidence
+        	                    	@endif	
+        	                    </td>
+        	                    <td class="text-center">
+	    	                    	{{ $image->caption ?? 'No Caption Provided' }}
+        	                    </td>
+        	                    <td class="text-center">
+        	                        <form action="{{route('event.image.restore', ['event_slug' => $event->slug, 'eventImage_slug' => $image->slug])}}" method="POST">
+        	                            @csrf
+        	                            <button type="submit" class="btn btn-success text-white">
+        	                                <i class="fas fa-trash-restore"></i> Restore
+        	                            </button>
+        	                        </form>
+        	                    </td>
+        	                </tr>
+        	            @php $i += 1; @endphp
+        	            @endforeach
+        	            </tbody>
+        	        </table>
+        	    </div>
+        	@endif
 
         	<div class="flex-row my-2 text-center">
         	    <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
