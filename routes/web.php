@@ -305,7 +305,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Accomplishment Reports
     Route::group([
             'as' => 'accomplishmentreports.',
-            'prefix' => '/e/reports'], 
+            'prefix' => '/events/reports'], 
         function () {
             Route::post('/create/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReport'])->name('finalizeReport');
             Route::post('/create/checklist', [App\Http\Controllers\AccomplishmentReportsController::class, 'showChecklist'])->name('showChecklist');
@@ -317,7 +317,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Events
     Route::group([
             'as' => 'event.',
-            'prefix' => '/e'], 
+            'prefix' => '/events'], 
         function () {
             // Event
             // --> /e
@@ -406,7 +406,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Student Accomplishments
     Route::group([
             'as' => 'studentAccomplishment.',
-            'prefix' => '/s/accomplishments',],
+            'prefix' => '/students/accomplishments',],
         function () {
         // Student Accomplishment
         // --> /s/accomplishments
@@ -420,7 +420,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group([
             'as' => 'studentAccomplishment.',
-            'prefix' => '/s/accomplishment/{accomplishmentUUID}',
+            'prefix' => '/students/accomplishment/{accomplishmentUUID}',
             'where' => ['accomplishmentUUID' => '^[a-zA-Z0-9-]{36}$'],],
         function () {
         // Student Accomplishment
@@ -435,7 +435,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group([
             'as' => 'notification.',
-            'prefix' => '/u/notification/{notification_id}',
+            'prefix' => '/user/notification/{notification_id}',
             'where' => ['notification_id' => '^([1-9][0-9]*)$'],],
         function () {
         // User Notification
@@ -447,7 +447,7 @@ Route::group(['middleware' => 'auth'], function () {
     // User Notification Routes
     Route::group([
             'as' => 'notifications.',
-            'prefix' => '/u/notifications',],
+            'prefix' => '/user/notifications',],
         function () {
         // User Notification
         // --> /u/notifications
