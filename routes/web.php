@@ -382,6 +382,7 @@ Route::group(['middleware' => 'auth'], function () {
                         // --> /e/{event_slug}/document/{document_id}
 
                                 Route::delete('', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
+                                Route::post('', [App\Http\Controllers\EventDocumentsController::class, 'restore'])->name('restore');
                                 Route::get('/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadDocument'])->name('download');
                     });
 
