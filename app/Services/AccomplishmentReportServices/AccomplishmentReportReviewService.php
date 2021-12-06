@@ -80,6 +80,8 @@ class AccomplishmentReportReviewService
 
             $organizationID = $accomplishmentReport->organization_id;
 
+            // Overlap Dates
+            // https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
             $documentationSignatory = Officer::whereHas(
                     'positionTitle', function(Builder $query) use($organizationID) {
                         $query->where('organization_id', $organizationID)->orderBy('position_title_id', 'ASC');},)
@@ -87,7 +89,8 @@ class AccomplishmentReportReviewService
                     'positionTitle.positionCategory', function(Builder $query) {
                         $query->where('position_category', 'Documentation');},)
                 ->with('positionTitle:position_title_id,position_title')
-                //->whereBetween('term_start', [$accomplishmentReport->start_date, $accomplishmentReport->end_date])
+                ->where('term_start', '<=', $accomplishmentReport->end_date)
+                ->where('term_end', '>=', $accomplishmentReport->start_date)
                 ->get();
             $presidentSignatory = Officer::whereHas(
                     'positionTitle', function(Builder $query) use($organizationID) {
@@ -96,9 +99,9 @@ class AccomplishmentReportReviewService
                     'positionTitle.positionCategory', function(Builder $query) {
                         $query->where('position_category', 'President');},)
                 ->with('positionTitle:position_title_id,position_title')
-                //->whereBetween('term_start', [$accomplishmentReport->start_date, $accomplishmentReport->end_date])
+                ->where('term_start', '<=', $accomplishmentReport->end_date)
+                ->where('term_end', '>=', $accomplishmentReport->start_date)
                 ->first();
-                //dd($documentationSignatory);
             // Get Organization Details including a single Logo
             $organization = Organization::with('logo')
                 ->where('organization_id', $organizationID)
