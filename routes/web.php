@@ -252,7 +252,8 @@ Route::group(['middleware' => 'auth'], function () {
                     function () {
                         Route::get('/edit', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'edit'])->name('edit');
                         Route::patch('/update', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'update'])->name('update');
-                        Route::delete('/delete', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'destroy'])->name('destroy');
+                        Route::delete('/destroy', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'destroy'])->name('destroy');
+                        Route::post('/restore', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'restore'])->name('restore');
                         Route::get('', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'show'])->name('show');
                 });
                 
@@ -280,6 +281,7 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('/edit', [App\Http\Controllers\OrganizationDocumentsController::class, 'edit'])->name('edit');
                             Route::post('/update', [App\Http\Controllers\OrganizationDocumentsController::class, 'update'])->name('update');
                             Route::delete('/destroy', [App\Http\Controllers\OrganizationDocumentsController::class, 'destroy'])->name('destroy');
+                            Route::post('/restore', [App\Http\Controllers\OrganizationDocumentsController::class, 'restore'])->name('restore');
                             Route::get('/{newDocument?}', [App\Http\Controllers\OrganizationDocumentsController::class, 'show'])->name('show');
                     });
 
@@ -340,7 +342,8 @@ Route::group(['middleware' => 'auth'], function () {
 
                     Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit'])->name('edit');
                     Route::patch('', [App\Http\Controllers\EventsController::class, 'update'])->name('update');
-                    Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
+                    Route::delete('/destroy', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
+                    Route::post('/restore', [App\Http\Controllers\EventsController::class, 'restore'])->name('restore');
                     Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show')->where(['newEvent' => '^([1-9][0-9]*)$']);
 
                     // Event Images

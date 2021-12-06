@@ -39,69 +39,169 @@
                     </ol>
                 </nav>
             </div>
+
             @if($events->isNotEmpty())
+                <div class="card w-100 my-2">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Events</h5>
+                    <div class="d-flex justify-content-center">
+                        @if($deletedEvents->isNotEmpty())
+                            {{ 
+                                $events->appends([
+                                    'events' => $events->currentPage(),
+                                    'deletedEvents' => $deletedEvents->currentPage(),
+                                ])->links() 
+                            }}
+                        @else
+                            {{ $events->links() }}
+                        @endif
+                    </div>
 
-            <div class="d-flex justify-content-center">
-                {{ $events->links() }}
-            </div>
+                    <table class="table table-striped table-hover table-bordered border border-dark" id="eventTable">
+                        <thead class="text-white fw-bold bg-maroon">
+                            <th class="text-center" scope="col">#</th>
+                            <th class="text-center" scope="col">Title</th>
+                            <th class="text-center" scope="col">Category</th>
+                            <th class="text-center" scope="col">Role</th>
+                            <th class="text-center" scope="col">Level</th>
+                            <th class="text-center" scope="col">Date</th>
+                            <th class="text-center" scope="col" data-sortable="false">Options</th>
+                        </thead>
+                        <tbody>
+                            @php $i = 1; @endphp
+                            @foreach($events as $event)
+                            <tr>
+                                <td scope="row" class="text-center">{{ $i }}</td>
+                                <td>{{ $event->title }}</td>
+                                <td class="text-center">
+                                    <span class="badge fs-6" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                                        {{$event->eventCategory->category}}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge fs-6" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                                        {{$event->eventRole->event_role}}
+                                    </span>
+                                </td>
+                                <td>{{ $event->eventLevel->level }}</td>
+                                <td> 
+                                    @if($event->start_date == $event->end_date)
+                                        {{date_format(date_create($event->start_date), 'F d, Y')}}
+                                    @else
+                                        {{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{route('event.show', ['event_slug' => $event->slug])}}" 
+                                        class="btn btn-primary" 
+                                        role="button" 
+                                        target="_blank">
+                                            <span class="fas fa-external-link-alt text-white"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                            @php $i += 1; @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
 
-            <table class="table table-striped table-hover table-bordered border border-dark" id="eventTable">
-                <thead class="text-white fw-bold bg-maroon">
-                    <th class="text-center" scope="col">#</th>
-                    <th class="text-center" scope="col">Title</th>
-                    <th class="text-center" scope="col">Category</th>
-                    <th class="text-center" scope="col">Role</th>
-                    <th class="text-center" scope="col">Level</th>
-                    <th class="text-center" scope="col">Date</th>
-                    <th class="text-center" scope="col" data-sortable="false">Options</th>
-                </thead>
-                <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($events as $event)
-                    <tr>
-                        <td scope="row" class="text-center">{{ $i }}</td>
-                        <td>{{ $event->title }}</td>
-                        <td class="text-center">
-                            <span class="badge fs-6" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
-                                {{$event->eventCategory->category}}
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <span class="badge fs-6" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
-                                {{$event->eventRole->event_role}}
-                            </span>
-                        </td>
-                        <td>{{ $event->eventLevel->level }}</td>
-                        <td> 
-                            @if($event->start_date == $event->end_date)
-                                {{date_format(date_create($event->start_date), 'F d, Y')}}
-                            @else
-                                {{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
-                            @endif
-                        </td>
-                        <td class="text-center">
-                            <a href="{{route('event.show', ['event_slug' => $event->slug])}}" 
-                                class="btn btn-primary" 
-                                role="button" 
-                                target="_blank">
-                                    <span class="fas fa-external-link-alt text-white"></span>
-                            </a>
-                        </td>
-                    </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                </tbody>
-            </table>
-
-            <div class="d-flex justify-content-center">
-                {{ $events->links() }}
-            </div>
-                
+                    <div class="d-flex justify-content-center">
+                        @if($deletedEvents->isNotEmpty())
+                            {{ 
+                                $events->appends([
+                                    'events' => $events->currentPage(),
+                                    'deletedEvents' => $deletedEvents->currentPage(),
+                                ])->links() 
+                            }}
+                        @else
+                            {{ $events->links() }}
+                        @endif
+                    </div>
+                </div>    
             @else
-            <p class="text-center">
-                No Event Found. :( You can create one <a href="{{route('event.create')}}" style="color:blue;"><u>here</u></a>.
-            </p>
+                <p class="text-center">
+                    No Event Found. :( You can create one <a href="{{route('event.create')}}" style="color:blue;"><u>here</u></a>.
+                </p>
             @endif
+
+            @if($deletedEvents->isNotEmpty())
+                <div class="card w-100 mt-5 mb-2">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Events</h5>
+                    <div class="d-flex justify-content-center">
+                        @if($events->isNotEmpty())
+                            {{ 
+                                $deletedEvents->appends([
+                                    'events' => $events->currentPage(),
+                                    'deletedEvents' => $deletedEvents->currentPage(),
+                                ])->links() 
+                            }}
+                        @else
+                            {{ $deletedEvents->links() }}
+                        @endif
+                    </div>
+
+                    <table class="table table-striped table-hover table-bordered border border-dark" id="deletedEventTable">
+                        <thead class="text-white fw-bold bg-maroon">
+                            <th class="text-center" scope="col">#</th>
+                            <th class="text-center" scope="col">Title</th>
+                            <th class="text-center" scope="col">Category</th>
+                            <th class="text-center" scope="col">Role</th>
+                            <th class="text-center" scope="col">Level</th>
+                            <th class="text-center" scope="col">Date</th>
+                            <th class="text-center" scope="col" data-sortable="false">Options</th>
+                        </thead>
+                        <tbody>
+                            @php $i = 1; @endphp
+                            @foreach($deletedEvents as $event)
+                            <tr>
+                                <td scope="row" class="text-center">{{ $i }}</td>
+                                <td>{{ $event->title }}</td>
+                                <td class="text-center">
+                                    <span class="badge fs-6" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                                        {{$event->eventCategory->category}}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge fs-6" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                                        {{$event->eventRole->event_role}}
+                                    </span>
+                                </td>
+                                <td>{{ $event->eventLevel->level }}</td>
+                                <td> 
+                                    @if($event->start_date == $event->end_date)
+                                        {{date_format(date_create($event->start_date), 'F d, Y')}}
+                                    @else
+                                        {{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <form action="{{route('event.restore', ['event_slug' => $event->slug])}}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success text-white">
+                                            <i class="fas fa-trash-restore"></i> Restore Event
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @php $i += 1; @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-center">
+                        @if($events->isNotEmpty())
+                            {{ 
+                                $deletedEvents->appends([
+                                    'events' => $events->currentPage(),
+                                    'deletedEvents' => $deletedEvents->currentPage(),
+                                ])->links() 
+                            }}
+                        @else
+                            {{ $deletedEvents->links() }}
+                        @endif
+                    </div>
+                </div>
+            @endif
+            
         </div>
     </div>
 
@@ -137,6 +237,17 @@
         // Datatables JS
         const dataTable = new simpleDatatables.DataTable("#eventTable", {
             searchable: true,
+            perPage: 30,
+            labels: {
+            placeholder: "Search Events...",
+            perPage: "Show {select} events per page",
+            noRows: "No events to display or try the next page",
+            info: "Showing {start} to {end} of {rows} events (Page {page} of {pages} pages)",
+            },
+        })
+        const dataTable2 = new simpleDatatables.DataTable("#deletedEventTable", {
+            searchable: true,
+            perPage: 30,
             labels: {
             placeholder: "Search Events...",
             perPage: "Show {select} events per page",
