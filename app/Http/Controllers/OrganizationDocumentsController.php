@@ -16,6 +16,7 @@ use App\Services\OrganizationDocumentServices\{
     OrganizationDocumentStoreService,
     OrganizationDocumentUpdateService,
     OrganizationDocumentDeleteService,
+    OrganizationDocumentRestoreService,
 };
 use App\Http\Requests\OrganizationDocumentRequests\{
     OrganizationDocumentStoreRequest,
@@ -39,6 +40,11 @@ class OrganizationDocumentsController extends Controller
         $this->permissionChecker = new PermissionCheckingService();
     }
 
+    /**
+     * @param String $organizationSlug
+     * Function to open Index Page for all Organization Document Type
+     * @return View
+     */
     public function index($organizationSlug)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
@@ -54,6 +60,11 @@ class OrganizationDocumentsController extends Controller
         return view($this->viewDirectory . 'index', compact('organization', 'organizationDocumentTypes'));
     }
 
+    /**
+     * @param String $organizationSlug, String $organizationDocumentTypeSlug
+     * Function to open Index Page for specific Organization Document Type
+     * @return View
+     */
     public function documentTypeIndex($organizationSlug, $organizationDocumentTypeSlug)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
@@ -69,13 +80,25 @@ class OrganizationDocumentsController extends Controller
             'documentType' => function($query) use ($organization, $organizationDocumentTypeSlug){
                 $query->where('organization_id', $organization->organization_id);}])
             ->where('organization_document_type_id', $organizationDocumentType->organization_document_type_id)
-            ->orderBy('created_at', 'DESC')
+            ->orderByDesc('created_at')
             ->paginate(30, ['*'], 'documents');
 
-        return view($this->viewDirectory . 'documentTypeIndex', compact('organization', 'organizationDocumentType', 'organizationDocuments'));
-
+        $deletedOrganizationDocuments = OrganizationDocument::onlyTrashed()
+            ->with([
+                'documentType' => function($query) use ($organization, $organizationDocumentTypeSlug){
+                $query->where('organization_id', $organization->organization_id);}])
+            ->where('organization_document_type_id', $organizationDocumentType->organization_document_type_id)
+            ->orderByDesc('created_at')
+            ->paginate(30, ['*'], 'deletedDocuments');
+            
+        return view($this->viewDirectory . 'documentTypeIndex', compact('organization', 'organizationDocumentType', 'organizationDocuments', 'deletedOrganizationDocuments'));
     }
 
+    /**
+     * @param String $organizationSlug, String $organizationDocumentTypeSlug
+     * Function to open Create Page for Organization Document
+     * @return View
+     */
     public function create($organizationSlug, $organizationDocumentTypeSlug)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Organization_Document'), 403);
@@ -91,6 +114,11 @@ class OrganizationDocumentsController extends Controller
     	return view($this->viewDirectory . 'create', compact('organization', 'organizationDocumentType', 'filePondJS'));
     }
 
+    /**
+     * @param Request $request, String $organizationSlug, String $organizationDocumentTypeSlug
+     * Function to store an Organization Document
+     * @return Redirect
+     */
     public function store(OrganizationDocumentStoreRequest $request, $organizationSlug, $organizationDocumentTypeSlug)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Organization_Document'), 403);
@@ -114,6 +142,11 @@ class OrganizationDocumentsController extends Controller
                 ->with($message);
     }
 
+    /**
+     * @param String $organizationSlug, String $organizationDocumentTypeSlug, Integer $organizationDocumentID, Boolean $newDocument
+     * Function to show a specific Organization Document
+     * @return View
+     */
     public function show($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID, $newDocument = false)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
@@ -133,6 +166,11 @@ class OrganizationDocumentsController extends Controller
         return view($this->viewDirectory . 'show', compact('organization', 'organizationDocumentType', 'organizationDocument', 'newDocument'));
     }
 
+    /**
+     * @param String $organizationSlug, String $organizationDocumentTypeSlug, Integer $organizationDocumentID
+     * Function to show edit page for an Organization Document
+     * @return View
+     */
     public function edit($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Organization_Document'), 403);
@@ -152,6 +190,11 @@ class OrganizationDocumentsController extends Controller
         return view($this->viewDirectory . 'edit', compact('organization', 'organizationDocumentType', 'organizationDocument'));
     }
 
+    /**
+     * @param Request $request, String $organizationSlug, String $organizationDocumentTypeSlug, Integer $organizationDocumentID
+     * Function to update an Event Document
+     * @return Redirect
+     */
     public function update(OrganizationDocumentUpdateRequest $request, $organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Organization_Document'), 403);
@@ -164,7 +207,6 @@ class OrganizationDocumentsController extends Controller
             ->first();
 
         abort_if(! OrganizationDocument::where('organization_document_id', $organizationDocumentID)->where('organization_document_type_id', $organizationDocumentType->organization_document_type_id)->exists(), 404);
-        
 
         $returnArray = (new OrganizationDocumentUpdateService())->update($request, $organizationDocumentID);
         $message = $returnArray['message'];
@@ -183,6 +225,11 @@ class OrganizationDocumentsController extends Controller
                 ->with($message);
     }
 
+    /**
+     * @param String $organizationSlug, String $organizationDocumentTypeSlug, Integer $organizationDocumentID
+     * Function to soft delete an Event Document
+     * @return Redirect
+     */
     public function destroy($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Organization_Document'), 403);
@@ -200,6 +247,32 @@ class OrganizationDocumentsController extends Controller
 
         return redirect()->action(
             [OrganizationDocumentsController::class, 'documentTypeIndex'], ['organizationSlug' => $organizationSlug, 'organizationDocumentTypeSlug' => $organizationDocumentTypeSlug])
+            ->with($message);
+    }
+
+    /**
+     * @param String $organizationSlug, String $organizationDocumentTypeSlug, Integer $organizationDocumentID
+     * Function to restore soft deleted Event Document
+     * @return Redirect
+     */
+    public function restore($organizationSlug, $organizationDocumentTypeSlug, $organizationDocumentID)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Organization_Document'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->where('organization_id', (new OfficerOrganizationIDService())->getOrganizationID())->exists(), 404);
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+
+        abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
+        $organizationDocumentType = OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)
+            ->where('organization_id', $organization->organization_id)
+            ->first();
+
+        abort_if(! OrganizationDocument::onlyTrashed()->where('organization_document_id', $organizationDocumentID)->where('organization_document_type_id', $organizationDocumentType->organization_document_type_id)->exists(), 404);
+
+        $message = (new OrganizationDocumentRestoreService())->restore($organizationDocumentID);
+
+        return redirect()->action(
+            [OrganizationDocumentsController::class, 'documentTypeIndex'], 
+            ['organizationSlug' => $organizationSlug, 'organizationDocumentTypeSlug' => $organizationDocumentTypeSlug])
             ->with($message);
     }
 
