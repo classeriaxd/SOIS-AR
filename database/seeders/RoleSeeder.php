@@ -31,6 +31,8 @@ class RoleSeeder extends Seeder
             ['role' => 'Finance Admin', 'description' => 'Finance Officer assigned to manage Financial Statements of each organization.'],
             // 8
             ['role' => 'User', 'description' => 'Members of the Organizations in PUP Taguig'],
+            // 9
+            ['role' => 'Adviser', 'description' => 'Adviser of an Organization in PUP Taguig'],
         ];
         DB::table('roles')->insert($data);
     }
