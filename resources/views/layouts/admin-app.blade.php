@@ -35,7 +35,7 @@
 <body id="body-pd">
     <div id="app">
         @guest
-            <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
+            <!-- <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
                 <div class="container" >
                     {{-- Brand --}}
                     <a class="navbar-brand text-light" href="{{ url('/home') }}">
@@ -46,14 +46,14 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
+                        <!-- Left Side Of Navbar 
                         <ul class="navbar-nav mr-auto">
 
                         </ul>
 
-                        <!-- Right Side Of Navbar -->
+                        <!-- Right Side Of Navbar 
                         <ul class="navbar-nav ml-auto">
-                            <!-- Authentication Links -->
+                            <!-- Authentication Links 
                                 @if (Route::has('login'))
                                     <li class="nav-item">
                                         <a class="nav-link text-light" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -77,7 +77,7 @@
 
             <main class="py-4">
                 @yield('content')
-            </main>   
+            </main>    -->
         @else
             <div class="wrapper">
                 <div class="body-overlay"></div>
@@ -138,6 +138,24 @@
                             </a>
                         </li>
 
+                        <!-- <li>
+                            <a href="{{ route('admin.organizations.index') }}" class="dashboard">
+                                <i class="material-icons">groups</i><span>School Organizations</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('admin.accomplishmentReports.index') }}" class="dashboard">
+                                <i class="material-icons">task</i><span>Accomplishment Reports</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('admin.events.index') }}" class="dashboard">
+                                <i class="material-icons">description</i><span>Event Reports</span>
+                            </a>
+                        </li> -->
+
                         <div class="sidebar-category">
                             <h5><span>Maintenance Tools</span></h5>
                         </div>
@@ -158,7 +176,7 @@
                         
                         <li class="dropdown">
                             <a href="#pageSubmenu2" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <i class="material-icons">topic</i><span>Document Types</span>
+                                <i class="material-icons">source</i><span>Document Types</span>
                             </a>
                             <ul class="collapse list-unstyled menu" id="pageSubmenu2">
                                 <li><a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}">Event Documents</a></li>
@@ -308,7 +326,7 @@
                                     <nav class="d-flex">
                                         <ul class="m-0 p-0">
                                             <li>
-                                                <a href="{{route('home')}}">Home </a>
+                                                <a href="{{route('admin.home')}}">Home </a>
                                             </li>
                                             <li>
                                                 <a href="#">About Us</a>

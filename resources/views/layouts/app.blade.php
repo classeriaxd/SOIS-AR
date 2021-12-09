@@ -35,7 +35,7 @@
 <body id="body-pd">
     <div id="app">
         @guest
-            <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
+            <!-- <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
                 <div class="container" >
                     {{-- Brand --}}
                     <a class="navbar-brand text-light" href="{{ url('/home') }}">
@@ -46,14 +46,14 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
+                        <!-- Left Side Of Navbar 
                         <ul class="navbar-nav mr-auto">
 
                         </ul>
 
-                        <!-- Right Side Of Navbar -->
+                        <!-- Right Side Of Navbar 
                         <ul class="navbar-nav ml-auto">
-                            <!-- Authentication Links -->
+                            <!-- Authentication Links 
                                 @if (Route::has('login'))
                                     <li class="nav-item">
                                         <a class="nav-link text-light" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -73,11 +73,11 @@
                         </ul>
                     </div>
                 </div>
-            </nav>
+            </nav> -->
 
-            <main class="py-4">
+            <!-- <main class="py-4">
                 @yield('content')
-            </main>   
+            </main>    -->
         @else
             <div class="wrapper">
                 <div class="body-overlay"></div>
@@ -141,7 +141,7 @@
                         @position_title('Officer')
                             <li class="dropdown">
                                 <a href="#pageSubmenu1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">summarize</i><span>Event Reports</span>
+                                    <i class="material-icons">description</i><span>Event Reports</span>
                                 </a>
                                 <ul class="collapse list-unstyled menu" id="pageSubmenu1">
                                     <li><a href="{{route('event.create')}}">Create Report</a></li>
@@ -157,7 +157,7 @@
 
                             <li class="dropdown">
                                 <a href="#pageSubmenu2" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">pending_actions</i><span>Accomplishment Report</span>
+                                    <i class="material-icons">task</i><span>Accomplishment Reports</span>
                                 </a>
                                 <ul class="collapse list-unstyled menu" id="pageSubmenu2">
                                     <li><a href="{{route('accomplishmentreports.index')}}">Submissions</a></li>
@@ -176,7 +176,7 @@
                             
                             <li class="dropdown">
                                 <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">people</i><span>Students/Members</span>
+                                    <i class="material-icons">assignment_ind</i><span>Student's Reports'</span>
                                 </a>
 
                                 <ul class="collapse list-unstyled menu" id="pageSubmenu4">

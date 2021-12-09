@@ -138,6 +138,20 @@ h2{
 	padding-left: 10px;
 }
 
+/* Change autocomplete styles in WebKit */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .login-content{
 	display: flex;
 	justify-content: center;
@@ -151,10 +165,6 @@ form{
 	padding: 30px 40px;
 	background-color: hsla(0, 100%, 90%, 0.5);
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.login-content img{
-    height: 100px;
 }
 
 .login-content h2{

@@ -6,21 +6,17 @@
         <div class="col-md-12">
         @position_title('Officer')
             {{-- Title and Breadcrumbs --}}
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Title --}}
-                    <h2 class="display-7 text-left">Dashboard</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Breadcrumbs --}}
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-end">
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Home
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+            <div class="d-flex justify-content-between align-items-center">
+                {{-- Title --}}
+                <h2 class="display-7 text-left text-break">Dashboard</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb align-items-center">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Home
+                        </li>
+                    </ol>
+                </nav>
             </div>
             
             <!-- <div class="card my-2 border border-dark">
@@ -90,7 +86,7 @@
                     <div class="card card-stats">
                         <div class="card-header">
                             <div class="icon icon-warning">
-                            <span class="material-icons">article</span>
+                            <span class="material-icons">description</span>
                             </div>
                         </div>
                         <div class="card-content">
@@ -99,7 +95,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-                                <a href="#pablo">More info
+                                <a href="{{route('event.index')}}">More info
                                     <i class="material-icons more-info">arrow_circle_right</i>
                                 </a>
                             </div>
@@ -110,11 +106,11 @@
                     <div class="card card-stats">
                         <div class="card-header">
                             <div class="icon icon-rose">
-                            <span class="material-icons">inventory_2</span>
+                            <span class="material-icons">task</span>
                             </div>
                         </div>
                         <div class="card-content">
-                            <p class="category"><strong>Archived Reports</strong></p>
+                            <p class="category"><strong>Accomplishment Reports</strong></p>
                             <h3 class="card-title">102</h3>
                         </div>
                         <div class="card-footer">
@@ -172,8 +168,7 @@
                     <div class="col-lg-7 col-md-12">
                         <div class="card" style="min-height: 485px">
                             <div class="card-header card-header-text">
-                                <h4 class="card-title">Accomplished Reports</h4>
-                                <p class="category">Latest added reports</p>
+                                <h4 class="card-title">Latest Added Event Reports</h4>
                             </div>
                             <div class="card-content table-responsive">
                                 <table class="table table-hover">
@@ -230,6 +225,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-primary" href="{{route('event.index')}}">See more</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -287,21 +285,17 @@
             </div>
         @elseposition_title('Member')
             {{-- Title and Breadcrumbs --}}
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Title --}}
-                    <h2 class="display-7 text-left">Dashboard</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Breadcrumbs --}}
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-end">
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Home
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+            <div class="d-flex justify-content-between align-items-center">
+                {{-- Title --}}
+                <h2 class="display-7 text-left text-break">Dashboard</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb align-items-center">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Home
+                        </li>
+                    </ol>
+                </nav>
             </div>
             <!-- <div class="pb-2">
                 <div class="card my-2 border border-dark">
@@ -431,21 +425,17 @@
                 </div>
         @elseposition_title('President')
             {{-- Title and Breadcrumbs --}}
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Title --}}
-                    <h2 class="display-7 text-left">Dashboard</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Breadcrumbs --}}
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-end">
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Home
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+            <div class="d-flex justify-content-between align-items-center">
+                {{-- Title --}}
+                <h2 class="display-7 text-left text-break">Dashboard</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb align-items-center">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Home
+                        </li>
+                    </ol>
+                </nav>
             </div>
             <!-- <div class="card my-2 border border-dark">
                 <h4 class="card-header card-text text-center align-middle bg-maroon text-white fw-bold">
@@ -494,7 +484,7 @@
                             </div>
                         </div>
                         <div class="card-content">
-                            <p class="category"><strong>Archived Reports</strong></p>
+                            <p class="category"><strong>Accomplishment Reports</strong></p>
                             <h3 class="card-title">102</h3>
                         </div>
                         <div class="card-footer">
