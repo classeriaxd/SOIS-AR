@@ -16,7 +16,7 @@
 
             {{-- Prepared by: --}}
             <div class="prep-prepared">
-                @if($documentationSignatory->isNotEmpty())
+                @if($documentationSignatory !== NULL)
                 <p class="prep-text">Prepared by:</p>
                     @foreach($documentationSignatory as $signatory)
 
@@ -42,7 +42,7 @@
 
             {{-- Approved by: --}}
             <div class="prep-approved">
-                @if($presidentSignatory->isNotEmpty())
+                @if($presidentSignatory !== NULL)
                 <p class="prep-text">Approved by:</p>
                 {{-- Signature --}}
                     @if($signature)

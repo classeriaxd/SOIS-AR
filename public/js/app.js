@@ -1928,11 +1928,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {},
   props: {
-    notification_id: Number,
     read: Boolean,
     title: String,
     description: String,
-    link: String
+    link: String,
+    route: String
   },
   data: function data() {
     return {
@@ -1952,10 +1952,9 @@ __webpack_require__.r(__webpack_exports__);
     readNotification: function readNotification() {
       var _this = this;
 
-      // Get Notification Id Property then mark as Read
-      axios.post('/u/notification/' + this.$props.notification_id).then(function (response) {
+      // Mark notification as Read through a post route {{route('notification.markAsRead'}}
+      axios.post(this.route).then(function (response) {
         _this.isRead = !_this.isRead;
-        console.log(response.data);
       });
     }
   }

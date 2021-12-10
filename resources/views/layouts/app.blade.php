@@ -34,334 +34,291 @@
 </head>
 <body id="body-pd">
     <div id="app">
-        {{-- Guest Container --}}
-        @guest
-            <!-- <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
-                <div class="container" >
-                    {{-- Brand --}}
-                    <a class="navbar-brand text-light" href="{{ url('/home') }}">
-                        {{ 'SOIS | Accomplishment Report' }}
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar 
-                        <ul class="navbar-nav mr-auto">
-
-                        </ul>
-
-                        <!-- Right Side Of Navbar 
-                        <ul class="navbar-nav ml-auto">
-                            <!-- Authentication Links 
-                                @if (Route::has('login'))
-                                    <li class="nav-item">
-                                        <a class="nav-link text-light" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                    </li>
-                                @endif
-                                </ul>
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                
-                            </li>
-                        </ul>
-                    </div>
+        <div class="wrapper">
+            <div class="body-overlay"></div>
+            <!-- Sidebar  -->
+            <nav class="sidebar active" id="sidebar">
+                <div class="sidebar-header">
+                    <h3><a href="{{route('home')}}"><img src="/images/pupt_logo.png" class="img-fluid"/><span>SOIS-AR</span></a></h3>
                 </div>
-            </nav> -->
-            <!-- <main class="py-4">
-                @yield('content')
-            </main>    -->
-            
-        {{-- Authenticated User Container --}}
-        @else
-            <div class="wrapper">
-                <div class="body-overlay"></div>
-                <!-- Sidebar  -->
-                <nav class="sidebar active" id="sidebar">
-                    <div class="sidebar-header">
-                        <h3><a href="{{route('home')}}"><img src="/images/pupt_logo.png" class="img-fluid"/><span>SOIS-AR</span></a></h3>
-                    </div>
-                    <ul class="list-unstyled components">
+                <ul class="list-unstyled components">
 
-                        {{-- Hidden Menu on Small Screen --}}
-                        <div class="small-screen navbar-display">
-                            <li class="dropdown dropdown-menu-end d-lg-none d-md-block d-xl-none d-sm-block">
-                                <a href="#homeSubmenu0" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
-                                <i class="material-icons">notifications</i><span>Notifications {{$notificationCount ?? 0}}</span></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        @if($notifications->count() > 0)
-                                            @foreach($notifications as $notification)
-                                                <read-notification 
-                                                    v-bind:notification_id= "{{$notification->notification_id}}" 
-                                                    :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
-                                                    title= "{{ $notification->title }}"
-                                                    description= "{{ $notification->description }}"
-                                                    link= " 
-                                                        @if($notification->type == 3)
-                                                            {{-- Student Accomplishments --}}
-                                                            {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
-                                                        @elseif($notification->type == 4)
-                                                            {{-- Accomplishment Reports --}}
-                                                            {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
-                                                        @endif
-                                                    ">
-                                                </read-notification>
-                                            
-                                                @if($loop->index == 4)
-                                                    @php break; @endphp
-                                                @endif
-                                            
-                                            @endforeach
+                    {{-- Hidden Menu on Small Screen --}}
+                    <div class="small-screen navbar-display">
+                        <li class="dropdown dropdown-menu-end d-lg-none d-md-block d-xl-none d-sm-block">
+                            <a href="#homeSubmenu0" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
+                            <i class="material-icons">notifications</i><span>Notifications {{$notificationCount ?? 0}}</span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    @if($notifications->count() > 0)
+                                        @foreach($notifications as $notification)
+                                            <read-notification 
+                                                :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                                title= "{{ $notification->title }}"
+                                                route="{{route('notification.markAsRead', ['notification_id' => $notification->notification_id])}}"
+                                                description= "{{ $notification->description }}"
+                                                link= " 
+                                                    @if($notification->type == 3)
+                                                        {{-- Student Accomplishments --}}
+                                                        {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                                    @elseif($notification->type == 4)
+                                                        {{-- Accomplishment Reports --}}
+                                                        {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                                    @endif">
+                                            </read-notification>
                                         
-                                        @else
-                                        <p class="dropdown-item">No Notifications found!</p>
-                                        @endif
-                                        <div class="row">
-                                            <div class="col text-center">
-                                                <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
-                                            </div>
+                                            @if($loop->index == 4)
+                                                @php break; @endphp
+                                            @endif
+                                        
+                                        @endforeach
+                                    
+                                    @else
+                                    <p class="dropdown-item">No Notifications found!</p>
+                                    @endif
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
                                         </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </div>
 
-                        <li>
-                            <a href="{{route('home')}}" class="dashboard">
-                                <i class="material-icons">dashboard</i><span>Dashboard</span>
+                    <li>
+                        <a href="{{route('home')}}" class="dashboard">
+                            <i class="material-icons">dashboard</i><span>Dashboard</span>
+                        </a>
+                    </li>
+                    
+                    {{-- If User is AR Officer Admin... --}}
+                    @role('AR Officer Admin')
+
+                        {{-- Event Reports --}}
+                        <li class="dropdown">
+                            <a href="#pageSubmenuOfficer1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">summarize</i><span>Event Reports</span>
                             </a>
+                            <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer1">
+                                <li><a href="{{route('event.create')}}">Create Event</a></li>
+                                <li><a href="{{route('event.index')}}">View Events</a></li>
+                            </ul>
+                        </li>
+
+                        {{-- Accomplishment Reports --}}
+                        <li class="dropdown">
+                            <a href="#pageSubmenuOfficer2" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">pending_actions</i>
+                                <span>Accomplishment Reports</span>
+                            </a>
+                            <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer2">
+                                <li><a href="{{route('accomplishmentreports.create')}}">Create AR</a></li>
+                                <li><a href="{{route('accomplishmentreports.index')}}">Submissions</a></li>
+                            </ul>
                         </li>
                         
-                        {{-- If User is AR Officer Admin... --}}
-                        @role('AR Officer Admin')
+                        {{-- Student Accomplishments --}}
+                        <li class="dropdown">
+                            <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">assignment_ind</i><span>Student's Reports'</span>
+                            </a>
 
-                            {{-- Event Reports --}}
-                            <li class="dropdown">
-                                <a href="#pageSubmenuOfficer1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">summarize</i><span>Event Reports</span>
-                                </a>
-                                <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer1">
-                                    <li><a href="{{route('event.create')}}">Create Event</a></li>
-                                    <li><a href="{{route('event.index')}}">View Events</a></li>
-                                </ul>
-                            </li>
+                            <ul class="collapse list-unstyled menu" id="pageSubmenu4">
+                                <li><a href="{{route('studentAccomplishment.index')}}">Submissions</a></li>
+                            </ul>
+                        </li>
+                    @endrole
 
-                            {{-- Accomplishment Reports --}}
-                            <li class="dropdown">
-                                <a href="#pageSubmenuOfficer2" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">pending_actions</i>
-                                    <span>Accomplishment Reports</span>
-                                </a>
-                                <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer2">
-                                    <li><a href="{{route('accomplishmentreports.create')}}">Create AR</a></li>
-                                    <li><a href="{{route('accomplishmentreports.index')}}">Submissions</a></li>
-                                </ul>
-                            </li>
-                            
-                            {{-- Student Accomplishments --}}
-                            <li class="dropdown">
-                                <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">assignment_ind</i><span>Student's Reports'</span>
-                                </a>
+                    {{-- If User is a User/Member of Organization --}}
+                    @role('User')
+                        <li class="dropdown">
+                            <a href="#pageSubmenuUser1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">stars</i><span>Accomplishments</span>
+                            </a>
+                            <ul class="collapse list-unstyled menu" id="pageSubmenuUser1">
+                                <li><a href="{{route('studentAccomplishment.index')}}">My Accomplishments</a></li>
+                                <li><a href="{{route('studentAccomplishment.create')}}">Submit an Accomplishment</a></li>
+                            </ul>
+                        </li>
+                    @endrole
 
-                                <ul class="collapse list-unstyled menu" id="pageSubmenu4">
-                                    <li><a href="{{route('studentAccomplishment.index')}}">Submissions</a></li>
-                                </ul>
-                            </li>
-                        @endrole
-
-                        {{-- If User is a User/Member of Organization --}}
-                        @role('User')
-                            <li class="dropdown">
-                                <a href="#pageSubmenuUser1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">stars</i><span>Accomplishments</span>
-                                </a>
-                                <ul class="collapse list-unstyled menu" id="pageSubmenuUser1">
-                                    <li><a href="{{route('studentAccomplishment.index')}}">My Accomplishments</a></li>
-                                    <li><a href="{{route('studentAccomplishment.create')}}">Submit an Accomplishment</a></li>
-                                </ul>
-                            </li>
-                        @endrole
-
-                        @role('AR President Admin')
-                            <li class="dropdown">
-                                <a href="#pageSubmenuPresident1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">pending_actions</i><span>Accomplishment Reports</span>
-                                </a>
-                                <ul class="collapse list-unstyled menu" id="pageSubmenuPresident1">
-                                    <li><a href="{{route('accomplishmentreports.index')}}">AR Submissions</a></li>
-                                </ul>
-                            </li>
-                        @endrole
-                            
-                        {{-- Logout Hidden Menu --}}
-                        <div class="small-screen navbar-display">
-                            <li  class="dropdown d-lg-none d-md-block d-xl-none d-sm-block">
-                                <a href="#pageSubmenuLogout1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">settings</i><span>Settings</span>
-                                </a>
-                                <ul class="collapse list-unstyled menu" id="pageSubmenuLogout1">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        </div>
-                    </ul> 
-                </nav>
-
-                {{-- Main Content --}}
-                <div id="content" class="active">
-                    {{-- Top Navbar --}}
-                    <div class="top-navbar">
-                        <nav class="navbar navbar-expand-lg">
-                            <div class="container-fluid">
-                                
-                                {{-- Sidebar Button --}}
-                                <button type="button" id="sidebarCollapse" class="d-xl-block d-lg-block d-md-mone d-none">
-                                    <span class="material-icons">view_headlines</span>
-                                </button>
-                                
-                                <a class="navbar-brand" href="{{route('home')}}"> Welcome {{ Auth::user()->full_name }}! </a>
-                                
-
-                                {{-- Notification Bell Icon --}}
-                                <button class="d-inline-block d-lg-none ml-auto more-button" 
-                                    type="button" 
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navbarNotificationBell" 
-                                    aria-controls="navbarNotificationBell" 
-                                    aria-expanded="false" 
-                                    aria-label="Toggle Notification Bell">
-                                    <span class="material-icons">more_vert</span>
-                                </button>
-
-                                <div class="collapse navbar-collapse d-lg-block d-xl-block d-sm-none d-md-none d-none justify-content-end" id="navbarNotificationBell">
-                                    <ul class="nav navbar-nav ml-auto">   
-                                        {{-- Notification Items --}}
-                                        <li class="dropdown nav-item active">
-                                            <a href="#" class="nav-link active" data-bs-toggle="dropdown">
-                                                <span class="material-icons">
-                                                    notifications
-                                                </span>
-                                                <span class="notification">
-                                                    {{$notificationCount ?? 0}}
-                                                </span>
-                                            </a>
-                                            {{-- Notification Items --}}
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    @if($notifications->count() > 0)
-                                                        @foreach($notifications as $notification)
-                                                            <read-notification 
-                                                                v-bind:notification_id= "{{$notification->notification_id}}" 
-                                                                :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
-                                                                title= "{{ $notification->title }}"
-                                                                description= "{{ $notification->description }}"
-                                                                link= " 
-                                                                    @if($notification->type == 3)
-                                                                        {{-- Student Accomplishments --}}
-                                                                        {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
-                                                                    @elseif($notification->type == 4)
-                                                                        {{-- Accomplishment Reports --}}
-                                                                        {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
-                                                                    @endif
-                                                            ">
-                                                            </read-notification>
-                                                        
-                                                            @if($loop->index == 4)
-                                                                @php break; @endphp
-                                                            @endif
-                                                        @endforeach
-                                                    
-                                                    @else
-                                                        <p class="dropdown-item">No Notifications found!</p>
-                                                    @endif
-
-                                                    <div class="row">
-                                                        <div class="col text-center">
-                                                            <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    
-                                        {{-- Profile Logout --}}
-                                        <li class="dropdown nav-item active">
-                                            <a id="navbarDropdown" class="nav-link text-light" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                                <span class="material-icons">settings</span>
-                                            </a>
-
-                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                                    onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
-                                                        <span class="material-icons">logout </span>{{ __('Logout') }}
-                                                </a>
-
-                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                    @csrf
-                                                </form>
-                                            </div>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </nav>
+                    @role('AR President Admin')
+                        <li class="dropdown">
+                            <a href="#pageSubmenuPresident1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">pending_actions</i><span>Accomplishment Reports</span>
+                            </a>
+                            <ul class="collapse list-unstyled menu" id="pageSubmenuPresident1">
+                                <li><a href="{{route('accomplishmentreports.index')}}">AR Submissions</a></li>
+                            </ul>
+                        </li>
+                    @endrole
+                        
+                    {{-- Logout Hidden Menu --}}
+                    <div class="small-screen navbar-display">
+                        <li  class="dropdown d-lg-none d-md-block d-xl-none d-sm-block">
+                            <a href="#pageSubmenuLogout1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">settings</i><span>Settings</span>
+                            </a>
+                            <ul class="collapse list-unstyled menu" id="pageSubmenuLogout1">
+                                <li>
+                                    <a href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                     </div>
+                </ul> 
+            </nav>
 
-                    <!-- Main Content -->
-                    <div class="main-content">			
-                        <main class="py-4">
-                            @yield('content')
-                        </main> 
-                    </div>
-
-                    <!-- Footer -->
-                    <footer class="footer">
+            {{-- Main Content --}}
+            <div id="content" class="active">
+                {{-- Top Navbar --}}
+                <div class="top-navbar">
+                    <nav class="navbar navbar-expand-lg">
                         <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <nav class="d-flex">
-                                        <ul class="m-0 p-0">
+                            
+                            {{-- Sidebar Button --}}
+                            <button type="button" id="sidebarCollapse" class="d-xl-block d-lg-block d-md-mone d-none">
+                                <span class="material-icons">view_headlines</span>
+                            </button>
+                            
+                            <a class="navbar-brand" href="{{route('home')}}"> Welcome {{ Auth::user()->full_name }}! </a>
+                            
+
+                            {{-- Notification Bell Icon --}}
+                            <button class="d-inline-block d-lg-none ml-auto more-button" 
+                                type="button" 
+                                data-bs-toggle="collapse"
+                                data-bs-target="#navbarNotificationBell" 
+                                aria-controls="navbarNotificationBell" 
+                                aria-expanded="false" 
+                                aria-label="Toggle Notification Bell">
+                                <span class="material-icons">more_vert</span>
+                            </button>
+
+                            <div class="collapse navbar-collapse d-lg-block d-xl-block d-sm-none d-md-none d-none justify-content-end" id="navbarNotificationBell">
+                                <ul class="nav navbar-nav ml-auto">   
+                                    {{-- Notification Items --}}
+                                    <li class="dropdown nav-item active">
+                                        <a href="#" class="nav-link active" data-bs-toggle="dropdown">
+                                            <span class="material-icons">
+                                                notifications
+                                            </span>
+                                            <span class="notification">
+                                                {{$notificationCount ?? 0}}
+                                            </span>
+                                        </a>
+                                        {{-- Notification Items --}}
+                                        <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <a href="{{route('home')}}">Home </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">About Us</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"> How to</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"> Help</a>
+                                                @if($notifications->count() > 0)
+                                                    @foreach($notifications as $notification)
+                                                        <read-notification 
+                                                            :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
+                                                            title= "{{ $notification->title }}"
+                                                            route="{{route('notification.markAsRead', ['notification_id' => $notification->notification_id])}}"
+                                                            description= "{{ $notification->description }}"
+                                                            link= " 
+                                                                @if($notification->type == 3)
+                                                                    {{-- Student Accomplishments --}}
+                                                                    {{route('studentAccomplishment.show', ['accomplishmentUUID' => $notification->link])}}
+                                                                @elseif($notification->type == 4)
+                                                                    {{-- Accomplishment Reports --}}
+                                                                    {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                                                @endif">
+                                                        </read-notification>
+                                                    
+                                                        @if($loop->index == 4)
+                                                            @php break; @endphp
+                                                        @endif
+                                                    @endforeach
+                                                
+                                                @else
+                                                    <p class="dropdown-item">No Notifications found!</p>
+                                                @endif
+
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <a class="dropdown-item" href="{{route('notifications.show')}}">See All Notifications</a>  
+                                                    </div>
+                                                </div>
                                             </li>
                                         </ul>
-                                    </nav>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class="copyright d-flex justify-content-end">
-                                        <a href="#">&copy 2021 SOIS - Accomplishment Report Module</a>
-                                    </p>
-                                </div>
+                                    </li>
+                                
+                                    {{-- Profile Logout --}}
+                                    <li class="dropdown nav-item active">
+                                        <a id="navbarDropdown" class="nav-link text-light" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                            <span class="material-icons">settings</span>
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                                document.getElementById('logout-form').submit();">
+                                                    <span class="material-icons">logout </span>{{ __('Logout') }}
+                                            </a>
+
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </div>
+                                    </li>
+
+                                </ul>
                             </div>
                         </div>
-                    </footer>
-
+                    </nav>
                 </div>
+
+                <!-- Main Content -->
+                <div class="main-content">			
+                    <main class="py-4">
+                        @yield('content')
+                    </main> 
+                </div>
+
+                <!-- Footer -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <nav class="d-flex">
+                                    <ul class="m-0 p-0">
+                                        <li>
+                                            <a href="{{route('home')}}">Home </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">About Us</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"> How to</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"> Help</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="copyright d-flex justify-content-end">
+                                    <a href="#">&copy 2021 SOIS - Accomplishment Report Module</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
             </div>
-        @endguest     
+        </div>
+   
     </div>
 
     {{-- Javascript Imports --}}

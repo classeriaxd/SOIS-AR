@@ -20,12 +20,11 @@
         },
 
         props: {
-            notification_id: Number,
             read: Boolean,
             title: String,
             description: String,
             link: String,
-
+            route: String,
         },
 
         data: function(){
@@ -48,11 +47,10 @@
         methods:{
             readNotification()
             {
-                // Get Notification Id Property then mark as Read
-                axios.post('/u/notification/' + this.$props.notification_id)
+                // Mark notification as Read through a post route {{route('notification.markAsRead'}}
+                axios.post(this.route)
                     .then(response => {
                         this.isRead = ! this.isRead;
-                        console.log(response.data);
                     });
             }
         },
