@@ -39,9 +39,6 @@
                             <a href="{{route('admin.maintenance.roles.index')}}" class="text-decoration-none">Roles</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Users
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
                             {{$user->full_name}}
                         </li>
                     </ol>
