@@ -96,6 +96,13 @@
                         Tabular AR Tables
                     </a>
                 </div>
+                <div class="flex-row text-center my-1">
+                    <a href="{{ route('admin.maintenance.roles.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Roles
+                    </a>
+                </div>
                 
             </div>
         </div>

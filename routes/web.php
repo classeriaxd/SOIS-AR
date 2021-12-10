@@ -45,6 +45,34 @@ Route::group(['middleware' => 'auth'], function () {
                 'prefix' => '/maintenance',], 
             function () {
 
+            // Role Maintenance 
+            Route::group([
+                    'as' => 'roles.',
+                    'prefix' => '/roles',], 
+                function () {
+                    Route::get('', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'index'])->name('index');
+                    Route::get('/{roleName}', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'roleIndex'])->name('roleIndex')->where(['role' => '^[a-zA-Z0-9_-]{2,255}$']);
+            });
+            
+            // User Maintenance
+            Route::group([
+                    'as' => 'users.',
+                    'prefix' => '/users/{user_id}',
+                    'where' => ['user_id' => '^([1-9][0-9]*)$'],], 
+                function () {
+                    Route::get('', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userShow'])->name('show');
+
+                    // Permission Attach and Detach
+                    Route::post('/detachPermission/{permission_id}', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'detachPermission'])->where(['permission_id' => '^([1-9][0-9]*)$'])->name('detachPermission');
+                    Route::post('/attachPermission/{permission_id}', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'attachPermission'])->where(['permission_id' => '^([1-9][0-9]*)$'])->name('attachPermission');
+
+                    // Role Attach and Detach
+                    Route::get('/roles', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userRoleIndex'])->name('roles.index');
+                    Route::post('/roles/attachRole', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userRoleAttach'])->name('roles.attach');
+                    Route::post('/roles/detachRole', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userRoleDetach'])->name('roles.detach');
+
+            });
+
             // Event Category Maintenance
             Route::resource('eventCategories', App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
             

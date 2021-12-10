@@ -58,6 +58,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id');
     }
+    public function rolesWithOrganization()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id')
+            ->join('organizations as role_organization', 'role_user.organization_id', 'role_organization.organization_id')
+            ->select('roles.role_id', 'roles.role','role_organization.organization_id', 'role_organization.organization_acronym');
+    }
 
     public function permissions()
     {
