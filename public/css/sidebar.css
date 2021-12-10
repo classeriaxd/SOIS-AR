@@ -20,7 +20,7 @@
 
 
 #sidebar::-webkit-scrollbar{
-	width:5px;
+	width:7px;
 	border-radius:10px;
 	background-color:rgb(197, 194, 194);
 	display:none;

@@ -5,21 +5,17 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             {{-- Title and Breadcrumbs --}}
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Title --}}
-                    <h2 class="display-7 text-left">Dashboard</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    {{-- Breadcrumbs --}}
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-end">
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Home
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+            <div class="d-flex justify-content-between align-items-center">
+                {{-- Title --}}
+                <h2 class="display-7 text-left text-break">Dashboard</h2>
+                {{-- Breadcrumbs --}}
+                <nav aria-label="breadcrumb align-items-center">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Home
+                        </li>
+                    </ol>
+                </nav>
             </div>
 
             {{-- Accomplishment Report President --}}
@@ -294,7 +290,7 @@
                             </div>
                         </a>
                     </div>
-
+                    
                     {{-- Accomplishment Report Count Card --}}
                     <div class="col-lg-3 col-md-6 col-sm-6">
                         <a href="{{ route('accomplishmentreports.index') }}">
@@ -465,7 +461,7 @@
                     </div>
                 </div>
             @endrole
-
+            
             {{-- Organization Member / User --}}
             @role('User')
                 <div class="row">
@@ -580,7 +576,6 @@
                     </div>
                 </div>
             @endrole
-        
     </div>
 </div>
 @endsection

@@ -40,6 +40,7 @@ class HomeController extends Controller
         $organizationCount = Organization::count();
         $accomplishmentReportCount = AccomplishmentReport::count();
         $loginAlert = $this->showLoginAlert();
+        $loadHomeCSS = true;
         
         return view('admin.home', 
             compact(
@@ -47,6 +48,7 @@ class HomeController extends Controller
                 'eventCount',
                 'organizationCount',
                 'accomplishmentReportCount',
+                'loadHomeCSS',
             ));
         
     }

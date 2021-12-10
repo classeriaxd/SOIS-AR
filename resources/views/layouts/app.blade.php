@@ -36,7 +36,7 @@
     <div id="app">
         {{-- Guest Container --}}
         @guest
-            <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
+            <!-- <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-maroon">
                 <div class="container" >
                     {{-- Brand --}}
                     <a class="navbar-brand text-light" href="{{ url('/home') }}">
@@ -47,14 +47,14 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
+                        <!-- Left Side Of Navbar 
                         <ul class="navbar-nav mr-auto">
 
                         </ul>
 
-                        <!-- Right Side Of Navbar -->
+                        <!-- Right Side Of Navbar 
                         <ul class="navbar-nav ml-auto">
-                            <!-- Authentication Links -->
+                            <!-- Authentication Links 
                                 @if (Route::has('login'))
                                     <li class="nav-item">
                                         <a class="nav-link text-light" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -68,13 +68,11 @@
                         </ul>
                     </div>
                 </div>
-            </nav>
-
-            {{-- Main Content --}}
-            <main class="py-4">
+            </nav> -->
+            <!-- <main class="py-4">
                 @yield('content')
-            </main>
-
+            </main>    -->
+            
         {{-- Authenticated User Container --}}
         @else
             <div class="wrapper">
@@ -165,7 +163,7 @@
                             {{-- Student Accomplishments --}}
                             <li class="dropdown">
                                 <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="material-icons">people</i><span>Students/Members</span>
+                                    <i class="material-icons">assignment_ind</i><span>Student's Reports'</span>
                                 </a>
 
                                 <ul class="collapse list-unstyled menu" id="pageSubmenu4">
