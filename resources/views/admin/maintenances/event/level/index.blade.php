@@ -50,40 +50,82 @@
                 </a>
             </div>
             
-            <div class="card w-100">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Level</th>
-                        <th>Helper</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($levels as $level)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $level->level }}</td>
-                            <td style="width: 50%;">{{ $level->helper }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.levels.show', ['level_id' => $level->level_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.levels.edit', ['level_id' => $level->level_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>    
+            {{-- Levels Table --}}
+            @if($levels->isNotEmpty())
+                <div class="card w-100">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Level</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($levels as $level)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $level->level }}</td>
+                                <td style="width: 50%;">{{ $level->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.levels.show', ['level_id' => $level->level_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.levels.edit', ['level_id' => $level->level_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
 
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Levels found. :(</p>
+            @endif
+            
+
+            {{-- Deleted Levels Table --}}
+            @if($deletedLevels->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Levels</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Level</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedLevels as $level)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $level->level }}</td>
+                                <td style="width: 50%;">{{ $level->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.levels.show', ['level_id' => $level->level_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
 
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"

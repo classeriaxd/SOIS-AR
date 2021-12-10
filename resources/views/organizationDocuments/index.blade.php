@@ -125,7 +125,7 @@
 
         <span>or</span>
 
-        <a href="{{route('maintenances.organizationDocumentTypes.create', ['organizationSlug' => $organization->organization_slug])}}"
+        <a href="{{route('maintenances.organizationDocumentTypes.index', ['organizationSlug' => $organization->organization_slug])}}"
             class="btn btn-primary text-white"
             role="button">
            <i class="fas fa-th"></i> Go to Organization Document Types

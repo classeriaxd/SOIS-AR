@@ -44,7 +44,7 @@
                         data-bs-container="body"
                         data-bs-trigger="hover focus"
                         title="Posters" 
-                        data-bs-content="Posters that are made exclusively for this Event. Landscape Orientation is a must."
+                        data-bs-content="Posters that are made exclusively for this Event. Portrait Orientation is a must."
                         data-bs-placement="right">
                         <i class="far fa-question-circle"></i>
                     </a>
@@ -110,33 +110,7 @@
         </a>
     </div>
 </div>
-{{-- 
-                <div class="form-group row">
-                    <label for="poster_caption" class="col-md-4 col-form-label">Poster Caption</label>
-                    <input id="poster_caption" 
-                    type="text" 
-                    class="form-control @error('poster_caption') is-invalid @enderror" 
-                    name="poster_caption" 
-                    value="{{ old('poster_caption') }}" autocomplete="poster_caption">
-                    @error('poster_caption')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div> 
-                <div class="form-group row">
-                    <label for="evidence_caption" class="col-md-4 col-form-label">Caption</label>
-                    <input id="evidence_caption" 
-                    type="text" 
-                    class="form-control @error('evidence_caption') is-invalid @enderror" 
-                    name="evidence_caption" 
-                    value="{{ old('evidence_caption') }}" autocomplete="evidence_caption">
-                    @error('evidence_caption')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>--}}
+
 @endsection
 
 

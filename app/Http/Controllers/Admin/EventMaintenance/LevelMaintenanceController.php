@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\Level\{
     LevelStoreService,
     LevelUpdateService,
     LevelDeleteService,
+    LevelRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,8 @@ class LevelMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $levels = Level::all();
-        return view($this->viewDirectory . 'index', compact('levels',));
+        $deletedLevels = Level::onlyTrashed()->get();
+        return view($this->viewDirectory . 'index', compact('levels','deletedLevels'));
     }
     
     public function create()
@@ -96,6 +98,18 @@ class LevelMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($level_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $level = $this->checkIfLevelExists($level_id);
+
+        $message = (new LevelRestoreService())->restore($level);
+
+        return redirect()->action(
+            [LevelMaintenanceController::class, 'index'])
+            ->with($message);
+    }
+
     /**
      * @param Integer $level_id
      * Function to check if a level id exists, sends 404 if not
@@ -103,7 +117,7 @@ class LevelMaintenanceController extends Controller
      */ 
     private function checkIfLevelExists($level_id)
     {
-        abort_if(! $level = Level::where('level_id', $level_id)->first(), 404);
+        abort_if(! $level = Level::withTrashed()->where('level_id', $level_id)->first(), 404);
 
         return $level;
     }

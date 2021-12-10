@@ -34,22 +34,33 @@
                 <div class="card w-50 text-center">
                     <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Document Type: {{ $documentType->document_type }}</h5>
                     <div class="card-body">
+                        @if($documentType->deleted_at !== NULL)
+                            <p class="card-text"><span class="badge rounded-pill bg-danger text-white">Status: DELETED</span></p>
+                        @endif
                         <p class="card-text">{{ $documentType->helper }}</p>
                         <hr class="my-2">
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
-                            <a href="{{ route('admin.maintenance.eventDocumentTypes.edit', ['document_type_id' => $documentType->event_document_type_id]) }}"
-                                class="btn btn-primary text-white mx-1"
-                                role="button">
-                                    Edit Document Type
-                            </a>
-                            <a href="#"
-                                class="btn btn-danger text-white mx-1"
-                                role="button"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteEventDocumentTypeReminderModal">
-                                    Delete Document Type
-                            </a>
+                            @if($documentType->deleted_at !== NULL)
+                                <form action="{{ route('admin.maintenance.eventDocumentTypes.restore', ['document_type_id' => $documentType->event_document_type_id]) }}" enctype="multipart/form-data" method="POST" id="eventDocumentTypeRestoreForm">
+                                    @csrf
+                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Document Type</button>
+                                </form>  
+                                </a>
+                            @else
+                                <a href="{{ route('admin.maintenance.eventDocumentTypes.edit', ['document_type_id' => $documentType->event_document_type_id]) }}"
+                                    class="btn btn-primary text-white mx-1"
+                                    role="button">
+                                        Edit Document Type
+                                </a>
+                                <a href="#"
+                                    class="btn btn-danger text-white mx-1"
+                                    role="button"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteEventDocumentTypeReminderModal">
+                                        Delete Document Type
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

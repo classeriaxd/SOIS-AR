@@ -275,8 +275,8 @@ class AccomplishmentReportsController extends Controller
                 {
                     $rangeTitle = 'Custom';
                     $data = request()->validate([
-                        'custom_start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
-                        'custom_end_date' => 'required|date|date_format:Y-m-d|after_or_equal:custom_start_date|before_or_equal:now|after:1992-01-01',
+                        'custom_start_date' => 'required|date|date_format:Y-m-d|after:1992-01-01',
+                        'custom_end_date' => 'required|date|date_format:Y-m-d|after_or_equal:custom_start_date|after:1992-01-01',
                         ]);
                     $start_date = $data['custom_start_date'];
                     $end_date = $data['custom_end_date'];

@@ -174,6 +174,23 @@ class UserSeeder extends Seeder
                 'updated_at' => $currentTime,
                 'status' => $status,
             ],
+            [
+                // 10 Adviser
+                'course_id' => NULL,
+                'gender_id' => NULL,
+                'email' => 'adviser@email.com', 
+                'password' => Hash::make('adviser@email.com'),
+                'student_number' => NULL, 
+                'first_name' => 'Adviser',
+                'middle_name' => 'I',
+                'last_name' => 'Am',
+                'date_of_birth' => '2001-01-01',
+                'mobile_number' => '+639667344637',
+                'address' => 'Taguig',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => $status,
+            ],
             
             
         ];

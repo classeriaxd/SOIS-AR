@@ -34,22 +34,35 @@
                 <div class="card w-50 text-center">
                     <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Category: {{ $eventCategory->category }}</h5>
                     <div class="card-body">
+                        @if($eventCategory->deleted_at !== NULL)
+                            <p class="card-text"><span class="badge rounded-pill bg-danger text-white">Status: DELETED</span></p>
+                        @endif
                         <p class="card-text">{{ $eventCategory->helper }}</p>
                         <hr class="my-2">
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
-                            <a href="{{ route('admin.maintenance.eventCategories.edit', ['category_id' => $eventCategory->event_category_id]) }}"
-                                class="btn btn-primary text-white mx-1"
-                                role="button">
-                                    Edit Category
-                            </a>
-                            <a href="#"
-                                class="btn btn-danger text-white mx-1"
-                                role="button"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteEventCategoryReminderModal">
-                                    Delete Category
-                            </a>
+                            @if($eventCategory->deleted_at !== NULL)
+                                <form action="{{ route('admin.maintenance.eventCategories.restore', ['category_id' => $eventCategory->event_category_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm">
+                                    @csrf
+
+                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Category</button>
+                                </form>  
+                                </a>
+                            @else
+                                <a href="{{ route('admin.maintenance.eventCategories.edit', ['category_id' => $eventCategory->event_category_id]) }}"
+                                    class="btn btn-primary text-white mx-1"
+                                    role="button">
+                                        Edit Category
+                                </a>
+
+                                <a href="#"
+                                    class="btn btn-danger text-white mx-1"
+                                    role="button"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteEventCategoryReminderModal">
+                                        Delete Category
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

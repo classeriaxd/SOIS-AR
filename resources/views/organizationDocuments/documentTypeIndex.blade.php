@@ -25,7 +25,7 @@
             {{-- Title and Breadcrumbs --}}
             <div class="d-flex justify-content-between align-items-center">
                 {{-- Title --}}
-                <h2 class="display-7 text-left text-break">{{$organization->organization_acronym}} Documents</h2>
+                <h2 class="display-7 text-left text-break">{{$organization->organization_acronym}} {{ $organizationDocumentType->type }} Documents</h2>
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb align-items-center">
                     <ol class="breadcrumb justify-content-center">
@@ -56,7 +56,7 @@
                     </div>
 
                     <table class="table table-striped table-hover table-bordered border border-dark" id="documentTable">
-                        @if($organizationDocuments->total() > 0)
+                        @if($organizationDocuments->isNotEmpty())
                             <thead class="text-white fw-bold bg-maroon">
                                 <th class="text-center" scope="col">#</th>
                                 <th class="text-center" scope="col">Title</th>
@@ -104,15 +104,69 @@
                     </table>
 
                     {{-- Organization Documents Table Pager --}}
-                    @if($organizationDocuments->total() > 0)
-                        <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center">
+                        @if($deletedOrganizationDocuments->isNotEmpty())
+                            {{ 
+                                $organizationDocuments->appends([
+                                    'documents' => $organizationDocuments->currentPage(),
+                                    'deletedDocuments' => $deletedOrganizationDocuments->currentPage(),
+                                ])->links() 
+                            }}
+                        @else
                             {{ $organizationDocuments->links() }}
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                     
                 </div>
             </div>
-                    
+            
+            @if($deletedOrganizationDocuments->isNotEmpty())
+                <div class="card w-100 mt-5 mb-2">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted {{ $organizationDocumentType->type }}</h5>
+
+                    <table class="table table-striped table-hover table-bordered border border-dark" id="deletedDocumentTable">
+                        <thead class="text-white fw-bold bg-maroon">
+                            <th class="text-center" scope="col">#</th>
+                            <th class="text-center" scope="col">Title</th>
+                            <th class="text-center" scope="col">Uploaded on</th>
+                            <th class="text-center" scope="col" data-sortable="false">Options</th>
+                        </thead>
+                        <tbody>
+                            @php $i = 1; @endphp
+                            @foreach($deletedOrganizationDocuments as $document)
+                                <tr>
+                                    <td scope="row" class="text-center">{{ $i }}</td>
+                                    <td>{{ $document->title }}</td>
+                                    <td>{{date_format(date_create($document->created_at), 'F d, Y')}}</td>
+                                    <td class="text-center">
+                                        <form action="{{route('organizationDocuments.restore',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug, 'organizationDocumentID' => $document->organization_document_id])}}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success text-white">
+                                                <i class="fas fa-trash-restore"></i> Restore Document
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @php $i += 1; @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    {{-- Deleted Organization Document Pager --}}
+                    <div class="d-flex justify-content-center">
+                        @if($organizationDocuments->isNotEmpty())
+                            {{ 
+                                $deletedOrganizationDocuments->appends([
+                                    'documents' => $organizationDocuments->currentPage(),
+                                    'deletedDocuments' => $deletedOrganizationDocuments->currentPage(),
+                                ])->links() 
+                            }}
+                        @else
+                            {{ $deletedOrganizationDocuments->links() }}
+                        @endif
+                    </div>
+                </div>
+            @endif  
         </div>
     </div>
 
@@ -149,6 +203,14 @@
         // https://github.com/fiduswriter/Simple-DataTables
         window.addEventListener('DOMContentLoaded', event => {
             const dataTable = new simpleDatatables.DataTable("#documentTable", {
+                perPage: 30,
+                searchable: true,
+                labels: {
+                    placeholder: "Search Documents...",
+                    noRows: "No documents to display in this page or try in the next page.",
+                },
+            });
+            const dataTable2 = new simpleDatatables.DataTable("#deletedDocumentTable", {
                 perPage: 30,
                 searchable: true,
                 labels: {

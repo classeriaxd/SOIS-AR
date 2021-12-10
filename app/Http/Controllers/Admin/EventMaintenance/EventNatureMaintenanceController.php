@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\EventNature\{
     EventNatureStoreService,
     EventNatureUpdateService,
     EventNatureDeleteService,
+    EventNatureRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,8 @@ class EventNatureMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventNatures = EventNature::all();
-        return view($this->viewDirectory . 'index', compact('eventNatures',));
+        $deletedEventNatures = EventNature::onlyTrashed()->get();
+        return view($this->viewDirectory . 'index', compact('eventNatures','deletedEventNatures'));
     }
     
     public function create()
@@ -96,6 +98,19 @@ class EventNatureMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($nature_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $eventNature = $this->checkIfNatureExists($nature_id);
+
+        $message = (new EventNatureRestoreService())->restore($eventNature);
+
+        return redirect()->action(
+            [EventNatureMaintenanceController::class, 'index'])
+            ->with($message);
+
+    }
+
     /**
      * @param Integer $nature_id
      * Function to check if a nature id exists, sends 404 if not
@@ -103,7 +118,7 @@ class EventNatureMaintenanceController extends Controller
      */ 
     private function checkIfNatureExists($nature_id)
     {
-        abort_if(! $eventNature = EventNature::where('event_nature_id', $nature_id)->first(), 404);
+        abort_if(! $eventNature = EventNature::withTrashed()->where('event_nature_id', $nature_id)->first(), 404);
 
         return $eventNature;
     }

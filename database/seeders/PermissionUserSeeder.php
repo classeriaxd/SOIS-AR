@@ -69,6 +69,7 @@ class PermissionUserSeeder extends Seeder
                 ['user_id' => 1, 'permission_id' => 34,],
                 ['user_id' => 1, 'permission_id' => 35,],
                 ['user_id' => 1, 'permission_id' => 36,],
+                ['user_id' => 1, 'permission_id' => 37,],
 
                 // AVP AR Officer (2 role Officer + Member) Initial Permissions
                 ['user_id' => 9, 'permission_id' => 1,],

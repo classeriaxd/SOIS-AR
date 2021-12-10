@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\{
@@ -27,6 +26,7 @@ use App\Services\EventServices\{
     EventStoreService,
     EventUpdateService,
     EventDeleteService,
+    EventRestoreService,
     EventGetOrganizationIDService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
@@ -34,6 +34,7 @@ use App\Services\PermissionServices\PermissionCheckingService;
 class EventsController extends Controller
 {
     protected $permissionChecker;
+
     /**
      * Create a new controller instance.
      * @return void
@@ -45,25 +46,35 @@ class EventsController extends Controller
     }
 
     /**
-     * Shows the Index Page of all Events
+     * Function to show the Index Page of all Events
      * @return View
      */
     public function index()
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event'), 403);
-        $orgAcronym = Organization::where('organization_id', (new EventGetOrganizationIDService)->getOrganizationID())->value('organization_acronym');
+        $organizationID = (new EventGetOrganizationIDService)->getOrganizationID();
+        $orgAcronym = Organization::where('organization_id', $organizationID)->value('organization_acronym');
         $events = Event::with('eventRole',
                 'eventCategory',
                 'eventLevel',)
-            ->where('organization_id', (new EventGetOrganizationIDService)->getOrganizationID(),)
+            ->where('organization_id', $organizationID,)
             ->orderByRaw('MONTH(`start_date`) ASC, `start_date` ASC')
-            ->paginate(30);
-        return view('events.index', compact('events', 'orgAcronym'));
+            ->paginate(30, ['*'], 'events');
+
+        $deletedEvents = Event::onlyTrashed()
+            ->with('eventRole',
+                'eventCategory',
+                'eventLevel',)
+            ->where('organization_id', $organizationID,)
+            ->orderByRaw('MONTH(`start_date`) ASC, `start_date` ASC')
+            ->paginate(30, ['*'], 'deletedEvents');
+
+        return view('events.index', compact('events', 'orgAcronym', 'deletedEvents'));
     }
 
     /**
      * @param String $event_slug, Boolean $newEvent
-     * Shows the Specific Event Details
+     * Function to shows the Specific Event
      * @return View
      */
     public function show($event_slug, $newEvent = false)
@@ -109,7 +120,6 @@ class EventsController extends Controller
             'eventClassifications',
             'levels', 
             'fundSources'));
-        
     }
 
     /**
@@ -138,7 +148,7 @@ class EventsController extends Controller
 
     /**
      * @param String $event_slug
-     * Function to Open Event Creation Page
+     * Function to soft delete an Event
      * @return View 
      */ 
     public function destroy($event_slug)
@@ -178,7 +188,7 @@ class EventsController extends Controller
 
     /**
      * @param Request $request
-     * Function to Store Event
+     * Function to Store an Event
      * @return Redirect
      */
     public function store(EventStoreRequest $request)
@@ -195,6 +205,23 @@ class EventsController extends Controller
         else
             return redirect()->action(
                 [EventsController::class, 'show'], ['event_slug' => $returnArray['eventSlug'], 'newEvent' => true])
+                ->with($message);
+    }
+
+    /**
+     * @param String $event_slug
+     * Function to restore soft deleted Event
+     * @return Redirect
+     */
+    public function restore($event_slug)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Event'), 403);
+        abort_if(! Event::onlyTrashed()->where('slug', $event_slug)->exists(), 404);
+
+        $message = (new EventRestoreService())->restore($event_slug);
+
+        return redirect()->action(
+            [EventsController::class, 'index'])
                 ->with($message);
     }
 

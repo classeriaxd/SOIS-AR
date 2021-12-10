@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\FundSource\{
     FundSourceStoreService,
     FundSourceUpdateService,
     FundSourceDeleteService,
+    FundSourceRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,8 @@ class FundSourceMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $fundSources = FundSource::all();
-        return view($this->viewDirectory . 'index', compact('fundSources',));
+        $deletedFundSources = FundSource::onlyTrashed()->get();
+        return view($this->viewDirectory . 'index', compact('fundSources','deletedFundSources'));
     }
     
     public function create()
@@ -96,6 +98,18 @@ class FundSourceMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($fund_source_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $fundSource = $this->checkIfFundSourceExists($fund_source_id);
+
+        $message = (new FundSourceRestoreService())->restore($fundSource);
+
+        return redirect()->action(
+            [FundSourceMaintenanceController::class, 'index'])
+            ->with($message);
+    }
+
     /**
      * @param Integer $fund_source_id
      * Function to check if a fund source id exists, sends 404 if not
@@ -103,7 +117,7 @@ class FundSourceMaintenanceController extends Controller
      */ 
     private function checkIfFundSourceExists($fund_source_id)
     {
-        abort_if(! $fundSource = FundSource::where('fund_source_id', $fund_source_id)->first(), 404);
+        abort_if(! $fundSource = FundSource::withTrashed()->where('fund_source_id', $fund_source_id)->first(), 404);
 
         return $fundSource;
     }

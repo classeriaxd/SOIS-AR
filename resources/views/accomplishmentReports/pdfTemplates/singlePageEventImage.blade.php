@@ -26,12 +26,28 @@
 
                         <div class="event-img-block">
                             @if($eventImage['image_type'] == 0)
-                                <div class="img-block">
-                                    <img class="img-poster" src="{{ public_path('/storage/'. $eventImage['image']) }}">
+                                <div class="img-block-poster">
+                                    <img class="img-poster" src="{{ public_path('/storage/'. $eventImage['image']) }}"
+                                    style="
+                                        min-height: auto;
+                                        min-width: auto;
+                                        max-height: 676px;
+                                        max-width: 480px;
+                                        border: 1px solid black;
+                                    ">
+                                    {{-- Inline CSS cause idk why pdf_css.css doesnt apply :) --}}
                                 </div>
                             @elseif($eventImage['image_type'] == 1)
-                                <div class="img-block">
-                                    <img class="img-evidence" src="{{ public_path('/storage/'. $eventImage['image']) }}">
+                                <div class="img-block-evidence">
+                                    <img class="img-evidence" src="{{ public_path('/storage/'. $eventImage['image']) }}"
+                                    style="
+                                        min-height: auto;
+                                        min-width: auto;
+                                        max-height: 480px;
+                                        max-width: 676px;
+                                        border: 1px solid black;
+                                    ">
+                                    {{-- Inline CSS cause idk why pdf_css.css doesnt apply :) --}}
                                 </div>
                             @endif
                             

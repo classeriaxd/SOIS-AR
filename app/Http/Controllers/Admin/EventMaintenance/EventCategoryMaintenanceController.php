@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\EventCategory\{
     EventCategoryStoreService,
     EventCategoryUpdateService,
     EventCategoryDeleteService,
+    EventCategoryRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,9 @@ class EventCategoryMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $eventCategories = EventCategory::all();
-        return view($this->viewDirectory . 'index', compact('eventCategories',));
+        $deletedEventCategories = EventCategory::onlyTrashed()->get();
+        
+        return view($this->viewDirectory . 'index', compact('eventCategories','deletedEventCategories'));
     }
     
     public function create()
@@ -96,6 +99,19 @@ class EventCategoryMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($category_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $eventCategory = $this->checkIfCategoryExists($category_id);
+
+        $message = (new EventCategoryRestoreService())->restore($eventCategory);
+
+        return redirect()->action(
+            [EventCategoryMaintenanceController::class, 'index'])
+            ->with($message);
+
+    }
+
     /**
      * @param Integer $category_id
      * Function to check if a category id exists, sends 404 if not
@@ -103,7 +119,7 @@ class EventCategoryMaintenanceController extends Controller
      */ 
     private function checkIfCategoryExists($category_id)
     {
-        abort_if(! $eventCategory = EventCategory::where('event_category_id', $category_id)->first(), 404);
+        abort_if(! $eventCategory = EventCategory::withTrashed()->where('event_category_id', $category_id)->first(), 404);
 
         return $eventCategory;
     }

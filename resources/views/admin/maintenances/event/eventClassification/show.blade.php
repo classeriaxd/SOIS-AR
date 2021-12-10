@@ -34,22 +34,34 @@
                 <div class="card w-50 text-center">
                     <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Classification: {{ $eventClassification->classification }}</h5>
                     <div class="card-body">
+                        @if($eventClassification->deleted_at !== NULL)
+                            <p class="card-text"><span class="badge rounded-pill bg-danger text-white">Status: DELETED</span></p>
+                        @endif
                         <p class="card-text">{{ $eventClassification->helper }}</p>
                         <hr class="my-2">
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
-                            <a href="{{ route('admin.maintenance.eventClassifications.edit', ['classification_id' => $eventClassification->classification]) }}"
-                                class="btn btn-primary text-white mx-1"
-                                role="button">
-                                    Edit Classification
-                            </a>
-                            <a href="#"
-                                class="btn btn-danger text-white mx-1"
-                                role="button"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteEventClassificationReminderModal">
-                                    Delete Classification
-                            </a>
+                            @if($eventClassification->deleted_at !== NULL)
+                                <form action="{{ route('admin.maintenance.eventClassifications.restore', ['classification_id' => $eventClassification->event_classification_id]) }}" enctype="multipart/form-data" method="POST" id="eventClassificationRestoreForm">
+                                    @csrf
+
+                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Category</button>
+                                </form>  
+                                </a>
+                            @else
+                                <a href="{{ route('admin.maintenance.eventClassifications.edit', ['classification_id' => $eventClassification->classification]) }}"
+                                    class="btn btn-primary text-white mx-1"
+                                    role="button">
+                                        Edit Classification
+                                </a>
+                                <a href="#"
+                                    class="btn btn-danger text-white mx-1"
+                                    role="button"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteEventClassificationReminderModal">
+                                        Delete Classification
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

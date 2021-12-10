@@ -50,47 +50,94 @@
                 </a>
             </div>
 
-            <div class="card w-100">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Category</th>
-                        <th>Helper</th>
-                        <th>Color Scheme</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($eventCategories as $category)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $category->category }}</td>
-                            <td style="width: 50%;">{{ $category->helper }}</td>
-                            <td class="text-center align-middle">
-                                <span class="badge rounded-pill fs-6"
-                                    style="background-color: {{$category->background_color}}; color: {{$category->text_color}};" >
-                                    {{ $category->category }}
-                            </span>
-                            </td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.eventCategories.show', ['category_id' => $category->event_category_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.eventCategories.edit', ['category_id' => $category->event_category_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            
+            {{-- Categories Table --}}
+            @if($eventCategories->isNotEmpty())
+                <div class="card w-100">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Helper</th>
+                            <th>Color Scheme</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($eventCategories as $category)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $category->category }}</td>
+                                <td style="width: 50%;">{{ $category->helper }}</td>
+                                <td class="text-center align-middle">
+                                    <span class="badge rounded-pill fs-6"
+                                        style="background-color: {{$category->background_color}}; color: {{$category->text_color}};" >
+                                        {{ $category->category }}
+                                </span>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.eventCategories.show', ['category_id' => $category->event_category_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventCategories.edit', ['category_id' => $category->event_category_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Categories found. :(</p>
+            @endif
+
+            {{-- Deleted Categories Table --}}
+            @if($deletedEventCategories->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Event Categories</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Helper</th>
+                            <th>Color Scheme</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedEventCategories as $category)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $category->category }}</td>
+                                <td style="width: 50%;">{{ $category->helper }}</td>
+                                <td class="text-center align-middle">
+                                    <span class="badge rounded-pill fs-6"
+                                        style="background-color: {{$category->background_color}}; color: {{$category->text_color}};" >
+                                        {{ $category->category }}
+                                </span>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventCategories.show', ['category_id' => $category->event_category_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"

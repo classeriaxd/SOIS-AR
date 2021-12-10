@@ -12,6 +12,7 @@ use App\Services\OrganizationDocumentServices\OrganizationDocumentTypeMaintenanc
     OrganizationDocumentTypeStoreService,
     OrganizationDocumentTypeUpdateService,
     OrganizationDocumentTypeDeleteService,
+    OrganizationDocumentTypeRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 use App\Services\EventServices\EventGetOrganizationIDService;
@@ -40,8 +41,15 @@ class OrganizationDocumentTypesController extends Controller
         $organization = Organization::where('organization_slug', $organizationSlug)->first();
         abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
 
-        $organizationDocumentTypes = OrganizationDocumentType::where('organization_id', $organization->organization_id)->get();
-        return view($this->viewDirectory . 'index', compact('organization','organizationDocumentTypes',));
+        $organizationDocumentTypes = OrganizationDocumentType::withCount('organizationDocuments')
+            ->where('organization_id', $organization->organization_id)
+            ->get();
+        $deletedOrganizationDocumentTypes = OrganizationDocumentType::onlyTrashed()
+            ->withCount('organizationDocuments')
+            ->where('organization_id', $organization->organization_id)
+            ->get();
+        //dd($organizationDocumentTypes);
+        return view($this->viewDirectory . 'index', compact('organization','organizationDocumentTypes','deletedOrganizationDocumentTypes'));
     }
     
     public function create($organizationSlug)
@@ -119,6 +127,22 @@ class OrganizationDocumentTypesController extends Controller
         abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
 
         $message = (new OrganizationDocumentTypeDeleteService())->delete($organization, $organizationDocumentTypeSlug);
+
+        return redirect()->action(
+            [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
+            ->with($message);
+    }
+
+    public function restore($organizationSlug, $organizationDocumentTypeSlug)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Organization_Document_Type'), 403);
+        abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
+        $organization = Organization::where('organization_slug', $organizationSlug)->first();
+        abort_if($organization->organization_id !== (new EventGetOrganizationIDService())->getOrganizationID(), 403);
+
+        abort_if(! OrganizationDocumentType::onlyTrashed()->where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
+
+        $message = (new OrganizationDocumentTypeRestoreService())->restore($organization, $organizationDocumentTypeSlug);
 
         return redirect()->action(
             [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])

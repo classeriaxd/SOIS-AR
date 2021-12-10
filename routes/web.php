@@ -45,6 +45,34 @@ Route::group(['middleware' => 'auth'], function () {
                 'prefix' => '/maintenance',], 
             function () {
 
+            // Role Maintenance 
+            Route::group([
+                    'as' => 'roles.',
+                    'prefix' => '/roles',], 
+                function () {
+                    Route::get('', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'index'])->name('index');
+                    Route::get('/{roleName}', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'roleIndex'])->name('roleIndex')->where(['role' => '^[a-zA-Z0-9_-]{2,255}$']);
+            });
+            
+            // User Maintenance
+            Route::group([
+                    'as' => 'users.',
+                    'prefix' => '/users/{user_id}',
+                    'where' => ['user_id' => '^([1-9][0-9]*)$'],], 
+                function () {
+                    Route::get('', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userShow'])->name('show');
+
+                    // Permission Attach and Detach
+                    Route::post('/detachPermission/{permission_id}', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'detachPermission'])->where(['permission_id' => '^([1-9][0-9]*)$'])->name('detachPermission');
+                    Route::post('/attachPermission/{permission_id}', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'attachPermission'])->where(['permission_id' => '^([1-9][0-9]*)$'])->name('attachPermission');
+
+                    // Role Attach and Detach
+                    Route::get('/roles', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userRoleIndex'])->name('roles.index');
+                    Route::post('/roles/attachRole', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userRoleAttach'])->name('roles.attach');
+                    Route::post('/roles/detachRole', [App\Http\Controllers\Admin\UserMaintenance\AdminRolesController::class, 'userRoleDetach'])->name('roles.detach');
+
+            });
+
             // Event Category Maintenance
             Route::resource('eventCategories', App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class)->only(['index', 'create', 'store']);
             
@@ -57,6 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventCategoryMaintenanceController::class, 'restore'])->name('restore');
             }); 
 
             // Event Role Maintenance
@@ -71,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventRoleMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Event Nature Maintenance
@@ -85,6 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventNatureMaintenanceController::class, 'restore'])->name('restore');
             }); 
 
             // Event Classification Maintenance
@@ -99,6 +130,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventClassificationMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Event Document Type Maintenance
@@ -113,6 +145,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\EventDocumentTypeMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Fund Source Maintenance
@@ -127,6 +160,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\FundSourceMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Level Maintenance
@@ -141,6 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\EventMaintenance\LevelMaintenanceController::class, 'restore'])->name('restore');
             });
 
             // Tabular Table Maintenance
@@ -155,6 +190,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'show'])->name('show');
                     Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'update'])->name('update');
                     Route::delete('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'destroy'])->name('destroy');
+                    Route::post('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularTableMaintenanceController::class, 'restore'])->name('restore');
 
                     // Tabular Column Maintenance
                     Route::resource('tabularColumns', App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class)->only(['create', 'store']);
@@ -168,6 +204,7 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'show'])->name('show');
                             Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'update'])->name('update');
                             Route::delete('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'destroy'])->name('destroy');
+                            Route::post('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\TabularColumnMaintenanceController::class, 'restore'])->name('restore');
                     });
             });
 
@@ -243,7 +280,8 @@ Route::group(['middleware' => 'auth'], function () {
                     function () {
                         Route::get('/edit', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'edit'])->name('edit');
                         Route::patch('/update', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'update'])->name('update');
-                        Route::delete('/delete', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'destroy'])->name('destroy');
+                        Route::delete('/destroy', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'destroy'])->name('destroy');
+                        Route::post('/restore', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'restore'])->name('restore');
                         Route::get('', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'show'])->name('show');
                 });
                 
@@ -271,6 +309,7 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('/edit', [App\Http\Controllers\OrganizationDocumentsController::class, 'edit'])->name('edit');
                             Route::post('/update', [App\Http\Controllers\OrganizationDocumentsController::class, 'update'])->name('update');
                             Route::delete('/destroy', [App\Http\Controllers\OrganizationDocumentsController::class, 'destroy'])->name('destroy');
+                            Route::post('/restore', [App\Http\Controllers\OrganizationDocumentsController::class, 'restore'])->name('restore');
                             Route::get('/{newDocument?}', [App\Http\Controllers\OrganizationDocumentsController::class, 'show'])->name('show');
                     });
 
@@ -296,7 +335,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Accomplishment Reports
     Route::group([
             'as' => 'accomplishmentreports.',
-            'prefix' => '/e/reports'], 
+            'prefix' => '/events/reports'], 
         function () {
             Route::post('/create/finalize', [App\Http\Controllers\AccomplishmentReportsController::class, 'finalizeReport'])->name('finalizeReport');
             Route::post('/create/checklist', [App\Http\Controllers\AccomplishmentReportsController::class, 'showChecklist'])->name('showChecklist');
@@ -308,7 +347,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Events
     Route::group([
             'as' => 'event.',
-            'prefix' => '/e'], 
+            'prefix' => '/events'], 
         function () {
             // Event
             // --> /e
@@ -331,7 +370,8 @@ Route::group(['middleware' => 'auth'], function () {
 
                     Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit'])->name('edit');
                     Route::patch('', [App\Http\Controllers\EventsController::class, 'update'])->name('update');
-                    Route::delete('', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
+                    Route::delete('/destroy', [App\Http\Controllers\EventsController::class, 'destroy'])->name('destroy');
+                    Route::post('/restore', [App\Http\Controllers\EventsController::class, 'restore'])->name('restore');
                     Route::get('/{newEvent?}', [App\Http\Controllers\EventsController::class, 'show'])->name('show')->where(['newEvent' => '^([1-9][0-9]*)$']);
 
                     // Event Images
@@ -358,7 +398,8 @@ Route::group(['middleware' => 'auth'], function () {
 
                             Route::get('/edit', [App\Http\Controllers\EventImagesController::class, 'edit'])->name('edit');
                             Route::patch('', [App\Http\Controllers\EventImagesController::class, 'update'])->name('update');
-                            Route::delete('', [App\Http\Controllers\EventImagesController::class, 'destroy'])->name('destroy');
+                            Route::delete('/destroy', [App\Http\Controllers\EventImagesController::class, 'destroy'])->name('destroy');
+                            Route::post('/restore', [App\Http\Controllers\EventImagesController::class, 'restore'])->name('restore');
                             Route::get('', [App\Http\Controllers\EventImagesController::class, 'show'])->name('show');
                         });
                     });
@@ -372,7 +413,8 @@ Route::group(['middleware' => 'auth'], function () {
                         // Event Documents
                         // --> /e/{event_slug}/document/{document_id}
 
-                                Route::delete('', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
+                                Route::delete('/destroy', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
+                                Route::post('/restore', [App\Http\Controllers\EventDocumentsController::class, 'restore'])->name('restore');
                                 Route::get('/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadDocument'])->name('download');
                     });
 
@@ -397,7 +439,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Student Accomplishments
     Route::group([
             'as' => 'studentAccomplishment.',
-            'prefix' => '/s/accomplishments',],
+            'prefix' => '/students/accomplishments',],
         function () {
         // Student Accomplishment
         // --> /s/accomplishments
@@ -411,7 +453,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group([
             'as' => 'studentAccomplishment.',
-            'prefix' => '/s/accomplishment/{accomplishmentUUID}',
+            'prefix' => '/students/accomplishment/{accomplishmentUUID}',
             'where' => ['accomplishmentUUID' => '^[a-zA-Z0-9-]{36}$'],],
         function () {
         // Student Accomplishment
@@ -426,7 +468,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group([
             'as' => 'notification.',
-            'prefix' => '/u/notification/{notification_id}',
+            'prefix' => '/user/notification/{notification_id}',
             'where' => ['notification_id' => '^([1-9][0-9]*)$'],],
         function () {
         // User Notification
@@ -438,7 +480,7 @@ Route::group(['middleware' => 'auth'], function () {
     // User Notification Routes
     Route::group([
             'as' => 'notifications.',
-            'prefix' => '/u/notifications',],
+            'prefix' => '/user/notifications',],
         function () {
         // User Notification
         // --> /u/notifications

@@ -12,6 +12,7 @@ use App\Services\Admin\EventMaintenance\EventDocumentType\{
     EventDocumentTypeStoreService,
     EventDocumentTypeUpdateService,
     EventDocumentTypeDeleteService,
+    EventDocumentTypeRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 
@@ -36,7 +37,8 @@ class EventDocumentTypeMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $documentTypes = EventDocumentType::all();
-        return view($this->viewDirectory . 'index', compact('documentTypes',));
+        $deletedDocumentTypes = EventDocumentType::onlyTrashed()->get();
+        return view($this->viewDirectory . 'index', compact('documentTypes','deletedDocumentTypes'));
     }
     
     public function create()
@@ -96,6 +98,19 @@ class EventDocumentTypeMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($document_type_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+        $documentType = $this->checkIfDocumentTypeExists($document_type_id);
+
+        $message = (new EventDocumentTypeRestoreService())->restore($documentType);
+
+        return redirect()->action(
+            [EventDocumentTypeMaintenanceController::class, 'index'])
+            ->with($message);
+
+    }
+
     /**
      * @param Integer $document_type_id
      * Function to check if a document type id exists, sends 404 if not
@@ -103,7 +118,7 @@ class EventDocumentTypeMaintenanceController extends Controller
      */ 
     private function checkIfDocumentTypeExists($document_type_id)
     {
-        abort_if(! $documentType = EventDocumentType::where('event_document_type_id', $document_type_id)->first(), 404);
+        abort_if(! $documentType = EventDocumentType::withTrashed()->where('event_document_type_id', $document_type_id)->first(), 404);
 
         return $documentType;
     }

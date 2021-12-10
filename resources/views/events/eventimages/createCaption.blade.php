@@ -39,8 +39,9 @@
                         <a role="button"
                             data-bs-toggle="popover" 
                             data-bs-container="body"
+                            data-bs-trigger="hover focus"
                             title="Posters" 
-                            data-bs-content="Posters, Photographs, or Screenshots on the Event. Landscape Orientation is a must."
+                            data-bs-content="Posters, Photographs, or Screenshots on the Event. Portrait Orientation is a must."
                             data-bs-placement="right">
                             <i class="far fa-question-circle"></i>
                         </a>
@@ -86,6 +87,7 @@
                         <a role="button"
                             data-bs-toggle="popover" 
                             data-bs-container="body"
+                            data-bs-trigger="hover focus"
                             title="Evidences" 
                             data-bs-content="Evidences, Photographs, or Screenshots on the Event. Landscape Orientation is a must."
                             data-bs-placement="right">
