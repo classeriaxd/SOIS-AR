@@ -2,45 +2,93 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Event;
 use App\Models\EventImage;
 use App\Models\TemporaryFile;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\EventImageRequests\{
     EventImageStoreRequest,
     EventImageStoreCaptionRequest,
     EventImageUpdateRequest,
 };
 
-use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
-use Carbon\Carbon;
+use App\Services\EventServices\EventImageServices\{
+    EventImageStoreService,
+    EventImageStoreCaptionService,
+    EventImageUpdateService,
+    EventImageDeleteService,
+    EventImageRestoreService,
+};
+
+use App\Services\PermissionServices\PermissionCheckingService;
 
 class EventImagesController extends Controller
 {
-    public function index($event_slug)
+    protected $permissionChecker;
+
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
     {
-        $event = Event::with('eventImages')
-            ->where('slug', $event_slug)->first();
-        return view('events.eventimages.index',compact('event'));
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
+    /**
+     * @param String $event_slug
+     * Function to show Index Page of all Event Images
+     * @return View
+     */
+    public function index($event_slug)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
+        $event = Event::with('eventImages')
+            ->where('slug', $event_slug)->first();
+        $posters = $event->eventImages->where('image_type', 0);
+        $evidences = $event->eventImages->where('image_type', 1);
+        $deletedEventImages = EventImage::onlyTrashed()
+            ->where('accomplished_event_id', $event->accomplished_event_id)
+            ->get();
+        return view('events.eventimages.index',compact('event','posters','evidences', 'deletedEventImages'));
+    }
+
+    /**
+     * @param String $event_slug, String $eventImage_slug
+     * Function to show a single Event Image
+     * @return View
+     */
     public function show($event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         $event = Event::with([
             'eventImage' => function ($query) use ($eventImage_slug) {
                 $query->where('slug', $eventImage_slug);},
             ])
-        ->where('slug', $event_slug)->first();
+            ->where('slug', $event_slug)->first();
         return view('events.eventimages.show',compact('event'));
     }
 
+    /**
+     * @param String $event_slug, String $eventImage_slug
+     * Function to edit an Event Image
+     * @return View
+     */
     public function edit($event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         $event = Event::with([
             'eventImage' => function ($query) use ($eventImage_slug) {
                 $query->where('slug', $eventImage_slug);},
@@ -50,45 +98,103 @@ class EventImagesController extends Controller
     	return view('events.eventimages.edit', compact('event'));
     }
 
+    /**
+     * @param Request $request, String $event_slug, String $eventImage_slug
+     * Function to update an Event Image
+     * @return Redirect
+     */
     public function update(EventImageUpdateRequest $request, $event_slug, $eventImage_slug)
     {
-        EventImage::where('slug', $eventImage_slug)
-            ->update([
-                'caption' => $request->input('caption', NULL),
-                'image_type' => $request->input('image_type'),
-        ]);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Edit_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
+        $event = Event::where('slug', $event_slug)->first();
+
+        $message = (new EventImageUpdateService())->update($request, $event, $eventImage_slug);
 
         return redirect()->action(
-            [EventImagesController::class, 'show'], ['event_slug' => $event_slug, 'eventImage_slug' => $eventImage_slug]
-        );
+            [EventImagesController::class, 'show'], ['event_slug' => $event_slug, 'eventImage_slug' => $eventImage_slug])
+            ->with($message);
     }
 
+    /**
+     * @param String $event_slug, String $eventImage_slug
+     * Function to soft delete an Event Image
+     * @return Redirect
+     */
     public function destroy($event_slug, $eventImage_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::where('slug', $eventImage_slug)->exists(), 404);
+
         $event = Event::where('slug', $event_slug)->first();
-        $eventImage = EventImage::where('slug', $eventImage_slug)->delete();
+
+        $message = (new EventImageDeleteService())->destroy($event, $eventImage_slug);
+
         return redirect()->action(
-            [EventImagesController::class, 'index'], ['event_slug' => $event->slug]
-        );
+            [EventImagesController::class, 'index'], ['event_slug' => $event->slug])
+            ->with($message);
     }
 
+    /**
+     * @param String $event_slug, String $eventImage_slug
+     * Function to restore soft deleted Event Image
+     * @return Redirect
+     */
+    public function restore($event_slug, $eventImage_slug)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Delete_Event_Document'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+        abort_if(! EventImage::withTrashed()->where('slug', $eventImage_slug)->exists(), 404);
+
+        $event = Event::where('slug', $event_slug)->first();
+
+        $message = (new EventImageRestoreService())->restore($event, $eventImage_slug);
+
+        return redirect()->action(
+            [EventImagesController::class, 'index'], ['event_slug' => $event->slug])
+            ->with($message);
+    }
     
+    /**
+     * @param String $event_slug
+     * Function to show Create Page for Event Image
+     * @return View
+     */
     public function create($event_slug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
         $event = Event::where('slug', $event_slug)->first();
         $filePondJS = true;
-        $loadJSWithoutDefer = true;
-        return view('events.eventimages.create', compact('event', 'filePondJS', 'loadJSWithoutDefer'));
+        return view('events.eventimages.create', compact('event', 'filePondJS'));
     }
+
+    /**
+     * @param String $event_slug
+     * Function to show Create Caption Page for Event Image, requires call from Store Function
+     * @return View | Redirect if not called from Store Function
+     */
     public function createCaption($event_slug)
     {
-        $event = Event::where('slug', $event_slug)->first();
-        $eventImages['posters'] = collect();
-        $eventImages['evidences'] = collect();
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
+        // If there is Inserted Image ID Array in Session data...
         if(session()->has('eventImagesArray'))
         {
+            $event = Event::where('slug', $event_slug)->first();
+            $eventImages['posters'] = collect();
+            $eventImages['evidences'] = collect();
+
+            // Get Inserted Image IDs from array on Session
             $eventImagesArray = session()->get('eventImagesArray');
             session()->keep(['eventImagesArray']);
+
+            // Get Inserted Images
             $eventImages['posters'] = EventImage::where('image_type', 0)
                 ->where('accomplished_event_id', $event->accomplished_event_id)
                 ->whereIn('event_image_id', $eventImagesArray)
@@ -97,101 +203,66 @@ class EventImagesController extends Controller
                 ->where('accomplished_event_id', $event->accomplished_event_id)
                 ->whereIn('event_image_id', $eventImagesArray)
                 ->get();
-        }
-        $loadJSWithoutDefer = true;
-        return view('events.eventimages.createCaption', compact('event','eventImages', 'loadJSWithoutDefer'));
-    }
-    public function store(EventImageStoreRequest $request, $event_slug)
-    {
-        $event = Event::where('slug', $event_slug)->first();
-    	$insertedImages = array();
-        $currentTime = Carbon::now();
-        if($request->has('poster'))
-        {
-            $tempPath = '/public/uploads/tmp/';
-            $finalPath = '/public/uploads/events/posters/';
-            $dbPath = '/uploads/events/posters/';
-            
-            foreach($request->input('poster') as $poster)
-            {
-                $file = TemporaryFile::where('folder', $poster)->value('filename');
-                Storage::move($tempPath . $poster . '/' . $file, $finalPath . $file);
-                $this->deleteDirectory($tempPath . $poster);
-                TemporaryFile::where('folder', $poster)->delete();
 
-                // Image Type > 0 = Poster | 1 = Evidence
-                $eventImageID = EventImage::insertGetId([
-                    'accomplished_event_id' => $event->accomplished_event_id,
-                    'image' => $dbPath . $file,
-                    'image_type' => 0,
-                    'caption' => NULL,
-                    'slug' => Str::uuid(),
-                    'created_at' => $currentTime,
-                    'updated_at' => $currentTime,
-                ]);
-                array_push($insertedImages, $eventImageID);
-            }
-        }
-
-        if($request->has('evidence'))
-        {
-            $tempPath = '/public/uploads/tmp/';
-            $finalPath = '/public/uploads/events/evidences/';
-            $dbPath = '/uploads/events/evidences/';
-            foreach($request->input('evidence') as $evidence)
-            {
-                $file = TemporaryFile::where('folder', $evidence)->value('filename');
-                Storage::move($tempPath . $evidence . '/' . $file, $finalPath . $file);
-                $this->deleteDirectory($tempPath . $evidence);
-                TemporaryFile::where('folder', $evidence)->delete();
-
-                // Image Type > 0 = Poster | 1 = Evidence
-                $eventImageID = EventImage::insertGetId([
-                    'accomplished_event_id' => $event->accomplished_event_id,
-                    'image' => $dbPath . $file,
-                    'image_type' => 1,
-                    'caption' => NULL,
-                    'slug' => Str::uuid(),
-                    'created_at' => $currentTime,
-                    'updated_at' => $currentTime,
-                ]);
-                array_push($insertedImages, $eventImageID);
-            }
-        }
-        if(count($insertedImages) > 0)
-        {   
-            session()->flash('eventImagesArray', $insertedImages);
-            return redirect()->action(
-                [EventImagesController::class, 'createCaption'], ['event_slug' => $event->slug,]
-            );
+            return view('events.eventimages.createCaption', compact('event','eventImages'));
         }
         else
             return redirect()->action(
-                [EventsController::class, 'show'], ['event_slug' => $event->slug]
-            );
-    }
-    public function storeCaption(EventImageStoreCaptionRequest $request, $event_slug)
-    {
-        if($request->has('caption'))
-        {
-            $event = Event::where('slug', $event_slug)->first();
-            foreach($request->input('caption') as $image => $caption)
-            {
-                if ($caption != NULL)
-                {
-                    EventImage::where('accomplished_event_id', $event->accomplished_event_id)
-                        ->where('slug', $image)
-                        ->update(['caption' => $caption ]);
-                }
-            }
-        }
-        return redirect()->action(
-            [EventsController::class, 'show'], ['event_slug' => $event->slug]
-        );
+                [EventsController::class, 'show'], ['event_slug' => $event->slug])
+                ->with(array('error' => 'No Image Uploaded.'));
     }
 
-    /* FilePond JS
-     * Upload Functions
+    /**
+     * @param Request $request, String $event_slug
+     * Function to store Event Images
+     * @return Redirect
+     */
+    public function store(EventImageStoreRequest $request, $event_slug)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
+        $event = Event::where('slug', $event_slug)->first();
+    	$returnArray = (new EventImageStoreService())->store($request, $event);
+
+        if($returnArray['insertedImagesCount'] > 0)
+        {   
+            session()->flash('eventImagesArray', $returnArray['insertedImages']);
+            return redirect()->action(
+                [EventImagesController::class, 'createCaption'], ['event_slug' => $event->slug,])
+                ->with($returnArray['message']);
+        }
+        else
+            return redirect()->action(
+                [EventsController::class, 'show'], ['event_slug' => $event->slug])
+                ->with($returnArray['message']);
+    }
+
+    /**
+     * @param Request $request, String $event_slug
+     * Function to store captions for Event Images
+     * @return Redirect
+     */
+
+    public function storeCaption(EventImageStoreCaptionRequest $request, $event_slug)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event_Image'), 403);
+        abort_if(! Event::where('slug', $event_slug)->exists(), 404);
+
+        $event = Event::where('slug', $event_slug)->first();
+
+        $message = (new EventImageStoreCaptionService())->storeCaption($request, $event);
+        
+        return redirect()->action(
+            [EventsController::class, 'show'], ['event_slug' => $event->slug])
+            ->with($message);
+    }
+
+    /**
+     * @param Request $request
+     * Function for FilePond JS File Upload 
+     * https://pqina.nl/filepond/
+     * @return text/plain JSON Response
      */
     public function upload(Request $request)
     {
@@ -232,9 +303,15 @@ class EventImagesController extends Controller
                 return $folder;
             }
         }
-        
         return 'not uploaded';
     }
+
+    /**
+     * @param Request $request
+     * Function for FilePond JS Reverting File Upload 
+     * https://pqina.nl/filepond/docs/api/server/#revert
+     * @return empty JSON Response
+     */
     public function undoUpload(Request $request)
     {
          if ($request->getContent())
@@ -251,16 +328,7 @@ class EventImagesController extends Controller
          }
          return 'file not deleted';
     }
-    /**
-     * Private Function to delete temporary directories.
-     *
-     * @return void
-     */
-    private function deleteDirectory($folderPath)
-    {
-        Storage::deleteDirectory($folderPath, true);
-        sleep(0.3);
-        Storage::deleteDirectory($folderPath);
-    }
+
+    
 
 }

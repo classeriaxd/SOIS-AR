@@ -93,7 +93,7 @@
                 @enderror
                 <div class="row pt-4">
                     <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white">Add Document</button>
+                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Document</button>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
         <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 
@@ -125,6 +125,7 @@
 @endif
 
 @section('scripts')
+    {{-- FilePondJS Upload --}}
     <script type="module">
         FilePond.registerPlugin(FilePondPluginFileValidateType);
         FilePond.registerPlugin(FilePondPluginFileValidateSize);
@@ -143,11 +144,11 @@
 
         FilePond.setOptions({
             server: {
-                url: '/e/documents/upload',
+                url: '{{ route('event.documents.upload') }}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                revert: '/revert',
+                revert: '{{ route('event.documents.undoUpload') }}',
             }
         });
     </script>

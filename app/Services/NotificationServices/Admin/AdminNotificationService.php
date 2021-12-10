@@ -2,57 +2,98 @@
 
 namespace App\Services\NotificationServices\Admin;
 
-use App\Models\PositionTitle;
 use App\Models\Notification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class AdminNotificationService
 {
     /**
-     * @param String $recievingOfficers, String $notificationTitle,  String $notificationDescription, Integer $type
+     * @param String $recievers, String $notificationTitle,  String $notificationDescription, Integer $type
      * Function to Send Notification to All Concerned Officer about changes to Event Categories
      * @return void
      */ 
-    public function sendNotification($recievingOfficers, $notificationTitle, $notificationDescription, $type = 1)
+    public function sendNotification($recievers, $notificationTitle, $notificationDescription, $type = 1)
     {
-        switch ($recievingOfficers) {
+        switch ($recievers) {
             case 'Documentation Officers':
-                $validPositions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
+                $recievingOfficers = User::whereHas(
+                        'roles', function(Builder $query){
+                            $query->where('role', 'AR Officer Admin');},)
+                    ->get();
                 break;
             case 'President':
-                $validPositions = ['President'];
+                $recievingOfficers = User::whereHas(
+                        'roles', function(Builder $query){
+                            $query->where('role', 'AR President Admin');},)
+                    ->get();
                 break;
             case 'All':
-                $validPositions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation', 'President'];
+                $recievingOfficers = User::whereHas(
+                        'roles', function(Builder $query){
+                            $query->whereIn('role', ['AR Officer Admin', 'AR President Admin']);},)
+                    ->get();
                 break;
         }
 
-        $recievingPositions = PositionTitle::whereIn('position_title', $validPositions)
-            ->pluck('position_title_id');
-        $recievingUsers = array();
-        foreach($recievingPositions as $reciever)
+        if ($recievingOfficers->count() > 0)
         {
-            $recievingUserId = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
-            if ($recievingUserId != NULL) 
-                array_push($recievingUsers,$recievingUserId);
+            foreach ($recievingOfficers as $recievingOfficer) 
+            {
+                Notification::create([
+                    'user_id' => $recievingOfficer->user_id,
+                    'title' => $notificationTitle,
+                    'description' => $notificationDescription,
+                    'type' => $type,
+                    'link' => NULL,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param Request $request, Integer $type
+     * Function to Send Notification to an Organization
+     * @return void
+     */ 
+    public function sendNotificationToOrganization($request, $type = 1)
+    {
+        switch ($request->input('reciever')) {
+            case 'All':
+                $recievers = ['AR Officer Admin', 'AR President Admin'];
+                break;
+            case 'Officers':
+                $recievers = ['AR Officer Admin'];
+                break;
+            case 'Presidents':
+                $recievers = ['AR President Admin'];
+                break;
         }
 
-        if (count($recievingUsers) > 0)
+        foreach ($request->input('organization') as $organizationID) 
         {
-            foreach($recievingUsers as $reciever)
+            $recievingOfficers = User::whereHas(
+                    'roles', function(Builder $query) use ($recievers, $organizationID) {
+                        $query->whereIn('role', $recievers)
+                            ->where('organization_id', $organizationID);},)
+                ->get();
+
+            if ($recievingOfficers->count() > 0)
             {
-                if ($reciever != NULL)
+                foreach ($recievingOfficers as $recievingOfficer) 
                 {
                     Notification::create([
-                        'user_id' => $reciever,
-                        'title' => $notificationTitle,
-                        'description' => $notificationDescription,
+                        'user_id' => $recievingOfficer->user_id,
+                        'title' => $request->input('title'),
+                        'description' => $request->input('description'),
                         'type' => $type,
                         'link' => NULL,
                     ]);
                 }
             }
         }
+
+
     }
 }

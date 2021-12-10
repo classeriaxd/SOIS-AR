@@ -39,22 +39,35 @@
                 <div class="card w-50 text-center">
                     <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Column: {{ $tabularColumn->tabular_column_name }}</h5>
                     <div class="card-body">
+                        @if($tabularColumn->deleted_at !== NULL)
+                            <p class="card-text"><span class="badge rounded-pill bg-danger text-white">Status: DELETED</span></p>
+                        @endif
                         <p class="card-text">{{ $tabularColumn->description ?? 'No Description Provided' }}</p>
                         <hr class="my-2">
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
-                            <a href="{{ route('admin.maintenance.tabularTables.tabularColumns.edit', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}"
-                                class="btn btn-primary text-white mx-1"
-                                role="button">
-                                    Edit Column
-                            </a>
-                            <a href="#"
-                                class="btn btn-danger text-white mx-1"
-                                role="button"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteTabularColumnReminderModal">
-                                    Delete Column
-                            </a>
+                            @if($tabularColumn->deleted_at !== NULL)
+                                <form action="{{ route('admin.maintenance.tabularTables.tabularColumns.restore', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm">
+                                    @csrf
+
+                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Column</button>
+                                </form>  
+                                </a>
+                            @else
+                                <a href="{{ route('admin.maintenance.tabularTables.tabularColumns.edit', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}"
+                                    class="btn btn-primary text-white mx-1"
+                                    role="button">
+                                        Edit Column
+                                </a>
+                                <a href="#"
+                                    class="btn btn-danger text-white mx-1"
+                                    role="button"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteTabularColumnReminderModal">
+                                        Delete Column
+                                </a>
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
@@ -65,14 +78,14 @@
     <hr>
 
     <div class="flex-row my-2 text-center">
-        <a href="{{ route('admin.maintenance.levels.index') }}"
+        <a href="{{ route('admin.maintenance.tabularTables.show', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 
-    {{-- Level Delete Reminder Modal --}}
+    {{-- Tabular Column Delete Reminder Modal --}}
         <div class="modal fade" id="deleteTabularColumnReminderModal" tabindex="-1" aria-labelledby="deleteTabularColumnReminderLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -90,20 +103,20 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                         <button type="button" 
                             class="btn btn-danger text-white" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteTabularColumnModal"
                             data-bs-dismiss="modal">
-                            Proceed
+                            <i class="fas fa-check"></i> Proceed
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-    {{-- Level Delete Modal --}}
+    {{-- Tabular Column Delete Modal --}}
         <div class="modal fade" id="deleteTabularColumnModal" tabindex="-1" aria-labelledby="deleteTabularColumnLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -165,8 +178,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white">Proceed</button>
+                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

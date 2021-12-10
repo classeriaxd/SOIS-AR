@@ -18,4 +18,8 @@ class StudentAccomplishmentFile extends Model
     {
         return $this->belongsTo(StudentAccomplishment::class, 'student_accomplishment_id');
     }
+    public function documentType()
+    {
+        return $this->belongsTo(StudentAccomplishmentDocumentType::class, 'SA_document_type_id');
+    }
 }

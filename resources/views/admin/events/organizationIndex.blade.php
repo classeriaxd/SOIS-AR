@@ -104,7 +104,7 @@
         <a href="{{route('admin.events.index')}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go Back to All Events
+            <i class="fas fa-arrow-left"></i> Go Back to All Events
         </a>
 
         <span>or</span>
@@ -112,7 +112,7 @@
         <a href="{{route('admin.home')}}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Home
+                <i class="fas fa-home"></i> Go Home
         </a>    
     </div>
 

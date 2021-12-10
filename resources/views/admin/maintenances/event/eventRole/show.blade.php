@@ -34,22 +34,33 @@
                 <div class="card w-50 text-center">
                     <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Role: {{ $eventRole->event_role }}</h5>
                     <div class="card-body">
+                        @if($eventRole->deleted_at !== NULL)
+                            <p class="card-text"><span class="badge rounded-pill bg-danger text-white">Status: DELETED</span></p>
+                        @endif
                         <p class="card-text">{{ $eventRole->helper }}</p>
                         <hr class="my-2">
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
-                            <a href="{{ route('admin.maintenance.eventRoles.edit', ['role_id' => $eventRole->event_role_id]) }}"
-                                class="btn btn-primary text-white mx-1"
-                                role="button">
-                                    Edit Role
-                            </a>
-                            <a href="#"
-                                class="btn btn-danger text-white mx-1"
-                                role="button"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteEventRoleReminderModal">
-                                    Delete Role
-                            </a>
+                            @if($eventRole->deleted_at !== NULL)
+                                <form action="{{ route('admin.maintenance.eventRoles.restore', ['role_id' => $eventRole->event_role_id]) }}" enctype="multipart/form-data" method="POST" id="eventRoleRestoreForm">
+                                    @csrf
+                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Event Role</button>
+                                </form>  
+                                </a>
+                            @else
+                                <a href="{{ route('admin.maintenance.eventRoles.edit', ['role_id' => $eventRole->event_role_id]) }}"
+                                    class="btn btn-primary text-white mx-1"
+                                    role="button">
+                                        Edit Role
+                                </a>
+                                <a href="#"
+                                    class="btn btn-danger text-white mx-1"
+                                    role="button"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteEventRoleReminderModal">
+                                        Delete Role
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -63,7 +74,7 @@
         <a href="{{ route('admin.maintenance.eventRoles.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 
@@ -85,13 +96,13 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                         <button type="button" 
                             class="btn btn-danger text-white" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteEventRoleModal"
                             data-bs-dismiss="modal">
-                            Proceed
+                            <i class="fas fa-check"></i> Proceed
                         </button>
                     </div>
                 </div>
@@ -160,8 +171,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white">Proceed</button>
+                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

@@ -9,37 +9,63 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use App\Services\NotificationServices\{
+    StudentAccomplishmentNotificationService,
+};
 
 class StudentAccomplishmentStoreService
 {
     /**
+     * @param Request $request
      * Service to Store a Student Accomplishment.
-     * Returns Accomplishment UUID on success.
-     *
-     * @return String
+     * Returns Message Accomplishment UUID on success.
+     * @return Array
      */
-    public function store($request)
+    public function store($request): array
     {
-        $accomplishmentUUID = StudentAccomplishment::create([
-            'user_id' => Auth::user()->user_id,
-            'organization_id' => Auth::user()->course->organization_id,
-            'accomplishment_uuid' => Str::uuid(),
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'objective' => $request->input('objective'),
-            'start_date' => $request->input('startDate'),
-            'end_date' => $request->input('endDate'),
-            'start_time' => $request->input('startTime'),
-            'end_time' => $request->input('endTime'),
-            'venue' => $request->input('venue'),
-            'organizer' => $request->input('organizer'),
-        ])->accomplishment_uuid;
-        return $accomplishmentUUID;
+        try 
+        {
+            $accomplishmentUUID = StudentAccomplishment::create([
+                'user_id' => Auth::user()->user_id,
+                'organization_id' => Auth::user()->course->organization_id,
+                'accomplishment_uuid' => Str::uuid(),
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'objective' => $request->input('objective'),
+                'start_date' => $request->input('startDate'),
+                'end_date' => $request->input('endDate'),
+                'start_time' => $request->input('startTime'),
+                'end_time' => $request->input('endTime'),
+                'venue' => $request->input('venue'),
+                'organizer' => $request->input('organizer'),
+            ])->accomplishment_uuid;
+
+            $this->storeAccomplishmentFiles($request, $accomplishmentUUID);
+
+            // Send Notification to Documentation Officers
+            (new StudentAccomplishmentNotificationService())->sendNotificationToOfficers(Auth::user()->full_name, Auth::user()->course->organization->organization_id, $accomplishmentUUID);
+            ;
+
+            $returnArray = array(
+                'accomplishmentUUID' => $accomplishmentUUID, 
+                'message' => array('success' => 'Submitted the Accomplishment Successfully! Notifications are sent to the Documentation Officers.'),
+            );
+            return $returnArray;
+        }
+        catch (\Illuminate\Database\QueryException $e) 
+        {
+            $returnArray = array(
+                'accomplishmentUUID' => NULL, 
+                'message' => array('error' => 'Error in submitting Accomplishment' . $e->getMessage()),
+            );
+
+            return $returnArray;
+        }
     }
 
     /**
+     * @param Request $request, String $accomplishmentUUID
      * Service to Store a Student Accomplishment Files.
-     *
      * @return void
      */
     public function storeAccomplishmentFiles($request, $accomplishmentUUID)
@@ -65,6 +91,7 @@ class StudentAccomplishmentStoreService
                 $type = 1;
             StudentAccomplishmentFile::create([
                 'student_accomplishment_id' => $accomplishmentID,
+                'SA_document_type_id' => $request->input('documentType1'),
                 'file' =>  $db_path . $file, 
                 'caption' => $caption,
                 'type' => $type
@@ -86,6 +113,7 @@ class StudentAccomplishmentStoreService
                 $type = 1;
             StudentAccomplishmentFile::create([
                 'student_accomplishment_id' => $accomplishmentID,
+                'SA_document_type_id' => $request->input('documentType2'),
                 'file' =>  $db_path . $file, 
                 'caption' => $caption,
                 'type' => $type
@@ -106,6 +134,7 @@ class StudentAccomplishmentStoreService
                 $type = 1;
             StudentAccomplishmentFile::create([
                 'student_accomplishment_id' => $accomplishmentID,
+                'SA_document_type_id' => $request->input('documentType3'),
                 'file' =>  $db_path . $file, 
                 'caption' => $caption,
                 'type' => $type
@@ -114,8 +143,8 @@ class StudentAccomplishmentStoreService
     }
 
     /**
+     * @param String $folderPath
      * Private Function to delete temporary directories.
-     *
      * @return void
      */
     private function deleteDirectory($folderPath)

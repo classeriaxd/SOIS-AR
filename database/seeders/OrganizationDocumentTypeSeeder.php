@@ -16,43 +16,21 @@ class OrganizationDocumentTypeSeeder extends Seeder
     {
         $data = [
             [
-                'org_id' => '1',
-                'doctype' => 'Minutes of the Meeting',
+                'organization_id' => 2,
+                'type' => 'Constitution',
+                'slug' => 'constitutions',
             ],
 
             [
-                'org_id' => '1',
-                'doctype' => 'Constitution',
+                'organization_id' => 2,
+                'type' => 'Resolution',
+                'slug' => 'resolutions',
             ],
 
             [
-                'org_id' => '1',
-                'doctype' => 'Resolution',
-            ],
-
-            [
-                'org_id' => '1',
-                'doctype' => 'Memorandum Order',
-            ],
-
-            [
-                'org_id' => '2',
-                'doctype' => 'Minutes of the Meeting',
-            ],
-
-            [
-                'org_id' => '2',
-                'doctype' => 'Constitution',
-            ],
-
-            [
-                'org_id' => '2',
-                'doctype' => 'Resolution',
-            ],
-
-            [
-                'org_id' => '2',
-                'doctype' => 'Memorandum Order',
+                'organization_id' => 2,
+                'type' => 'Memorandum Order',
+                'slug' => 'memorandum_orders',
             ],
             
         ];

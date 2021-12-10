@@ -46,52 +46,97 @@
                 <a href="{{ route('admin.maintenance.tabularTables.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Table
+                        <i class="fas fa-plus"></i> Add Table
                 </a>
             </div>
             
-            <div class="card w-100">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Table Name</th>
-                        <th>Description</th>
-                        <th>Reference Table No.</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($tabularTables as $tabularTable)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $tabularTable->tabular_table_name }}</td>
-                            <td style="width: 30%;">{{ $tabularTable->description ?? 'No Description Provided' }}</td>
-                            <td>{{ $tabularTable->reference_table_number ?? 'No Reference Number Provided' }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.tabularTables.show', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.tabularTables.edit', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>    
+            {{-- Tabular Tables --}}
+            @if($tabularTables->isNotEmpty())
+                <div class="card w-100">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Table Name</th>
+                            <th>Description</th>
+                            <th>Reference Table No.</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($tabularTables as $tabularTable)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $tabularTable->tabular_table_name }}</td>
+                                <td style="width: 30%;">{{ $tabularTable->description ?? 'No Description Provided' }}</td>
+                                <td>{{ $tabularTable->reference_table_number ?? 'No Reference Number Provided' }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.tabularTables.show', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.tabularTables.edit', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
 
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Tables found. :(</p>
+            @endif
+
+            {{-- Deleted Tabular Tables --}}
+            @if($deletedTabularTables->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Tabular Tables</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Table Name</th>
+                            <th>Description</th>
+                            <th>Reference Table No.</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedTabularTables as $tabularTable)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $tabularTable->tabular_table_name }}</td>
+                                <td style="width: 30%;">{{ $tabularTable->description ?? 'No Description Provided' }}</td>
+                                <td>{{ $tabularTable->reference_table_number ?? 'No Reference Number Provided' }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.tabularTables.show', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
+
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+            
 
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                 </a>
             </div>
         </div>

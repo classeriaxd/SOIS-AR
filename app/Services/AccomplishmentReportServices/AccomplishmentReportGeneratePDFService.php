@@ -5,28 +5,31 @@ namespace App\Services\AccomplishmentReportServices;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
 use iio\libmergepdf\Merger;
 use PDF;
 
+use App\Models\OrganizationDocumentType;
+
 class AccomplishmentReportGeneratePDFService
 {
+    protected $viewDirectory = 'accomplishmentReports.pdfTemplates.';
+    protected $temporaryFolderDirectory = '/app/public/compiledDocuments/tmp/';
     /**
+     * @param Request $request, Integer $organizationID, Collection $events, Collection $studentAccomplishments, Collection $organizationConstitution
      * Service to generate PDF Accomplishment Report.
      * Returns Array of Final File Name and Folder Name
      * @return array
      */
-    public function generate($request, $events, $studentAccomplishments)
+    public function generate($request, $organizationID, $events, $studentAccomplishments, $organizationConstitution)
     {
-
         // Get all Keys from Form
         $allKeys= $request->except(['start_date', 'end_date', '_token', 'ar_format', 'range_title']);
-        if (count($allKeys) == 0) 
-        {
-            return redirect()->action(
-                [AccomplishmentReportsController::class, 'index'])
-                ->with('error', 'No Report Selected!');
-        }
+        
+        // Redirect if there is no event/accomplishment selected
+            if (count($allKeys) == 0) 
+                return redirect()->action(
+                    [AccomplishmentReportsController::class, 'index'])
+                    ->with('error', 'No Report Selected!');
 
         // Get Sorted Events and Accomplishments
         $sortedEvents = $this->sortAndCompileReport($allKeys, $events, 'events');
@@ -35,32 +38,88 @@ class AccomplishmentReportGeneratePDFService
         // Create Folder and Directory
         $temporaryFolder = 'temporaryFolder-' . uniqid() . '-' . now()->timestamp;
         $this->createDirectory('/app/public/compiledDocuments/tmp', $temporaryFolder);
-
-        // Create Event PDF, save it to File, then add to array
-        // After that get all documents, then add to array
-        // temp is true for Title Page
         $compiledDocuments = array();
-        $temp = true;
 
+        //**********************************************//
+        //********** ORGANIZATION CONSTITUTION *********//
+        //**********************************************//
+        // Append Constitution if Checked
+        if ($request->has('constitution')) 
+        {
+            array_push($compiledDocuments, storage_path('/app/public/' . $organizationConstitution->file));
+        }
+
+        //********************************************//
+        //********** ORGANIZATION DOCUMENTS **********//
+        //********************************************//
+        if ($request->has('organizationDocument')) 
+        {
+            // Collect all Organization Document ID from Request
+            $idArray = array();
+            foreach ($request->input('organizationDocument') as $key => $value) 
+            {
+                // Validate Array Values, forget all non-ID friendly numbers and non-integer
+                if ((preg_match('/^([1-9][0-9]*)$/', $value)) === 1 )
+                    array_push($idArray, $value);
+            }
+            // Requery Organization Documents based on Array Values checked in the checklist
+
+            $startDate = $request->input('start_date'); $endDate = $request->input('end_date');
+            $organizationDocumentTypes = OrganizationDocumentType::with([
+                'organizationDocuments' => function ($query) use($startDate, $endDate, $idArray){
+                    $query->whereBetween('effective_date', [$startDate, $endDate])
+                        ->whereIn('organization_document_id', $idArray)
+                        ->orderBy('effective_date', 'DESC')
+                        ->orderBy('created_at', 'DESC');},])
+                ->whereNotIn('type', ['Constitution'])
+                ->where('organization_id', $organizationID)
+                ->get();
+
+            // Append each Organization Documents
+            foreach ($organizationDocumentTypes as $organizationDocumentType) 
+            {
+                foreach ($organizationDocumentType->organizationDocuments as $document) 
+                {
+                    array_push($compiledDocuments, storage_path('/app/public/' . $document->file));
+                }
+            }
+        }
+        
+
+        //*****************************************//
+        //********** ACCOMPLISHED EVENTS **********//
+        //*****************************************//
+        // Create Event PDF, save it to File, then add to array, After that get all documents, then add to array
+        $appendTitlePage = true;
         foreach($sortedEvents as $event)
         {
-            //dd($event);
-            if ($temp)
+            if ($appendTitlePage)
             {
                 // Create and Append Event Title Page
                 $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.eventTitlePage')
+                $dompdf = PDF::loadView($this->viewDirectory . 'eventTitlePage')
                     ->setPaper('letter', 'portrait')
-                    ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                $temp = false;
+                    ->save(storage_path($this->temporaryFolderDirectory .  $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                $appendTitlePage = false;
             }
-            //dd($event);
             $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-            $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageEvent', compact('event'))
+            $dompdf = PDF::loadView($this->viewDirectory . 'singlePageEvent', compact('event'))
                 ->setPaper('letter', 'portrait')
-                ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
+                ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+
+            // If Event Images is checked
+            if (isset($event['event_images']))
+            {
+                $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
+                $dompdf = PDF::loadView($this->viewDirectory . 'singlePageEventImage', compact('event'))
+                    ->setPaper('letter', 'portrait')
+                    ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+            }
+
+            // If Event Documents is checked
             if (isset($event['event_documents']))
             {
                 foreach ($event['event_documents'] as $document) 
@@ -70,23 +129,31 @@ class AccomplishmentReportGeneratePDFService
             }
         }
 
-        $temp = true;
+
+        //*********************************************//
+        //********** STUDENT ACCOMPLISHMENTS **********//
+        //*********************************************//
+        // Create Student Accomplishment PDF, save it to File, then add to array, After that get all documents, then add to array
+        $appendTitlePage = true;
 
         foreach ($sortedAccomplishments as $accomplishment)
         {
-            if($temp)
+            if($appendTitlePage)
             {
                 // Create and Append Accomplishment Title Page
                 $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-                $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.accomplishmentTitlePage')->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-                $temp = false;
+                $dompdf = PDF::loadView($this->viewDirectory . 'accomplishmentTitlePage')->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+                $appendTitlePage = false;
             }
+
             $fileName = 'temporary-' . uniqid() . '-' . now()->timestamp . '.pdf';
-            $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageAccomplishment', compact('accomplishment'))
+            $dompdf = PDF::loadView($this->viewDirectory . 'singlePageAccomplishment', compact('accomplishment'))
                 ->setPaper('letter', 'portrait')
-                ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
-            array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName));
+                ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+            array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName));
+
+            // If Accomplishment Evidences/Files is checked
             if (isset($accomplishment['accomplishment_files']))
             {
                 foreach ($accomplishment['accomplishment_files'] as $file) 
@@ -96,10 +163,10 @@ class AccomplishmentReportGeneratePDFService
                     elseif($file['type'] == 1)
                     {
                         $fileName2 = uniqid() . '-' . now()->timestamp . '.pdf';
-                        $dompdf = PDF::loadView('accomplishmentreports.pdfTemplates.singlePageAccomplishmentImage', compact('file'))
+                        $dompdf = PDF::loadView($this->viewDirectory . 'singlePageAccomplishmentImage', compact('file'))
                             ->setPaper('letter', 'portrait')
-                            ->save(storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName2));
-                        array_push($compiledDocuments, storage_path('/app/public/compiledDocuments/tmp/' . $temporaryFolder . '/' . $fileName2));
+                            ->save(storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName2));
+                        array_push($compiledDocuments, storage_path($this->temporaryFolderDirectory . $temporaryFolder . '/' . $fileName2));
                     }
                 }
             }
@@ -120,10 +187,9 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
-     * Function to Sort and Compile Report using Key Array and Report Collection
-     * keys = array()
-     * reportCollection = collection()
-     * reportType = String (events, accomplishments)
+     * @param Array $keys, Collection $collection, String $reportType
+     * Function to Sort and Compile Report using Key Array and Report Collectio
+     * WORKS ONLY FOR EVENTS AND STUDENT ACCOMPLISHMENTS
      * @return Collection
      */ 
     private function sortAndCompileReport($keys, $reportCollection, $reportType)
@@ -185,10 +251,9 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
+     * @param Array $choiceKeyArray, Integer $rowCount, String $category
      * Function to Group Keys using a given key array
-     * choiceKeyArray = array() 
-     * rowCount = int
-     * category = String
+     * WORKS FOR sortAndCompileReport FUNCTION ONLY
      * @return array
      */ 
     private function groupKeysWithAttributes($choiceKeyArray, $rowCount, $category)
@@ -239,10 +304,9 @@ class AccomplishmentReportGeneratePDFService
     }
 
     /**
+     * Array $documents, String $fileName, String $folderName
      * Function to Merge PDF using documents array.
-     * documents = array()
-     * fileName = String
-     * folderName = String
+     * https://github.com/hanneskod/libmergepdf
      * @return void
      */
     private function mergePDF($documents, $fileName, $folderName)

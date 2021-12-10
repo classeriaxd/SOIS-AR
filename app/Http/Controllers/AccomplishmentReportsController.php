@@ -9,6 +9,8 @@ use App\Models\{
     StudentAccomplishment,
     AccomplishmentReport,
     AccomplishmentReportType,
+    OrganizationDocument,
+    OrganizationDocumentType,
 };
 
 use App\Http\Requests\AccomplishmentReportRequests\{
@@ -33,10 +35,13 @@ use Illuminate\{
     Support\Facades\Auth,
 };
 
+
+use Illuminate\Database\Eloquent\Builder;
+
 use Carbon\Carbon;
 use iio\libmergepdf\Merger;
 use PDF;
-
+use App\Services\PermissionServices\PermissionCheckingService;
 /**
  * Handles all Accomplishment Report Requests, Services, and Exports
  * Libraries: DomPDF, Carbon, LibMergePDF
@@ -45,14 +50,17 @@ use PDF;
 // Remaining tasks: showChecklist()
 class AccomplishmentReportsController extends Controller
 {
+    protected $viewDirectory = 'accomplishmentReports.';
+    protected $permissionChecker;
+
     /**
-     * Function to show page to create accomplishment report
-     * @return View
-     */ 
-    public function create()
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct()
     {
-        $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')->orderBy('year_start', 'DESC')->get();
-    	return view('accomplishmentreports.create', compact('schoolYears'));
+        $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     /**
@@ -61,16 +69,68 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function index()
     {
-        $approvedAccomplishmentReports = AccomplishmentReport::where('status', 2)
-            ->where('organization_id', Auth::user()->course->organization_id)
-            ->paginate(5, ['*'], 'approved');
-        $pendingAccomplishmentReports = AccomplishmentReport::where('status', 1)
-            ->where('organization_id', Auth::user()->course->organization_id)
-            ->paginate(5, ['*'], 'pending');
-        $declinedAccomplishmentReports = AccomplishmentReport::where('status', 3)
-            ->where('organization_id', Auth::user()->course->organization_id)
-            ->paginate(5,  ['*'], 'declined');
-        return view('accomplishmentreports.index', compact('approvedAccomplishmentReports', 'pendingAccomplishmentReports', 'declinedAccomplishmentReports'));
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Accomplishment_Report'), 403);
+
+        // Pluck all User Roles
+        $userRoleCollection = Auth::user()->roles;
+
+        // Remap User Roles into array with Organization ID
+        $userRoles = array();
+        foreach ($userRoleCollection as $role) 
+        {
+            array_push($userRoles, ['role' => $role->role, 'organization_id' => $role->pivot->organization_id]);
+        }
+
+        // Array to store variables to send to View
+        $compactVariables = array();
+
+        // If User has AR President Admin role...
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'AR President Admin')) !== false ? true : false)
+        {
+            // Get the Organization from which the user is AR President Admin
+            $organizationID = $userRoles[$userRoleKey]['organization_id'];
+            
+            // Query the pending accomplishment reports under this Organization
+            $pendingAccomplishmentReports = AccomplishmentReport::with('accomplishmentReportType')
+                ->where('status', 1)
+                ->where('organization_id', $organizationID)
+                ->paginate(30, ['*'], 'pendingAR');
+            
+            $organizationAccomplishmentReports = AccomplishmentReport::with('accomplishmentReportType')
+                ->where('organization_id', $organizationID)
+                ->paginate(30, ['*'], 'orgAR');
+
+            array_push($compactVariables, 'pendingAccomplishmentReports', 'organizationAccomplishmentReports');
+        }
+
+        // If User has AR Officer Admin role...
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'AR Officer Admin')) !== false ? true : false)
+        {
+            // Get the Organization from which the user is AR President Admin
+            $organizationID = $userRoles[$userRoleKey]['organization_id'];
+
+            $organizationAccomplishmentReports = AccomplishmentReport::with('accomplishmentReportType')
+                ->where('organization_id', $organizationID)
+                ->paginate(30, ['*'], 'orgAR');
+
+            array_push($compactVariables, 'organizationAccomplishmentReports');
+        }
+
+        return view($this->viewDirectory . 'index', compact($compactVariables));
+    }
+
+    /**
+     * Function to show page to create accomplishment report
+     * @return View
+     */ 
+    public function create()
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Accomplishment_Report'), 403);
+        $schoolYears = SchoolYear::select('year_start', 'year_end', 'school_year_id as id')
+            ->orderBy('year_start', 'DESC')
+            ->get();
+
+        return view($this->viewDirectory . 'create', compact('schoolYears'));
     }
 
     /**
@@ -80,12 +140,13 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function show($accomplishmentReportUUID, $newAccomplishmentReport = false)
     {
-        if($accomplishmentReport = AccomplishmentReport::with('accomplishmentReportType')->where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
-        {
-            return view('accomplishmentreports.show', compact('accomplishmentReport','newAccomplishmentReport'));
-        }
-        else
-            abort(404);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Accomplishment_Report'), 403);
+        abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
+
+        $accomplishmentReport = AccomplishmentReport::with('accomplishmentReportType', 'reviewer')
+            ->where('accomplishment_report_uuid', $accomplishmentReportUUID)
+            ->first();
+        return view($this->viewDirectory . 'show', compact('accomplishmentReport','newAccomplishmentReport')); 
     }
 
     /**
@@ -95,17 +156,17 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function review($accomplishmentReportUUID)
     {
-        if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
-        {
-            if($accomplishmentReport->status != 1)
-                return redirect()->action(
-                    [AccomplishmentReportsController::class, 'show'], ['accomplishmentReportUUID' => $accomplishmentReportUUID]
-                );
-            $loadJSWithoutDefer = true;
-            return view('accomplishmentreports.review', compact('accomplishmentReport', 'loadJSWithoutDefer'));
-        }
-        else
-            abort(404);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Accomplishment_Report'), 403);
+        abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
+
+        $accomplishmentReport = AccomplishmentReport::with('accomplishmentReportType')->where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
+
+        // Redirect if Status is not Pending, or AR type is Tabular
+        if($accomplishmentReport->status !== 1 || $accomplishmentReport->accomplishment_report_type_id === 1)
+            return redirect()->action(
+                [AccomplishmentReportsController::class, 'show'], ['accomplishmentReportUUID' => $accomplishmentReportUUID]);
+
+        return view($this->viewDirectory . 'review', compact('accomplishmentReport'));
     }
 
     /**
@@ -115,234 +176,264 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function finalizeReview(FinalizeReviewRequest $request, $accomplishmentReportUUID)
     {
-        if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
-        {
-            $accomplishmentReportReviewService = new AccomplishmentReportReviewService();
-            $message = $accomplishmentReportReviewService->reviewAccomplishmentReport($accomplishmentReport, $request);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Review_Accomplishment_Report'), 403);
+        abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
 
-            return redirect()->action(
-                [AccomplishmentReportsController::class, 'index'])
-                ->with('success', $message);
-            
-        }
-        else
-            abort(404);
+        $returnArray = (new AccomplishmentReportReviewService())->reviewAccomplishmentReport($accomplishmentReportUUID, $request);
+
+        return redirect()->action(
+            [AccomplishmentReportsController::class, 'show'], ['accomplishmentReportUUID' => $accomplishmentReportUUID])
+            ->with($returnArray['message']);
     }
 
     /**
-     * Get request from Index, then Show Checklist Page
+     * @param Request $request
+     * Function to show checklist from Create Page
+     * @return View
      */
     public function showChecklist(Request $request)
     {
-        $range = NULL;
-        $rangeTitle = NULL;
-        if($request->input('semestral'))
-        {
-            $data = $request->validate([
-                'school_year' => 'required|numeric|exists:school_years,school_year_id',
-                'first_semester' => 'required_without:second_semester|string',
-                'second_semester' => 'required_without:first_semester|string',
-            ]);
-            $year_data = SchoolYear::where('school_year_id', $data['school_year'])->first();
-            if (isset($data['first_semester']))
-            {
-                $start_date = $year_data->first_semester_start;
-                $end_date = $year_data->first_semester_end;
-                $range = 'First Semester SY ' . $year_data->year_start . '-' . $year_data->year_end;
-            }
-            else if (isset($data['second_semester']))
-            {
-                $start_date = $year_data->second_semester_start;
-                $end_date = $year_data->second_semester_end;
-                $range = 'Second Semester SY ' . $year_data->year_start . '-' . $year_data->year_end;
-            }
-            $rangeTitle = 'Semestral';
-        }
-        else if ($request->input('quarterly'))
-        {
-            $data = $request->validate([
-                'first_quarter' => 'required_without_all:second_quarter,third_quarter,fourth_quarter|string',
-                'second_quarter' => 'required_without_all:first_quarter,third_quarter,fourth_quarter|string',
-                'third_quarter' => 'required_without_all:first_quarter,second_quarter,fourth_quarter|string',
-                'fourth_quarter' => 'required_without_all:first_quarter,second_quarter,third_quarter|string',
-            ]);
-            if (isset($data['first_quarter']))
-            {
-                $start_date = Carbon::parse(date('Y'))->firstOfYear()->firstOfQuarter()->format('Y-m-d');
-                $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
-                $range = 'First Quarter of ' . date('Y');
-            }
-            else if (isset($data['second_quarter']))
-            {
-                $start_date = Carbon::parse(date('Y'))->firstOfYear()->addMonths(3)->firstOfQuarter()->format('Y-m-d');
-                $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
-                $range = 'Second Quarter of ' . date('Y');
-            }
-            else if (isset($data['third_quarter']))
-            {
-                $start_date = Carbon::parse(date('Y'))->firstOfYear()->addMonths(6)->firstOfQuarter()->format('Y-m-d');
-                $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
-                $range = 'Third Quarter of ' . date('Y');
-            }
-            else if (isset($data['fourth_quarter']))
-            {
-                $start_date = Carbon::parse(date('Y'))->firstOfYear()->addMonths(9)->firstOfQuarter()->format('Y-m-d');
-                $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
-                $range = 'Fourth Quarter of ' . date('Y');
-            }
-            $rangeTitle = 'Quarterly';
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Accomplishment_Report'), 403);
+        // Pluck all User Roles
+        $userRoleCollection = Auth::user()->roles;
 
-        }
-        else if($request->input('custom'))
+        // Remap User Roles into array with Organization ID
+        $userRoles = array();
+        foreach ($userRoleCollection as $role) 
         {
-            $data = request()->validate([
-                'custom_start_date' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
-                'custom_end_date' => 'required|date|date_format:Y-m-d|after_or_equal:custom_start_date|before_or_equal:now|after:1992-01-01',
-                ]);
-            $start_date = $data['custom_start_date'];
-            $end_date = $data['custom_end_date'];
-            $range = Carbon::parse($start_date)->format('F d, Y') . ' - ' . Carbon::parse($end_date)->format('F d, Y');
-            $rangeTitle = 'Custom';
+            array_push($userRoles, ['role' => $role->role, 'organization_id' => $role->pivot->organization_id]);
+        }
 
+        // If User has AR Officer Admin role...
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'AR Officer Admin')) !== false ? true : false)
+        {
+            // Get the Organization from which the user is AR Officer Admin
+            $organizationID = $userRoles[$userRoleKey]['organization_id'];
+            $organization = Organization::where('organization_id', $organizationID)->first();
+
+            $range = NULL;
+            $rangeTitle = NULL;
+
+            // Get Date Range/Title
+                if($request->input('semestral'))
+                {
+                    $rangeTitle = 'Semestral';
+                    $data = $request->validate([
+                        'school_year' => 'required|numeric|exists:school_years,school_year_id',
+                        'first_semester' => 'required_without:second_semester|string',
+                        'second_semester' => 'required_without:first_semester|string',
+                    ]);
+                    $year_data = SchoolYear::where('school_year_id', $data['school_year'])->first();
+                    if (isset($data['first_semester']))
+                    {
+                        $start_date = $year_data->first_semester_start;
+                        $end_date = $year_data->first_semester_end;
+                        $range = 'First Semester SY ' . $year_data->year_start . '-' . $year_data->year_end;
+                    }
+                    else if (isset($data['second_semester']))
+                    {
+                        $start_date = $year_data->second_semester_start;
+                        $end_date = $year_data->second_semester_end;
+                        $range = 'Second Semester SY ' . $year_data->year_start . '-' . $year_data->year_end;
+                    }
+                }
+                else if ($request->input('quarterly'))
+                {
+                    $rangeTitle = 'Quarterly';
+                    $data = $request->validate([
+                        'first_quarter' => 'required_without_all:second_quarter,third_quarter,fourth_quarter|string',
+                        'second_quarter' => 'required_without_all:first_quarter,third_quarter,fourth_quarter|string',
+                        'third_quarter' => 'required_without_all:first_quarter,second_quarter,fourth_quarter|string',
+                        'fourth_quarter' => 'required_without_all:first_quarter,second_quarter,third_quarter|string',
+                    ]);
+                    if (isset($data['first_quarter']))
+                    {
+                        $start_date = Carbon::parse(date('Y'))->firstOfYear()->firstOfQuarter()->format('Y-m-d');
+                        $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
+                        $range = 'First Quarter of ' . date('Y');
+                    }
+                    else if (isset($data['second_quarter']))
+                    {
+                        $start_date = Carbon::parse(date('Y'))->firstOfYear()->addMonths(3)->firstOfQuarter()->format('Y-m-d');
+                        $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
+                        $range = 'Second Quarter of ' . date('Y');
+                    }
+                    else if (isset($data['third_quarter']))
+                    {
+                        $start_date = Carbon::parse(date('Y'))->firstOfYear()->addMonths(6)->firstOfQuarter()->format('Y-m-d');
+                        $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
+                        $range = 'Third Quarter of ' . date('Y');
+                    }
+                    else if (isset($data['fourth_quarter']))
+                    {
+                        $start_date = Carbon::parse(date('Y'))->firstOfYear()->addMonths(9)->firstOfQuarter()->format('Y-m-d');
+                        $end_date = Carbon::parse($start_date)->endOfQuarter()->format('Y-m-d');
+                        $range = 'Fourth Quarter of ' . date('Y');
+                    }
+                }
+                else if($request->input('custom'))
+                {
+                    $rangeTitle = 'Custom';
+                    $data = request()->validate([
+                        'custom_start_date' => 'required|date|date_format:Y-m-d|after:1992-01-01',
+                        'custom_end_date' => 'required|date|date_format:Y-m-d|after_or_equal:custom_start_date|after:1992-01-01',
+                        ]);
+                    $start_date = $data['custom_start_date'];
+                    $end_date = $data['custom_end_date'];
+                    $range = Carbon::parse($start_date)->format('F d, Y') . ' - ' . Carbon::parse($end_date)->format('F d, Y');
+                }
+                else
+                    return redirect()->action(
+                        [AccomplishmentReportsController::class, 'index']);
+
+            // Get the latest Constitution from the Organization's Documents
+            $organizationConstitution = OrganizationDocument::whereHas(
+                'documentType', function(Builder $query) use($organizationID){
+                    $query->where('type', 'Constitution')->where('organization_id', $organizationID);},)
+                ->orderBy('effective_date', 'DESC')
+                ->first();
+
+            // Get the other Organization Documents that fall under the Start and End Dates
+            $organizationDocumentTypes = OrganizationDocumentType::with([
+                'organizationDocuments' => function ($query) use($start_date, $end_date){
+                    $query->whereBetween('effective_date', [$start_date, $end_date])
+                        ->orderBy('effective_date', 'DESC')
+                        ->orderBy('created_at', 'DESC')
+                        ;},])
+                ->whereNotIn('type', ['Constitution'])
+                ->where('organization_id', $organizationID)
+                ->get();
+
+            // Get all Events within $start_date and $end_date, then grabs all of their child Event Images and Documents. 
+            //Images Sorted on Image type, Documents on Document Type, Event on Organization's Role
+            $events = Event::with(
+                    'eventCategory:event_category_id,category,text_color,background_color', 
+                    'eventRole:event_role_id,event_role,text_color,background_color', )
+                ->withCount('eventImages', 'eventDocuments')
+                ->where('organization_id', $organizationID)
+                ->whereBetween('start_date', [$start_date, $end_date])
+                ->orderBy('event_role_id', 'ASC')
+                ->get();
+            
+            $studentAccomplishments = StudentAccomplishment::with('student')
+                ->withCount('accomplishmentFiles')
+                ->where('organization_id', $organizationID)
+                ->whereBetween('end_date', [$start_date, $end_date])
+                ->where('status', 2)
+                ->get();
+            
+            $accomplishmentReportTypes = AccomplishmentReportType::all();
+
+            return view($this->viewDirectory . 'showChecklist', 
+                compact(
+                    'organizationConstitution',
+                    'organizationDocumentTypes',
+                    'events', 
+                    'studentAccomplishments', 
+                    'accomplishmentReportTypes', 
+                    'range', 
+                    'rangeTitle', 
+                    'organization', 
+                    'start_date', 
+                    'end_date',)); 
         }
         else
-        {
-            return redirect()->action(
-                [AccomplishmentReportsController::class, 'index']);
-        }
-        
-        //Fetch organization and assets
-        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)
-            ->first();
-
-        // Get all Events within $start_date and $end_date, then grabs all of their child Event Images and Documents. Images Sorted on Image type, Documents on Document Type, Event on Organization's Role
-        $events = Event::with([
-            'eventImages' => function ($query) {
-                    $query->orderBy('image_type', 'ASC')->get();},
-            'eventDocuments' => function ($query) {
-                    $query->orderBy('event_document_type_id', 'ASC')->get();},
-            'eventCategory:event_category_id,category,text_color,background_color', 
-            'eventRole:event_role_id,event_role,text_color,background_color', 
-                ])
-            ->where('organization_id', $organization->organization_id)
-            ->whereBetween('start_date', [$start_date, $end_date])
-            ->orderBy('event_role_id', 'ASC')
-            ->get();
-
-        $studentAccomplishments = StudentAccomplishment::with([
-            'accomplishmentFiles' => function ($query) {
-                    $query->orderBy('type', 'ASC')->get();},
-            'student',
-                ])
-            ->where('organization_id', $organization->organization_id)
-            ->whereBetween('end_date', [$start_date, $end_date])
-            ->where('status', 2)
-            ->get();
-        
-        $accomplishmentReportTypes = AccomplishmentReportType::all();
-
-        $loadJSWithoutDefer = true;
-        return view('accomplishmentreports.showChecklist', 
-            compact(
-                'events', 
-                'studentAccomplishments', 
-                'accomplishmentReportTypes', 
-                'range', 
-                'rangeTitle', 
-                'organization', 
-                'start_date', 
-                'end_date', 
-                'loadJSWithoutDefer'
-            )); 
+            abort(403);
     }
 
     /**
+     * FinalizeReportRequest $request
      * @param Request $request
      * Function to compile events and student accomplishment to finalize the Accomplishment Report
      * @return Redirect Response
      */ 
     public function finalizeReport(FinalizeReportRequest $request)
     {
-        // Fetch Organization Details
-        $organization = Organization::where('organization_id', Auth::user()->course->organization_id)
-            ->select('organization_id')
-            ->first();
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Accomplishment_Report'), 403);
+        // Pluck all User Roles
+        $userRoleCollection = Auth::user()->roles;
 
-        // Fetch Events and Accomplishments within Dates
-        $events = Event::with([
-                'eventImages' => function ($query) {
-                        $query->orderBy('image_type', 'ASC')->get();},
-                'eventDocuments' => function ($query) {
-                        $query->orderBy('event_document_type_id', 'ASC')->get();},
-                'eventDocuments.documentType:event_document_type_id,document_type',
-                'eventLevel:level_id,level',
-                'eventFundSource:fund_source_id,fund_source',
-                'eventCategory:event_category_id,category,text_color,background_color', 
-                'eventRole:event_role_id,event_role,text_color,background_color', 
-                'eventNature:event_nature_id,nature',
-                'eventClassification:event_classification_id,classification',
-                    ])
-            ->where('organization_id', $organization->organization_id)
-            ->whereBetween('start_date', [$request->input('start_date'), $request->input('end_date')])
-            ->orderBy('event_role_id', 'ASC')
-            ->get();
-        //dd($events);
-        $studentAccomplishments = StudentAccomplishment::with([
-                'accomplishmentFiles' => function ($query) {
-                        $query->orderBy('type', 'ASC')->get();},
-                'student',
-                'level',
-                    ])
-            ->where('organization_id', $organization->organization_id)
-            ->whereBetween('end_date', [$request->input('start_date'), $request->input('end_date')])
-            ->where('status', 2)
-            ->get();
-
-        $accomplishmentReportStoreService = new AccomplishmentReportStoreService();
-        
-        // Tabular Format XLSX
-        if ($request->input('ar_format') == 1)
+        // Remap User Roles into array with Organization ID
+        $userRoles = array();
+        foreach ($userRoleCollection as $role) 
         {
-            // Generate XLSX AR then Return the directory where it is saved
-            $accomplishmentReportGenerateXLSXService = new AccomplishmentReportGenerateXLSXService();
-            $ARDirectory = $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
-            $accomplishmentReportGenerateXLSXService->generate($events, $studentAccomplishments);
-
-            // Store Accomplishment Report
-            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization);
-
-            // Send Notification to Organization President
-            $this->sendNotificationToPresident($accomplishmentReportUUID);
-
-            // Automatic approval for Tabular reports
-            $accomplishmentReportReviewService = new AccomplishmentReportReviewService();
-            $accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
-            $accomplishmentReportReviewService->approveAccomplishmentReport_Tabular($accomplishmentReport);
-
-            // Go to AR Page
-            return redirect()->route('accomplishmentReport.show',
-                ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
-                ->with('success', 'Accomplishment Report Generated and Approved. No approval process is required for Tabular Reports.');
+            array_push($userRoles, ['role' => $role->role, 'organization_id' => $role->pivot->organization_id]);
         }
 
-        // Design Format PDF
-        elseif ($request->input('ar_format') == 2) 
+        // If User has AR Officer Admin role...
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'AR Officer Admin')) !== false ? true : false)
         {
-            // Generate PDF AR then Return the directory where it is saved
-            $accomplishmentReportGeneratePDFService = new AccomplishmentReportGeneratePDFService();
-            $ARDirectory = $accomplishmentReportGeneratePDFService->generate($request, $events, $studentAccomplishments,);
+            // Get the Organization from which the user is AR Officer Admin
+            $organizationID = $userRoles[$userRoleKey]['organization_id'];
 
-            // Store Accomplishment Report
-            $accomplishmentReportUUID = $accomplishmentReportStoreService->store($request, $ARDirectory, $organization);
+            // Get the one latest Constitution from the Organization's Documents
+            $organizationConstitution = OrganizationDocument::whereHas(
+                'documentType', function(Builder $query) use($organizationID){
+                    $query->where('type', 'Constitution')->where('organization_id', $organizationID);},)
+                ->orderBy('effective_date', 'DESC')
+                ->first();
 
-            // Send Notification to Organization President
-            $this->sendNotificationToPresident($accomplishmentReportUUID);
+            // Fetch Events within Dates
+            $events = Event::with([
+                    'eventImages' => function ($query) {
+                            $query->orderBy('image_type', 'ASC')->get();},
+                    'eventDocuments' => function ($query) {
+                            $query->orderBy('event_document_type_id', 'ASC')->get();},
+                    'eventDocuments.documentType:event_document_type_id,document_type',
+                    'eventLevel:level_id,level',
+                    'eventFundSource:fund_source_id,fund_source',
+                    'eventCategory:event_category_id,category,text_color,background_color', 
+                    'eventRole:event_role_id,event_role,text_color,background_color', 
+                    'eventNature:event_nature_id,nature',
+                    'eventClassification:event_classification_id,classification',
+                        ])
+                ->where('organization_id', $organizationID)
+                ->whereBetween('start_date', [$request->input('start_date'), $request->input('end_date')])
+                ->orderBy('event_role_id', 'ASC')
+                ->get();
+
+            // Fetch Student Accomplishments within Dates
+            $studentAccomplishments = StudentAccomplishment::with(
+                    'accomplishmentFiles.documentType',
+                    'student',
+                    'level:level_id,level',)
+                ->where('organization_id', $organizationID)
+                ->whereBetween('end_date', [$request->input('start_date'), $request->input('end_date')])
+                ->where('status', 2)
+                ->get();
+
+            // If AR Format selected is Tabular...
+            if ($request->input('ar_format') == 1)
+            {
+                // Generate XLSX AR then Return the directory where it is saved
+                $ARDirectory = (new AccomplishmentReportGenerateXLSXService())->generate($events, $studentAccomplishments);
+
+                // Store Accomplishment Report
+                $returnArray = (new AccomplishmentReportStoreService())->store($request, $ARDirectory, $organizationID);
+            }
+
+            // If AR Format selected is Design...
+            elseif ($request->input('ar_format') == 2) 
+            {
+                // Generate PDF AR then Return the directory where it is saved
+                $ARDirectory = (new AccomplishmentReportGeneratePDFService())->generate($request, $organizationID, $events, $studentAccomplishments, $organizationConstitution);
+
+                // Store Accomplishment Report
+                $returnArray = (new AccomplishmentReportStoreService())->store($request, $ARDirectory, $organizationID);
+            }
 
             // Go to AR Page
-            return redirect()->route('accomplishmentReport.show',
-                ['accomplishmentReportUUID' => $accomplishmentReportUUID, 'newAccomplishmentReport' => true])
-                ->with('success', 'Accomplishment Report Generated. Sent in for President\'s Approval.');
+            if ($returnArray['accomplishmentReportUUID'] !== NULL) 
+                return redirect()->action(
+                    [AccomplishmentReportsController::class, 'show'], ['accomplishmentReportUUID' => $returnArray['accomplishmentReportUUID'], 'newAccomplishmentReport' => true])
+                    ->with($returnArray['message']);
+            else
+                return redirect()->action(
+                    [AccomplishmentReportsController::class, 'index'])
+                    ->with($returnArray['message']);
         }
+        else
+            abort(403);
     }
 
     /**
@@ -352,34 +443,31 @@ class AccomplishmentReportsController extends Controller
      */ 
     public function downloadAccomplishmentReport($accomplishmentReportUUID)
     {
-        if($accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first())
-        {
-            $filePath = storage_path('/app/public/'. $accomplishmentReport->file);
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Download_Accomplishment_Report'), 403);
+        abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
 
-            if ($accomplishmentReport->accomplishment_report_type_id == 1) 
-                $headers = ['Content-Type: application/vnd.ms-excel'];
-            else if ($accomplishmentReport->accomplishment_report_type_id == 2) 
-                $headers = ['Content-Type: application/pdf'];
-            
-            $fileName = Str::limit(Str::slug($accomplishmentReport->title, '-'), 20, '-') .'-AccomplishmentReport.' .  pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
+        $accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
+        $filePath = storage_path('/app/public/'. $accomplishmentReport->file);
 
-            return response()->download($filePath, $fileName, $headers);
-        }
+        if ($accomplishmentReport->accomplishment_report_type_id == 1) 
+            $headers = ['Content-Type: application/vnd.ms-excel'];
+        else if ($accomplishmentReport->accomplishment_report_type_id == 2) 
+            $headers = ['Content-Type: application/pdf'];
+        
+        $fileName = Str::limit(Str::slug($accomplishmentReport->title, '-'), 20, '-') .'-AccomplishmentReport.' .  pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
+
+        return response()->download($filePath, $fileName, $headers);
     }
 
     /**
-     * @param String $accomplishmentReportUUID
-     * Function to send notification to Organization President
-     * @return void
+     * @param Array $roles, String $role
+     * Function to search for a role under 'role' column in $roles Array 
+     * Return Array Key if found, False if not
+     * @return True: Integer, False: Boolean
      */ 
-    private function sendNotificationToPresident($accomplishmentReportUUID)
+    private function hasRole($roles, $role)
     {
-        // Get Sender Details
-        $sender = Auth::user()->last_name . ', '.  Auth::user()->first_name . ' ' .  Auth::user()->middle_name;
-
-        // Send Notification to Organization President
-        $accomplishmentReportNotificationService = new AccomplishmentReportNotificationService();
-        $accomplishmentReportNotificationService->sendNotificationToPresident($sender, Auth::user()->course->organization_id, $accomplishmentReportUUID);
+        return array_search($role, array_column($roles, 'role'));
     }
 
 }

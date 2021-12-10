@@ -31,41 +31,43 @@
                         </ol>
                     </nav>
                 </div>
- <div class="card mb-3">
-                <div class="card-header text-white bg-maroon">Add Document Type</div>
-                <div class="card-body">
-                <div class="form-group row my-1">
-                    <label for="documentType" class="col-md-4 col-form-label align-middle fw-bold fs-3">Event Document Type</label>
-                    <input id="documentType" 
-                    type="text" 
-                    class="form-control @error('documentType') is-invalid @enderror" 
-                    name="documentType" 
-                    placeholder="Event Document Type"
-                    value="{{ old('documentType') }}" 
-                    required>
-                    @error('documentType')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
+                <div class="card mb-3">
+                    <div class="card-header text-white bg-maroon">Add Document Type</div>
+                    <div class="card-body">
+                        <div class="form-group row my-1">
+                            <label for="documentType" class="col-md-4 col-form-label align-middle fw-bold fs-3">Event Document Type</label>
+                            <input id="documentType" 
+                            type="text" 
+                            class="form-control @error('documentType') is-invalid @enderror" 
+                            name="documentType" 
+                            placeholder="Event Document Type"
+                            value="{{ old('documentType') }}" 
+                            required>
+                            @error('documentType')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
 
-                <div class="form-group row my-1">
-                    <label for="helper" class="col-md-4 col-form-label align-middle fw-bold fs-3">Helper/Description</label>    
-                    <textarea id="helper" 
-                    class="form-control @error('helper') is-invalid @enderror" 
-                    name="helper"
-                    placeholder="Helper/Description" 
-                    required>{{ old('helper') }}</textarea>
-                    @error('helper')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                
-                <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white">Add Document Type</button>
+                        <div class="form-group row my-1">
+                            <label for="helper" class="col-md-4 col-form-label align-middle fw-bold fs-3">Helper/Description</label>    
+                            <textarea id="helper" 
+                            class="form-control @error('helper') is-invalid @enderror" 
+                            name="helper"
+                            placeholder="Helper/Description" 
+                            required>{{ old('helper') }}</textarea>
+                            @error('helper')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        
+                        <div class="flex-row my-2 text-center">
+                            <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Document Type</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,7 +79,7 @@
         <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 

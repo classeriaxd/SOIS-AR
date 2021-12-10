@@ -65,7 +65,7 @@
                 </div>
                 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white">Add Fund Source</button>
+                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Fund Source</button>
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
         <a href="{{ route('admin.maintenance.fundSources.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 

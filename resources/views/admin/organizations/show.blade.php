@@ -181,14 +181,15 @@
                 <a href="{{route('admin.organizations.index')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go back to All Organizations
+                        <i class="fas fa-arrow-left"></i> Go back to All Organizations
                 </a>
+                
                 <span>or</span>
                 
                 <a href="{{route('admin.home')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Go Home
+                        <i class="fas fa-home"></i> Go Home
                 </a>            
             </div>
 
@@ -197,9 +198,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-    {{-- Enable Popovers --}}
-    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection

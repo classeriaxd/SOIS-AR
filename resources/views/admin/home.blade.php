@@ -101,7 +101,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Table -->
                 <!-- <div class="row ">
                     <div class="col-lg-7 col-md-12">
@@ -218,7 +217,13 @@
                         </div>
                     </div> -->
                 </div>
-
+                <div class="flex-row text-center my-1">
+                    <a href="{{ route('admin.maintenance.roles.index') }}"
+                    role="button"
+                    class="btn btn-primary text-white">
+                        Roles
+                    </a>
+                </div>
             </div>
 
             <div class="card w-100">
@@ -299,9 +304,6 @@
 
 
 @section('scripts')
-
-
-
     <script type="text/javascript">
         {{-- LOGIN ALERT TIMEOUT --}}
         window.setTimeout(function() {

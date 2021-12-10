@@ -1,12 +1,5 @@
-@page{
-    margin-right: 1.5cm;
-    margin-left: 1.5cm;
-    size:8.5in 11in
-}
-
 .page
 {
-    /*background-image: url('images/cs_logo.png');*/
     width: 100%;
     height:100%;
     position:absolute;
@@ -16,6 +9,10 @@
     margin-top: 0px !important;
 }
 
+.text-center{
+    text-align: center;
+}
+
 .page-break
 {
     page-break-after: always;
@@ -23,10 +20,14 @@
 
 .vertical-center
 {
+    margin: 0;
     position: absolute;
-    top: 50%; 
-    transform: translate(0, -50%);
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
+
 .intro-title-block
 {
     text-align: center;
@@ -70,8 +71,6 @@
     margin-bottom: 20px;
 }
 
-
-
 .event-prep-block .prep-org
 {
     text-transform: uppercase;
@@ -86,6 +85,11 @@
 .event-prep-block .prep-officer-title
 {
     font-style: italic;
+}
+.event-prep-block .prep-signature
+{
+    max-width: 150px;
+    max-height: 150px;
 }
 
 .event-desc-block .block-desc
@@ -114,22 +118,38 @@
 .event-img-block .info-block p
 {
    border: 1px solid black;
-   padding: 3px
+   padding: 3px;
 }
 
-.event-img-block .img-block
+div .img-block-poster
+{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 480px;
+}
+
+div .img-block-evidence
 {
     margin-left: auto;
     margin-right: auto;
     max-width: 676px;
 }
 
-.event-img-block .img-block img
+img .img-poster
 {
-    min-width: 672px;
-    max-width: 672px;
-    min-height: 480px;
+    min-height: auto;
+    min-width: auto;
+    max-height: 676px;
+    max-width: 480px;
+    border: 1px solid black;
+}
+
+img .img-evidence
+{
+    min-height: auto;
+    min-width: auto;
     max-height: 480px;
+    max-width: 676px;
     border: 1px solid black;
 }
 

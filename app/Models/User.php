@@ -40,6 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['full_name'];
     
     protected $primaryKey = 'user_id';
 
@@ -48,14 +54,20 @@ class User extends Authenticatable
         return $this->belongsTo(Course::class, 'course_id');
     }
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id');
+    }
+    public function rolesWithOrganization()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withPivot('organization_id')
+            ->join('organizations as role_organization', 'role_user.organization_id', 'role_organization.organization_id')
+            ->select('roles.role_id', 'roles.role','role_organization.organization_id', 'role_organization.organization_acronym');
     }
 
-    public function positionTitles()
+    public function permissions()
     {
-        return $this->belongsToMany(PositionTitle::class, 'users_position_titles');
+        return $this->belongsToMany(Permission::class, 'permission_user', 'user_id', 'permission_id');
     }
 
     public function notifications()
@@ -66,5 +78,21 @@ class User extends Authenticatable
     public function studentAccomplishments()
     {
         return $this->hasMany(studentAccomplishments::class, 'user_id');
+    }
+
+    /**
+     * Get the user's full concatenated name.
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        $name = "{$this->last_name}, {$this->first_name}";
+
+        if (! $this->middle_name === NULL)
+            $name .= " {$this->middle_name}";
+        if (! $this->suffix === NULL)
+            $name .= " {$this->suffix}";
+
+        return $name;
     }
 }

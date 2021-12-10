@@ -46,44 +46,85 @@
                 <a href="{{ route('admin.maintenance.eventNatures.create') }}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        Add Event Nature
+                        <i class="fas fa-plus"></i> Add Event Nature
                 </a>
             </div>
             
-            <div class="card w-100">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Nature</th>
-                        <th>Helper</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($eventNatures as $nature)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $nature->nature }}</td>
-                            <td style="width: 50%;">{{ $nature->helper }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.eventNatures.show', ['nature_id' => $nature->event_nature_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.eventNatures.edit', ['nature_id' => $nature->event_nature_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>    
+            {{-- Event Natures Table --}}
+            @if($eventNatures->isNotEmpty())
+                <div class="card w-100">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Nature</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($eventNatures as $nature)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $nature->nature }}</td>
+                                <td style="width: 50%;">{{ $nature->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.eventNatures.show', ['nature_id' => $nature->event_nature_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventNatures.edit', ['nature_id' => $nature->event_nature_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
 
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Event Nature found. :(</p>
+            @endif
+            
+            {{-- Deleted Event Natures Table --}}
+            @if($deletedEventNatures->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Event Natures</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Nature</th>
+                            <th>Helper</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedEventNatures as $nature)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $nature->nature }}</td>
+                                <td style="width: 50%;">{{ $nature->helper }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.eventNatures.show', ['nature_id' => $nature->event_nature_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
             
             <div class="flex-row my-2 text-center">
                 <a href="{{ route('admin.home') }}"

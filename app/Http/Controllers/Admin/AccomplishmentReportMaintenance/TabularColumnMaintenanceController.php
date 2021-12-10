@@ -13,26 +13,30 @@ use App\Services\Admin\AccomplishmentReportMaintenance\TabularColumn\{
     TabularColumnStoreService,
     TabularColumnUpdateService,
     TabularColumnDeleteService,
+    TabularColumnRestoreService,
 };
+use App\Services\PermissionServices\PermissionCheckingService;
 
 use App\Http\Controllers\Controller as Controller;
 
 class TabularColumnMaintenanceController extends Controller
 {
-    protected $viewDirectory = 'admin.maintenances.accomplishmentreport.tabularColumn.';
+    protected $viewDirectory = 'admin.maintenances.accomplishmentReport.tabularColumn.';
+    protected $permissionChecker;
 
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
     
     public function create($tabular_table_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         return view($this->viewDirectory . 'create', compact('tabularTable'));
@@ -40,6 +44,7 @@ class TabularColumnMaintenanceController extends Controller
 
     public function store(TabularColumnStoreRequest $request, $tabular_table_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         $message = (new TabularColumnStoreService())->store($tabularTable, $request);
@@ -51,6 +56,7 @@ class TabularColumnMaintenanceController extends Controller
 
     public function edit($tabular_table_id, $tabular_column_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
         $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
 
@@ -59,6 +65,7 @@ class TabularColumnMaintenanceController extends Controller
 
     public function update(TabularColumnUpdateRequest $request, $tabular_table_id, $tabular_column_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
         $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
 
@@ -72,6 +79,7 @@ class TabularColumnMaintenanceController extends Controller
 
     public function show($tabular_table_id, $tabular_column_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
         $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
         
@@ -80,6 +88,7 @@ class TabularColumnMaintenanceController extends Controller
 
     public function destroy(TabularColumnDeleteRequest $request, $tabular_table_id, $tabular_column_id)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
         $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
 
@@ -90,6 +99,19 @@ class TabularColumnMaintenanceController extends Controller
             ->with($message);
     }
 
+    public function restore($tabular_table_id, $tabular_column_id)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
+        $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
+
+        $message = (new TabularColumnRestoreService())->restore($tabularColumn);
+
+        return redirect()->action(
+            [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
+            ->with($message);
+
+    }
+
     /**
      * @param Integer $tabular_table_id, Integer $tabular_column_id
      * Function to check if a tabular column id exists, sends 404 if not
@@ -97,7 +119,7 @@ class TabularColumnMaintenanceController extends Controller
      */ 
     private function checkIfTabularColumnExists($tabular_table_id, $tabular_column_id)
     {
-        abort_if(! $tabularColumn = TabularColumn::where('tabular_column_id', $tabular_column_id)->where('tabular_table_id', $tabular_table_id)->first(), 404);
+        abort_if(! $tabularColumn = TabularColumn::withTrashed()->where('tabular_column_id', $tabular_column_id)->where('tabular_table_id', $tabular_table_id)->first(), 404);
 
         return $tabularColumn;
     }
@@ -109,7 +131,7 @@ class TabularColumnMaintenanceController extends Controller
      */ 
     private function checkIfTabularTableExists($tabular_table_id)
     {
-        abort_if(! $tabularTable = TabularTable::where('tabular_table_id', $tabular_table_id)->first(), 404);
+        abort_if(! $tabularTable = TabularTable::withTrashed()->where('tabular_table_id', $tabular_table_id)->first(), 404);
 
         return $tabularTable;
     }

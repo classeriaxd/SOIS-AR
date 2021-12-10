@@ -7,23 +7,27 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use App\Models\Organization;
 
+use App\Services\PermissionServices\PermissionCheckingService;
 use App\Http\Controllers\Controller as Controller;
 
 class AdminEventsController extends Controller
 {
     protected $viewDirectory = 'admin.events.';
+    protected $permissionChecker;
+
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $events = Event::with(
                 'organization:organization_id,organization_acronym,organization_slug',
                 'eventRole:event_role_id,event_role,background_color,text_color',
@@ -45,6 +49,7 @@ class AdminEventsController extends Controller
     }
     public function organizationIndex($organizationSlug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         abort_if(($organization = Organization::where('organization_slug', $organizationSlug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
         $organizationLogo = $organization->logo->file;
         $events = Event::with(
@@ -64,6 +69,7 @@ class AdminEventsController extends Controller
     }
     public function show($organizationSlug, $eventSlug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         abort_if(($organization_id = Organization::where('organization_slug', $organizationSlug)->value('organization_id')) !== NULL ? false : true, 404);
         abort_if(! Event::where('slug', $eventSlug)->where('organization_id', $organization_id)->exists(), 404);
         

@@ -4,13 +4,12 @@
 <div class="container">
     <form action="{{route('event.image.store', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageForm">
         @csrf
-        <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
             <div class="col-8 offset-2">
                 {{-- Title and Breadcrumbs --}}
                 <div class="row">
                     {{-- Title --}}
                     <h2 class="display-2 text-center">New Event Image</h2>
-                    <h6 class="display-6 text-center">{{$event->title}}</h6>
                     {{-- Breadcrumbs --}}
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
@@ -43,6 +42,7 @@
                     <a role="button"
                         data-bs-toggle="popover" 
                         data-bs-container="body"
+                        data-bs-trigger="hover focus"
                         title="Posters" 
                         data-bs-content="Posters that are made exclusively for this Event. Portrait Orientation is a must."
                         data-bs-placement="right">
@@ -70,6 +70,7 @@
                     <a role="button"
                         data-bs-toggle="popover" 
                         data-bs-container="body"
+                        data-bs-trigger="hover focus"
                         title="Evidences" 
                         data-bs-content="Evidences, Photographs, or Screenshots on the Event. Landscape Orientation is a must."
                         data-bs-placement="right">
@@ -91,7 +92,9 @@
                 @enderror
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">Add Images</button>
+                    <button class="btn btn-primary text-white" type="submit">
+                        <i class="fas fa-plus"></i> Add Images
+                    </button>
                 </div>
             </div>
         </div>
@@ -103,37 +106,11 @@
         <a href="{{route('event.show', ['event_slug' => $event->slug])}}"
         class="btn btn-secondary text-white"
         role="button">
-            Go back
+            <i class="fas fa-arrow-left"></i> Go back
         </a>
     </div>
 </div>
-{{-- 
-                <div class="form-group row">
-                    <label for="poster_caption" class="col-md-4 col-form-label">Poster Caption</label>
-                    <input id="poster_caption" 
-                    type="text" 
-                    class="form-control @error('poster_caption') is-invalid @enderror" 
-                    name="poster_caption" 
-                    value="{{ old('poster_caption') }}" autocomplete="poster_caption">
-                    @error('poster_caption')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div> 
-                <div class="form-group row">
-                    <label for="evidence_caption" class="col-md-4 col-form-label">Caption</label>
-                    <input id="evidence_caption" 
-                    type="text" 
-                    class="form-control @error('evidence_caption') is-invalid @enderror" 
-                    name="evidence_caption" 
-                    value="{{ old('evidence_caption') }}" autocomplete="evidence_caption">
-                    @error('evidence_caption')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>--}}
+
 @endsection
 
 
@@ -155,6 +132,10 @@
 @endif
 
 @section('scripts')
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
+    
+    {{-- FilePondJS Upload --}}
     <script type="module">
         FilePond.registerPlugin(FilePondPluginFileValidateType);
         FilePond.registerPlugin(FilePondPluginFileValidateSize);
@@ -187,27 +168,12 @@
 
         FilePond.setOptions({
             server: {
-                url: '/e/images/upload',
+                url: '{{ route('event.images.upload') }}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                revert: '/revert',
+                revert: '{{ route('event.images.undoUpload') }}',
             }
-        });
-    </script>
-    <script type="text/javascript">
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-          return new bootstrap.Popover(popoverTriggerEl)
-        })
-        $('body').on('click', function (e) {
-            $('[data-bs-toggle="popover"]').each(function () {
-                //the 'is' for buttons that trigger popups
-                //the 'has' for icons within a button that triggers a popup
-                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                    $(this).popover('hide');
-                }
-            });
         });
     </script>
 @endsection

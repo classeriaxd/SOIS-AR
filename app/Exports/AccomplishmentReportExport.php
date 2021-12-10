@@ -17,6 +17,8 @@ class AccomplishmentReportExport implements
     ShouldAutoSize,
     WithEvents
 {
+    protected $viewDirectory = 'accomplishmentReports.excelTemplates.';
+
     // Contains all query information
     protected $table1; 
     protected $table2; 
@@ -52,7 +54,7 @@ class AccomplishmentReportExport implements
    
     public function view(): View
     {
-        return view('accomplishmentreports.excelTemplates.tabularAccomplishmentReport', [
+        return view($this->viewDirectory . 'tabularAccomplishmentReport', [
             'table1' => $this->table1,
             'table2' => $this->table2,
             'table3' => $this->table3,
@@ -88,7 +90,7 @@ class AccomplishmentReportExport implements
                 $table1Columns,
                 $table2Columns,
                 $table3Columns,
-                $table4Columns,
+                $table4Columns
             )
             {
                 $currentRow = 1;
@@ -116,10 +118,10 @@ class AccomplishmentReportExport implements
                                     // BACKGROUND COLOR 
                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                    'startColor' => [
-                                       'argb' => 'FF800000',
+                                       'rgb' => '800000',
                                    ],
                                    'endColor' => [
-                                       'argb' => 'FF800000',
+                                       'rgb' => '800000',
                                    ],
                             ],
                         ]);
@@ -139,10 +141,10 @@ class AccomplishmentReportExport implements
                                     // BACKGROUND COLOR 
                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                    'startColor' => [
-                                       'argb' => '203763',
+                                       'rgb' => '203763',
                                    ],
                                    'endColor' => [
-                                       'argb' => '203763',
+                                       'rgb' => '203763',
                                    ],
                             ],
                         ]);

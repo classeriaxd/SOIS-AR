@@ -2,73 +2,66 @@
 
 namespace App\Services\NotificationServices;
 
-use App\Models\PositionTitle;
 use App\Models\Notification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class StudentAccomplishmentNotificationService
 {
     /**
-     * Service to Send Notifications to Officer.
-     *
+     * @param String $sender, Integer $recieverOrganizationID, String $accomplishmentUUID, Integer $type
+     * Service to Send Notifications to Documentation Officer.
      * @return void
      */
     public function sendNotificationToOfficers($sender, $recieverOrganizationID, $accomplishmentUUID, $type = 3)
     {
-        $valid_positions = ['Vice President for Research and Documentation', 'Assistant Vice President for Research and Documentation'];
-        $recieving_positions = PositionTitle::where('organization_id', $recieverOrganizationID)
-            ->whereIn('position_title', $valid_positions)
-            ->pluck('position_title_id');
-        $recieving_users = array();
-        foreach($recieving_positions as $reciever)
-        {
-            $recieving_user_id = DB::table('users_position_titles')->where('position_title_position_title_id', $reciever)->value('user_user_id');
-            if ($recieving_user_id != NULL) 
-                array_push($recieving_users,$recieving_user_id);
-        }
+        $recievingOfficers = User::whereHas(
+                'roles', function(Builder $query){
+                    $query->where('role', 'AR Officer Admin');},)
+            ->whereHas(
+                'course.organization', function(Builder $query) use($recieverOrganizationID){
+                    $query->where('organization_id', $recieverOrganizationID);},)
+            ->get();
 
         $notificationTitle = "New Student Accomplishment Submission";
         $notificationDescription = 'A student named ' . $sender . ' sent an Accomplishment Submission. Please review it!';
         $notificationType = $type;
         $notificationLink = $accomplishmentUUID;
 
-        if (count($recieving_users) > 0)
+        if ($recievingOfficers->count() > 0)
         {
-            foreach($recieving_users as $reciever)
+            foreach ($recievingOfficers as $recievingOfficer) 
             {
-                if ($reciever != NULL)
-                {
-                    Notification::create([
-                        'user_id' => $reciever,
-                        'title' => $notificationTitle,
-                        'description' => $notificationDescription,
-                        'type' => $notificationType,
-                        'link' => $notificationLink,
-                    ]);
-                }
+                Notification::create([
+                    'user_id' => $recievingOfficer->user_id,
+                    'title' => $notificationTitle,
+                    'description' => $notificationDescription,
+                    'type' => $notificationType,
+                    'link' => $notificationLink,
+                ]);
             }
         }
     }
 
     /**
+     * @param Integer $recieverID, String $accomplishmentUUID, Integer $status, Integer $type
      * Service to Send Notifications to member.
-     *
      * @return void
      */
     public function sendNotificationToMember($recieverID, $accomplishmentUUID, $status, $type = 3)
     {
-        if ($recieverID != NULL)
+        if ($recieverID !== NULL)
         {
             $notificationLink = $accomplishmentUUID;
             $notificationType = $type;
 
-            if ($status == 'approved')
+            if ($status === 'approved')
             {
                 $notificationTitle = "Submission Approved";
-                $notificationDescription = 'Your Accomplishment Submission has been approved. Cheers!';
+                $notificationDescription = 'Your Accomplishment Submission has been approved. \'Grats!';
             }
-            else if ($status == 'declined')
+            else if ($status === 'declined')
             {
                 $notificationTitle = "Submission Declined";
                 $notificationDescription = 'Your Accomplishment Submission has been declined.';

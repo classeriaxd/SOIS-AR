@@ -10,23 +10,27 @@ use App\Models\Organization;
 
 use Carbon\Carbon;
 
+use App\Services\PermissionServices\PermissionCheckingService;
 use App\Http\Controllers\Controller as Controller;
 
 class AdminAccomplishmentReportsController extends Controller
 {
     protected $viewDirectory = 'admin.accomplishmentReports.';
+    protected $permissionChecker;
+
     /**
      * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+        $this->permissionChecker = new PermissionCheckingService();
     }
 
     public function index()
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $accomplishmentReports = AccomplishmentReport::with(
                 'accomplishmentReportType',
                 'organization:organization_id,organization_acronym,organization_slug')
@@ -46,6 +50,7 @@ class AdminAccomplishmentReportsController extends Controller
     }
     public function organizationIndex($organizationSlug)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         abort_if(($organization = Organization::where('organization_slug', $organizationSlug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
 
         $organizationLogo = $organization->logo->file;
@@ -67,17 +72,19 @@ class AdminAccomplishmentReportsController extends Controller
     }
     public function show($organizationSlug, $accomplishmentReportUUID)
     {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         abort_if(($organization_id = Organization::where('organization_slug', $organizationSlug)->value('organization_id')) !== NULL ? false : true, 404);
         abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->where('organization_id', $organization_id)->exists(), 404);
         
         $accomplishmentReport = AccomplishmentReport::with(
                 'accomplishmentReportType',
+                'creator',
+                'reviewer',
                 'organization:organization_id,organization_acronym,organization_slug',
                 'organization.logo:organization_id,file',)
             ->where('accomplishment_report_uuid', $accomplishmentReportUUID)
             ->where('organization_id', $organization_id)
             ->first();
-
         if ($accomplishmentReport->read_at == NULL) 
         {
             $data = ['read_at' => Carbon::now(),];
@@ -87,6 +94,18 @@ class AdminAccomplishmentReportsController extends Controller
             compact(
                 'accomplishmentReport',
             ));
+    }
+
+    public function redirectFromNotification($accomplishmentReportUUID)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
+        abort_if(! AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->exists(), 404);
+
+        $accomplishmentReport = AccomplishmentReport::with('organization:organization_id,organization_slug')
+            ->where('accomplishment_report_uuid', $accomplishmentReportUUID)
+            ->first();
+        return redirect()->action(
+            [AdminAccomplishmentReportsController::class, 'show'], ['organizationSlug' => $accomplishmentReport->organization->organization_slug, 'accomplishmentReportUUID' => $accomplishmentReportUUID]);
     }
 
 }

@@ -52,23 +52,36 @@
                 <div class="card w-50 text-center">
                     <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Table Name: {{ $tabularTable->tabular_table_name }}</h5>
                     <div class="card-body">
+                        @if($tabularTable->deleted_at !== NULL)
+                            <p class="card-text"><span class="badge rounded-pill bg-danger text-white">Status: DELETED</span></p>
+                        @endif
                         <p class="card-text">{{ $tabularTable->description ?? 'No Description Provided'}}</p>
                         <p class="card-text">Reference Table No. : {{ $tabularTable->reference_table_number ?? 'No Reference Number Provided' }}</p>
                         <hr class="my-2">
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
-                            <a href="{{ route('admin.maintenance.tabularTables.edit', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}"
-                                class="btn btn-primary text-white mx-1"
-                                role="button">
-                                    Edit Tabular AR Table
-                            </a>
-                            <a href="#"
-                                class="btn btn-danger text-white mx-1"
-                                role="button"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#deleteTabularTableReminderModal">
-                                    Delete Tabular AR Table
-                            </a>
+                            @if($tabularTable->deleted_at !== NULL)
+                                <form action="{{ route('admin.maintenance.tabularTables.restore', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm">
+                                    @csrf
+
+                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Table</button>
+                                </form>  
+                                </a>
+                            @else
+                                <a href="{{ route('admin.maintenance.tabularTables.edit', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}"
+                                    class="btn btn-primary text-white mx-1"
+                                    role="button">
+                                        Edit Tabular AR Table
+                                </a>
+                                <a href="#"
+                                    class="btn btn-danger text-white mx-1"
+                                    role="button"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteTabularTableReminderModal">
+                                        Delete Tabular AR Table
+                                </a>
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
@@ -86,41 +99,82 @@
                 </a>
             </div>
 
-            <div class="card w-100 my-2">
-                <table class="w-100 table table-bordered table-striped table-hover border border-dark">
-                    <thead class="align-middle bg-maroon text-white fw-bold fs-6">
-                        <th>#</th>
-                        <th>Column Name</th>
-                        <th>Description</th>
-                        <th>Option</th>
-                    </thead>
-                    <tbody>
-                    @php $i = 1; @endphp
-                    @foreach($tabularColumns as $tabularColumn)
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td style="width: 30%;">{{ $tabularColumn->tabular_column_name }}</td>
-                            <td style="width: 30%;">{{ $tabularColumn->description ?? 'No Description Provided' }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-success text-white" 
-                                    href="{{ route('admin.maintenance.tabularTables.tabularColumns.show', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary text-white" 
-                                    href="{{ route('admin.maintenance.tabularTables.tabularColumns.edit', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" 
-                                    role="button">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>    
+            {{-- Tabular Columns --}}
+            @if($tabularColumns->isNotEmpty())
+                <div class="card w-100 my-2">
+                    <table class="w-100 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Column Name</th>
+                            <th>Description</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($tabularColumns as $tabularColumn)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td style="width: 30%;">{{ $tabularColumn->tabular_column_name }}</td>
+                                <td style="width: 30%;">{{ $tabularColumn->description ?? 'No Description Provided' }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.tabularTables.tabularColumns.show', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary text-white" 
+                                        href="{{ route('admin.maintenance.tabularTables.tabularColumns.edit', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
 
-                        </tr>
-                    @php $i += 1; @endphp
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-center">No Columns found. :(</p>
+            @endif
+
+            {{-- Deleted Tabular Columns --}}
+            @if($deletedTabularColumns->isNotEmpty())
+                <hr>
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Deleted Tabular Columns</h5>
+
+                    <table class="w-100 my-1 table table-bordered table-striped table-hover border border-dark">
+                        <thead class="align-middle bg-maroon text-white fw-bold fs-6">
+                            <th>#</th>
+                            <th>Column Name</th>
+                            <th>Description</th>
+                            <th>Option</th>
+                        </thead>
+                        <tbody>
+                        @php $i = 1; @endphp
+                        @foreach($deletedTabularColumns as $tabularColumn)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td style="width: 30%;">{{ $tabularColumn->tabular_column_name }}</td>
+                                <td style="width: 30%;">{{ $tabularColumn->description ?? 'No Description Provided' }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success text-white" 
+                                        href="{{ route('admin.maintenance.tabularTables.tabularColumns.show', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" 
+                                        role="button">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>    
+
+                            </tr>
+                        @php $i += 1; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
     <hr>
@@ -129,7 +183,7 @@
         <a href="{{ route('admin.maintenance.tabularTables.index') }}"
             class="btn btn-secondary text-white"
             role="button">
-                Go Back
+                <i class="fas fa-arrow-left"></i> Go Back
         </a>
     </div>
 
@@ -151,13 +205,13 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                         <button type="button" 
                             class="btn btn-danger text-white" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteTabularTableModal"
                             data-bs-dismiss="modal">
-                            Proceed
+                            <i class="fas fa-check"></i> Proceed
                         </button>
                     </div>
                 </div>
@@ -226,8 +280,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white">Proceed</button>
+                            <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>
