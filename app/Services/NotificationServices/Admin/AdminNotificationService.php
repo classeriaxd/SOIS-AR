@@ -88,7 +88,7 @@ class AdminNotificationService
 
                     Notification::create([
                         'user_id' => $recievingOfficer->user_id,
-                        'title' => $request->input('title'),
+                        'title' => 'Announcement: ' . $request->input('title'),
                         'description' => $request->input('description'),
                         'type' => $type,
                         'link' => NULL,

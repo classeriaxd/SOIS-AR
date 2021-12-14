@@ -36,6 +36,7 @@ class AdminAnnouncementMail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->markdown('mails.AdminAnnouncementMailTemplate')
+            ->subject('SOIS-AR Announcement: ' . $this->title)
             ->with([
                 'full_name' => $this->full_name,
                 'title' => $this->title,

@@ -1,6 +1,6 @@
 @component('mail::message')
 {{-- Title --}}
-# {{ 'SOIS-AR Announcement: ' . $title }}
+# {{ 'Announcement: ' . $title }}
 
 {{-- Message --}}
 Dear {{ $full_name }},
