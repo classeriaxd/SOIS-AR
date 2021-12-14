@@ -17,11 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
 // halep me organize this shit ples
 Auth::routes();
-
-
 
 Route::group(['middleware' => 'auth'], function () {
 
