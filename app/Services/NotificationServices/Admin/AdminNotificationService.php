@@ -4,6 +4,8 @@ namespace App\Services\NotificationServices\Admin;
 
 use App\Models\Notification;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminAnnouncementMail;
 
 use Illuminate\Database\Eloquent\Builder;
 
@@ -11,7 +13,7 @@ class AdminNotificationService
 {
     /**
      * @param String $recievers, String $notificationTitle,  String $notificationDescription, Integer $type
-     * Function to Send Notification to All Concerned Officer about changes to Event Categories
+     * Function to Send Notification to All Concerned Officer about changes System Changes
      * @return void
      */ 
     public function sendNotification($recievers, $notificationTitle, $notificationDescription, $type = 1)
@@ -54,7 +56,7 @@ class AdminNotificationService
 
     /**
      * @param Request $request, Integer $type
-     * Function to Send Notification to an Organization
+     * Function to Send an Announcement Notification to an Organization and its Officers/Presidents
      * @return void
      */ 
     public function sendNotificationToOrganization($request, $type = 1)
@@ -83,13 +85,18 @@ class AdminNotificationService
             {
                 foreach ($recievingOfficers as $recievingOfficer) 
                 {
+
                     Notification::create([
                         'user_id' => $recievingOfficer->user_id,
-                        'title' => $request->input('title'),
+                        'title' => 'Announcement: ' . $request->input('title'),
                         'description' => $request->input('description'),
                         'type' => $type,
                         'link' => NULL,
                     ]);
+
+                    Mail::to($recievingOfficer->email)
+                        ->cc($recievingOfficer->email)
+                        ->send(new AdminAnnouncementMail($recievingOfficer->full_name, $request->input('title'), $request->input('description')));
                 }
             }
         }

@@ -64,6 +64,9 @@
                                                     @elseif($notification->type == 4)
                                                         {{-- Accomplishment Reports --}}
                                                         {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                                    @else
+                                                        {{-- Notifications Index --}}
+                                                        {{route('notifications.show')}}
                                                     @endif">
                                             </read-notification>
                                         
@@ -232,6 +235,9 @@
                                                                 @elseif($notification->type == 4)
                                                                     {{-- Accomplishment Reports --}}
                                                                     {{route('accomplishmentReport.show', ['accomplishmentReportUUID' => $notification->link])}}
+                                                                @else
+                                                                    {{-- Notifications Index --}}
+                                                                    {{route('notifications.show')}}
                                                                 @endif">
                                                         </read-notification>
                                                     
