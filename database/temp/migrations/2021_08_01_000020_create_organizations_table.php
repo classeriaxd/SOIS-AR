@@ -21,13 +21,10 @@ class CreateOrganizationsTable extends Migration
             $table->text('organization_details');
             $table->string('organization_primary_color');
             $table->string('organization_secondary_color');
-            $table->string('organization_tertiary_color')->nullable();
             $table->string('organization_slug')->unique();
             $table->timestamps();
 
             $table->foreign('organization_type_id')->references('organization_type_id')->on('organization_types');
-
-            $table->integer('status')->nullable();
         });
     }
 

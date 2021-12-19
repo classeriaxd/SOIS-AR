@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssetTypesTable extends Migration
+class CreateTemporaryFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAssetTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset_types', function (Blueprint $table) {
-            $table->id('asset_type_id');            
-            $table->string('type');
-            $table->string('asset_type_description')->nullable();
+        Schema::create('temporary_files', function (Blueprint $table) {
+            $table->id('temporary_file_id');
+            $table->string('folder');
+            $table->string('filename');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateAssetTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asset_types');
+        Schema::dropIfExists('temporary_files');
     }
 }

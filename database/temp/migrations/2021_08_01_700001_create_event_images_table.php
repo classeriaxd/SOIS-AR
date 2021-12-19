@@ -16,6 +16,7 @@ class CreateEventImagesTable extends Migration
         Schema::create('event_images', function (Blueprint $table) {
             $table->id('event_image_id');
             $table->foreignId('accomplished_event_id');
+            // Image Type > 0 = Poster | 1 = Evidence
             $table->unsignedTinyInteger('image_type');
             $table->string('image');
             $table->text('caption')->nullable();

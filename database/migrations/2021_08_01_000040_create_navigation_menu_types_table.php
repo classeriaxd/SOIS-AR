@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssetTypesTable extends Migration
+class CreateNavigationMenuTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateAssetTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset_types', function (Blueprint $table) {
-            $table->id('asset_type_id');            
-            $table->string('type');
-            $table->string('asset_type_description')->nullable();
+        Schema::create('navigation_menu_types', function (Blueprint $table) {
+            $table->id('navigation_menu_types_id');
+            $table->string('navigation_menu_type');
+            $table->string('navigation_menu_description');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateAssetTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asset_types');
+        Schema::dropIfExists('navigation_menu_types');
     }
 }

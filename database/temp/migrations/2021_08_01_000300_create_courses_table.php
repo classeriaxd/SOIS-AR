@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationDocumentTypesTable extends Migration
+class CreateCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateOrganizationDocumentTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_document_types', function (Blueprint $table) {
-            $table->id('organization_document_type_id');
+        Schema::create('courses', function (Blueprint $table) {
+            $table->id('course_id');
             $table->foreignId('organization_id');
-            $table->string('type');
-            $table->string('slug')->unique();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->string('course_name');
+            $table->string('course_acronym');
 
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
         });
@@ -32,7 +30,7 @@ class CreateOrganizationDocumentTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_document_types');
+        Schema::dropIfExists('courses');
         $table->dropForeign('organization_id');
     }
 }
