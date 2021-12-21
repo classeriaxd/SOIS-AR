@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 // NOTES 
 // GET BEFORE POST
+// PHP ARTISAN OPTIMIZE EVERY NEW ADDITION/EDIT
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// halep me organize this shit ples
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
@@ -349,13 +349,13 @@ Route::group(['middleware' => 'auth'], function () {
             'prefix' => '/events'], 
         function () {
             // Event
-            // --> /e
+            // --> /events
 
             Route::delete('/images/upload/revert', [App\Http\Controllers\EventImagesController::class, 'undoUpload'])->name('images.undoUpload');
             Route::post('/images/upload', [App\Http\Controllers\EventImagesController::class, 'upload'])->name('images.upload');
             Route::delete('/documents/upload/revert', [App\Http\Controllers\EventDocumentsController::class, 'undoUpload'])->name('documents.undoUpload');
             Route::post('/documents/upload', [App\Http\Controllers\EventDocumentsController::class, 'upload'])->name('documents.upload');
-            Route::get('/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent']);
+            Route::get('/find{event?}', [App\Http\Controllers\EventsController::class, 'findEvent'])->name('find');
             Route::get('/create', [App\Http\Controllers\EventsController::class, 'create'])->name('create');
             Route::post('', [App\Http\Controllers\EventsController::class, 'store'])->name('store');
             Route::get('', [App\Http\Controllers\EventsController::class, 'index'])->name('index');
@@ -365,7 +365,7 @@ Route::group(['middleware' => 'auth'], function () {
                     'where' => ['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'],], 
                 function () {
                     // Event
-                    // --> /e/{event_slug}
+                    // --> /events/{event_slug}
 
                     Route::get('/edit', [App\Http\Controllers\EventsController::class, 'edit'])->name('edit');
                     Route::patch('', [App\Http\Controllers\EventsController::class, 'update'])->name('update');
@@ -379,7 +379,7 @@ Route::group(['middleware' => 'auth'], function () {
                             'prefix' => '/images',],
                         function () {
                         // Event Images
-                        // --> /e/{event_slug}/images
+                        // --> /events/{event_slug}/images
 
                         Route::get('/create', [App\Http\Controllers\EventImagesController::class, 'create'])->name('create');
                         Route::get('/createCaption', [App\Http\Controllers\EventImagesController::class, 'createCaption'])->name('createCaption');
@@ -410,7 +410,7 @@ Route::group(['middleware' => 'auth'], function () {
                             'where' => ['document_id' => '^([1-9][0-9]*)$'],],
                         function() {
                         // Event Documents
-                        // --> /e/{event_slug}/document/{document_id}
+                        // --> /events/{event_slug}/document/{document_id}
 
                                 Route::delete('/destroy', [App\Http\Controllers\EventDocumentsController::class, 'destroy'])->name('destroy');
                                 Route::post('/restore', [App\Http\Controllers\EventDocumentsController::class, 'restore'])->name('restore');
@@ -423,7 +423,7 @@ Route::group(['middleware' => 'auth'], function () {
                             'prefix' => '/documents',],
                         function() {
                         // Event Documents
-                        // --> /e/{event_slug}/documents
+                        // --> /events/{event_slug}/documents
 
                                 Route::get('/create', [App\Http\Controllers\EventDocumentsController::class, 'create'])->name('create');
                                 Route::get('/download', [App\Http\Controllers\EventDocumentsController::class, 'downloadAllDocument'])->name('downloadAll');

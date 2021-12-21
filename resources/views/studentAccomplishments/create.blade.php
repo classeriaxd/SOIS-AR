@@ -406,12 +406,13 @@
     </script>
 
     {{-- Bloodhound TypeAhead --}}
-    <script type="text/javascript" defer>
-        jQuery(document).ready(function($) {
+    {{-- Requires JQuery --}}
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function(event) {
             // Set the Options for "Bloodhound" suggestion engine
             var engine = new Bloodhound({
                 remote: {
-                    url: '/e/find?event=%QUERY%',
+                    url: '{{ route('event.find', ['event' => '%QUERY%']) }}',
                     wildcard: '%QUERY%',
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace('event'),
@@ -447,9 +448,8 @@
                     }
                 }
             });
-
-
         });
     </script>
+    
     <link href="{{ asset('css/typeaheadjs.css') }}" rel="stylesheet">
 @endsection
