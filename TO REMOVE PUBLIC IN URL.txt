@@ -1,0 +1,8 @@
+To remove /public in URL for uploading
+
+1 > Rename (server.php) to (index.php)
+2 > Go to Public Folder, move (.htaccess) to root
+3 > Add these lines to (.htaccess) 
+	# Remove public URL from the path
+    	RewriteCond %{REQUEST_URI} !^/public/
+    	RewriteRule ^(.*)$ /public/$1 [L,QSA]

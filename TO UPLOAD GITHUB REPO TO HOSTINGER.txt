@@ -1,0 +1,42 @@
+HOW TO UPLOAD SYSTEM FROM GITHUB TO HOSTINGER
+
+1. Go to Subdomains > Create Subdomain
+	> Input system acronym, (ex. SOIS-AR)
+	> Check Custom Folder Option
+	> Input system acronym as directory (ex. sois-ar)
+
+2. Go to Advanced > GIT > Create a New Repository
+	> Go to Github Repository, Click Code, Copy HTTPS link
+	> Paste Link in Repository field in Hostinger
+	> Input main or master for Branch Field depending on the repository, (ex. main for SOIS-AR)
+	> Input Directory name from the last step
+	> After Create, click Deploy
+	> Wait or check in Other>Activity Log if deployment is successful
+	> If the deployment fails, remove the repository in Hostinger and clear the files in the folder and try step 1 again
+
+3. Go to Databases > MySQL Databases
+	> Input system acronym as database name and username
+	> Generate a Password then save all of this somewhere, for database name and username include the character prepended in the field (ex. u877275727_sois_ar)
+	> Create Database
+	> After Creating, find the database then Enter phpMyAdmin
+	> In phpMyAdmin, click Import, Select SQL File, then click Go
+
+4. Go to Files > File Manager > public_html > (system_acronym)
+	> Open .env or Rename specified .env for Hosting into .env
+	> Input Missing Details, if missing
+		> APP_KEY from given ENV file
+		> APP_URL from from Step 1, include http/https, (ex. http://system-acronym.puptaguigcs.net)
+		> DB_DATABASE from Step 3
+		> DB_USERNAME from Step 3
+		> DB_PASSWORD from Step 3
+
+		> MAIL_HOST from given ENV
+		> MAIL_PORT from given ENV
+		> MAIL_USERNAME from given ENV
+		> MAIL_PASSWORD from given ENV
+		> MAIL_ENCRYPTION from given ENV
+		> MAIL_FROM_ADDRESS from given ENV
+
+5. Do steps from file TO REMOVE PUBLIC IN URL.txt
+
+6. :)
