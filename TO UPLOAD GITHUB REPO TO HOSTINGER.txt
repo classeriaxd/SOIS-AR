@@ -1,4 +1,4 @@
-HOW TO UPLOAD SYSTEM FROM GITHUB TO HOSTINGER
+HOW TO UPLOAD LARAVEL SYSTEM FROM GITHUB TO HOSTINGER
 
 1. Go to Subdomains > Create Subdomain
 	> Input system acronym, (ex. SOIS-AR)
@@ -16,7 +16,7 @@ HOW TO UPLOAD SYSTEM FROM GITHUB TO HOSTINGER
 
 3. Go to Databases > MySQL Databases
 	> Input system acronym as database name and username
-	> Generate a Password then save all of this somewhere, for database name and username include the character prepended in the field (ex. u877275727_sois_ar)
+	> Generate a Password then save all of this somewhere, for database name and username include the character prepended in the field (ex. u8***75727_sois_ar)
 	> Create Database
 	> After Creating, find the database then Enter phpMyAdmin
 	> In phpMyAdmin, click Import, Select SQL File, then click Go
