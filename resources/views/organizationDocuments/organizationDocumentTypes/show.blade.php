@@ -74,12 +74,17 @@
                 Are you Sure?
                 </div>
                 <div class="modal-footer">
-                    <form action="{{ route('maintenances.organizationDocumentTypes.destroy',  ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" method="POST">
+                    <form action="{{ route('maintenances.organizationDocumentTypes.destroy',  ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" method="POST"
+                        onsubmit="document.getElementById('deleteButton').disabled=true;">
                         @method('DELETE')
                         @csrf
                     
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                        <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Understood</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button id="deleteButton" type="submit" class="btn btn-danger text-white">
+                            <i class="fas fa-check"></i> Understood
+                        </button>
                     </form>
                 </div>
             </div>

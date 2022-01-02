@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('maintenances.organizationDocumentTypes.store', ['organizationSlug' => $organization->organization_slug]) }}" enctype="multipart/form-data" method="POST" id="organizationDocumentTypeCreateForm">
+    <form action="{{ route('maintenances.organizationDocumentTypes.store', ['organizationSlug' => $organization->organization_slug]) }}" enctype="multipart/form-data" method="POST" id="organizationDocumentTypeCreateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -49,7 +50,7 @@
                         </div>
                         
                         <div class="flex-row my-2 text-center">
-                            <button class="btn btn-primary text-white" type="submit">
+                            <button id="submitButton" class="btn btn-primary text-white" type="submit">
                                 <i class="fas fa-plus"></i> Add Document Type
                             </button>
                         </div>

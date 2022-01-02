@@ -26,7 +26,8 @@
     </div>
 
     {{-- Organization Document Create Form --}}
-    <form action="{{route('organizationDocuments.store',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,])}}" enctype="multipart/form-data" method="POST" id="organizationDocumentCreateForm">
+    <form action="{{route('organizationDocuments.store',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,])}}" enctype="multipart/form-data" method="POST" id="organizationDocumentCreateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         <div class="row">
             <div class="col">
                 <div class="card mb-2">
@@ -108,7 +109,7 @@
 
            <div class="flex-row my-2 text-center">
                 @csrf
-                <button class="btn btn-primary text-white col-md-12" type="submit">
+                <button id="submitButton" class="btn btn-primary text-white col-md-12" type="submit">
                     <i class="fas fa-plus"></i> Add Document
                 </button>
             </div> 

@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.fundSources.store') }}" enctype="multipart/form-data" method="POST" id="fundSourceCreateForm">
+    <form action="{{ route('admin.maintenance.fundSources.store') }}" enctype="multipart/form-data" method="POST" id="fundSourceCreateForm"
+    onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -65,7 +66,9 @@
                 </div>
                 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Fund Source</button>
+                    <button id="submitButton" type="submit" class="btn btn-primary text-white">
+                        <i class="fas fa-plus"></i> Add Fund Source
+                    </button>
                 </div>
             </div>
         </div>

@@ -31,7 +31,8 @@
                 </nav>
             </div>
             
-            <form action="{{route('studentAccomplishment.approveSubmission',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST" id="approvedSubmissionForm">   
+            <form action="{{route('studentAccomplishment.approveSubmission',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST" id="approvedSubmissionForm"
+                onsubmit="document.getElementById('success').disabled=true;document.getElementById('decline').disabled=true;">   
             	@csrf
                 <div class="row justify-content-center pb-1">
 

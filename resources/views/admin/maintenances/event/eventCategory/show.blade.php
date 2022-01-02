@@ -42,10 +42,11 @@
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
                             @if($eventCategory->deleted_at !== NULL)
-                                <form action="{{ route('admin.maintenance.eventCategories.restore', ['category_id' => $eventCategory->event_category_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm">
+                                <form action="{{ route('admin.maintenance.eventCategories.restore', ['category_id' => $eventCategory->event_category_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm"
+                                    onsubmit="document.getElementById('restoreButton').disabled=true;">
                                     @csrf
 
-                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Category</button>
+                                    <button id="restoreButton" class="btn btn-success text-white mx-1" type="submit">Restore Category</button>
                                 </form>  
                                 </a>
                             @else
@@ -115,7 +116,8 @@
         <div class="modal fade" id="deleteEventCategoryModal" tabindex="-1" aria-labelledby="deleteEventCategoryLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{route('admin.maintenance.eventCategories.destroy', ['category_id' => $eventCategory->event_category_id])}}" method="POST" id="eventCategoryDeleteForm">
+                    <form action="{{route('admin.maintenance.eventCategories.destroy', ['category_id' => $eventCategory->event_category_id])}}" method="POST" id="eventCategoryDeleteForm"
+                        onsubmit="document.getElementById('deleteButton').disabled=true;">
                         @method('DELETE')
                         @csrf
 
@@ -174,7 +176,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
+                            <button id="deleteButton" type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

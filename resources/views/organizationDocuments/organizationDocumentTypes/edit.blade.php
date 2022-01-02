@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('maintenances.organizationDocumentTypes.update', ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" enctype="multipart/form-data" method="POST" id="organizationDocumentTypeUpdateForm">
+    <form action="{{ route('maintenances.organizationDocumentTypes.update', ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" enctype="multipart/form-data" method="POST" id="organizationDocumentTypeUpdateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @method('PATCH')
         @csrf
         <div class="row">
@@ -53,7 +54,7 @@
                         </div>
                         
                         <div class="flex-row my-2 text-center">
-                            <button class="btn btn-primary text-white" type="submit">
+                            <button id="submitButton" class="btn btn-primary text-white" type="submit">
                                 <i class="fas fa-edit"></i> Update Document Type
                             </button>
                         </div>

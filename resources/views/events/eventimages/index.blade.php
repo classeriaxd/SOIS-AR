@@ -173,9 +173,10 @@
 	    	                    	{{ $image->caption ?? 'No Caption Provided' }}
         	                    </td>
         	                    <td class="text-center">
-        	                        <form action="{{route('event.image.restore', ['event_slug' => $event->slug, 'eventImage_slug' => $image->slug])}}" method="POST">
+        	                        <form action="{{route('event.image.restore', ['event_slug' => $event->slug, 'eventImage_slug' => $image->slug])}}" method="POST"
+        	                        	onsubmit="document.getElementById('restoreButton').disabled=true;">
         	                            @csrf
-        	                            <button type="submit" class="btn btn-success text-white">
+        	                            <button id="restoreButton" type="submit" class="btn btn-success text-white">
         	                                <i class="fas fa-trash-restore"></i> Restore
         	                            </button>
         	                        </form>

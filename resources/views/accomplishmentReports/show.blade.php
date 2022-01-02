@@ -104,8 +104,9 @@
                             {{-- Download button for Design --}}
                             @if ($accomplishmentReport->status == 2 && $accomplishmentReport->accomplishment_report_type_id == 2)
                                 <div class="flex-row text-center my-1">
-                                    <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
-                                        <button class="btn btn-primary text-white" type="submit">
+                                    <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data"
+                                        onsubmit="document.getElementById('downloadDesign').disabled=true;">
+                                        <button id="downloadDesign" class="btn btn-primary text-white" type="submit">
                                             <i class="fas fa-file-pdf"></i> Download Accomplishment Report
                                         </button>
                                     </form>
@@ -117,8 +118,9 @@
                                 {{-- Tabular --}}
                                 @if($accomplishmentReport->accomplishment_report_type_id == 1)
                                     <p class="text-center">No preview for spreadsheet files, you can download the generated report instead.</p>  
-                                    <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data">
-                                        <button class="btn btn-primary text-white" type="submit">
+                                    <form action="{{route('accomplishmentReport.download',['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" enctype="multipart/form-data"
+                                        onsubmit="document.getElementById('firstQuarter').disabled=true;">
+                                        <button id="downloadTabular" class="btn btn-primary text-white" type="submit">
                                             <i class="fas fa-file-excel"></i> Download Spreadsheet
                                         </button>
                                     </form>

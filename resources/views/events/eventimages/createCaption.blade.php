@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('event.image.storeCaption', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageCaptionForm">
+    <form action="{{route('event.image.storeCaption', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageCaptionForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="row">
             <div class="col-12">
@@ -129,7 +130,7 @@
 
                 @if($eventImages['evidences']->isNotEmpty() || $eventImages['posters']->isNotEmpty())
                     <div class="flex my-2 text-center">
-                        <button class="btn btn-primary text-white col-md-12" type="submit">Add Captions</button>
+                        <button id="submitButton" class="btn btn-primary text-white col-md-12" type="submit">Add Captions</button>
                     </div>
                 @endif
             </div>

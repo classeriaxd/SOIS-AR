@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('event.image.update', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageUpdateForm">
+    <form action="{{route('event.image.update', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageUpdateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         @method('PATCH')
     	<div class="row justify-content-center">
@@ -52,7 +53,7 @@
                 
                           
                             <div class="card-body d-flex align-items-center justify-content-center">
-                                <button class="btn btn-primary text-white me-3" type="submit">Finalize Edit</button>
+                                <button id="submitButton" class="btn btn-primary text-white me-3" type="submit">Finalize Edit</button>
                             </div>
                         </div>
                     </div>      

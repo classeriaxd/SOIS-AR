@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('event.document.store',['event_slug' => $event->slug,])}}" enctype="multipart/form-data" method="POST" id="eventDocumentForm">
+    <form action="{{route('event.document.store',['event_slug' => $event->slug,])}}" enctype="multipart/form-data" method="POST" id="eventDocumentForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="row">
             <div class="col-8 offset-2">
@@ -93,7 +94,7 @@
                 @enderror
                 <div class="row pt-4">
                     <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Document</button>
+                    <button id="submitButton" type="submit" class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Document</button>
                 </div>
             </div>
         </div>

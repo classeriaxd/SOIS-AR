@@ -42,10 +42,11 @@
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
                             @if($level->deleted_at !== NULL)
-                                <form action="{{ route('admin.maintenance.levels.restore', ['level_id' => $level->level_id]) }}" enctype="multipart/form-data" method="POST" id="eventLevelRestoreForm">
+                                <form action="{{ route('admin.maintenance.levels.restore', ['level_id' => $level->level_id]) }}" enctype="multipart/form-data" method="POST" id="eventLevelRestoreForm"
+                                    onsubmit="document.getElementById('restoreButton').disabled=true;">
                                     @csrf
 
-                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Level</button>
+                                    <button id="restoreButton" class="btn btn-success text-white mx-1" type="submit">Restore Level</button>
                                 </form>  
                                 </a>
                             @else
@@ -114,7 +115,8 @@
         <div class="modal fade" id="deleteLevelModal" tabindex="-1" aria-labelledby="deleteLevelLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{route('admin.maintenance.levels.destroy', ['level_id' => $level->level_id])}}" method="POST" id="levelDeleteForm">
+                    <form action="{{route('admin.maintenance.levels.destroy', ['level_id' => $level->level_id])}}" method="POST" id="levelDeleteForm"
+                        onsubmit="document.getElementById('deleteButton').disabled=true;">
                         @method('DELETE')
                         @csrf
 
@@ -173,7 +175,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
+                            <button id="deleteButton" type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

@@ -139,9 +139,10 @@
                                     <td>{{ $document->title }}</td>
                                     <td>{{date_format(date_create($document->created_at), 'F d, Y')}}</td>
                                     <td class="text-center">
-                                        <form action="{{route('organizationDocuments.restore',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug, 'organizationDocumentID' => $document->organization_document_id])}}" method="POST">
+                                        <form action="{{route('organizationDocuments.restore',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug, 'organizationDocumentID' => $document->organization_document_id])}}" method="POST"
+                                            onsubmit="document.getElementById('restoreButton').disabled=true;">
                                             @csrf
-                                            <button type="submit" class="btn btn-success text-white">
+                                            <button id="restoreButton" type="submit" class="btn btn-success text-white">
                                                 <i class="fas fa-trash-restore"></i> Restore Document
                                             </button>
                                         </form>

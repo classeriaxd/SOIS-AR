@@ -29,8 +29,9 @@
                         @if($allNotifications->isNotEmpty())
                         <div class="row mb-2">
                             <div class="col text-center">
-                                <form method="POST" action="{{route('notifications.markAllAsRead')}}">
-                                    <button type="submit" class="btn btn-primary text-white"><i class="fas fa-book-open"></i> Mark all as Read</button>
+                                <form method="POST" action="{{route('notifications.markAllAsRead')}}"
+                                onsubmit="document.getElementById('submitButton').disabled=true;">
+                                    <button id="submitButton" type="submit" class="btn btn-primary text-white"><i class="fas fa-book-open"></i> Mark all as Read</button>
                                     @csrf
                                 </form>
                             </div>

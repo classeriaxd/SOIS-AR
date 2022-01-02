@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.eventClassifications.store') }}" enctype="multipart/form-data" method="POST" id="eventClassificationCreateForm">
+    <form action="{{ route('admin.maintenance.eventClassifications.store') }}" enctype="multipart/form-data" method="POST" id="eventClassificationCreateForm"
+    onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -65,7 +66,9 @@
                 </div>
                 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Event Classification</button>
+                    <button id="deleteButton" type="submit" class="btn btn-primary text-white">
+                        <i class="fas fa-plus"></i> Add Event Classification
+                    </button>
                 </div>
 
             </div>

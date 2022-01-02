@@ -4,7 +4,8 @@
 <div class="container">
 	<div class="row justify-content-center">
         <div class="col-md-12">
-            <form action="{{route('accomplishmentreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm">
+            <form action="{{route('accomplishmentreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm"
+            onsubmit="document.getElementById('submitButton').disabled=true;">
                 {{-- Title and Breadcrumbs --}}
                 <div class="d-flex justify-content-between align-items-center">
                     {{-- Title --}}
@@ -379,7 +380,7 @@
                             @enderror
 
                             <div class="flex-row my-2 text-center">
-                                <button class="btn btn-primary text-white" type="submit">Submit Checklist</button>
+                                <button id="submitButton" class="btn btn-primary text-white" type="submit">Submit Checklist</button>
                                 @csrf
                                 <input type="hidden" name="start_date" value="{{$start_date}}">
                                 <input type="hidden" name="end_date" value="{{$end_date}}">

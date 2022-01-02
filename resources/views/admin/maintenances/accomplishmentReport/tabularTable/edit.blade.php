@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.tabularTables.update', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" enctype="multipart/form-data" method="POST" id="tabularTableUpdateForm">
+    <form action="{{ route('admin.maintenance.tabularTables.update', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" enctype="multipart/form-data" method="POST" id="tabularTableUpdateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         @method('PATCH')
         <div class="row">
@@ -86,7 +87,9 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-edit"></i> Update Table</button>
+                    <button id="submitButton" class="btn btn-primary text-white" type="submit">
+                        <i class="fas fa-edit"></i> Update Table
+                    </button>
                 </div>
             </div>
         </div>

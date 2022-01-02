@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.eventNatures.update', ['nature_id' => $eventNature->event_nature_id]) }}" enctype="multipart/form-data" method="POST" id="eventNatureUpdateForm">
+    <form action="{{ route('admin.maintenance.eventNatures.update', ['nature_id' => $eventNature->event_nature_id]) }}" enctype="multipart/form-data" method="POST" id="eventNatureUpdateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         @method('PATCH')
         <div class="row">
@@ -73,7 +74,9 @@
                 </div>
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-edit"></i> Update Event Nature</button>
+                    <button id="submitButton "class="btn btn-primary text-white" type="submit">
+                        <i class="fas fa-edit"></i> Update Event Nature
+                    </button>
                 </div>
             </div>
         </div>

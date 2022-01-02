@@ -3,7 +3,8 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route('admin.maintenance.tabularTables.tabularColumns.store', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" enctype="multipart/form-data" method="POST" id="tabularColumnCreateForm">
+    <form action="{{ route('admin.maintenance.tabularTables.tabularColumns.store', ['tabular_table_id' => $tabularTable->tabular_table_id]) }}" enctype="multipart/form-data" method="POST" id="tabularColumnCreateForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -63,7 +64,9 @@
                 </div>
                 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white"><i class="fas fa-plus"></i> Add Column</button>
+                    <button id="submitButton" type="submit" class="btn btn-primary text-white">
+                        <i class="fas fa-plus"></i> Add Column
+                    </button>
                 </div>
             </div>
         </div>

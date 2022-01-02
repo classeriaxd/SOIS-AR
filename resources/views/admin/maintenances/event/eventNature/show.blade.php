@@ -42,9 +42,10 @@
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
                             @if($eventNature->deleted_at !== NULL)
-                                <form action="{{ route('admin.maintenance.eventNatures.restore', ['nature_id' => $eventNature->event_nature_id]) }}" enctype="multipart/form-data" method="POST" id="eventNatureRestoreForm">
+                                <form action="{{ route('admin.maintenance.eventNatures.restore', ['nature_id' => $eventNature->event_nature_id]) }}" enctype="multipart/form-data" method="POST" id="eventNatureRestoreForm"
+                                    onsubmit="document.getElementById('restoreButton').disabled=true;">
                                     @csrf
-                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Nature</button>
+                                    <button id="restoreButton" class="btn btn-success text-white mx-1" type="submit">Restore Nature</button>
                                 </form>  
                                 </a>
                             @else
@@ -113,7 +114,8 @@
         <div class="modal fade" id="deleteEventNatureModal" tabindex="-1" aria-labelledby="deleteEventNatureLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{route('admin.maintenance.eventNatures.destroy', ['nature_id' => $eventNature->event_nature_id])}}" method="POST" id="eventNatureDeleteForm">
+                    <form action="{{route('admin.maintenance.eventNatures.destroy', ['nature_id' => $eventNature->event_nature_id])}}" method="POST" id="eventNatureDeleteForm"
+                        onsubmit="document.getElementById('deleteButton').disabled=true;">
                         @method('DELETE')
                         @csrf
 
@@ -172,7 +174,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
+                            <button id="deleteButton" type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

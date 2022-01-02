@@ -29,7 +29,8 @@
                     <div class="card">
                         <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Create Notification</h5>
                         <div class="card-body">
-                            <form action="{{route('admin.notifications.store')}}" enctype="multipart/form-data" method="POST" id="adminNotificationCreateForm">
+                            <form action="{{route('admin.notifications.store')}}" enctype="multipart/form-data" method="POST" id="adminNotificationCreateForm"
+                            onsubmit="document.getElementById('submitButton').disabled=true;">
                                 {{-- Notification Title --}}
                                 <div class="form-group row">
                                     <label for="title" class="col-md-4 col-form-label">Title<span style="color:red">*</span></label>
@@ -106,7 +107,7 @@
                                 
                                 <div class="form-group flex-row text-center">
                                     @csrf
-                                    <button class="btn btn-primary text-white" type="submit"><i class="fas fa-paper-plane"></i> Send Notification</button>
+                                    <button id="submitButton" class="btn btn-primary text-white" type="submit"><i class="fas fa-paper-plane"></i> Send Notification</button>
                                 </div>
                             </form>
 

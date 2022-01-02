@@ -50,8 +50,9 @@
             @if($eventDocuments->count() > 0)
                 <div class="d-flex justify-content-center text-center my-1">
                     <div class="me-2">
-                        <form action="{{route('event.document.downloadAll',['event_slug' => $event->slug])}}" enctype="multipart/form-data" class="mr-2">
-                            <button type="submit" class="btn btn-primary text-white"><i class="fas fa-download"></i> Compile and Download All Documents</button>
+                        <form action="{{route('event.document.downloadAll',['event_slug' => $event->slug])}}" enctype="multipart/form-data" class="mr-2"
+                            onsubmit="document.getElementById('downloadAll').disabled=true;">
+                            <button id="downloadAll" type="submit" class="btn btn-primary text-white"><i class="fas fa-download"></i> Compile and Download All Documents</button>
                         </form>
                     </div>
                     
@@ -84,8 +85,9 @@
                     </div>
                     <div class="col d-flex align-items-center">
                         <div class="flex-fill">
-                            <form action="{{route('event.document.download',['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" enctype="multipart/form-data">
-                                <button type="submit" class="btn btn-primary text-white w-100">
+                            <form action="{{route('event.document.download',['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" enctype="multipart/form-data"
+                                onsubmit="document.getElementById('downloadSingle').disabled=true;">
+                                <button id="downloadSingle" type="submit" class="btn btn-primary text-white w-100">
                                     <i class="fas fa-download"></i> Download<br>{{ $document->title }}
                                 </button>
                             </form>
@@ -112,11 +114,12 @@
                             Are you Sure?
                             </div>
                             <div class="modal-footer">
-                                <form action="{{route('event.document.destroy', ['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" method="POST">
+                                <form action="{{route('event.document.destroy', ['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" method="POST"
+                                    onsubmit="document.getElementById('deleteButton').disabled=true;">
                                     @method('DELETE')
                                     @csrf
                                 
-                                    <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                                    <button id="deleteButton" type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                                     <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Understood</button>
                                 </form>
                             </div>
@@ -150,9 +153,10 @@
                                 <td class="text-break">{{ $document->description }}</td>
                                 <td>{{ date_format(date_create($document->deleted_at), 'F d, Y') }}</td>
                                 <td class="text-center">
-                                    <form action="{{route('event.document.restore', ['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" method="POST">
+                                    <form action="{{route('event.document.restore', ['event_slug' => $event->slug, 'document_id' => $document->event_document_id])}}" method="POST"
+                                        onsubmit="document.getElementById('restoreButton').disabled=true;">
                                         @csrf
-                                        <button type="submit" class="btn btn-success text-white">
+                                        <button id="restoreButton" type="submit" class="btn btn-success text-white">
                                             <i class="fas fa-trash-restore"></i> Restore
                                         </button>
                                     </form>

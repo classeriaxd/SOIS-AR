@@ -29,7 +29,8 @@
     </div>
 
     {{-- Organization Document Create Form --}}
-    <form action="{{route('organizationDocuments.update',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,'organizationDocumentID' => $organizationDocument->organization_document_id])}}" enctype="multipart/form-data" method="POST" id="organizationDocumentEditForm">
+    <form action="{{route('organizationDocuments.update',['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug,'organizationDocumentID' => $organizationDocument->organization_document_id])}}" enctype="multipart/form-data" method="POST" id="organizationDocumentEditForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         <div class="row">
             <div class="col">
                 <div class="card mb-2">
@@ -101,7 +102,7 @@
             </div>
             @csrf
             <div class="row my-2 text-center">
-                <button class="btn btn-primary text-white col-md-12" type="submit">
+                <button id="submitButton" class="btn btn-primary text-white col-md-12" type="submit">
                     <i class="fas fa-edit"></i> Update Document
                 </button>
             </div> 

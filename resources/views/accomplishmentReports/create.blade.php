@@ -72,7 +72,8 @@
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">
                 	<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Semestral</h4>
-                	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
+                	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm"
+                	onsubmit="document.getElementById('firstSemester').disabled=true;document.getElementById('secondSemester').disabled=true;">
 		            	<div class="card-body">
 		            		{{-- School Year Select --}}
 		            		<div class="row text-center">
@@ -102,10 +103,10 @@
 		            		</div>
 		    				<div class="row text-center mt-3">
 								<div class="col">
-	        						<button class="btn btn-primary text-center text-white h-100" name="first_semester" value="first_semester" type="submit" >1st Semester</button>
+	        						<button id="firstSemester" class="btn btn-primary text-center text-white h-100" name="first_semester" value="first_semester" type="submit" >1st Semester</button>
 		        				</div>
 		    					<div class="col">
-	    							<button class="btn btn-primary text-center text-white h-100" name="second_semester" value="second_semester" type="submit" >2nd Semester</button>
+	    							<button id="secondSemester" class="btn btn-primary text-center text-white h-100" name="second_semester" value="second_semester" type="submit" >2nd Semester</button>
 		    					</div>
 		    				</div>
 		            	</div>
@@ -136,23 +137,24 @@
             <div class="row mb-1 mt-1">
 	    		<div class="card w-100">
 					<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Quarterly</h4>
-					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
+					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm"
+                	onsubmit="document.getElementById('firstQuarter').disabled=true;document.getElementById('secondQuarter').disabled=true;document.getElementById('thirdQuarter').disabled=true;document.getElementById('fourthQuarter').disabled=true;">
 		    			<div class="card-body">
 		    				<h5 class="card-title text-center fw-bold fs-3">{{ date('Y') }}</h5>
 		    				{{-- Quarter Buttons --}}
 		    				<div class="row text-center">
 								<div class="col">
-		    						<button class="btn btn-primary text-white h-100" name="first_quarter" value="first_quarter" type="submit">1st Quarter</button>
+		    						<button id="firstQuarter" class="btn btn-primary text-white h-100" name="first_quarter" value="first_quarter" type="submit">1st Quarter</button>
 		        				</div>
 		    					<div class="col">
-									<button class="btn btn-primary text-white h-100" name="second_quarter" value="second_quarter" type="submit">2nd Quarter</button>
+									<button id="secondQuarter" class="btn btn-primary text-white h-100" name="second_quarter" value="second_quarter" type="submit">2nd Quarter</button>
 		    					</div>
 		    					<div class="col">
-		    						<button class="btn btn-primary text-white h-100" name="third_quarter" value="third_quarter" type="submit">3rd Quarter</button>
+		    						<button id="thirdQuarter" class="btn btn-primary text-white h-100" name="third_quarter" value="third_quarter" type="submit">3rd Quarter</button>
 
 		    					</div>
 		    					<div class="col">
-		    						<button class="btn btn-primary text-white h-100"  name="fourth_quarter" value="fourth_quarter" type="submit">4th Quarter</button>
+		    						<button id="fourthQuarter" class="btn btn-primary text-white h-100"  name="fourth_quarter" value="fourth_quarter" type="submit">4th Quarter</button>
 		    					</div>        					
 		    				</div>
 		    				{{-- Quarter Labels --}}
@@ -212,7 +214,8 @@
         	<div class="row mt-1">
         		<div class="card w-100">
         			<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Custom</h4>
-    				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
+    				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100"
+    				onsubmit="document.getElementById('customSubmitButton').disabled=true;">
         			<div class="card-body">
         				{{-- Start Date Input --}}
         				<div class="form-group row">
@@ -245,7 +248,7 @@
         				</div>
         				<div class="row text-center justify-content-center">
 							<div class="flex-row my-2 text-center">
-	        				    <button class="btn btn-primary text-white" type="submit">
+	        				    <button id="customSubmitButton" class="btn btn-primary text-white" type="submit">
 	        				    	<i class="fas fa-clipboard-list"></i> Submit Custom
 	        				    </button>
 	        				    @csrf

@@ -61,10 +61,11 @@
                             <a href="{{route('event.image.edit', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}">
                                 <button class="btn btn-primary me-3 text-white">Edit</button>
                             </a>
-                            <form action="{{route('event.image.destroy', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}" method="POST">
+                            <form action="{{route('event.image.destroy', ['event_slug' => $event->slug, 'eventImage_slug' => $event->eventImage->slug])}}" method="POST"
+                                onsubmit="document.getElementById('deleteButton').disabled=true;">
                                 @method('DELETE')
                                 @csrf
-                                <button class="btn btn-danger text-white" type="submit">Delete Image</button>
+                                <button id="deleteButton" class="btn btn-danger text-white" type="submit">Delete Image</button>
                             </form>  
                         </div>
                     </div>

@@ -122,10 +122,11 @@
                                     <i class="fas fa-edit"></i> Edit Event
                                 </button>
         					</a>
-        					<form action="{{route('event.destroy', $event->slug)}}" method="POST">
+        					<form action="{{route('event.destroy', $event->slug)}}" method="POST"
+                                onsubmit="document.getElementById('deleteButton').disabled=true;">
         						@method('DELETE')
         						@csrf
-        						<button class="btn btn-danger text-white">
+        						<button id="deleteButton" class="btn btn-danger text-white">
                                     <i class="fas fa-trash"></i> Delete Event
                                 </button>
         					</form>  
@@ -243,7 +244,7 @@
                 <a href="{{route('event.index')}}"
                     class="btn btn-secondary text-white"
                     role="button">
-                        <i class="fas fa-arrow-left"></i> Go Back
+                        <i class="fas fa-arrow-left"></i> Go Back to All Events
                 </a>
                 @if($newEvent)
 

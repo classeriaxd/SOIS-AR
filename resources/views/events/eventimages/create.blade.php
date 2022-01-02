@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('event.image.store', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageForm">
+    <form action="{{route('event.image.store', ['event_slug' => $event->slug])}}" enctype="multipart/form-data" method="POST" id="eventImageForm"
+        onsubmit="document.getElementById('submitButton').disabled=true;">
         @csrf
         <div class="d-flex justify-content-between align-items-center">
             <div class="col-8 offset-2">
@@ -92,7 +93,7 @@
                 @enderror
 
                 <div class="flex-row my-2 text-center">
-                    <button class="btn btn-primary text-white" type="submit">
+                    <button id="submitButton" class="btn btn-primary text-white" type="submit">
                         <i class="fas fa-plus"></i> Add Images
                     </button>
                 </div>

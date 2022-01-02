@@ -75,7 +75,8 @@
                         <hr>
                         <div class="row text-center my-1">
                             <h3 class="fw-bold">Attach a Role with Organization</h3>
-                            <form action="{{route('admin.maintenance.users.roles.attach', ['user_id' => $user->user_id])}}" method="POST">
+                            <form action="{{route('admin.maintenance.users.roles.attach', ['user_id' => $user->user_id])}}" method="POST"
+                                onsubmit="document.getElementById('attachButton').disabled=true;">
 
                                 {{-- Role Select --}}
                                 <div class="form-group flex-row my-1">
@@ -98,7 +99,7 @@
                                 </div>
 
                                 @csrf
-                                <button class="btn btn-primary text-white" type="submit">Attach Role</button>
+                                <button id="attachButton" class="btn btn-primary text-white" type="submit">Attach Role</button>
 
                                 {{-- Error Messages --}}
                                 @error('role')
@@ -124,7 +125,8 @@
                         <hr>
                         <div class="row text-center my-1">
                             <h3 class="fw-bold">Detach Role</h3>
-                            <form action="{{route('admin.maintenance.users.roles.detach', ['user_id' => $user->user_id])}}" method="POST">
+                            <form action="{{route('admin.maintenance.users.roles.detach', ['user_id' => $user->user_id])}}" method="POST"
+                                onsubmit="document.getElementById('detachButton').disabled=true;">
 
                                 {{-- Role Select --}}
                                 <div class="form-group flex-row my-1">
@@ -137,7 +139,7 @@
                                 </div>
 
                                 @csrf
-                                <button class="btn btn-danger text-white" type="submit">Detach Role</button>
+                                <button id="detachButton" class="btn btn-danger text-white" type="submit">Detach Role</button>
                                 @error('role')
                                     <div class="row">
                                         <span class="invalid-feedback d-block" role="alert">

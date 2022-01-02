@@ -42,9 +42,10 @@
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
                             @if($documentType->deleted_at !== NULL)
-                                <form action="{{ route('admin.maintenance.eventDocumentTypes.restore', ['document_type_id' => $documentType->event_document_type_id]) }}" enctype="multipart/form-data" method="POST" id="eventDocumentTypeRestoreForm">
+                                <form action="{{ route('admin.maintenance.eventDocumentTypes.restore', ['document_type_id' => $documentType->event_document_type_id]) }}" enctype="multipart/form-data" method="POST" id="eventDocumentTypeRestoreForm"
+                                    onsubmit="document.getElementById('restoreButton').disabled=true;">
                                     @csrf
-                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Document Type</button>
+                                    <button id="restoreButton" class="btn btn-success text-white mx-1" type="submit">Restore Document Type</button>
                                 </form>  
                                 </a>
                             @else
@@ -113,7 +114,8 @@
         <div class="modal fade" id="deleteEventDocumentTypeModal" tabindex="-1" aria-labelledby="deleteEventDocumentTypeLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{route('admin.maintenance.eventDocumentTypes.destroy', ['document_type_id' => $documentType->event_document_type_id])}}" method="POST" id="eventDocumentTypeDeleteForm">
+                    <form action="{{route('admin.maintenance.eventDocumentTypes.destroy', ['document_type_id' => $documentType->event_document_type_id])}}" method="POST" id="eventDocumentTypeDeleteForm"
+                        onsubmit="document.getElementById('deleteButton').disabled=true;">
                         @method('DELETE')
                         @csrf
 
@@ -172,7 +174,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
+                            <button id="deleteButton" type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

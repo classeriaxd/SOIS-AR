@@ -107,9 +107,10 @@
                                 <td>{{ $organizationDocumentType->organization_documents_count }}</td>
                                 <td>{{ $organizationDocumentType->slug }}</td>
                                 <td class="text-center">
-                                    <form action="{{ route('maintenances.organizationDocumentTypes.restore',  ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" method="POST">
+                                    <form action="{{ route('maintenances.organizationDocumentTypes.restore',  ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" method="POST"
+                                        onsubmit="document.getElementById('restoreButton').disabled=true;">
                                         @csrf
-                                        <button type="submit" class="btn btn-success text-white">
+                                        <button id="restoreButton" type="submit" class="btn btn-success text-white">
                                             <i class="fas fa-trash-restore"></i> Restore Document Type
                                         </button>
                                     </form>

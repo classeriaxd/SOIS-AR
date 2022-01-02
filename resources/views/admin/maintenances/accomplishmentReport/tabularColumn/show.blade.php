@@ -47,10 +47,11 @@
                         <p class="card-text my-1">Options</p>
                         <div class="flex-row">
                             @if($tabularColumn->deleted_at !== NULL)
-                                <form action="{{ route('admin.maintenance.tabularTables.tabularColumns.restore', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm">
+                                <form action="{{ route('admin.maintenance.tabularTables.tabularColumns.restore', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id]) }}" enctype="multipart/form-data" method="POST" id="eventCategoryRestoreForm"
+                                    onsubmit="document.getElementById('restoreButton').disabled=true;">
                                     @csrf
 
-                                    <button class="btn btn-success text-white mx-1" type="submit">Restore Column</button>
+                                    <button id="restoreButton" class="btn btn-success text-white mx-1" type="submit">Restore Column</button>
                                 </form>  
                                 </a>
                             @else
@@ -120,7 +121,8 @@
         <div class="modal fade" id="deleteTabularColumnModal" tabindex="-1" aria-labelledby="deleteTabularColumnLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{route('admin.maintenance.tabularTables.tabularColumns.destroy', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id])}}" method="POST" id="tabularColumnDeleteForm">
+                    <form action="{{route('admin.maintenance.tabularTables.tabularColumns.destroy', ['tabular_table_id' => $tabularTable->tabular_table_id, 'tabular_column_id' => $tabularColumn->tabular_column_id])}}" method="POST" id="tabularColumnDeleteForm"
+                        onsubmit="document.getElementById('deleteButton').disabled=true;">
                         @method('DELETE')
                         @csrf
 
@@ -179,7 +181,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                            <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
+                            <button id="deleteButton" type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Proceed</button>
                         </div>
 
                     </form>

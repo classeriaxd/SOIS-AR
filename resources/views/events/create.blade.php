@@ -24,7 +24,9 @@
 
 
     {{-- Event Create Form --}}
-    <form action="{{route('event.store')}}" enctype="multipart/form-data" method="POST" id="eventForm">
+    <form action="{{route('event.store')}}" enctype="multipart/form-data" method="POST" id="eventForm"
+    onsubmit="document.getElementById('submitButton').disabled=true;"
+    >
         <div class="row">
             <div class="col">
                 {{-- Event "WHAT" --}}
@@ -34,12 +36,12 @@
 
                         {{-- Event Title --}}
                         <div class="form-group row">
-                            <label for="title" class="col-md-4 col-form-label">Title<span style="color:red">*</span></label>
+                            <label for="title" class="col-md-4 col-form-label">Title<span class="required">*</span></label>
                             <input id="title" 
                             type="text" 
                             class="form-control @error('title') is-invalid @enderror" 
                             name="title"
-                            placeholder="Event Title" 
+                            placeholder="The Event's Title" 
                             value="{{ old('title') }}" 
                             autofocus 
                             required>
@@ -53,11 +55,11 @@
 
                         {{-- Event Description --}}
                         <div class="form-group row">
-                            <label for="description" class="col-md-4 col-form-label">Description<span style="color:red">*</span></label>    
+                            <label for="description" class="col-md-4 col-form-label">Description<span class="required">*</span></label>    
                             <textarea id="description" 
                             class="form-control @error('description') is-invalid @enderror" 
                             name="description"
-                            placeholder="Description" 
+                            placeholder="The Event's Description" 
                             required>{{ old('description')}}</textarea>
 
                             @error('description')
@@ -69,11 +71,11 @@
 
                         {{-- Event Objective --}}
                         <div class="form-group row">
-                            <label for="objective" class="col-md-4 col-form-label">Objective<span style="color:red">*</span></label>
+                            <label for="objective" class="col-md-4 col-form-label">Objective<span class="required">*</span></label>
                             <textarea id="objective" 
                             class="form-control @error('objective') is-invalid @enderror" 
                             name="objective" 
-                            placeholder="Objective" 
+                            placeholder="The Event's Objective" 
                             required>{{ old('objective') }}</textarea>
 
                             @error('objective')
@@ -92,12 +94,12 @@
 
                         {{-- Event Venue --}}
                         <div class="form-group row">
-                            <label for="venue" class="col-md-4 col-form-label">Venue<span style="color:red">*</span></label>
+                            <label for="venue" class="col-md-4 col-form-label">Venue<span class="required">*</span></label>
                             <input id="venue" 
                             type="text" 
                             class="form-control @error('venue') is-invalid @enderror" 
                             name="venue"
-                            placeholder="Venue (Ex. Zoom or Facebook Live)"  
+                            placeholder="The Event's Venue (ex. Zoom or Facebook Live)"  
                             value="{{ old('venue') }}">
 
                             @error('venue')
@@ -109,12 +111,12 @@
 
                         {{-- Event Activity Type --}}
                         <div class="form-group row">
-                            <label for="activityType" class="col-md-4 col-form-label">Type of Activity<span style="color:red">*</span></label>
+                            <label for="activityType" class="col-md-4 col-form-label">Type of Activity<span class="required">*</span></label>
                             <input id="activityType" 
                             type="text" 
                             class="form-control @error('activityType') is-invalid @enderror" 
                             name="activityType" 
-                            placeholder="Type of Activity (Ex. Student Development-Intellectual)" 
+                            placeholder="The Event's Activity Type (ex. Student Development-Intellectual)" 
                             value="{{ old('activityType') }}">
 
                             @error('activityType')
@@ -126,12 +128,12 @@
 
                         {{-- Event Beneficiaries --}}
                         <div class="form-group row">
-                                <label for="beneficiaries" class="col-md-4 col-form-label">Event Beneficiaries<span style="color:red">*</span></label>
+                                <label for="beneficiaries" class="col-md-4 col-form-label">Event Beneficiaries<span class="required">*</span></label>
                                 <input id="beneficiaries" 
                                 type="text" 
                                 class="form-control @error('beneficiaries') is-invalid @enderror" 
                                 name="beneficiaries" 
-                                placeholder="Beneficiaries (Ex. Students of PUP-Taguig Branch)" 
+                                placeholder="The Event's Beneficiaries (ex. Students of PUP-Taguig Branch)" 
                                 value="{{ old('beneficiaries') }}">
 
                                 @error('beneficiaries')
@@ -143,12 +145,12 @@
 
                         {{-- Total Event Beneficiaries --}}
                         <div class="form-group row">
-                            <label for="totalBeneficiary" class="col-md-4 col-form-label">Number of Beneficiaries<span style="color:red">*</span></label>
+                            <label for="totalBeneficiary" class="col-md-4 col-form-label">Number of Beneficiaries<span class="required">*</span></label>
                             <input id="totalBeneficiary" 
                             type="text" 
                             class="form-control @error('totalBeneficiary') is-invalid @enderror" 
                             name="totalBeneficiary" 
-                            placeholder="Total Number of Beneficiaries. (Ex. 1000)" 
+                            placeholder="The Total Number of Beneficiaries. (ex. 1000)" 
                             value="{{ old('totalBeneficiary') }}">
 
                             @error('totalBeneficiary')
@@ -160,12 +162,12 @@
 
                         {{-- Event Sponsors --}}
                         <div class="form-group row">
-                            <label for="sponsors" class="col-md-4 col-form-label">Sponsors<span style="color:red">*</span></label>
+                            <label for="sponsors" class="col-md-4 col-form-label">Sponsors<span class="required">*</span></label>
                             <input id="sponsors" 
                             type="text" 
                             class="form-control @error('sponsors') is-invalid @enderror" 
                             name="sponsors" 
-                            placeholder="Sponsors" 
+                            placeholder="The Event's Sponsors" 
                             value="{{ old('sponsors') }}">
 
                             @error('sponsors')
@@ -186,7 +188,7 @@
                                 type="text" 
                                 class="form-control @error('budget') is-invalid @enderror" 
                                 name="budget" 
-                                placeholder="Leave blank if none" 
+                                placeholder="The Event's Budget. Leave blank if none" 
                                 aria-describedby="eventBudgetPesoSign"
                                 value="{{ old('budget') }}">
                             </div>
@@ -209,7 +211,7 @@
                         <div class="form-group row">
                             {{-- Start Date --}}
                             <div class="col">
-                                <label for="startDate" class="col-md-4 form-label">Start Date<span style="color:red">*</span></label>
+                                <label for="startDate" class="col-md-4 form-label">Start Date<span class="required">*</span></label>
                                 <input id="startDate" 
                                 type="date" 
                                 class="form-control @error('startDate') is-invalid @enderror" 
@@ -227,7 +229,7 @@
 
                             {{-- End Date --}}
                             <div class="col">
-                                <label for="endDate" class="col-md-4 form-label">End Date<span style="color:red">*</span></label>
+                                <label for="endDate" class="col-md-4 form-label">End Date<span class="required">*</span></label>
                                 <input id="endDate" 
                                 type="date" 
                                 class="form-control @error('endDate') is-invalid @enderror" 
@@ -247,7 +249,7 @@
                         <div class="form-group row">
                             {{-- Start Time --}}
                             <div class="col">
-                                <label for="startTime" class="col-md-4 col-form-label">Start Time<span style="color:red">*</span></label>
+                                <label for="startTime" class="col-md-4 col-form-label">Start Time<span class="required">*</span></label>
                                 <input id="startTime" 
                                 type="time" 
                                 class="form-control @error('startTime') is-invalid @enderror" 
@@ -262,7 +264,7 @@
 
                             {{-- End Time --}}
                             <div class="col">
-                                <label for="endTime" class="col-md-4 col-form-label">End Time<span style="color:red">*</span></label>
+                                <label for="endTime" class="col-md-4 col-form-label">End Time<span class="required">*</span></label>
                                 <input id="endTime" 
                                 type="time" 
                                 class="form-control @error('endTime') is-invalid @enderror" 
@@ -288,7 +290,7 @@
                         {{-- Event Fund Source --}}
                         <div class="form-group row">
                             <div class="col">
-                                <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?<span style="color:red">*</span></label>
+                                <label for="radioFundSourceGroup" class="form-label @error('fundSource') text-danger @enderror">What was the Organization's Fund Source for this Event?<span class="required">*</span></label>
                             </div>
                             <div class="col" id="radioFundSourceGroup">
                                 @foreach($fundSources as $source)
@@ -321,7 +323,7 @@
                         {{-- Event Role --}}
                         <div class="form-group row">
                             <div class="col">
-                                <label for="radioEventRoleGroup" class="form-label @error('eventRole') text-danger @enderror">What was the Organization's Role in this Event?<span style="color:red">*</span></label></div>
+                                <label for="radioEventRoleGroup" class="form-label @error('eventRole') text-danger @enderror">What was the Organization's Role in this Event?<span class="required">*</span></label></div>
                             <div class="col" id="radioEventRoleGroup">
                                 @foreach($eventRoles as $role)
                                 <div class="form-check">
@@ -353,7 +355,7 @@
                         {{-- Event Category --}}
                         <div class="form-group row">
                             <div class="col">
-                                <label for="radioEventCategoryGroup" class="form-label @error('eventCategory') text-danger @enderror">Event Category<span style="color:red">*</span></label>
+                                <label for="radioEventCategoryGroup" class="form-label @error('eventCategory') text-danger @enderror">Event Category<span class="required">*</span></label>
                             </div>
                             <div class="col" id="radioEventCategoryGroup">
                                 @foreach($eventCategories as $category)
@@ -386,7 +388,7 @@
                         {{-- Event Classification --}}
                         <div class="form-group row">
                             <div class="col">
-                                <label for="radioEventClassificationGroup" class="form-label @error('eventClassification') text-danger @enderror">Event Classification<span style="color:red">*</span></label>
+                                <label for="radioEventClassificationGroup" class="form-label @error('eventClassification') text-danger @enderror">Event Classification<span class="required">*</span></label>
                             </div>
                             <div class="col" id="radioEventClassificationGroup">
                                 @foreach($eventClassifications as $classification)
@@ -419,7 +421,7 @@
                         {{-- Event Natures --}}
                         <div class="form-group row">
                             <div class="col">
-                                <label for="radioEventNatureGroup" class="form-label @error('eventNature') text-danger @enderror">Event Nature<span style="color:red">*</span></label>
+                                <label for="radioEventNatureGroup" class="form-label @error('eventNature') text-danger @enderror">Event Nature<span class="required">*</span></label>
                             </div>
                             <div class="col" id="radioEventNatureGroup">
                                 @foreach($eventNatures as $nature)
@@ -452,7 +454,7 @@
                         {{-- Event Level --}}
                         <div class="form-group row">
                             <div class="col">
-                                <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level<span style="color:red">*</span></label></div>
+                                <label for="radioLevelGroup" class="form-label @error('level') text-danger @enderror">Level<span class="required">*</span></label></div>
                             <div class="col" id="radioLevelGroup">
                                 @foreach($levels as $level)
                                 <div class="form-check">
@@ -484,7 +486,7 @@
 
            <div class="flex-row my-2 text-center">
                 @csrf
-                <button class="btn btn-primary text-white col-md-12" type="submit"><i class="fas fa-plus"></i> Add Event</button>
+                <button id="submitButton" class="btn btn-primary text-white col-md-12" type="submit"><i class="fas fa-plus"></i> Add Event</button>
             </div> 
         </div>     
     </form>

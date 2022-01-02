@@ -56,7 +56,8 @@
                     </div>
         		</div>
                 <div class="col-md-4">
-                    <form action="{{route('accomplishmentReport.finalizeReview', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" method="POST">
+                    <form action="{{route('accomplishmentReport.finalizeReview', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" method="POST"
+                        onsubmit="document.getElementById('success').disabled=true;document.getElementById('decline').disabled=true;">
                         <div class="card mB-1 w-100">
                             <div class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</div>
                             <small class="text-center">Include comments for possible changes for this submission to be approved.</small>
@@ -85,14 +86,14 @@
                         <div class="card card-body text-center">
                             <div class="row mb-2 justify-content-center">
                                 <div class="col">
-                                    <button class="btn btn-success text-white w-100" type="submit" name="success" value="success">Approve</button>
+                                    <button id="success" class="btn btn-success text-white w-100" type="submit" name="success" value="success">Approve</button>
                                     </a>
                                 </div>
                             </div>
                             <hr>
                             <div class="row mt-2 justify-content-center">
                                 <div class="col">
-                                    <button class="btn btn-danger text-white w-100" type="submit" name="decline" value="decline">Decline</button>
+                                    <button id="decline" class="btn btn-danger text-white w-100" type="submit" name="decline" value="decline">Decline</button>
                                 </div>
                             </div>
                         </div>

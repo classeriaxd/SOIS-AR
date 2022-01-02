@@ -145,7 +145,8 @@
 
                 {{-- Remarks and Decision Buttons --}}
                 <div class="col-4">
-                    <form action="{{route('studentAccomplishment.submissionDecision',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST">
+                    <form action="{{route('studentAccomplishment.submissionDecision',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST"
+                        onsubmit="document.getElementById('success').disabled=true;document.getElementById('decline').disabled=true;">
                         {{-- Remarks Card --}}
                         <div class="card mb-1 w-100">
                             <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</h5>
