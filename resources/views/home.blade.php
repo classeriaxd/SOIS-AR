@@ -263,6 +263,13 @@
                                         </a>
                                     </div>
                                 </div>
+                                {{-- GPOA Alert Badge --}}
+                                @if($accomplishedEventsCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{$accomplishedEventsCount}}
+                                        <span class="visually-hidden">GPOA Alert</span>
+                                    </span>
+                                @endif
                             </div>
                         </a>
                     </div>
@@ -287,6 +294,13 @@
                                         </a>
                                     </div>
                                 </div>
+                                {{-- Student Accomplishment Pending Submission Badge --}}
+                                @if($pendingStudentAccomplishmentCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{$pendingStudentAccomplishmentCount}}
+                                        <span class="visually-hidden">Student Accomplishment Pending Submission Alert</span>
+                                    </span>
+                                @endif
                             </div>
                         </a>
                     </div>

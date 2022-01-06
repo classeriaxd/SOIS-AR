@@ -359,7 +359,17 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/create', [App\Http\Controllers\EventsController::class, 'create'])->name('create');
             Route::post('', [App\Http\Controllers\EventsController::class, 'store'])->name('store');
             Route::get('', [App\Http\Controllers\EventsController::class, 'index'])->name('index');
-           
+
+            // GPOA Routes
+            // --> /events/gpoa
+            Route::group([
+                    'as' => 'gpoa.',
+                    'prefix' => '/gpoa',],
+                function () {
+                    Route::get('/{gpoaID}/create', [App\Http\Controllers\EventsController::class, 'gpoaCreate'])->where(['gpoaID' => '^([1-9][0-9]*)$'])->name('create');
+                    Route::get('', [App\Http\Controllers\EventsController::class, 'gpoaIndex'])->name('index');
+            });
+
             Route::group([
                     'prefix' => '/{event_slug}',
                     'where' => ['event_slug' => '^[a-zA-Z0-9-_]{2,255}$'],], 

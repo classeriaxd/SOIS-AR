@@ -15,11 +15,10 @@ class CreateUpcomingEventsTable extends Migration
     {
         Schema::create('upcoming_events', function (Blueprint $table) {
             $table->id('upcoming_event_id');
-
-            $table->unsignedBigInteger('organization_id');
-
+            $table->foreignId('organization_id');
+            $table->foreignId('accomplished_event_id')->nullable()->default(NULL);
             $table->date('date');
-            $table->string('title_of_activity');
+            $table->string('title');
             $table->string('objectives');
             $table->string('semester');
             $table->string('school_year');
@@ -27,17 +26,17 @@ class CreateUpcomingEventsTable extends Migration
             $table->string('partnerships');
             $table->string('venue');
             $table->time('time');
-            $table->string('projected_budget');
+            $table->integer('projected_budget')->nullable()->default(NULL);
             $table->string('sponsor');
-            $table->string('fund_sourcing');
-            $table->string('type_of_activity');
-            $table->string('approval_status')->default('pending'); //values = pending/disapproved/approved
-            $table->string('status')->default('upcoming'); //values = upcoming/accomplished
+            $table->string('fund_source');
+            $table->string('activity_type');
+            $table->string('advisers_approval')->default('pending'); //values = pending/disapproved/approved
+            $table->string('studAffairs_approval')->default('pending'); //values = pending/disapproved/approved
+            $table->string('completion_status')->default('upcoming'); //values = upcoming/accomplished
             $table->timestamps();
 
             $table->foreign('organization_id')->references('organization_id')->on('organizations')->onDelete('cascade');
-            //$table->foreign('course_id')->references('course_id')->on('courses')->onDelete('cascade');
-        
+            $table->foreign('accomplished_event_id')->references('accomplished_event_id')->on('accomplished_events');
         });
     }
 
@@ -49,5 +48,7 @@ class CreateUpcomingEventsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('upcoming_events');
+        $table->dropForeign('organization_id');
+        $table->dropForeign('accomplished_event_id');
     }
 }

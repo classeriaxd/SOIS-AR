@@ -202,8 +202,28 @@
                     </div>
                 </div>
             @endif
-            
+
+
         </div>
+    </div>
+
+    <hr>
+
+    {{-- GPOA Button --}}
+    <div class="flex-row my-2 text-center">
+        <a href="{{route('event.gpoa.index')}}">
+            <button class="btn btn-primary text-white position-relative">
+                <i class="fas fa-clipboard-list"></i> Go to GPOA Events
+
+                {{-- GPOA Alert Badge --}}
+                @if($accomplishedEventsCount > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{$accomplishedEventsCount}}
+                        <span class="visually-hidden">GPOA Alert</span>
+                    </span>
+                @endif
+            </button>
+        </a>
     </div>
 
     <hr>

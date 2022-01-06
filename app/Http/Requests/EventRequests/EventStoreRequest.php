@@ -31,8 +31,8 @@ class EventStoreRequest extends FormRequest
             'title' => 'required|string|min:2|max:250',
             'description' => 'required|string',
             'objective' => 'required|string',
-            'startDate' => 'required|date|date_format:Y-m-d|before_or_equal:now|after:1992-01-01',
-            'endDate' => 'required|date|date_format:Y-m-d|after_or_equal:startDate|before_or_equal:now|after:1992-01-01',
+            'startDate' => 'required|date|date_format:Y-m-d|after:1992-01-01',
+            'endDate' => 'required|date|date_format:Y-m-d|after_or_equal:startDate|after:1992-01-01',
             'startTime' => 'date_format:H:i',
             'endTime' => 'date_format:H:i|after_or_equal:startTime',
             'venue' => 'required|string|min:2|max:250',
@@ -47,6 +47,8 @@ class EventStoreRequest extends FormRequest
             'eventNature' => 'required|integer|exists:App\Models\EventNature,event_nature_id',
             'fundSource' => 'required|integer|exists:App\Models\FundSource,fund_source_id',
             'level' => 'required|integer|exists:App\Models\Level,level_id',
+
+            'gpoa' => 'sometimes|required|integer|exists:App\Models\UpcomingEvent,upcoming_event_id',
 
         ];
         return $rules;

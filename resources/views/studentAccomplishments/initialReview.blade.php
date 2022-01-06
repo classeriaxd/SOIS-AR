@@ -145,15 +145,16 @@
 
                 {{-- Remarks and Decision Buttons --}}
                 <div class="col-4">
-                    <form action="{{route('studentAccomplishment.submissionDecision',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST"
-                        onsubmit="document.getElementById('success').disabled=true;document.getElementById('decline').disabled=true;">
+                    <form action="{{route('studentAccomplishment.submissionDecision',['accomplishmentUUID' => $accomplishment->accomplishment_uuid,]);}}" method="POST">
+                        @csrf
+
                         {{-- Remarks Card --}}
                         <div class="card mb-1 w-100">
                             <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</h5>
                             <small class="text-center">Include comments for possible changes for this submission to be approved.</small>
                             <div class="card-body">
                                 <textarea class="form-control" id="remarks" name="remarks" placeholder="Start Review here..." rows="9" required></textarea>
-                                @csrf
+                                
                             </div>
                         </div>
 

@@ -106,6 +106,7 @@
                             <ul class="collapse list-unstyled menu" id="pageSubmenuOfficer1">
                                 <li><a href="{{route('event.create')}}">Create Event</a></li>
                                 <li><a href="{{route('event.index')}}">View Events</a></li>
+                                <li><a href="{{route('event.gpoa.index')}}">GPOA Events</a></li>
                             </ul>
                         </li>
 
