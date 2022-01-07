@@ -1,0 +1,22 @@
+HOW TO RUN LARAVEL SYSTEM LOCALLY
+
+1. Download and Install XAMPP with PHP version 7.4
+	> Download it here: https://www.apachefriends.org/download.html
+	> After installation, run the Application then click start for both Apache and MySQL
+	> Go to your browser and type localhost/phpmyadmin
+	> Add a new database by clicking New then input a database name (This should come from DB_DATABASE field in the given ENV)
+	> Import the Database by clicking Import in the upper tabs > Choose File > Go
+
+2. Download and Install Composer
+	> Download it here: https://getcomposer.org/download/
+
+3. Clone the Repository from Github
+	> Clone it here: https://github.com/classeriaxd/SOIS-QAR
+	> Modify/Replace the env file from the cloned repository with the given ENV.
+	> After cloning, go to your Terminal and change the directory to the repository
+	> Run (composer install) and (php artisan key:generate)
+	> After that, run (php artisan serve) and access the system with the link given
+
+Steps taken from:
+	Run laravel project locally
+	https://gist.github.com/hootlex/da59b91c628a6688ceb1
