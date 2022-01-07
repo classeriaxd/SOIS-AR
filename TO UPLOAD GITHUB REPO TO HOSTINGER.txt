@@ -37,6 +37,10 @@ HOW TO UPLOAD LARAVEL SYSTEM FROM GITHUB TO HOSTINGER
 		> MAIL_ENCRYPTION from given ENV
 		> MAIL_FROM_ADDRESS from given ENV
 
+	> Zip the vendor folder from Local Laravel / Storage
+		> Upload the zip to the vendor folder in Hostinger
+		> Once done, extract its contents
+
 5. Do steps from file TO REMOVE PUBLIC IN URL.txt
 
 6. :)
