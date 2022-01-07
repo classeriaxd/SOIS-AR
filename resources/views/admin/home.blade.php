@@ -26,20 +26,6 @@
                     </ol>
                 </nav>
             </div>
-            <!-- <div class="row">
-                <a href="{{ route('admin.events.index') }}">
-                    <p class="text-primary border border-dark">Accomplished Event Count: {{ $eventCount ?? 0 }}</p>
-                </a>
-                <a href="{{ route('admin.organizations.index') }}">
-                    <p class="text-primary border border-dark">Organization Count: {{ $organizationCount ?? 0 }}</p>
-                </a>
-                <a href="{{ route('admin.accomplishmentReports.index') }}">
-                    <p class="text-primary border border-dark">AR Count: {{ $accomplishmentReportCount ?? 0 }}</p>
-                </a>
-            </div> -->
-            
-            
-            
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card card-stats">
@@ -101,203 +87,112 @@
                         </div>
                     </div>
                 </div>
-                <!-- Table -->
-                <!-- <div class="row ">
-                    <div class="col-lg-7 col-md-12">
-                        <div class="card" style="min-height: 485px">
-                            <div class="card-header card-header-text">
-                                <h4 class="card-title">Accomplished Reports</h4>
-                                <p class="category">Latest added reports</p>
-                            </div>
-                            <div class="card-content table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="text-primary">
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Title</th>
-                                            <th>Date</th>
-                                            <th>Role</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Borderland: Withstanding Virtual Reality"</td>
-                                            <td>Nov. 7, 2021</td>
-                                            <td>Sponsor</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>General Assembly - Hacker x Hunter: The Algo Hunting Begins</td>
-                                            <td>Oct. 22, 2021</td>
-                                            <td>Organizer</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>PUPTALKS - Laboratory Utilization and Management </td>
-                                            <td>Oct. 15, 2021</td>
-                                            <td>Participant</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Oath Taking Ceremony</td>
-                                            <td>Oct. 8, 2021</td>
-                                            <td>Participant</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Safe Space Online Classroom for LGBTQIA+ Students</td>
-                                            <td>Oct. 8, 2021</td>
-                                            <td>Participant</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Techer's Day</td>
-                                            <td>Oct. 5, 2021</td>
-                                            <td>Sponsor</td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Knights of Honor 2021</td>
-                                            <td>Sept. 30, 2021</td>
-                                            <td>Organizer</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> -->
+            </div>
 
-                    <!-- Activities -->
-                    <!-- <div class="col-lg-5 col-md-12">
-                        <div class="card" style="min-height: 485px">
-                            <div class="card-header card-header-text">
-                                <h4 class="card-title">Activity Log</h4>
+            {{-- Notification Form --}}
+            <form action="{{route('admin.notifications.store')}}" enctype="multipart/form-data" method="POST" id="adminNotificationCreateForm"
+                onsubmit="document.getElementById('submitButton').disabled=true;">
+
+                <div class="card w-100">
+                    <h5 class="card-header card-title text-center bg-maroon text-black fw-bold">Send an Announcement</h5>
+                    <div class="card-body">
+                        
+                            {{-- Notification Title --}}
+                            <div class="form-group row">
+                                <label for="title" class="col-md-4 col-form-label">Title<span class="required">*</span></label>
+                                <input id="title" 
+                                type="text" 
+                                class="form-control @error('title') is-invalid @enderror" 
+                                name="title"
+                                placeholder="Notification Title" 
+                                value="{{ old('title') }}" 
+                                autofocus 
+                                required>
+
+                                @error('title')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                            <div class="card-content">
-                                <div class="streamline">
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">5 mins ago</small>
-                                            <p>You created a report entitled "General Assembly 2021"</p>
-                                        </div>
+
+                            {{-- Notification Description --}}
+                            <div class="form-group row">
+                                <label for="description" class="col-md-4 col-form-label">Description<span class="required">*</span></label>    
+                                <textarea id="description" 
+                                class="form-control @error('description') is-invalid @enderror" 
+                                name="description"
+                                placeholder="Notification Description" 
+                                required>{{ old('description')}}</textarea>
+
+                                @error('description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            {{-- Reciever Organization --}}
+                            <div class="form-group row">
+                                <label for="organizationSelect" class="col-md-8 col-form-label">Organization<span class="required">*</span> (select one or more)
+                                    <a role="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-container="body" 
+                                        data-bs-trigger="hover focus"
+                                        title="Selecting Organizations" 
+                                        data-bs-content="You can select multiple Organizations by click-and-drag, or hold the CTRL key then click."
+                                        data-bs-placement="right">
+                                        <i class="far fa-question-circle"></i>
+                                    </a>
+                                </label>
+                                <select class="form-select" id="organizationSelect" name="organization[]" multiple required>
+                                    @foreach($organizations as $organization)
+                                        <option class="text-truncate" value="{{$organization->organization_id}}">{{'(' . $organization->organization_acronym . ') ' . $organization->organization_name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('organization')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            {{-- Reciever Users --}}
+                            <div class="form-group row">
+                                <label for="userRecieverRadioGroup" class="col-md-4 col-form-label">Reciever</label>
+                                <div id="userRecieverRadioGroup">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="reciever" id="userRecieverRadioGroup-All" value="All" required>
+                                        <label class="form-check-label" for="userRecieverRadioGroup-All">All</label>
                                     </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">25 mins ago</small>
-                                            <p>You submitted an accomplishment report</p>
-                                        </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="reciever" id="userRecieverRadioGroup-Officers" value="Officers" required>
+                                        <label class="form-check-label" for="userRecieverRadioGroup-Officers">Officers</label>
                                     </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">40 mins ago</small>
-                                            <p>You deleted a report entitled "U-Knights Tutorial"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">45 minutes ago</small>
-                                            <p>You updated a report entilted "Knights of Honor"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">55 mins ago</small>
-                                            <p>You approved a member's report entitled "Recognition"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">60 minutes ago</small>
-                                            <p>You declined a member's report entitled "Stock Markert"</p>
-                                        </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="reciever" id="userRecieverRadioGroup-Presidents" value="Presidents" required>
+                                        <label class="form-check-label" for="userRecieverRadioGroup-Presidents">Presidents</label>
                                     </div>
                                 </div>
+                                @error('reciever')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                        </div>
-                    </div> -->
-                </div>
-                <div class="flex-row text-center my-1">
-                    <a href="{{ route('admin.maintenance.roles.index') }}"
-                    role="button"
-                    class="btn btn-primary text-white">
-                        Roles
-                    </a>
-                </div>
-            </div>
-
-            <div class="card w-100">
-            <h5 class="card-header card-title text-center bg-maroon text-black fw-bold">Send an Announcement</h5>
-            <div class="card-body text-center">
-                <p>(Announcement Form)</p>
-            </div>
-            </div>
-            
-            <!-- <div class="card w-100">
-                <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Maintenance</h5>
-                <div class="card-body">
-                    <div class="flex-row text-center my-1">
-                        <a href="{{ route('admin.maintenance.eventCategories.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Categories
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventRoles.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Roles
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventNatures.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Natures
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventClassifications.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Classifications
-                        </a>
-                        <a href="{{ route('admin.maintenance.eventDocumentTypes.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Event Document Types
-                        </a>
+                            
+                            <div class="form-group flex-row text-center">
+                                @csrf
+                                <button id="submitButton" class="btn btn-primary text-white" type="submit"><i class="fas fa-paper-plane"></i> Send Notification</button>
+                            </div>
+                        
                     </div>
-                    <div class="flex-row text-center my-1">
-                        <a href="{{ route('admin.maintenance.levels.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Levels
-                        </a>
-                        <a href="{{ route('admin.maintenance.fundSources.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Fund Sources
-                        </a>
-                        <a href="#"
-                        role="button"
-                        class="btn btn-primary text-white disabled">
-                            School Years
-                        </a>
-                        <a href="#"
-                        role="button"
-                        class="btn btn-primary text-white disabled">
-                            Organization Document Types
-                        </a>
-                    </div>
-                    <div class="flex-row text-center my-1">
-                        <a href="{{ route('admin.maintenance.tabularTables.index') }}"
-                        role="button"
-                        class="btn btn-primary text-white">
-                            Tabular AR Tables
-                        </a>
-                    </div>
-                    
                 </div>
-            </div> -->
-            
-
+            </form>
         </div>
+
+            
+        
     </div>
 </div>
 @endsection
@@ -312,5 +207,7 @@
             });
         }, 3000);
     </script>
-    
+
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection

@@ -39,6 +39,12 @@ class HomeController extends Controller
         $eventCount = Event::count();
         $organizationCount = Organization::count();
         $accomplishmentReportCount = AccomplishmentReport::count();
+
+        $organizations = Organization::select('organization_id', 'organization_acronym', 'organization_name')
+            ->orderBy('organization_type_id', 'ASC')
+            ->orderBy('organization_name', 'ASC')
+            ->get();
+
         $loginAlert = $this->showLoginAlert();
         $loadHomeCSS = true;
         
@@ -49,6 +55,7 @@ class HomeController extends Controller
                 'organizationCount',
                 'accomplishmentReportCount',
                 'loadHomeCSS',
+                'organizations',
             ));
         
     }

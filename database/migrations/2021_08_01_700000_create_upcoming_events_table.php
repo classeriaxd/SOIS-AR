@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateUpcomingEventsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('upcoming_events', function (Blueprint $table) {
+            $table->id('upcoming_event_id');
+            $table->foreignId('organization_id');
+            $table->foreignId('accomplished_event_id')->nullable()->default(NULL);
+            $table->date('date');
+            $table->string('title');
+            $table->string('objectives');
+            $table->string('semester');
+            $table->string('school_year');
+            $table->string('participants');
+            $table->string('partnerships');
+            $table->string('venue');
+            $table->time('time');
+            $table->integer('projected_budget')->nullable()->default(NULL);
+            $table->string('sponsor');
+            $table->string('fund_source');
+            $table->string('activity_type');
+            $table->string('advisers_approval')->default('pending'); //values = pending/disapproved/approved
+            $table->string('studAffairs_approval')->default('pending'); //values = pending/disapproved/approved
+            $table->string('completion_status')->default('upcoming'); //values = upcoming/accomplished
+            $table->timestamps();
+
+            $table->foreign('organization_id')->references('organization_id')->on('organizations')->onDelete('cascade');
+            $table->foreign('accomplished_event_id')->references('accomplished_event_id')->on('accomplished_events');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('upcoming_events');
+        $table->dropForeign('organization_id');
+        $table->dropForeign('accomplished_event_id');
+    }
+}

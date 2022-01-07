@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Nicolaslopezj\Searchable\SearchableTrait;
 
+// Model For Accomplished Events Table
 class Event extends Model
 {
     use HasFactory, SoftDeletes, SearchableTrait;

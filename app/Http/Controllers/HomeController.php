@@ -11,6 +11,8 @@ use App\Models\AccomplishmentReport;
 use App\Models\Event;
 use App\Models\Organization;
 use App\Models\OrganizationDocument;
+use App\Models\UpcomingEvent;
+use App\Models\Role;
 
 use Illuminate\Database\Eloquent\Builder;
 use App\Services\PermissionServices\PermissionCheckingService;
@@ -75,9 +77,12 @@ class HomeController extends Controller
             $organizationID = $userRoles[$userRoleKey]['organization_id'];
             
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization
-            $eventCount = Event::where('organization_id', $organizationID)->count();
-            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)->count();
-            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)->count();
+            $eventCount = Event::where('organization_id', $organizationID)
+                ->count();
+            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
+                ->count();
+            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)
+                ->count();
             $documentCount = OrganizationDocument::whereHas(
                     'documentType.organization', function(Builder $query) use($organizationID){
                         $query->where('organization_id', $organizationID);},)
@@ -92,15 +97,27 @@ class HomeController extends Controller
             $organizationID = $userRoles[$userRoleKey]['organization_id'];
 
             // Query the number of events, student accomplishments, and accomplishment reports under this Organization
-            $eventCount = Event::where('organization_id', $organizationID)->count();
-            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)->count();
-            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)->count();
+            $eventCount = Event::where('organization_id', $organizationID)
+                ->count();
+            $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
+                ->count();
+            $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)
+                ->count();
             $documentCount = OrganizationDocument::whereHas(
                     'documentType.organization', function(Builder $query) use($organizationID){
                         $query->where('organization_id', $organizationID);},)
                 ->count();
             $organization = Organization::where('organization_id', $organizationID)->first();
-            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount','organization');
+            $accomplishedEventsCount = UpcomingEvent::whereNull('accomplished_event_id')
+                ->where('organization_id', $organizationID)
+                ->where('advisers_approval', 'approved')
+                ->where('studAffairs_approval', 'approved')
+                ->where('completion_status', 'accomplished')
+                ->count();
+            $pendingStudentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
+                ->where('status', 1)
+                ->count();
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount','organization', 'accomplishedEventsCount', 'pendingStudentAccomplishmentCount');
         }
 
         // Show Login Alert on View once

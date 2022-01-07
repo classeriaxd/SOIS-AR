@@ -36,8 +36,8 @@ class CreateEventDocumentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('event_documents');
-        $table->foreign('accomplished_event_id')->references('accomplished_event_id')->on('events');
-        $table->foreign('event_document_type_id')->references('event_document_type_id')->on('event_document_types');
+        $table->dropForeign('accomplished_event_id');
+        $table->dropForeign('event_document_type_id');
 
     }
 }

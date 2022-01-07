@@ -3,6 +3,7 @@
 namespace App\Services\EventServices;
 
 use App\Models\Event;
+use App\Models\UpcomingEvent;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -11,7 +12,7 @@ use App\Services\EventServices\EventGetOrganizationIDService;
 class EventStoreService
 {
     /**
-     * @param Request $request
+     * @param Request $request, Integer $gpoaID
      * Service to Store an event.
      * Returns Event Slug and Message on success.
      * @return Array
@@ -43,6 +44,16 @@ class EventStoreService
                 'budget' => $request->input('budget', NULL),
                 'slug' => Str::slug($request->input('title'), '-') . '-' . Carbon::parse($request->input('startDate'))->format('Y') . '-' . Str::uuid(),
             ])->slug;
+
+            // If store request is from GPOA
+            if($request->has('gpoa'))
+            {
+                $eventID = Event::where('slug', $eventSlug)
+                    ->value('accomplished_event_id');
+                UpcomingEvent::where('upcoming_event_id', $request->input('gpoa'))
+                    ->update(['accomplished_event_id' => $eventID]);
+            }
+
             $returnArray = array(
                 'eventSlug' => $eventSlug, 
                 'message' => array('success' => 'Event added sucessfully!'),

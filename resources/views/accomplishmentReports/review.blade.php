@@ -56,8 +56,7 @@
                     </div>
         		</div>
                 <div class="col-md-4">
-                    <form action="{{route('accomplishmentReport.finalizeReview', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" method="POST"
-                        onsubmit="document.getElementById('success').disabled=true;document.getElementById('decline').disabled=true;">
+                    <form action="{{route('accomplishmentReport.finalizeReview', ['accomplishmentReportUUID' => $accomplishmentReport->accomplishment_report_uuid])}}" method="POST">
                         <div class="card mB-1 w-100">
                             <div class="card-header card-title text-center bg-maroon text-white fw-bold">Review Remarks</div>
                             <small class="text-center">Include comments for possible changes for this submission to be approved.</small>

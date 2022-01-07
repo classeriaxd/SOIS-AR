@@ -13,6 +13,7 @@ use App\Models\{
     Level,
     FundSource,
     Organization,
+    UpcomingEvent,
 };
 
 use App\Http\Requests\EventRequests\{
@@ -69,7 +70,13 @@ class EventsController extends Controller
             ->orderByRaw('MONTH(`start_date`) ASC, `start_date` ASC')
             ->paginate(30, ['*'], 'deletedEvents');
 
-        return view('events.index', compact('events', 'orgAcronym', 'deletedEvents'));
+        $accomplishedEventsCount = UpcomingEvent::whereNull('accomplished_event_id')
+            ->where('organization_id', $organizationID)
+            ->where('advisers_approval', 'approved')
+            ->where('studAffairs_approval', 'approved')
+            ->where('completion_status', 'accomplished')
+            ->count();
+        return view('events.index', compact('events', 'orgAcronym', 'deletedEvents', 'accomplishedEventsCount'));
     }
 
     /**
@@ -244,4 +251,62 @@ class EventsController extends Controller
     }
     // Notes
     //https://github.com/laravel/framework/issues/14997#issuecomment-242129087
+
+    /**
+     * Function to show all GPOA Events that are not in AR
+     * @return View
+     */
+    public function gpoaIndex()
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Event'), 403);
+        $organizationID = (new EventGetOrganizationIDService)->getOrganizationID();
+        $orgAcronym = Organization::where('organization_id', $organizationID)->value('organization_acronym');
+        $accomplishedEvents = UpcomingEvent::whereNull('accomplished_event_id')
+            ->where('organization_id', $organizationID)
+            ->where('advisers_approval', 'approved')
+            ->where('studAffairs_approval', 'approved')
+            ->where('completion_status', 'accomplished')
+            ->paginate(30, ['*'], 'accomplishedEvents');
+
+        return view('events.gpoa.index', compact('orgAcronym', 'accomplishedEvents'));
+    }
+
+    /**
+     * Function to show Create Page with prefilled GPOA Data
+     * @return View
+     */ 
+    public function gpoaCreate($gpoaID)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Create_Event'), 403);
+        $organizationID = (new EventGetOrganizationIDService)->getOrganizationID();
+        abort_if(! UpcomingEvent::where('upcoming_event_id', $gpoaID)->where('organization_id', $organizationID)->exists(), 404);
+
+        $accomplishedEvent = UpcomingEvent::where('upcoming_event_id', $gpoaID)
+            ->where('organization_id', $organizationID)
+            ->first();
+
+        if ($accomplishedEvent->accomplished_event_id !== NULL)
+        {
+            $event = Event::where('accomplished_event_id', $accomplishedEvent->accomplished_event_id)->first();
+            return redirect()->action(
+                [EventsController::class, 'show'], ['event_slug' => $event->slug]);
+        }
+
+        $eventCategories = EventCategory::all();
+        $eventClassifications = EventClassification::all();
+        $eventNatures = EventNature::all();
+        $eventRoles = EventRole::all();
+        $fundSources = FundSource::all();
+        $levels = Level::all();
+
+        return view('events.gpoa.create', compact(
+            'accomplishedEvent',
+            'eventCategories', 
+            'eventRoles', 
+            'eventClassifications',
+            'eventNatures',
+            'levels', 
+            'fundSources',));
+    }
+
 }
