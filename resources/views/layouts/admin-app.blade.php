@@ -121,6 +121,16 @@
                             <li><a href="{{ route('admin.maintenance.tabularTables.index') }}">School Years</a></li>
                         </ul>
                     </li>
+
+                    {{-- User Maintenance --}}
+                    <li class="dropdown">
+                        <a href="#userMaintenanceSubMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <i class="material-icons">person</i><span>User Maintenance</span>
+                        </a>
+                        <ul class="collapse list-unstyled menu" id="userMaintenanceSubMenu">
+                            <li><a href="{{ route('admin.maintenance.roles.index') }}">Manage Roles</a></li>
+                        </ul>
+                    </li>
                     
                     <!-- Hidden Menu -->
                     <div class="small-screen navbar-display">

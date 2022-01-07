@@ -68,7 +68,18 @@
 
                                 {{-- Reciever Organization --}}
                                 <div class="form-group row">
-                                    <label for="organizationSelect" class="col-md-8 col-form-label">Organization<span class="required">*</span> (select one or more)</label>
+                                    <label for="organizationSelect" class="col-md-8 col-form-label">Organization<span class="required">*</span> (select one or more)
+                                        <a role="button"
+                                            data-bs-toggle="popover"
+                                            data-bs-container="body" 
+                                            data-bs-trigger="hover focus"
+                                            title="Selecting Organizations" 
+                                            data-bs-content="You can select multiple Organizations by click-and-drag, or hold the CTRL key then click."
+                                            data-bs-placement="right">
+                                            <i class="far fa-question-circle"></i>
+                                        </a>
+                                    </label>
+                                    
                                     <select class="form-select" id="organizationSelect" name="organization[]" multiple required>
                                         @foreach($organizations as $organization)
                                             <option class="text-truncate" value="{{$organization->organization_id}}">{{'(' . $organization->organization_acronym . ') ' . $organization->organization_name}}</option>
@@ -128,4 +139,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    {{-- Enable Popovers --}}
+    <script type="text/javascript" src="{{ asset('js/bootstrap_related_js/enablePopover.js') }}"></script>
 @endsection
