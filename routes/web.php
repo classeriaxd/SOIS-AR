@@ -289,6 +289,7 @@ Route::group(['middleware' => 'auth'], function () {
     
     
     // Organization Documents
+    Route::get('/redirect/documents', [App\Http\Controllers\OrganizationDocumentsController::class, 'indexRedirect'])->name('organizationDocuments.indexRedirect');
     Route::group([
             'as' => 'organizationDocuments.',
             'prefix' => '/documents/{organizationSlug}',

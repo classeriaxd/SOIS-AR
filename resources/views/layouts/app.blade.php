@@ -125,11 +125,22 @@
                         {{-- Student Accomplishments --}}
                         <li class="dropdown">
                             <a href="#pageSubmenu4" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <i class="material-icons">assignment_ind</i><span>Student's Reports'</span>
+                                <i class="material-icons">assignment_ind</i><span>Student Reports</span>
                             </a>
 
                             <ul class="collapse list-unstyled menu" id="pageSubmenu4">
                                 <li><a href="{{route('studentAccomplishment.index')}}">Submissions</a></li>
+                            </ul>
+                        </li>
+
+                        {{-- Organization Documents --}}
+                        <li class="dropdown">
+                            <a href="#pageSubmenu5" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">picture_as_pdf</i><span>Organization Documents</span>
+                            </a>
+
+                            <ul class="collapse list-unstyled menu" id="pageSubmenu5">
+                                <li><a href="{{route('organizationDocuments.indexRedirect')}}">All Organization Documents</a></li>
                             </ul>
                         </li>
                     @endrole

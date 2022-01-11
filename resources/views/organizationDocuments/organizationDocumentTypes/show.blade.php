@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex-row my-2 text-center">
                         <a class="btn btn-primary text-white" 
-                            href="{{ route('maintenances.organizationDocumentTypes.show',  ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" 
+                            href="{{ route('maintenances.organizationDocumentTypes.edit',  ['organizationSlug' => $organization->organization_slug, 'organizationDocumentTypeSlug' => $organizationDocumentType->slug]) }}" 
                             role="button">
                             <i class="fas fa-edit"></i> Edit Document Type
                         </a>
