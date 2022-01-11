@@ -130,7 +130,9 @@
 
                 @if($eventImages['evidences']->isNotEmpty() || $eventImages['posters']->isNotEmpty())
                     <div class="flex my-2 text-center">
-                        <button id="submitButton" class="btn btn-primary text-white col-md-12" type="submit">Add Captions</button>
+                        <button id="submitButton" class="btn btn-primary text-white col-md-12" type="submit">
+                            <i class="fas fa-plus"></i> Add Captions
+                        </button>
                     </div>
                 @endif
             </div>
