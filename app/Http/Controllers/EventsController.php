@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\{
@@ -30,12 +32,14 @@ use App\Services\EventServices\{
     EventRestoreService,
     EventGetOrganizationIDService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 class EventsController extends Controller
 {
     protected $permissionChecker;
-
+    protected $dataLogger;
     /**
      * Create a new controller instance.
      * @return void
@@ -44,6 +48,7 @@ class EventsController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -144,6 +149,8 @@ class EventsController extends Controller
         $returnArray = (new EventUpdateService())->update($request, $event_slug);
         $message = $returnArray['message'];
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Updated an Event.');
+
         if ($returnArray['eventSlug'] == NULL) {
             return redirect()->action(
                 [EventsController::class, 'index'])
@@ -166,6 +173,8 @@ class EventsController extends Controller
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $message = (new EventDeleteService())->destroy($event_slug);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Deleted an Event.');
 
         return redirect()->action(
                 [EventsController::class, 'index'])
@@ -206,6 +215,8 @@ class EventsController extends Controller
         $returnArray = (new EventStoreService())->store($request);
         $message = $returnArray['message'];
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created an Event.');
+
         if ($returnArray['eventSlug'] == NULL) {
             return redirect()->action(
                 [EventsController::class, 'index'])
@@ -228,6 +239,8 @@ class EventsController extends Controller
         abort_if(! Event::onlyTrashed()->where('slug', $event_slug)->exists(), 404);
 
         $message = (new EventRestoreService())->restore($event_slug);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Restored an Event.');
 
         return redirect()->action(
             [EventsController::class, 'index'])

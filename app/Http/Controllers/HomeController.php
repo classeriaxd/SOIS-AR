@@ -13,6 +13,7 @@ use App\Models\Organization;
 use App\Models\OrganizationDocument;
 use App\Models\UpcomingEvent;
 use App\Models\Role;
+use App\Models\DataLog;
 
 use Illuminate\Database\Eloquent\Builder;
 use App\Services\PermissionServices\PermissionCheckingService;
@@ -107,7 +108,6 @@ class HomeController extends Controller
                     'documentType.organization', function(Builder $query) use($organizationID){
                         $query->where('organization_id', $organizationID);},)
                 ->count();
-            $organization = Organization::where('organization_id', $organizationID)->first();
             $accomplishedEventsCount = UpcomingEvent::whereNull('accomplished_event_id')
                 ->where('organization_id', $organizationID)
                 ->where('advisers_approval', 'approved')
@@ -117,8 +117,14 @@ class HomeController extends Controller
             $pendingStudentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
                 ->where('status', 1)
                 ->count();
-            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount','organization', 'accomplishedEventsCount', 'pendingStudentAccomplishmentCount');
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount', 'accomplishedEventsCount', 'pendingStudentAccomplishmentCount');
         }
+        // Query Activity Logs
+        $activityLogs = DataLog::where('user_id', Auth::user()->user_id)
+            ->orderBy('created_at', 'DESC')
+            ->limit(6)
+            ->get();
+        array_push($compactVariables, 'activityLogs');
 
         // Show Login Alert on View and Activity Log once
         $loginAlert = $this->showLoginAlert();

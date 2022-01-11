@@ -18,6 +18,7 @@ use App\Services\NotificationServices\{
 };
 
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\DataLogServices\DataLogService;
 
 class AccomplishmentReportReviewService
 {
@@ -34,9 +35,15 @@ class AccomplishmentReportReviewService
         $accomplishmentReport = AccomplishmentReport::where('accomplishment_report_uuid', $accomplishmentReportUUID)->first();
 
         if ($request->has('success')) 
+        {
             $returnArray = $this->approveAccomplishmentReport_Design($accomplishmentReport, $request);
+            (new DataLogService)->log(Auth::user()->user_id, 'User Approved an Accomplishment Report.');
+        }
         else if ($request->has('decline'))
+        {
             $returnArray = $this->declineAccomplishmentReport_Design($accomplishmentReport, $request);
+            (new DataLogService)->log(Auth::user()->user_id, 'User Declined an Accomplishment Report.');
+        }
 
         return $returnArray;
     }

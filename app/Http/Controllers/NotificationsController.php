@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 class NotificationsController extends Controller
 {
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -23,6 +25,7 @@ class NotificationsController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function show()
@@ -50,6 +53,8 @@ class NotificationsController extends Controller
             $notification->update($data);
         }
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Marked Notifications as Read.');
+
         return redirect()->action(
             [NotificationsController::class, 'show']);
     }
@@ -62,5 +67,7 @@ class NotificationsController extends Controller
         $notification = Notification::where('notification_id', $notification_id)->first();
         $data = ['read_at' => Carbon::now(),];
         $notification->update($data);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Marked a Notification as Read.');
     }
 }

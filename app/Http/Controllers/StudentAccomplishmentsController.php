@@ -37,12 +37,16 @@ use App\Models\{
     Event,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
+
 
 class StudentAccomplishmentsController extends Controller
 {
     protected $viewDirectory = 'studentAccomplishments.';
     protected $temporaryFolderDirectory = '/public/uploads/tmp/';
     protected $permissionChecker;
+    protected $dataLogger;
+
 
     /**
      * Create a new controller instance.
@@ -52,6 +56,7 @@ class StudentAccomplishmentsController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -135,6 +140,8 @@ class StudentAccomplishmentsController extends Controller
         $returnArray = (new StudentAccomplishmentStoreService())->store($request);
         $message = $returnArray['message'];
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created a Student Accomplishment.');
+
         if ($returnArray['accomplishmentUUID'] === NULL) 
             return redirect()->action(
                 [StudentAccomplishmentsController::class, 'index'])
@@ -154,7 +161,7 @@ class StudentAccomplishmentsController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Student_Accomplishment'), 403);
         abort_if(! StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)->exists(), 404);
-
+        
         $accomplishment = StudentAccomplishment::with(
                 'level', 
                 'fundSource', 
@@ -229,6 +236,7 @@ class StudentAccomplishmentsController extends Controller
                 ->with($message);
         }
 
+        // If Submission is approved, Redirect to Final Review Function
         else if(request()->has('success'))
             return redirect()->action(
                 [StudentAccomplishmentsController::class, 'finalReview'], ['accomplishmentUUID' => $accomplishmentUUID]
@@ -281,12 +289,13 @@ class StudentAccomplishmentsController extends Controller
     /**
      * @param Collection $accomplishment, String $remarks
      * Function to Decline the Student Accomplishment Submission
-     * @return Redirect
+     * @return String
      */ 
     public function declineSubmission(StudentAccomplishment $accomplishment, $remarks)
     {
         $message = (new StudentAccomplishmentUpdateService())->decline($accomplishment, $remarks);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Declined a Student Accomplishment.');
 
         return $message;
     }
@@ -318,6 +327,8 @@ class StudentAccomplishmentsController extends Controller
         else if($request->has('success'))
         {
             $message = (new StudentAccomplishmentUpdateService())->approve($accomplishment, $request);
+
+            $this->dataLogger->log(Auth::user()->user_id, 'User Approved a Student Accomplishment.');
 
             return redirect()->action(
                 [StudentAccomplishmentsController::class, 'index'])

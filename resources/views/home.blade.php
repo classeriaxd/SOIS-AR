@@ -117,8 +117,9 @@
                         </a>
                     </div>
 
-                    <!-- Table -->
+                    {{-- Table and Activity Logs --}}
                     <div class="row justify-content-center">
+                        {{-- Table --}}
                         <div class="col-lg-7 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
@@ -186,54 +187,34 @@
                             </div>
                         </div>
 
+                        {{-- Activity Logs --}}
                         @if($showActivityLog)
-                        <!-- Activities -->
                         <div class="col-lg-5 col-md-12">
-                            
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
                                     <h4 class="card-title">
-                                        Activity Log <i class="fas fa-tools"></i>
+                                        Activity Log
                                     </h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="streamline">
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">5 mins ago</small>
-                                                <p>You approved the submitted accomplishment report</p>
+                                        @if($activityLogs->isNotEmpty())
+                                            @foreach($activityLogs as $log)
+                                            <div class="sl-item sl-activity-log">
+                                                <div class="sl-content">
+                                                    <small class="text-muted">{{ $log->elapsed_time }}</small>
+                                                    <p>{{ $log->details }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">25 mins ago</small>
-                                                <p>You declined the submitted accomplishment report</p>
+                                            @endforeach
+                                        @else
+                                            <div class="sl-item sl-activity-log">
+                                                <div class="sl-content">
+                                                    <small class="text-muted">now</small>
+                                                    <p>No Logs Found!</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">40 mins ago</small>
-                                                <p>You approved the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">45 minutes ago</small>
-                                                <p>You declined the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">55 mins ago</small>
-                                                <p>You approved the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">60 minutes ago</small>
-                                                <p>You declined the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +316,7 @@
                     
                     {{-- Document Count Card --}}
                     <div class="col-lg-3 col-md-6 col-sm-6">
-                        <a href="{{route('organizationDocuments.index', ['organizationSlug' => $organization->organization_slug])}}">
+                        <a href="{{route('organizationDocuments.indexRedirect')}}">
                             <div class="card card-stats">
                                 <div class="card-header">
                                     <div class="icon icon-info">
@@ -348,7 +329,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <a href="{{route('organizationDocuments.index', ['organizationSlug' => $organization->organization_slug])}}">More info
+                                        <a href="{{route('organizationDocuments.indexRedirect')}}">More info
                                             <i class="material-icons more-info">arrow_circle_right</i>
                                         </a>
                                     </div>
@@ -359,7 +340,7 @@
 
                     
                     <div class="row justify-content-center">
-                        <!-- Table -->
+                        {{-- Table --}}
                         <div class="col-lg-7 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
@@ -427,54 +408,35 @@
                             </div>
                         </div>
 
+                        {{-- Activity Logs --}}
                         @if($showActivityLog)
-                        <!-- Activities -->
                         <div class="col-lg-5 col-md-12">
                             
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
                                     <h4 class="card-title">
-                                        Activity Log <i class="fas fa-tools"></i>
+                                        Activity Log
                                     </h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="streamline">
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">5 mins ago</small>
-                                                <p>You approved the submitted accomplishment report</p>
+                                         @if($activityLogs->isNotEmpty())
+                                            @foreach($activityLogs as $log)
+                                            <div class="sl-item sl-activity-log">
+                                                <div class="sl-content">
+                                                    <small class="text-muted">{{ $log->elapsed_time }}</small>
+                                                    <p>{{ $log->details }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">25 mins ago</small>
-                                                <p>You declined the submitted accomplishment report</p>
+                                            @endforeach
+                                        @else
+                                            <div class="sl-item sl-activity-log">
+                                                <div class="sl-content">
+                                                    <small class="text-muted">now</small>
+                                                    <p>No Logs Found!</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">40 mins ago</small>
-                                                <p>You approved the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">45 minutes ago</small>
-                                                <p>You declined the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">55 mins ago</small>
-                                                <p>You approved the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
-                                        <div class="sl-item sl-activity-log">
-                                            <div class="sl-content">
-                                                <small class="text-muted">60 minutes ago</small>
-                                                <p>You declined the submitted accomplishment report</p>
-                                            </div>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -547,54 +509,35 @@
                         </div>
                     </div>
 
+                    {{-- Activity Logs --}}
                     @if($showActivityLog)
-                    <!-- Activities -->
                     <div class="col-lg-5 col-md-12">
                         
                         <div class="card" style="min-height: 485px">
                             <div class="card-header card-header-text">
                                 <h4 class="card-title">
-                                    Activity Log <i class="fas fa-tools"></i>
+                                    Activity Log
                                 </h4>
                             </div>
                             <div class="card-content">
                                 <div class="streamline">
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">5 mins ago</small>
-                                            <p>You submitted an accomplishment entitled "Borderland: Withstanding Virtual Reality"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">25 mins ago</small>
-                                            <p>You submitted an accomplishment entitled "U-Knights Tutorial"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">40 mins ago</small>
-                                            <p>You submitted an accomplishment entitled "OverKnights Got Talent"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">45 minutes ago</small>
-                                            <p>You submitted an accomplishment entitled "White Hackfest"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">55 mins ago</small>
-                                            <p>You submitted an accomplishment entitled "Safe Space Online Classroom for LGBTQIA+ Students"</p>
-                                        </div>
-                                    </div>
-                                    <div class="sl-item sl-activity-log">
-                                        <div class="sl-content">
-                                            <small class="text-muted">60 minutes ago</small>
-                                            <p>You submitted an accomplishment entitled "Mental Health Webinar"</p>
-                                        </div>
-                                    </div>
+                                    @if($activityLogs->isNotEmpty())
+                                            @foreach($activityLogs as $log)
+                                            <div class="sl-item sl-activity-log">
+                                                <div class="sl-content">
+                                                    <small class="text-muted">{{ $log->elapsed_time }}</small>
+                                                    <p>{{ $log->details }}</p>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        @else
+                                            <div class="sl-item sl-activity-log">
+                                                <div class="sl-content">
+                                                    <small class="text-muted">now</small>
+                                                    <p>No Logs Found!</p>
+                                                </div>
+                                            </div>
+                                        @endif
                                 </div>
                             </div>
                         </div>

@@ -10,6 +10,7 @@ use App\Models\TemporaryFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests\EventDocumentRequests\{
     EventDocumentStoreRequest,
@@ -24,11 +25,12 @@ use App\Services\EventServices\EventDocumentServices\{
 use iio\libmergepdf\Merger;
 
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 class EventDocumentsController extends Controller
 {
     protected $permissionChecker;
-
+    protected $dataLogger;
     /**
      * Create a new controller instance.
      * @return void
@@ -37,6 +39,7 @@ class EventDocumentsController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -68,6 +71,8 @@ class EventDocumentsController extends Controller
 
         $event = Event::where('slug', $event_slug)->first();
         $message = (new EventDocumentStoreService())->store($request, $event);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created an Event Document.');
 
         return redirect()->action(
             [EventsController::class, 'show'], ['event_slug' => $event->slug])
@@ -112,6 +117,8 @@ class EventDocumentsController extends Controller
         $event = Event::where('slug', $event_slug)->first();
         
         $message = (new EventDocumentDeleteService())->destroy($event, $document_id);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Deleted an Event Document.');
         
         return redirect()->action(
             [EventDocumentsController::class, 'index'], ['event_slug' => $event->slug])
@@ -132,6 +139,8 @@ class EventDocumentsController extends Controller
         $event = Event::where('slug', $event_slug)->first();
 
         $message = (new EventDocumentRestoreService())->restore($event, $document_id);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Restored an Event Document.');
 
         return redirect()->action(
             [EventDocumentsController::class, 'index'], ['event_slug' => $event->slug])
@@ -165,6 +174,9 @@ class EventDocumentsController extends Controller
                 Str::slug($event->eventDocument->documentType->type, '-') . 
                 '.' . 
                 pathinfo(storage_path($filePath), PATHINFO_EXTENSION);
+
+            $this->dataLogger->log(Auth::user()->user_id, 'User Downloaded an Event Document.');
+
             return response()->download($filePath, $fileName, $headers);
         }
         else
@@ -199,6 +211,9 @@ class EventDocumentsController extends Controller
 
             // Send Download Response
             $headers = ['Content-Type: application/pdf'];
+
+            $this->dataLogger->log(Auth::user()->user_id, 'User Downloaded Event Documents.');
+
             return response()->download($filePath, $fileName, $headers)->deleteFileAfterSend(true);
         }
         else

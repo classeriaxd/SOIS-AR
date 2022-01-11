@@ -82,7 +82,7 @@ class User extends Authenticatable
 
     public function dataLogs()
     {
-        return $this->hasMany(DataLogs::class, 'user_id');
+        return $this->hasMany(DataLog::class, 'user_id')->orderBy('created_at', 'DESC');
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Event;
 use App\Models\EventImage;
 use App\Models\TemporaryFile;
@@ -24,10 +26,12 @@ use App\Services\EventServices\EventImageServices\{
 };
 
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 class EventImagesController extends Controller
 {
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -37,6 +41,7 @@ class EventImagesController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -113,6 +118,8 @@ class EventImagesController extends Controller
 
         $message = (new EventImageUpdateService())->update($request, $event, $eventImage_slug);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Updated an Event Image.');
+
         return redirect()->action(
             [EventImagesController::class, 'show'], ['event_slug' => $event_slug, 'eventImage_slug' => $eventImage_slug])
             ->with($message);
@@ -133,6 +140,8 @@ class EventImagesController extends Controller
 
         $message = (new EventImageDeleteService())->destroy($event, $eventImage_slug);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Deleted an Event Image.');
+
         return redirect()->action(
             [EventImagesController::class, 'index'], ['event_slug' => $event->slug])
             ->with($message);
@@ -152,6 +161,8 @@ class EventImagesController extends Controller
         $event = Event::where('slug', $event_slug)->first();
 
         $message = (new EventImageRestoreService())->restore($event, $eventImage_slug);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Restored an Event Image.');
 
         return redirect()->action(
             [EventImagesController::class, 'index'], ['event_slug' => $event->slug])
@@ -225,6 +236,8 @@ class EventImagesController extends Controller
         $event = Event::where('slug', $event_slug)->first();
     	$returnArray = (new EventImageStoreService())->store($request, $event);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created an Event Image.');
+
         if($returnArray['insertedImagesCount'] > 0)
         {   
             session()->flash('eventImagesArray', $returnArray['insertedImages']);
@@ -252,6 +265,8 @@ class EventImagesController extends Controller
         $event = Event::where('slug', $event_slug)->first();
 
         $message = (new EventImageStoreCaptionService())->storeCaption($request, $event);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created an Event Image Caption.');
         
         return redirect()->action(
             [EventsController::class, 'show'], ['event_slug' => $event->slug])
@@ -328,7 +343,4 @@ class EventImagesController extends Controller
          }
          return 'file not deleted';
     }
-
-    
-
 }

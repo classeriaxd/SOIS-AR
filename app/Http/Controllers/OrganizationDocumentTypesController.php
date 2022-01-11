@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Organization;
 use App\Models\OrganizationDocumentType;
 use App\Http\Requests\OrganizationDocumentRequests\OrganizationDocumentTypeMaintenanceRequests\{
@@ -16,11 +18,13 @@ use App\Services\OrganizationDocumentServices\OrganizationDocumentTypeMaintenanc
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 use App\Services\EventServices\EventGetOrganizationIDService;
+use App\Services\DataLogServices\DataLogService;
 
 class OrganizationDocumentTypesController extends Controller
 {
     protected $viewDirectory = 'organizationDocuments.organizationDocumentTypes.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -30,7 +34,7 @@ class OrganizationDocumentTypesController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
-        
+        $this->dataLogger = new DataLogService();
     }
 
     public function index($organizationSlug)
@@ -69,7 +73,9 @@ class OrganizationDocumentTypesController extends Controller
         abort_if(! Organization::where('organization_slug', $organizationSlug)->exists(), 404);
 
         $message = (new OrganizationDocumentTypeStoreService())->store($request, $organizationSlug);
-        
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created an Organization Document Type.');
+
         return redirect()->action(
             [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
             ->with($message);
@@ -98,6 +104,8 @@ class OrganizationDocumentTypesController extends Controller
         abort_if(! OrganizationDocumentType::where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
 
         $message = (new OrganizationDocumentTypeUpdateService())->update($request, $organization, $organizationDocumentTypeSlug);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Updated an Organization Document Type.');
 
         return redirect()->action(
             [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
@@ -128,6 +136,8 @@ class OrganizationDocumentTypesController extends Controller
 
         $message = (new OrganizationDocumentTypeDeleteService())->delete($organization, $organizationDocumentTypeSlug);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Deleted an Organization Document Type.');
+
         return redirect()->action(
             [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])
             ->with($message);
@@ -143,6 +153,8 @@ class OrganizationDocumentTypesController extends Controller
         abort_if(! OrganizationDocumentType::onlyTrashed()->where('slug', $organizationDocumentTypeSlug)->where('organization_id', $organization->organization_id)->exists(), 404);
 
         $message = (new OrganizationDocumentTypeRestoreService())->restore($organization, $organizationDocumentTypeSlug);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'User Restored an Organization Document Type.');
 
         return redirect()->action(
             [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organizationSlug])

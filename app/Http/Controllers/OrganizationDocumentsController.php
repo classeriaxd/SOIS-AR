@@ -9,6 +9,7 @@ use App\Models\OrganizationDocumentType;
 use App\Models\TemporaryFile;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use App\Services\OrganizationDocumentServices\{
@@ -22,13 +23,16 @@ use App\Http\Requests\OrganizationDocumentRequests\{
     OrganizationDocumentStoreRequest,
     OrganizationDocumentUpdateRequest,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 class OrganizationDocumentsController extends Controller
 {
     protected $viewDirectory = 'organizationDocuments.';
     protected $temporaryFolderDirectory = '/public/uploads/tmp/';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -38,6 +42,7 @@ class OrganizationDocumentsController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -128,6 +133,8 @@ class OrganizationDocumentsController extends Controller
         $returnArray = (new OrganizationDocumentStoreService())->store($request, $organizationDocumentTypeSlug);
         $message = $returnArray['message'];
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Created an Organization Document.');
+
         if ($returnArray['organizationDocumentID'] === NULL) 
             return redirect()->action(
                 [OrganizationDocumentsController::class, 'index'], ['organizationSlug' => $organizationSlug,])
@@ -211,6 +218,8 @@ class OrganizationDocumentsController extends Controller
         $returnArray = (new OrganizationDocumentUpdateService())->update($request, $organizationDocumentID);
         $message = $returnArray['message'];
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Updated an Organization Document.');
+
         if ($returnArray['organizationDocumentID'] === NULL) 
             return redirect()->action(
                 [OrganizationDocumentsController::class, 'index'], ['organizationSlug' => $organizationSlug,])
@@ -245,6 +254,8 @@ class OrganizationDocumentsController extends Controller
 
         $message = (new OrganizationDocumentDeleteService())->delete($organizationDocumentID);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Deleted an Organization Document.');
+
         return redirect()->action(
             [OrganizationDocumentsController::class, 'documentTypeIndex'], ['organizationSlug' => $organizationSlug, 'organizationDocumentTypeSlug' => $organizationDocumentTypeSlug])
             ->with($message);
@@ -270,10 +281,27 @@ class OrganizationDocumentsController extends Controller
 
         $message = (new OrganizationDocumentRestoreService())->restore($organizationDocumentID);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'User Restored an Organization Document.');
+
         return redirect()->action(
             [OrganizationDocumentsController::class, 'documentTypeIndex'], 
             ['organizationSlug' => $organizationSlug, 'organizationDocumentTypeSlug' => $organizationDocumentTypeSlug])
             ->with($message);
+    }
+
+    /**
+     * Function to redirect from sidebar/homepage to Index
+     * @return Redirect
+     */ 
+    public function indexRedirect()
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document'), 403);
+
+        $organizationID = (new OfficerOrganizationIDService())->getOrganizationID();
+        $organization = Organization::where('organization_id', $organizationID)->first();
+
+        return redirect()->action(
+            [OrganizationDocumentsController::class, 'index'], ['organizationSlug' => $organization->organization_slug,]);
     }
 
     /**

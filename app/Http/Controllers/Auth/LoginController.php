@@ -7,6 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
+use App\Services\DataLogServices\DataLogService;
+
 class LoginController extends Controller
 {
     /*
@@ -21,7 +23,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
+    protected $dataLogger;
     /**
      * Where to redirect users after login.
      *
@@ -30,13 +32,19 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // Redirect Super Admin Role
-        if ( ($user->roles->pluck('role'))->containsStrict('Super Admin') ) 
+        if ( ($user->roles->pluck('role'))->containsStrict('Super Admin') )
+        {
+            $this->dataLogger->log($user->user_id, 'Super Admin Logged In.');
             return redirect()->route('admin.home');
+        } 
 
         // User | Officer | President | Other Admins
         else
-            return redirect()->route('home');
-        
+        {
+            $this->dataLogger->log($user->user_id, 'User Logged In.');
+            return redirect()->route('home');   
+        }
+            
     }
 
     /**
@@ -47,6 +55,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->dataLogger = new DataLogService();
         session()->put('showLoginAlert', 1);
     }
 
