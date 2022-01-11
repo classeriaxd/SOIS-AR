@@ -5,7 +5,9 @@
 	<div class="row justify-content-center">
         <div class="col-md-12">
             <form action="{{route('accomplishmentreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm"
-            onsubmit="document.getElementById('submitButton').disabled=true;">
+            onsubmit="document.getElementById('submitButton').disabled=true;
+            document.getElementById('submitButtonText').hidden=true;
+            document.getElementById('submitSpinner').hidden=false;">
                 {{-- Title and Breadcrumbs --}}
                 <div class="d-flex justify-content-between align-items-center">
                     {{-- Title --}}
@@ -380,7 +382,13 @@
                             @enderror
 
                             <div class="flex-row my-2 text-center">
-                                <button id="submitButton" class="btn btn-primary text-white" type="submit">Submit Checklist</button>
+                                <button id="submitButton" class="btn btn-primary text-white" type="submit">
+                                    <span id="submitButtonText">Submit Checklist</span>
+                                    <span id="submitSpinner" hidden>
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                        Please wait...
+                                    </span>
+                                </button>
                                 @csrf
                                 <input type="hidden" name="start_date" value="{{$start_date}}">
                                 <input type="hidden" name="end_date" value="{{$end_date}}">

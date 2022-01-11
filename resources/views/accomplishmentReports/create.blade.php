@@ -72,8 +72,7 @@
         	<div class="row mb-1 mt-1">
                 <div class="card w-100">
                 	<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Semestral</h4>
-                	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm"
-                	onsubmit="document.getElementById('firstSemester').disabled=true;document.getElementById('secondSemester').disabled=true;">
+                	<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="semestralReportForm">
 		            	<div class="card-body">
 		            		{{-- School Year Select --}}
 		            		<div class="row text-center">
@@ -137,8 +136,7 @@
             <div class="row mb-1 mt-1">
 	    		<div class="card w-100">
 					<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Quarterly</h4>
-					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm"
-                	onsubmit="document.getElementById('firstQuarter').disabled=true;document.getElementById('secondQuarter').disabled=true;document.getElementById('thirdQuarter').disabled=true;document.getElementById('fourthQuarter').disabled=true;">
+					<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="quarterlyReportForm">
 		    			<div class="card-body">
 		    				<h5 class="card-title text-center fw-bold fs-3">{{ date('Y') }}</h5>
 		    				{{-- Quarter Buttons --}}
@@ -214,8 +212,7 @@
         	<div class="row mt-1">
         		<div class="card w-100">
         			<h4 class="card-header card-text text-center bg-maroon text-white fw-bold">Custom</h4>
-    				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100"
-    				onsubmit="document.getElementById('customSubmitButton').disabled=true;">
+    				<form action="{{route('accomplishmentreports.showChecklist')}}" enctype="multipart/form-data" method="POST" id="customReportForm" class="w-100">
         			<div class="card-body">
         				{{-- Start Date Input --}}
         				<div class="form-group row">
