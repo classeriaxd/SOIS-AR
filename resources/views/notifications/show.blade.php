@@ -62,7 +62,7 @@
                                             @endif
                                         </h5>
                                         <p class="text-center">{{$notification->description}}</p>
-                                        <p class="text-center">{{date_format(date_create($notification->created_at), 'F d, Y - h:i A')}}</p>
+                                        <p class="text-center">{{$notification->elapsed_time}}</p>
                                     </div>
                                 </div>
                             </a>
