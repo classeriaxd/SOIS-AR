@@ -154,10 +154,21 @@
                             <small class="text-center">Include comments for possible changes for this submission to be approved.</small>
                             <div class="card-body">
                                 <textarea class="form-control" id="remarks" name="remarks" placeholder="Start Review here..." rows="9" required></textarea>
-                                
+
+                                {{-- Error Messages --}}
+                                @error('success')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                @error('decline')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
-
+                        
                         {{-- Decision Buttons --}}
                         <div class="card card-body text-center">
                             <div class="row mt-2 justify-content-center">

@@ -322,15 +322,6 @@
 
                                             {{-- Accomplishment Document Type --}}
                                             <div class="row">
-                                                {{--select class="form-select" name="documentType{{$i}}">
-                                                    @foreach($studentAccomplishmentDocumentTypes as $studentAccomplishmentDocumentType)
-
-                                                        <option value="{{$studentAccomplishmentDocumentType->SA_document_type_id}}"
-                                                            @if($studentAccomplishmentDocumentType->SA_document_type_id === $file->SA_document_type_id) selected @endif>
-                                                            {{$studentAccomplishmentDocumentType->document_type}}
-                                                        </option>
-                                                    @endforeach
-                                                </select>--}}
                                                 <p class="text-center">
                                                     <span class="fw-bold">Document Type:</span>
                                                     {{ $file->documentType->document_type }}
@@ -371,6 +362,17 @@
                             <small class="text-center">Include comments for possible improvement for this submission.<br>These changes are FINAL.</small>
                             <div class="card-body">
                                 <textarea class="form-control" id="remarks" name="remarks" placeholder="Start Review here..." rows="9" required></textarea>
+                                {{-- Error Messages --}}
+                                @error('success')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                @error('decline')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 

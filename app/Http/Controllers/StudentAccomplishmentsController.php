@@ -212,12 +212,21 @@ class StudentAccomplishmentsController extends Controller
         $accomplishment = StudentAccomplishment::where('accomplishment_uuid', $accomplishmentUUID)
             ->first();
 
+        // Validate that Either buttons are clicked
+        $request->validate([
+            'decline' => 'required_without:success',
+            'success' => 'required_without:decline',
+        ]);
+
+        // If Submission is declined, Update Submission then redirect to Index
         if(request()->has('decline'))
         {
             $data = $request->validate([
                 'remarks' => 'required|string',]);
-
-            $this->declineSubmission($accomplishment, $data['remarks']);
+            $message = $this->declineSubmission($accomplishment, $data['remarks']);
+            return redirect()->action(
+                [StudentAccomplishmentsController::class, 'index'])
+                ->with($message);
         }
 
         else if(request()->has('success'))
@@ -278,10 +287,8 @@ class StudentAccomplishmentsController extends Controller
     {
         $message = (new StudentAccomplishmentUpdateService())->decline($accomplishment, $remarks);
 
-        return redirect()->action(
-            [StudentAccomplishmentsController::class, 'index'])
-            ->with($message);
 
+        return $message;
     }
 
     /**
@@ -300,7 +307,12 @@ class StudentAccomplishmentsController extends Controller
 
         // If Documentation Officer declines that submission...
         if($request->has('decline'))
-            $this->declineSubmission($accomplishment, $request->input('remarks'));
+        {
+            $message = $this->declineSubmission($accomplishment, $request->input('remarks'));
+            return redirect()->action(
+                [StudentAccomplishmentsController::class, 'index'])
+                ->with($message);
+        }
 
         // If Documentation Officer accepts that submission...
         else if($request->has('success'))

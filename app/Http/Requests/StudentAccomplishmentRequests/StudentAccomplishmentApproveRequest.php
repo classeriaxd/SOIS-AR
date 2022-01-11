@@ -39,6 +39,8 @@ class StudentAccomplishmentApproveRequest extends FormRequest
             'documentType1' => 'sometimes|integer|exists:App\Models\studentAccomplishmentDocumentTypes,SA_document_type_id',
             'documentType2' => 'sometimes|integer|exists:App\Models\studentAccomplishmentDocumentTypes,SA_document_type_id',
             'documentType3' => 'sometimes|integer|exists:App\Models\studentAccomplishmentDocumentTypes,SA_document_type_id',
+            'success' => 'required_without:decline',
+            'decline' => 'required_without:success',
         ];
         return $rules;
     }
