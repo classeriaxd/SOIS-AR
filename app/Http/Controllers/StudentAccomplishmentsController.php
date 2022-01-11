@@ -159,7 +159,7 @@ class StudentAccomplishmentsController extends Controller
                 'level', 
                 'fundSource', 
                 'event', 
-                'student',
+                'student:user_id,first_name,middle_name,last_name,suffix,student_number,email',
                 'reviewer',
                 'accomplishmentFiles.documentType',)
             ->where('accomplishment_uuid', $accomplishmentUUID)
