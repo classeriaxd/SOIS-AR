@@ -77,7 +77,12 @@ class User extends Authenticatable
 
     public function studentAccomplishments()
     {
-        return $this->hasMany(studentAccomplishments::class, 'user_id');
+        return $this->hasMany(StudentAccomplishments::class, 'user_id');
+    }
+
+    public function dataLogs()
+    {
+        return $this->hasMany(DataLogs::class, 'user_id');
     }
 
     /**

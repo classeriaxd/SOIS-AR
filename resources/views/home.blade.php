@@ -118,7 +118,7 @@
                     </div>
 
                     <!-- Table -->
-                    <div class="row ">
+                    <div class="row justify-content-center">
                         <div class="col-lg-7 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
@@ -186,8 +186,10 @@
                             </div>
                         </div>
 
+                        @if($showActivityLog)
                         <!-- Activities -->
                         <div class="col-lg-5 col-md-12">
+                            
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
                                     <h4 class="card-title">
@@ -236,6 +238,8 @@
                                 </div>
                             </div>
                         </div>
+                        @php $showActivityLog = false; @endphp
+                        @endif
                     </div>
                 </div>
             @endrole
@@ -353,8 +357,9 @@
                         </a>
                     </div>
 
-                    <!-- Table -->
-                    <div class="row ">
+                    
+                    <div class="row justify-content-center">
+                        <!-- Table -->
                         <div class="col-lg-7 col-md-12">
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
@@ -422,8 +427,10 @@
                             </div>
                         </div>
 
+                        @if($showActivityLog)
                         <!-- Activities -->
                         <div class="col-lg-5 col-md-12">
+                            
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
                                     <h4 class="card-title">
@@ -472,13 +479,15 @@
                                 </div>
                             </div>
                         </div>
+                        @php $showActivityLog = false; @endphp
+                        @endif
                     </div>
                 </div>
             @endrole
             
             {{-- Organization Member / User --}}
             @role('User')
-                <div class="row">
+                <div class="row justify-content-center">
                     <div class="col-lg-7 col-md-6 col-sm-6">
                         <div class="card card-stats">
                             <div class="card-content trophy-icon icon icon-warning">
@@ -538,8 +547,10 @@
                         </div>
                     </div>
 
+                    @if($showActivityLog)
                     <!-- Activities -->
                     <div class="col-lg-5 col-md-12">
+                        
                         <div class="card" style="min-height: 485px">
                             <div class="card-header card-header-text">
                                 <h4 class="card-title">
@@ -588,6 +599,8 @@
                             </div>
                         </div>
                     </div>
+                    @php $showActivityLog = false; @endphp
+                    @endif
                 </div>
             @endrole
     </div>

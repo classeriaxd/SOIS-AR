@@ -120,9 +120,10 @@ class HomeController extends Controller
             array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount','organization', 'accomplishedEventsCount', 'pendingStudentAccomplishmentCount');
         }
 
-        // Show Login Alert on View once
+        // Show Login Alert on View and Activity Log once
         $loginAlert = $this->showLoginAlert();
-        array_push($compactVariables, 'loginAlert');
+        $showActivityLog = true;
+        array_push($compactVariables, 'loginAlert', 'showActivityLog');
 
         // Boolean to determine whether to load Home CSS
         $loadHomeCSS = true;
