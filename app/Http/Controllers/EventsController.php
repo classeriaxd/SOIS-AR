@@ -90,7 +90,9 @@ class EventsController extends Controller
         abort_if(! Event::where('slug', $event_slug)->exists(), 404);
 
         $event = (new EventShowService())->show($event_slug);
-        return view('events.show',compact('event', 'newEvent',));
+        $eventPosters = $event->eventImages->where('image_type', 0);
+        $eventEvidences = $event->eventImages->where('image_type', 1);
+        return view('events.show',compact('event', 'newEvent', 'eventPosters', 'eventEvidences'));
     }
 
     /**

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-md-12">
             {{-- Success Alert --}}
                 @if (session()->has('success'))
                     <div class="flex-row text-center" id="success_alert">

@@ -75,103 +75,246 @@
                 </nav>
             </div>
             
-            {{-- Event Details and Images --}}
-        	<div class="row justify-content-center mb-1">
-                {{-- Event Details Column --}}
-        		<div class="col-md-5">
-        			<div class="card">
-        				<h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Summary</h4>
-        				<div class="card-body">
-        					<h3 class="card-title text-center">Title: {{ $event->title }}</h3>
-        					<p class="card-text">
-        						<span style="font-weight: bold;">Date:</span> 
-                                @if($event->start_date == $event->end_date){{date_format(date_create($event->start_date), 'F d, Y')}}
-                                @else{{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
-                                @endif
-        					</p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Time:</span>
-                                @if($event->start_time == $event->end_time){{date_format(date_create($event->start_time), 'h:i A')}}
-                                @else{{date_format(date_create($event->start_time), 'h:i A') . ' - ' . date_format(date_create($event->end_time), 'h:i A')}}
-                                @endif
-                            </p>
-        					<p class="card-text">
-        						<span style="font-weight: bold;">Venue:</span> {{ $event->venue }}
-        					</p>
-        					<p class="card-text">
-        						<span style="font-weight: bold;">Type of Activity:</span> 
-                                {{ $event->activity_type }}
-        					</p>
-        					<p class="card-text">
-        						<span style="font-weight: bold;">Sponsors:</span> 
-                                {{ $event->sponsors }}
-        					</p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Budget:</span> 
-                                {{ $event->budget }} - {{ $event->eventFundSource->fund_source }}
-                            </p>
-                            <p class="card-text">
-                                <span style="font-weight: bold;">Level:</span>
-                                {{ $event->eventLevel->level }}
-                            </p>
-        				</div>
-                        <h5 class="card-header card-text text-center border-top">Options</h5>
-        				<div class="card-body d-flex flex-row justify-content-around">
-        					<a href="{{route('event.edit', ['event_slug' => $event->slug])}}">
-        						<button class="btn btn-primary text-white">
-                                    <i class="fas fa-edit"></i> Edit Event
-                                </button>
-        					</a>
-        					<form action="{{route('event.destroy', $event->slug)}}" method="POST"
-                                onsubmit="document.getElementById('deleteButton').disabled=true;">
-        						@method('DELETE')
-        						@csrf
-        						<button id="deleteButton" class="btn btn-danger text-white">
+
+            <div class="row justify-content-center my-1">
+                <div class="col">
+                    <div class="card my-2 w-100">
+                        <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Summary</h4>
+                        <div class="card-body">
+
+                            {{-- Title --}}
+                            <div class="d-flex justify-content-center my-2">
+                                {{-- Organization Logo --}}
+                                <div class="my-auto">
+                                    <img src="/storage/{{$event->organization->logo->file}}" style="max-width: 5em; max-height: 5em; min-height: 5em; min-width: 5em;">
+                                </div>
+
+                                {{-- Vertical Rule --}}
+                                <div class="vr mx-2" style="border:1px solid black; background-color: black;"></div>
+
+                                {{-- Event Details --}}
+                                <div>
+                                    <p class="card-title text-break">
+                                        <span style="font-weight: bold; font-size:1.5em">{{ $event->title }}</span>
+
+                                        <br>
+
+                                        <span class="badge" style="background-color:{{$event->eventCategory->background_color}}; color:{{$event->eventCategory->text_color}};">
+                                            {{$event->eventCategory->category}}
+                                            @if($event->eventCategory->deleted_at != NULL)
+                                            <a role="button"
+                                                data-bs-toggle="popover"
+                                                data-bs-container="body"
+                                                data-bs-trigger="hover focus" 
+                                                title="{{$event->eventCategory->category}}" 
+                                                data-bs-content="This category has been deleted since {{date_format(date_create($event->eventCategory->deleted_at), 'F d, Y')}}."
+                                                data-bs-placement="right">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </a>
+                                            @endif
+                                        </span>
+
+                                        <span class="badge" style="background-color:{{$event->eventRole->background_color}}; color:{{$event->eventRole->text_color}};">
+                                            {{$event->eventRole->event_role}}
+                                            @if($event->eventRole->deleted_at != NULL)
+                                            <a role="button"
+                                                data-bs-toggle="popover"
+                                                data-bs-container="body" 
+                                                data-bs-trigger="hover focus"
+                                                title="{{$event->eventRole->event_role}}" 
+                                                data-bs-content="This event role has been deleted since {{date_format(date_create($event->eventRole->deleted_at), 'F d, Y')}}."
+                                                data-bs-placement="right">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </a>
+                                            @endif
+                                        </span>
+
+                                        <br>
+
+                                        <span style="font-weight: bold;">Organization:</span> {{ $event->organization->organization_acronym }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{-- Description --}}
+                            <div class="row my-2">
+                                <h5 class="card-text fw-bold">Description:</h5>
+                                <p class="text-justify">{{ $event->description }}</p>
+                            </div>
+
+                            {{-- Objective --}}
+                            <div class="row my-2">
+                                <h5 class="card-text fw-bold">Objective:</h5>
+                                <p class="text-justify">{{ $event->objective }}</p>
+                            </div>
+
+                            {{-- Other Event Details --}}
+                            <div class="row text-center mt-4 mb-1">
+
+                                {{-- Date and Venue --}}
+                                <div class="col">
+
+                                    <h5 class="card-text fw-bold">Date and Venue</h5>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Date:</span> 
+                                        @if($event->start_date == $event->end_date){{date_format(date_create($event->start_date), 'F d, Y')}}
+                                        @else{{date_format(date_create($event->start_date), 'F d, Y') . ' - ' . date_format(date_create($event->end_date), 'F d, Y')}}
+                                        @endif
+                                    </p>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Time:</span>
+                                        @if($event->start_time == $event->end_time){{date_format(date_create($event->start_time), 'h:i A')}}
+                                        @else{{date_format(date_create($event->start_time), 'h:i A') . ' - ' . date_format(date_create($event->end_time), 'h:i A')}}
+                                        @endif
+                                    </p>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Venue:</span> {{ $event->venue }}
+                                    </p>
+                                </div>
+
+                                {{-- Funding --}}
+                                <div class="col">
+                                    <h5 class="card-text fw-bold">Funding</h5>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Budget:</span> 
+                                        {{ $event->budget ?? '-' }}
+                                    </p>
+                                    <p class="card-text">
+                                        {{ $event->eventFundSource->fund_source }}
+                                    </p>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Sponsors:</span> 
+                                        {{ $event->sponsors }}
+                                    </p>
+                                </div>
+
+                                {{-- Categories --}}
+                                <div class="col">
+                                    <h5 class="card-text fw-bold">Categories</h5>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Type of Activity:</span> 
+                                        {{ $event->activity_type }}
+                                    </p>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Level:</span>
+                                        {{ $event->eventLevel->level }}
+                                    </p>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Classification:</span>
+                                        {{ $event->eventClassification->classification }}
+                                    </p>
+                                    <p class="card-text">
+                                        <span style="font-weight: bold;">Nature:</span>
+                                        {{ $event->eventNature->nature }}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            {{-- Event Options --}}
+                            <div class="d-flex mt-2 mb-1 justify-content-around">
+                                <a href="{{route('event.edit', ['event_slug' => $event->slug])}}">
+                                    <button class="btn btn-primary text-white">
+                                        <i class="fas fa-edit"></i> Edit Event
+                                    </button>
+                                </a>
+                                
+                                <button class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#areYouSureModal">
                                     <i class="fas fa-trash"></i> Delete Event
                                 </button>
-        					</form>  
-        				</div>
-        			</div>
-        		</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card my-2 w-100">
+                        <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Gallery</h4>
+                        <div class="card-body">
 
-                {{-- Event Images Column --}}
-        		<div class="col-md-5">
-        			<div class="card">
-    				    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Gallery</h4>
-        				<div class="card-body">
-                            <h3 class="card-title text-center">Posters</h3>
-                            <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
-                                @if($event->eventImages->where('image_type', 0)->count() > 0)
-                                    @foreach($event->eventImages as $eventImage)
-                                        @if($eventImage->image_type == 0)
-                                            <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-height: 130px; width: 100px;">
-                                        @endif
-                                    @endforeach
+                            {{-- Posters --}}
+                            <div class="row">
+                                <h3 class="card-title text-center">Posters</h3>
+                                @if($eventPosters->count() > 0)
+                                    <div id="PosterControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            @foreach($eventPosters as $poster)
+                                                <button type="button" data-bs-target="#PosterControls" data-bs-slide-to="{{$loop->index}}" @if($loop->first) class="active" aria-current="true" @endif aria-label="Slide {{$loop->index}}"></button>
+                                            @endforeach
+                                        </div>
+                                        <div class="carousel-inner">
+                                            @foreach($eventPosters as $poster)
+                                                <div class="carousel-item @if($loop->first)active @endif">
+                                                    <a href="{{route('event.image.show', ['event_slug' => $event->slug, 'eventImage_slug' => $poster->slug])}}">
+                                                        <img src="/storage/{{$poster->image}}" class="d-block" style="max-width: 350px; max-height: 350px; margin:auto"> 
+                                                        <div class="carousel-caption">
+                                                            <div class="d-flex justify-content-center">
+                                                                <p class="bg-primary bg-opacity-50 text-white p-1 rounded-pill">
+                                                                    {{$poster->caption ?? 'No Caption Provided'}}
+                                                                </p>
+                                                            </div>
+                                                        </div>  
+                                                    </a>
+                                                </div>  
+                                            @endforeach
+                                        </div>
+
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#PosterControls" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#PosterControls" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
                                 @else
-                                        <p class="text-center">No Image found. :(</p>
+                                    <p class="text-center">No Image found. :(</p>
+                                @endif
+                            </div>
+                            
+                            <hr>
+
+                            {{-- Evidences --}}
+                            <div class="row">
+                                <h3 class="card-title text-center">Evidences</h3>
+                                @if($eventEvidences->count() > 0)
+                                    <div id="EvidenceControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            @foreach($eventEvidences as $evidence)
+                                                <button type="button" data-bs-target="#EvidenceControls" data-bs-slide-to="{{$loop->index}}" @if($loop->first) class="active" aria-current="true" @endif aria-label="Slide {{$loop->index}}"></button>
+                                            @endforeach
+                                        </div>
+                                        <div class="carousel-inner">
+                                            @foreach($eventEvidences as $evidence)
+                                                <div class="carousel-item @if($loop->first)active @endif">  
+                                                    <a href="{{route('event.image.show', ['event_slug' => $event->slug, 'eventImage_slug' => $evidence->slug])}}">
+                                                        <img src="/storage/{{$evidence->image}}" class="d-block" style="max-width: 500px; max-height: 350px; margin:auto"> 
+                                                        <div class="carousel-caption">
+                                                            <div class="d-flex justify-content-center">
+                                                                <p class="bg-primary bg-opacity-50 text-white p-1 rounded-pill">
+                                                                    {{$evidence->caption ?? 'No Caption Provided'}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#EvidenceControls" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#EvidenceControls" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+                                @else
+                                    <p class="text-center">No Image found. :(</p>
                                 @endif
                             </div>
 
-                            <hr>
-
-                            <h3 class="card-title text-center">Evidences</h3>
-                            <div class="row flex-row flex-nowrap pb-4 px-2" style="overflow-x:auto;">
-
-                                @if($event->eventImages->where('image_type', 1)->count() > 0)
-
-                                @foreach($event->eventImages as $eventImage)
-                                    @if($eventImage->image_type == 1)
-                                        <img src="/storage/{{$eventImage->image}}" class="w-200 pr-3" style="max-width: 130px; height: 100px;">
-                                    @endif
-                                @endforeach
-                                @else
-                                        <p class="text-center">No Image found. :(</p>
-                                @endif        
-                                </div>                  
-                            </div>
-
-                            <h5 class="card-header card-text text-center border-top">Options</h5>
-                            <div class="card-body d-flex flex-row justify-content-around">
+                            {{-- Event Images Options --}}
+                            <div class="d-flex justify-content-around">
                                 <a href="{{route('event.image.create', ['event_slug' => $event->slug])}}">
                                     <button class="btn btn-primary text-white">
                                         <i class="fas fa-plus"></i> Add Image
@@ -182,59 +325,54 @@
                                         <i class="fas fa-th"></i> View Event Gallery
                                     </button>
                                 </a>    
-                            </div>
+                            </div>    
+                        </div>
                     </div>
-    			</div>                   		        
-    	    </div>
-
-            {{-- Event Documents --}}
-            <div class="row justify-content-center mt-2 mb-1">
-                <div class="card w-50">
-                    <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Documents</h4>
-
-                    <div class="card-body text-center">
+                    <div class="card my-2 w-100">
+                        <h4 class="card-header card-title text-center bg-maroon text-white fw-bold">Event Documents</h4>
+                        <div class="card-body text-center">
                         @if($event->eventDocuments->count() > 0 )
                             @php $i = 1; @endphp
                             <table class="table-striped table-bordered w-100">
-                                <thead>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Document Type</th>
+                                    <th scope="col">Title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($event->eventDocuments as $document)
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Document Type</th>
-                                        <th scope="col">Title</th>
+                                        <td>{{ $i }}</td>
+                                        <td>{{ $document->documentType->document_type }}</td>
+                                        <td>{{ $document->title }}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($event->eventDocuments as $document)
-                                            <tr>
-                                                <td>{{ $i }}</td>
-                                                <td>{{ $document->documentType->document_type }}</td>
-                                                <td>{{ $document->title }}</td>
-                                            </tr>
-                                    @php $i += 1; @endphp
+                                @php $i += 1; @endphp
 
-                                    @endforeach
+                                @endforeach
                                 </tbody>
                             </table>
                         @else
                             <p class="text-center">No Document found. :(</p>
                         @endif
 
-                    </div>
+                        {{-- Event Document Options --}}
+                        <div class="mt-2 mb-1 d-flex justify-content-around">
+                            <a href="{{route('event.document.create',['event_slug' => $event->slug,])}}"
+                                class="btn btn-primary text-white"
+                                role="button">
+                                <i class="fas fa-plus"></i> Add Document
+                            </a>
 
-                    <h5 class="card-header card-text text-center border-top">Options</h5>
-                    <div class="card-body d-flex justify-content-around">
-                        <a href="{{route('event.document.create',['event_slug' => $event->slug,])}}"
-                            class="btn btn-primary text-white"
-                            role="button">
-                            <i class="fas fa-plus"></i> Add Document
-                        </a>
-
-                        <a href="{{route('event.document.index',['event_slug' => $event->slug,])}}"
-                            class="btn btn-primary text-white"
-                            role="button">
-                            <i class="fas fa-th"></i> View All Event Documents
-                        </a>
-                    </div>
+                            <a href="{{route('event.document.index',['event_slug' => $event->slug,])}}"
+                                class="btn btn-primary text-white"
+                                role="button">
+                                <i class="fas fa-th"></i> View All Event Documents
+                            </a>
+                        </div>   
+                        </div>
+                    </div>                
                 </div>
             </div>
 
@@ -258,6 +396,30 @@
                 @endif
             </div>
 
+            {{-- Are you sure Modal --}}
+            <div class="modal fade" id="areYouSureModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="areYouSureModal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="areYouSureModal">Confirmation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you Sure?
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{{route('event.destroy', $event->slug)}}" method="POST"
+                                    onsubmit="document.getElementById('deleteButton').disabled=true;">
+                                @method('DELETE')
+                                @csrf
+                            
+                                <button id="deleteButton" type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                                <button type="submit" class="btn btn-danger text-white"><i class="fas fa-check"></i> Understood</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -89,7 +89,7 @@
 
                             {{-- Description --}}
                             <div class="row my-2">
-                                <h5 class="card-text fw-bold">Description:</h5><div class="vr"></div>
+                                <h5 class="card-text fw-bold">Description:</h5>
                                 <p class="text-justify">{{ $event->description }}</p>
                             </div>
 
