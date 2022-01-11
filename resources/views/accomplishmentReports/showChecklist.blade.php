@@ -7,7 +7,8 @@
             <form action="{{route('accomplishmentreports.finalizeReport')}}" method="POST" enctype="multipart/form-data" id="reportChecklistForm"
             onsubmit="document.getElementById('submitButton').disabled=true;
             document.getElementById('submitButtonText').hidden=true;
-            document.getElementById('submitSpinner').hidden=false;">
+            document.getElementById('submitSpinner').hidden=false;
+            document.getElementById('submitMessage').hidden=false;">
                 {{-- Title and Breadcrumbs --}}
                 <div class="d-flex justify-content-between align-items-center">
                     {{-- Title --}}
@@ -213,7 +214,7 @@
                                                                                 <td>Event Details</td>
                                                                                 <td><input type="checkbox" id="grandchildevent{{$j}}details" name="event{{$j}}details"></td>
                                                                             </tr>
-                                                                            @if($event->eventImages->count() > 0)
+                                                                            @if($event->event_images_count > 0)
                                                                                 <tr>
                                                                                     <td>Images ({{ $event->event_images_count }})</td>
                                                                                     <td>
@@ -221,7 +222,7 @@
                                                                                     </td>
                                                                                 </tr>
                                                                             @endif
-                                                                            @if($event->eventDocuments->count() > 0)
+                                                                            @if($event->event_documents_count > 0)
                                                                                 <tr>
                                                                                     <td>Documents ({{ $event->event_documents_count }})</td>
                                                                                     <td>
@@ -288,7 +289,7 @@
                                                                         </tr>
                                                                         @if($accomplishment->accomplishment_files_count > 0)
                                                                             <tr>
-                                                                                <td>Evidences ({{ $accomplishment->accomplishmentFiles->count() }})</td>
+                                                                                <td>Evidences ({{ $accomplishment->accomplishment_files_count }})</td>
                                                                                 <td>
                                                                                     <input type="checkbox" id="grandchildaccomplishment{{$j}}files" name="accomplishment{{$j}}files" onchange="toggleChild(this,'files')">
                                                                                 </td>
@@ -389,11 +390,15 @@
                                         Please wait...
                                     </span>
                                 </button>
+                                
                                 @csrf
                                 <input type="hidden" name="start_date" value="{{$start_date}}">
                                 <input type="hidden" name="end_date" value="{{$end_date}}">
                                 <input type="hidden" name="range_title" value="{{$rangeTitle}}">
                             </div>
+                            <p class="text-center" id="submitMessage" hidden>
+                                Please wait while your report is being generated. You will be automatically redirected after it is done.
+                            </p>
                         </form>
                     </div>         
                 </div>
