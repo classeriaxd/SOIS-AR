@@ -50,7 +50,7 @@
                         <a href="{{route('studentAccomplishment.review', ['accomplishmentUUID' => $accomplishment->accomplishment_uuid])}}"
                             class="btn btn-primary text-white"
                             role="button">
-                                Review this Accomplishment
+                                <i class="fas fa-edit"></i> Review this Accomplishment
                         </a>
                     </div>
                 @endif
