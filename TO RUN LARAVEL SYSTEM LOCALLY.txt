@@ -14,7 +14,7 @@ HOW TO RUN LARAVEL SYSTEM LOCALLY
 	> Clone it here: https://github.com/classeriaxd/SOIS-QAR
 	> Modify/Replace the env file from the cloned repository with the given ENV.
 	> After cloning, go to your Terminal and change the directory to the repository
-	> Run (composer install) and (php artisan key:generate)
+	> Run (composer install), (php artisan key:generate), and (php artisan storage:link)
 	> After that, run (php artisan serve) and access the system with the link given
 
 Steps taken from:
