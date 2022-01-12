@@ -118,7 +118,7 @@
                         </a>
                         <ul class="collapse list-unstyled menu" id="accomplishmentReportSubMenu">
                             <li><a href="{{ route('admin.maintenance.tabularTables.index') }}">Tabular AR Tables</a></li>
-                            <li><a href="{{ route('admin.maintenance.tabularTables.index') }}">School Years</a></li>
+                            <li><a href="{{ route('admin.maintenance.schoolYears.index') }}">School Years</a></li>
                         </ul>
                     </li>
 

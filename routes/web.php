@@ -207,6 +207,17 @@ Route::group(['middleware' => 'auth'], function () {
                     });
             });
 
+            // School Year Maintenance
+            Route::resource('schoolYears', App\Http\Controllers\Admin\AccomplishmentReportMaintenance\SchoolYearMaintenanceController::class)->only(['index', 'create', 'store']);
+            
+            Route::group([
+                    'as' => 'schoolYears.',
+                    'prefix' => '/schoolYears/{school_year_id}',
+                    'where' => ['school_year_id' => '^([1-9][0-9]*)$'],], 
+                function () {
+                    Route::get('/edit', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\SchoolYearMaintenanceController::class, 'edit'])->name('edit');
+                    Route::patch('', [App\Http\Controllers\Admin\AccomplishmentReportMaintenance\SchoolYearMaintenanceController::class, 'update'])->name('update');
+            });
             
         });
         
