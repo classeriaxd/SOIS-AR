@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin\AccomplishmentReportMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\TabularTable;
 use App\Models\TabularColumn;
+
 use App\Http\Requests\Admin\AccomplishmentReportMaintenance\TabularTable\{
     TabularTableStoreRequest,
     TabularTableUpdateRequest,
@@ -15,7 +18,9 @@ use App\Services\Admin\AccomplishmentReportMaintenance\TabularTable\{
     TabularTableDeleteService,
     TabularTableRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -23,6 +28,7 @@ class TabularTableMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.accomplishmentReport.tabularTable.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -32,6 +38,7 @@ class TabularTableMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -53,6 +60,8 @@ class TabularTableMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $message = (new TabularTableStoreService())->store($request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created a Tabular AR Table.');
+
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
             ->with($message);
@@ -72,6 +81,8 @@ class TabularTableMaintenanceController extends Controller
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         $message = (new TabularTableUpdateService())->update($tabularTable, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated a Tabular AR Table.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
@@ -97,6 +108,8 @@ class TabularTableMaintenanceController extends Controller
 
         $message = (new TabularTableDeleteService())->delete($tabularTable, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted a Tabular AR Table.');
+
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
             ->with($message);
@@ -109,10 +122,11 @@ class TabularTableMaintenanceController extends Controller
 
         $message = (new TabularTableRestoreService())->restore($tabularTable);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored a Tabular AR Table.');
+
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
             ->with($message);
-
     }
 
     /**

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\EventRole;
+
 use App\Http\Requests\Admin\EventMaintenance\EventRole\{
     EventRoleStoreRequest,
     EventRoleUpdateRequest,
@@ -14,7 +17,9 @@ use App\Services\Admin\EventMaintenance\EventRole\{
     EventRoleDeleteService,
     EventRoleRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -22,6 +27,7 @@ class EventRoleMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventRole.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -31,6 +37,7 @@ class EventRoleMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -52,6 +59,8 @@ class EventRoleMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventRoleStoreService())->store($request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Role.');
+
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
             ->with($message);
@@ -71,6 +80,8 @@ class EventRoleMaintenanceController extends Controller
         $eventRole = $this->checkIfRoleExists($role_id);
 
         $message = (new EventRoleUpdateService())->update($eventRole, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Role.');
 
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
@@ -93,6 +104,8 @@ class EventRoleMaintenanceController extends Controller
 
         $message = (new EventRoleDeleteService())->delete($eventRole, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Role.');
+
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
             ->with($message);
@@ -105,10 +118,11 @@ class EventRoleMaintenanceController extends Controller
 
         $message = (new EventRoleRestoreService())->restore($eventRole);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Role.');
+
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
             ->with($message);
-
     }
 
     /**

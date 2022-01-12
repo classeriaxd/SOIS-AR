@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\EventCategory;
+
 use App\Http\Requests\Admin\EventMaintenance\EventCategory\{
     EventCategoryStoreRequest,
     EventCategoryUpdateRequest,
@@ -15,6 +18,7 @@ use App\Services\Admin\EventMaintenance\EventCategory\{
     EventCategoryRestoreService,
 };
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -22,6 +26,7 @@ class EventCategoryMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventCategory.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -31,6 +36,7 @@ class EventCategoryMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -52,6 +58,8 @@ class EventCategoryMaintenanceController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventCategoryStoreService())->store($request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Category.');
         
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
@@ -72,6 +80,8 @@ class EventCategoryMaintenanceController extends Controller
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
         $message = (new EventCategoryUpdateService())->update($eventCategory, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Category.');
 
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
@@ -94,6 +104,8 @@ class EventCategoryMaintenanceController extends Controller
 
         $message = (new EventCategoryDeleteService())->delete($eventCategory, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Category.');
+
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
             ->with($message);
@@ -105,6 +117,8 @@ class EventCategoryMaintenanceController extends Controller
         $eventCategory = $this->checkIfCategoryExists($category_id);
 
         $message = (new EventCategoryRestoreService())->restore($eventCategory);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Category.');
 
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])

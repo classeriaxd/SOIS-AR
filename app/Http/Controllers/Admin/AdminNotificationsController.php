@@ -8,18 +8,20 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
 use App\Models\Organization;
 
-use App\Http\Requests\Admin\NotificationStoreRequest
-;
+use App\Http\Requests\Admin\NotificationStoreRequest;
 use App\Services\Admin\NotificationStoreService;
 use Carbon\Carbon;
 
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
+
 use App\Http\Controllers\Controller as Controller;
 
 class AdminNotificationsController extends Controller
 {
     protected $viewDirectory = 'admin.notifications.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -29,6 +31,7 @@ class AdminNotificationsController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function create()
@@ -45,7 +48,9 @@ class AdminNotificationsController extends Controller
     public function store(NotificationStoreRequest $request)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
+
         $message = (new NotificationStoreService())->store($request);
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Announcement.');
 
         return redirect()->action(
             [AdminNotificationsController::class, 'index'])
@@ -74,9 +79,11 @@ class AdminNotificationsController extends Controller
             $data = ['read_at' => Carbon::now(),];
             $notification->update($data);
         }
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Marked Notifications as Read.');
+
         return redirect()->action(
             [AdminNotificationsController::class, 'index']);
-       
     }
 
     // Vue Function: AdminReadNotification Component
@@ -87,7 +94,8 @@ class AdminNotificationsController extends Controller
         
         $data = ['read_at' => Carbon::now(),];
         $notification->update($data);
-        
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Marked a Notification as Read.');
     }
 
 }

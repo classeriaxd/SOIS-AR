@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\EventDocumentType;
+
 use App\Http\Requests\Admin\EventMaintenance\EventDocumentType\{
     EventDocumentTypeStoreRequest,
     EventDocumentTypeUpdateRequest,
@@ -14,7 +17,9 @@ use App\Services\Admin\EventMaintenance\EventDocumentType\{
     EventDocumentTypeDeleteService,
     EventDocumentTypeRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -22,6 +27,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventDocumentType.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -31,6 +37,7 @@ class EventDocumentTypeMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -50,7 +57,10 @@ class EventDocumentTypeMaintenanceController extends Controller
     public function store(EventDocumentTypeStoreRequest $request)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+
         $message = (new EventDocumentTypeStoreService())->store($request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Document Type.');
 
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])
@@ -72,10 +82,11 @@ class EventDocumentTypeMaintenanceController extends Controller
 
         $message = (new EventDocumentTypeUpdateService())->update($documentType, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Document Type.');
+
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])
             ->with($message);
-
     }
 
     public function show($document_type_id)
@@ -93,6 +104,8 @@ class EventDocumentTypeMaintenanceController extends Controller
 
         $message = (new EventDocumentTypeDeleteService())->delete($documentType, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Document Type.');
+
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])
             ->with($message);
@@ -104,6 +117,8 @@ class EventDocumentTypeMaintenanceController extends Controller
         $documentType = $this->checkIfDocumentTypeExists($document_type_id);
 
         $message = (new EventDocumentTypeRestoreService())->restore($documentType);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Document Type.');
 
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])

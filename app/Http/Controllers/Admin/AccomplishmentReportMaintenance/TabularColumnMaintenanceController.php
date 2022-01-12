@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin\AccomplishmentReportMaintenance;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\TabularTable;
 use App\Models\TabularColumn;
+
 use App\Http\Requests\Admin\AccomplishmentReportMaintenance\TabularColumn\{
     TabularColumnStoreRequest,
     TabularColumnUpdateRequest,
@@ -15,7 +17,9 @@ use App\Services\Admin\AccomplishmentReportMaintenance\TabularColumn\{
     TabularColumnDeleteService,
     TabularColumnRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -23,6 +27,7 @@ class TabularColumnMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.accomplishmentReport.tabularColumn.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -32,6 +37,7 @@ class TabularColumnMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
     
     public function create($tabular_table_id)
@@ -48,6 +54,8 @@ class TabularColumnMaintenanceController extends Controller
         $tabularTable = $this->checkIfTabularTableExists($tabular_table_id);
 
         $message = (new TabularColumnStoreService())->store($tabularTable, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
@@ -70,6 +78,8 @@ class TabularColumnMaintenanceController extends Controller
         $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
 
         $message = (new TabularColumnUpdateService())->update($tabularTable, $tabularColumn, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
@@ -94,6 +104,8 @@ class TabularColumnMaintenanceController extends Controller
 
         $message = (new TabularColumnDeleteService())->delete($tabularTable, $tabularColumn, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted a Tabular AR Column.');
+
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
             ->with($message);
@@ -105,6 +117,8 @@ class TabularColumnMaintenanceController extends Controller
         $tabularColumn = $this->checkIfTabularColumnExists($tabular_table_id, $tabular_column_id);
 
         $message = (new TabularColumnRestoreService())->restore($tabularColumn);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])

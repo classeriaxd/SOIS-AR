@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\FundSource;
+
 use App\Http\Requests\Admin\EventMaintenance\FundSource\{
     FundSourceStoreRequest,
     FundSourceUpdateRequest,
@@ -14,7 +17,9 @@ use App\Services\Admin\EventMaintenance\FundSource\{
     FundSourceDeleteService,
     FundSourceRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -22,6 +27,7 @@ class FundSourceMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.fundSource.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -31,6 +37,7 @@ class FundSourceMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -52,6 +59,8 @@ class FundSourceMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new FundSourceStoreService())->store($request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Fund Source.');
+
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])
             ->with($message);
@@ -71,6 +80,8 @@ class FundSourceMaintenanceController extends Controller
         $fundSource = $this->checkIfFundSourceExists($fund_source_id);
 
         $message = (new FundSourceUpdateService())->update($fundSource, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Fund Source.');
 
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])
@@ -93,6 +104,8 @@ class FundSourceMaintenanceController extends Controller
 
         $message = (new FundSourceDeleteService())->delete($fundSource, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Fund Source.');
+
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])
             ->with($message);
@@ -104,6 +117,8 @@ class FundSourceMaintenanceController extends Controller
         $fundSource = $this->checkIfFundSourceExists($fund_source_id);
 
         $message = (new FundSourceRestoreService())->restore($fundSource);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Fund Source.');
 
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])

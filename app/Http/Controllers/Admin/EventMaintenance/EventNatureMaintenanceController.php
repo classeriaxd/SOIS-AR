@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\EventNature;
+
 use App\Http\Requests\Admin\EventMaintenance\EventNature\{
     EventNatureStoreRequest,
     EventNatureUpdateRequest,
@@ -14,7 +17,9 @@ use App\Services\Admin\EventMaintenance\EventNature\{
     EventNatureDeleteService,
     EventNatureRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -22,6 +27,7 @@ class EventNatureMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.eventNature.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -31,6 +37,7 @@ class EventNatureMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -50,7 +57,10 @@ class EventNatureMaintenanceController extends Controller
     public function store(EventNatureStoreRequest $request)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+
         $message = (new EventNatureStoreService())->store($request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])
@@ -71,6 +81,8 @@ class EventNatureMaintenanceController extends Controller
         $eventNature = $this->checkIfNatureExists($nature_id);
 
         $message = (new EventNatureUpdateService())->update($eventNature, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])
@@ -93,6 +105,8 @@ class EventNatureMaintenanceController extends Controller
 
         $message = (new EventNatureDeleteService())->delete($eventNature, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Nature.');
+
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])
             ->with($message);
@@ -104,6 +118,8 @@ class EventNatureMaintenanceController extends Controller
         $eventNature = $this->checkIfNatureExists($nature_id);
 
         $message = (new EventNatureRestoreService())->restore($eventNature);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])

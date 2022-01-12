@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\EventMaintenance;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Level;
+
 use App\Http\Requests\Admin\EventMaintenance\Level\{
     LevelStoreRequest,
     LevelUpdateRequest,
@@ -14,7 +17,9 @@ use App\Services\Admin\EventMaintenance\Level\{
     LevelDeleteService,
     LevelRestoreService,
 };
+
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
 
 use App\Http\Controllers\Controller as Controller;
 
@@ -22,6 +27,7 @@ class LevelMaintenanceController extends Controller
 {
     protected $viewDirectory = 'admin.maintenances.event.level.';
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -31,6 +37,7 @@ class LevelMaintenanceController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     public function index()
@@ -50,7 +57,10 @@ class LevelMaintenanceController extends Controller
     public function store(LevelStoreRequest $request)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
+
         $message = (new LevelStoreService())->store($request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])
@@ -71,6 +81,8 @@ class LevelMaintenanceController extends Controller
         $level = $this->checkIfLevelExists($level_id);
 
         $message = (new LevelUpdateService())->update($level, $request);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])
@@ -93,6 +105,8 @@ class LevelMaintenanceController extends Controller
 
         $message = (new LevelDeleteService())->delete($level, $request);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Level');
+
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])
             ->with($message);
@@ -104,6 +118,8 @@ class LevelMaintenanceController extends Controller
         $level = $this->checkIfLevelExists($level_id);
 
         $message = (new LevelRestoreService())->restore($level);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])

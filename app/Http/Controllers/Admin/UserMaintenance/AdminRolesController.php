@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\UserMaintenance;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\{
@@ -24,12 +25,16 @@ use App\Services\Admin\RoleAndPermissionMaintenance\{
 };
 
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
+
 use App\Http\Controllers\Controller as Controller;
 
 class AdminRolesController extends Controller
 {
     protected $viewDirectory = 'admin.roles.';
     protected $permissionChecker;
+    protected $dataLogger;
+
 
     /**
      * Create a new controller instance.
@@ -39,6 +44,7 @@ class AdminRolesController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -211,6 +217,8 @@ class AdminRolesController extends Controller
 
         $message = (new AttachRoleService())->attach($request, $user_id);
 
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Attached a Role to a User.');
+
         return redirect()->action(
             [AdminRolesController::class, 'userShow'], ['user_id' => $user_id])
             ->with($message);
@@ -227,6 +235,8 @@ class AdminRolesController extends Controller
         abort_if(! User::where('user_id', $user_id)->exists(), 404);
 
         $message = (new DetachRoleService())->detach($request, $user_id);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Detached a Role to a User.');
 
         return redirect()->action(
             [AdminRolesController::class, 'userShow'], ['user_id' => $user_id])
@@ -245,6 +255,8 @@ class AdminRolesController extends Controller
         abort_if(! User::where('user_id', $user_id)->exists(), 404);
 
         (new AttachPermissionService())->attach($user_id, $permission_id);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Attached a Permission to a User.');
     }
 
     /**
@@ -259,5 +271,7 @@ class AdminRolesController extends Controller
         abort_if(! User::where('user_id', $user_id)->exists(), 404);
 
         (new DetachPermissionService())->detach($user_id, $permission_id);
+
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Detached a Permission to a User.');
     }
 }
