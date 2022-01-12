@@ -249,6 +249,7 @@ Route::group(['middleware' => 'auth'], function () {
             function () {
                 Route::get('/create', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'create'])->name('create');
                 Route::post('/store', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'store'])->name('store');
+                Route::post('/storeFromHomePage', [App\Http\Controllers\Admin\HomeController::class, 'storeNotification'])->name('storeFromHomePage');
                 Route::post('/all', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'markAllAsRead'])->name('markAllAsRead');
                 Route::post('/{notification_id}', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'markAsRead'])->where(['notification_id' => '^([1-9][0-9]*)$'])->name('markAsRead');
                 Route::get('', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'index'])->name('index');

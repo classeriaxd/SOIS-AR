@@ -9,14 +9,19 @@ use App\Models\Event;
 use App\Models\Organization;
 
 use Carbon\Carbon;
-use DateTime;
 
+use App\Http\Requests\Admin\NotificationStoreRequest;
+
+use App\Services\Admin\NotificationStoreService;
 use App\Services\PermissionServices\PermissionCheckingService;
+use App\Services\DataLogServices\DataLogService;
+
 use App\Http\Controllers\Controller as Controller;
 
 class HomeController extends Controller
 {
     protected $permissionChecker;
+    protected $dataLogger;
 
     /**
      * Create a new controller instance.
@@ -26,6 +31,7 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
         $this->permissionChecker = new PermissionCheckingService();
+        $this->dataLogger = new DataLogService();
     }
 
     /**
@@ -57,7 +63,18 @@ class HomeController extends Controller
                 'loadHomeCSS',
                 'organizations',
             ));
-        
+    }
+
+    public function storeNotification(NotificationStoreRequest $request)
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
+
+        $message = (new NotificationStoreService())->store($request);
+        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Announcement.');
+
+        return redirect()->action(
+            [HomeController::class, 'index'])
+            ->with($message);
     }
 
     public function showLoginAlert()

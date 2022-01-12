@@ -30,7 +30,10 @@
                         <h5 class="card-header card-title text-center bg-maroon text-white fw-bold">Create Notification</h5>
                         <div class="card-body">
                             <form action="{{route('admin.notifications.store')}}" enctype="multipart/form-data" method="POST" id="adminNotificationCreateForm"
-                            onsubmit="document.getElementById('submitButton').disabled=true;">
+                            onsubmit="document.getElementById('submitButton').disabled=true;
+                            document.getElementById('submitButtonText').hidden=true;
+                            document.getElementById('submitSpinner').hidden=false;
+                            document.getElementById('submitMessage').hidden=false;">
                                 {{-- Notification Title --}}
                                 <div class="form-group row">
                                     <label for="title" class="col-md-4 col-form-label">Title<span style="color:red">*</span></label>
@@ -118,8 +121,18 @@
                                 
                                 <div class="form-group flex-row text-center">
                                     @csrf
-                                    <button id="submitButton" class="btn btn-primary text-white" type="submit"><i class="fas fa-paper-plane"></i> Send Notification</button>
+                                    <button id="submitButton" class="btn btn-primary text-white" type="submit"><i class="fas fa-paper-plane"></i>
+                                        <span id="submitButtonText">Send Notification</span>
+                                        <span id="submitSpinner" hidden>
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+                                                Please wait...
+                                            </span>
+                                    </button>
                                 </div>
+                                
+                                <p class="text-center" id="submitMessage" hidden>
+                                    Please wait while your announcement is being sent. You will be notified after it is done.
+                                </p>
                             </form>
 
                         </div>
