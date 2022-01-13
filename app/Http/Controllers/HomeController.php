@@ -83,6 +83,7 @@ class HomeController extends Controller
             $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
                 ->count();
             $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)
+                ->where('status', 2)
                 ->count();
             $documentCount = OrganizationDocument::whereHas(
                     'documentType.organization', function(Builder $query) use($organizationID){
@@ -108,6 +109,7 @@ class HomeController extends Controller
             $studentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
                 ->count();
             $accomplishmentReportCount = AccomplishmentReport::where('organization_id', $organizationID)
+                ->where('status', 2)
                 ->count();
             $documentCount = OrganizationDocument::whereHas(
                     'documentType.organization', function(Builder $query) use($organizationID){
