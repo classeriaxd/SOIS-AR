@@ -24,7 +24,7 @@ class CreateNonAcademicMembershipTable extends Migration
             $table->string('registration_status');
             $table->date('registration_start_date');
             $table->date('registration_end_date');
-            $table->string('status');
+            $table->string('nam_status');
             $table->timestamps();
 
             $table->foreign('organization_id')->references('organization_id')->on('organizations')->onDelete('cascade');
