@@ -129,6 +129,7 @@
                         </a>
                         <ul class="collapse list-unstyled menu" id="userMaintenanceSubMenu">
                             <li><a href="{{ route('admin.maintenance.roles.index') }}">Manage Roles</a></li>
+                            <li><a href="{{ route('admin.activityLogs.index') }}">Activity Logs</a></li>
                         </ul>
                     </li>
                     

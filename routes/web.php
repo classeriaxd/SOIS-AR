@@ -209,7 +209,7 @@ Route::group(['middleware' => 'auth'], function () {
 
             // School Year Maintenance
             Route::resource('schoolYears', App\Http\Controllers\Admin\AccomplishmentReportMaintenance\SchoolYearMaintenanceController::class)->only(['index', 'create', 'store']);
-            
+
             Route::group([
                     'as' => 'schoolYears.',
                     'prefix' => '/schoolYears/{school_year_id}',
@@ -251,8 +251,6 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('', [App\Http\Controllers\Admin\AdminOrganizationsController::class, 'index'])->name('index');
         });
 
-        
-
         // Admin User Notification Routes
         Route::group([
                 'as' => 'notifications.',
@@ -264,6 +262,15 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::post('/all', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'markAllAsRead'])->name('markAllAsRead');
                 Route::post('/{notification_id}', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'markAsRead'])->where(['notification_id' => '^([1-9][0-9]*)$'])->name('markAsRead');
                 Route::get('', [App\Http\Controllers\Admin\AdminNotificationsController::class, 'index'])->name('index');
+        });
+
+        // Admin Activity Logs Routes
+        Route::group([
+                'as' => 'activityLogs.',
+                'prefix' => '/activityLogs',],
+            function () {
+                Route::get('/{organizationSlug}', [App\Http\Controllers\Admin\UserMaintenance\AdminActivityLogsController::class, 'organizationIndex'])->where(['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'])->name('organizationIndex');
+                Route::get('', [App\Http\Controllers\Admin\UserMaintenance\AdminActivityLogsController::class, 'index'])->name('index');
         });
 
     });
