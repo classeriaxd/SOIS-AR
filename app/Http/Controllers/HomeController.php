@@ -88,7 +88,12 @@ class HomeController extends Controller
                     'documentType.organization', function(Builder $query) use($organizationID){
                         $query->where('organization_id', $organizationID);},)
                 ->count();
-            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount');
+            $latestEvents = Event::with('eventRole')
+                ->where('organization_id', $organizationID)
+                ->orderBy('start_date', 'DESC')
+                ->limit(10)
+                ->get();
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount', 'latestEvents');
         }
 
         // If User has AR Officer Admin role...
@@ -117,7 +122,12 @@ class HomeController extends Controller
             $pendingStudentAccomplishmentCount = StudentAccomplishment::where('organization_id', $organizationID)
                 ->where('status', 1)
                 ->count();
-            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount', 'accomplishedEventsCount', 'pendingStudentAccomplishmentCount');
+            $latestEvents = Event::with('eventRole')
+                ->where('organization_id', $organizationID)
+                ->orderBy('start_date', 'DESC')
+                ->limit(10)
+                ->get();
+            array_push($compactVariables, 'eventCount', 'studentAccomplishmentCount', 'accomplishmentReportCount', 'documentCount', 'accomplishedEventsCount', 'pendingStudentAccomplishmentCount','latestEvents');
         }
         // Query Activity Logs
         $activityLogs = DataLog::where('user_id', Auth::user()->user_id)

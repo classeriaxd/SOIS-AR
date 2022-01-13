@@ -124,9 +124,9 @@
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
                                     <h4 class="card-title">
-                                        Accomplished Reports <i class="fas fa-tools"></i>
+                                        Event Reports
                                     </h4>
-                                    <p class="category">Latest added reports</p>
+                                    <p class="category">Latest added event reports</p>
                                 </div>
                                 <div class="card-content table-responsive">
                                     <table class="table table-hover">
@@ -139,48 +139,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Borderland: Withstanding Virtual Reality"</td>
-                                                <td>Nov. 7, 2021</td>
-                                                <td>Sponsor</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>General Assembly - Hacker x Hunter: The Algo Hunting Begins</td>
-                                                <td>Oct. 22, 2021</td>
-                                                <td>Organizer</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>PUPTALKS - Laboratory Utilization and Management </td>
-                                                <td>Oct. 15, 2021</td>
-                                                <td>Participant</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Oath Taking Ceremony</td>
-                                                <td>Oct. 8, 2021</td>
-                                                <td>Participant</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Safe Space Online Classroom for LGBTQIA+ Students</td>
-                                                <td>Oct. 8, 2021</td>
-                                                <td>Participant</td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Techer's Day</td>
-                                                <td>Oct. 5, 2021</td>
-                                                <td>Sponsor</td>
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td>Knights of Honor 2021</td>
-                                                <td>Sept. 30, 2021</td>
-                                                <td>Organizer</td>
-                                            </tr>
+                                            @if($latestEvents->isNotEmpty())
+                                                @php $i = 1 @endphp
+                                                @foreach($latestEvents as $latestEvent)
+                                                <tr>
+                                                    <td>{{$i}}</td>
+                                                    <td>{{$latestEvent->title}}</td>
+                                                    <td>
+                                                        @if($latestEvent->start_date == $latestEvent->end_date)
+                                                            {{date_format(date_create($latestEvent->start_date), 'F d, Y')}}
+                                                        @else
+                                                            {{date_format(date_create($latestEvent->start_date), 'F d, Y') . ' - ' . date_format(date_create($latestEvent->end_date), 'F d, Y')}}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{$latestEvent->eventRole->event_role}}</td>
+                                                </tr>
+                                                    @php $i += 1 @endphp
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="4">No Event Found!</td>
+                                                </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -345,9 +325,9 @@
                             <div class="card" style="min-height: 485px">
                                 <div class="card-header card-header-text">
                                     <h4 class="card-title">
-                                        Accomplished Reports <i class="fas fa-tools"></i>
+                                        Event Reports
                                     </h4>
-                                    <p class="category">Latest added reports</p>
+                                    <p class="category">Latest added event reports</p>
                                 </div>
                                 <div class="card-content table-responsive">
                                     <table class="table table-hover">
@@ -360,48 +340,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Borderland: Withstanding Virtual Reality"</td>
-                                                <td>Nov. 7, 2021</td>
-                                                <td>Sponsor</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>General Assembly - Hacker x Hunter: The Algo Hunting Begins</td>
-                                                <td>Oct. 22, 2021</td>
-                                                <td>Organizer</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>PUPTALKS - Laboratory Utilization and Management </td>
-                                                <td>Oct. 15, 2021</td>
-                                                <td>Participant</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Oath Taking Ceremony</td>
-                                                <td>Oct. 8, 2021</td>
-                                                <td>Participant</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Safe Space Online Classroom for LGBTQIA+ Students</td>
-                                                <td>Oct. 8, 2021</td>
-                                                <td>Participant</td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td>Techer's Day</td>
-                                                <td>Oct. 5, 2021</td>
-                                                <td>Sponsor</td>
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td>Knights of Honor 2021</td>
-                                                <td>Sept. 30, 2021</td>
-                                                <td>Organizer</td>
-                                            </tr>
+                                            @if($latestEvents->isNotEmpty())
+                                                @php $i = 1 @endphp
+                                                @foreach($latestEvents as $latestEvent)
+                                                <tr>
+                                                    <td>{{$i}}</td>
+                                                    <td>{{$latestEvent->title}}</td>
+                                                    <td>
+                                                        @if($latestEvent->start_date == $latestEvent->end_date)
+                                                            {{date_format(date_create($latestEvent->start_date), 'F d, Y')}}
+                                                        @else
+                                                            {{date_format(date_create($latestEvent->start_date), 'F d, Y') . ' - ' . date_format(date_create($latestEvent->end_date), 'F d, Y')}}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{$latestEvent->eventRole->event_role}}</td>
+                                                </tr>
+                                                    @php $i += 1 @endphp
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="4">No Event Found!</td>
+                                                </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
