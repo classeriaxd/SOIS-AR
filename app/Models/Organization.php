@@ -48,7 +48,7 @@ class Organization extends Model
 
     public function logos()
     {
-        return $this->hasMany(OrganizationAsset::class, 'organization_id')->where('asset_type_id', $this->logo_id)->limit(1);
+        return $this->hasMany(OrganizationAsset::class, 'organization_id')->where('asset_type_id', $this->logo_id);
     }
 
     public function unreadAccomplishmentReports()

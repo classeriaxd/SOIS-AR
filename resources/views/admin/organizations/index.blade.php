@@ -28,50 +28,28 @@
                     @if($organizations->count() > 0)
 
                         @foreach($organizations as $organization)
-                            
-                                <!-- <div class="col-lg-4 col-md-6 col-sm-6">
-                                    <div class="card card-stats">
-                                        <div class="card-header">
-                                            <div class="icon icon-success">
-                                            <img class="card-img-top mx-auto image" src="/storage/{{$organization->logo->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
-                                            </div>
-                                        </div>
-                                        <div class="card-content">
-                                            <p class="category"><strong>{{ $organization->organization_acronym }}</strong></p>
-                                            <h3 class="card-title">{{ $organizationCount ?? 0 }}</h3>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="stats">
-                                                <a href="{{ route('admin.organizations.show', ['organizationSlug' => $organization->organization_slug]) }}">More info
-                                                    <i class="material-icons more-info">arrow_circle_right</i>
-                                                </a>
-                                            </div>
-                                        </div>
+                            <a href="{{ route('admin.organizations.show', ['organizationSlug' => $organization->organization_slug]) }}">
+                                <div class="card text-center">   
+                                    <span class="position-absolute p-2 top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                        {{ $organization->unread_accomplishment_reports_count ?? 0}}
+                                        <span class="visually-hidden">unread notifications</span>
+                                    </span>
+                                    <img class="card-img-top mx-auto" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    <div class="card-body text-center bg-maroon text-white fw-bold">
+                                        <h5 class="card-title d-flex align-items-center text-center">
+                                        {{ $organization->organization_acronym }}
+                                        </h5>
+                                        <h5 class="card-text d-flex align-items-center text-center">
+                                            <i class="fas fa-clipboard-list fs-2"></i>|{{ $organization->events_count ?? 0 }}
+                                        </h5>
+                                        <h5 class="card-text d-flex align-items-center text-center">
+                                        <i class="fas fa-file-alt fs-2"></i>|{{ $organization->accomplishment_reports_count ?? 0 }}
+                                        </h5>
                                     </div>
-                                </div>      -->
-
-                                <a href="{{ route('admin.organizations.show', ['organizationSlug' => $organization->organization_slug]) }}">
-                                    <div class="card text-center">   
-                                        <span class="position-absolute p-2 top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                            {{ $organization->unread_accomplishment_reports_count ?? 0}}
-                                            <span class="visually-hidden">unread notifications</span>
-                                        </span>
-                                        <img class="card-img-top mx-auto" src="/storage/{{$organization->logo->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
-                                        <div class="card-body text-center bg-maroon text-white fw-bold">
-                                            <h5 class="card-title d-flex align-items-center text-center">
-                                            {{ $organization->organization_acronym }}
-                                            </h5>
-                                            <h5 class="card-text d-flex align-items-center text-center">
-                                                <i class="fas fa-clipboard-list fs-2"></i>|{{ $organization->events_count ?? 0 }}
-                                            </h5>
-                                            <h5 class="card-text d-flex align-items-center text-center">
-                                            <i class="fas fa-file-alt fs-2"></i>|{{ $organization->accomplishment_reports_count ?? 0 }}
-                                            </h5>
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                </a>
+                                    
+                                    
+                                </div>
+                            </a>
                             
                         @endforeach
                     @else

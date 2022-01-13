@@ -100,7 +100,7 @@
                         @foreach($organizations as $organization)
                             <a href="{{ route('admin.events.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
                                 <div class="card">
-                                    <img class="card-img-top" src="/storage/{{$organization->logo->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    <img class="card-img-top" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
                                     <div class="card-body text-center bg-maroon text-white fw-bold">
                                         <p class="card-title">
                                            {{ $organization->organization_acronym }}
