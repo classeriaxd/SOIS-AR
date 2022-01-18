@@ -277,12 +277,18 @@ Route::group(['middleware' => 'auth'], function () {
     
     
     // Documentation Officer Maintenance routes
+    Route::get('/redirect/organizationDocumentTypes', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'indexRedirect'])->name('maintenances.organizationDocumentTypes.indexRedirect');
+    Route::get('/redirect/officerSignatures', [App\Http\Controllers\OfficersController::class, 'indexRedirect'])->name('maintenances.officerSignatures.indexRedirect');
+    Route::delete('/maintenances/officerSignatures/upload/revert', [App\Http\Controllers\OfficersController::class, 'undoUpload'])->name('maintenances.officerSignatures.undoUpload');
+    Route::post('/maintenances/officerSignatures/upload', [App\Http\Controllers\OfficersController::class, 'upload'])->name('maintenances.officerSignatures.upload');
+    
     Route::group([
             'as' => 'maintenances.',
             'prefix' => '/maintenances/{organizationSlug}',
             'where' => ['organizationSlug' => '^[a-zA-Z0-9_-]{2,255}$'],], 
         function () {
 
+        // Organization Document Types
         Route::group([
                 'as' => 'organizationDocumentTypes.',
                 'prefix' => '/organizationDocumentTypes',], 
@@ -302,13 +308,29 @@ Route::group(['middleware' => 'auth'], function () {
                         Route::post('/restore', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'restore'])->name('restore');
                         Route::get('', [App\Http\Controllers\OrganizationDocumentTypesController::class, 'show'])->name('show');
                 });
+        });
+
+        // Officer Signatures
+        Route::group([
+                'as' => 'officerSignatures.',
+                'prefix' => '/officerSignatures',], 
+            function () {
+                Route::get('', [App\Http\Controllers\OfficersController::class, 'index'])->name('index');
+                Route::group([
+                        'prefix' => '/{officerID}',
+                        'where' => ['officerID' => '^([1-9][0-9]*)$',],], 
+
+                    function () {
+                        Route::get('/create', [App\Http\Controllers\OfficersController::class, 'create'])->name('create');
+                        Route::post('/store', [App\Http\Controllers\OfficersController::class, 'store'])->name('store');
+                });
                 
         });
     });
     
     
     // Organization Documents
-    Route::get('/redirect/documents', [App\Http\Controllers\OrganizationDocumentsController::class, 'indexRedirect'])->name('organizationDocuments.indexRedirect');
+    Route::get('/redirect/organizationDocuments', [App\Http\Controllers\OrganizationDocumentsController::class, 'indexRedirect'])->name('organizationDocuments.indexRedirect');
     Route::group([
             'as' => 'organizationDocuments.',
             'prefix' => '/documents/{organizationSlug}',

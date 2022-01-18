@@ -141,6 +141,18 @@
 
                             <ul class="collapse list-unstyled menu" id="pageSubmenu5">
                                 <li><a href="{{route('organizationDocuments.indexRedirect')}}">All Organization Documents</a></li>
+                                <li><a href="{{route('maintenances.organizationDocumentTypes.indexRedirect')}}">Organization Documents Types</a></li>
+                            </ul>
+                        </li>
+
+                        {{-- Officers --}}
+                        <li class="dropdown">
+                            <a href="#pageSubmenu6" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="material-icons">person</i><span>Officers</span>
+                            </a>
+
+                            <ul class="collapse list-unstyled menu" id="pageSubmenu6">
+                                <li><a href="{{route('maintenances.officerSignatures.indexRedirect')}}">Manage Officer Signatures</a></li>
                             </ul>
                         </li>
                     @endrole

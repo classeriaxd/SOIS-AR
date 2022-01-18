@@ -49,6 +49,7 @@ class PermissionUserSeeder extends Seeder
                 ['user_id' => 3, 'permission_id' => 28,],
                 ['user_id' => 3, 'permission_id' => 30,],
                 ['user_id' => 3, 'permission_id' => 31,],
+                ['user_id' => 3, 'permission_id' => 38,],
 
                 // AR President Initial Permissions
                 ['user_id' => 4, 'permission_id' => 15,],
@@ -102,6 +103,7 @@ class PermissionUserSeeder extends Seeder
                 ['user_id' => 9, 'permission_id' => 28,],
                 ['user_id' => 9, 'permission_id' => 30,],
                 ['user_id' => 9, 'permission_id' => 31,],
+                ['user_id' => 3, 'permission_id' => 38,],
             
         ];
         DB::table('permission_user')->insert($data);

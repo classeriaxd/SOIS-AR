@@ -22,6 +22,6 @@ class PositionTitle extends Model
 
     public function officers()
     {
-        return $this->hasMany(Officer::class, 'position_title_id');
+        return $this->hasMany(Officer::class, 'position_title_id')->orderBy('position_title_id');
     }
 }

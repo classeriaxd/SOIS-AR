@@ -228,6 +228,12 @@ class PermissionSeeder extends Seeder
                     'name' => 'AR-Super-Admin-Manage_Roles_and_Permissions', 
                     'created_at' => $currentTime, 'updated_at' => $currentTime,
                 ],
+            // AR Officer Manage Officer Signatures
+                [
+                    // 38
+                    'name' => 'AR-Manage_Officer_Signatures', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
         ];
         DB::table('permissions')->insert($data);
     }

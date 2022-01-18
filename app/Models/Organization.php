@@ -55,4 +55,9 @@ class Organization extends Model
     {
         return $this->hasMany(AccomplishmentReport::class, 'organization_id')->where('read_at', NULL);
     }
+
+    public function positionTitles()
+    {
+        return $this->hasMany(PositionTitle::class, 'organization_id');
+    }
 }
