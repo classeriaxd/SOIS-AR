@@ -98,6 +98,7 @@ class AccomplishmentReportReviewService
                 ->with('positionTitle:position_title_id,position_title')
                 ->where('term_start', '<=', $accomplishmentReport->end_date)
                 ->where('term_end', '>=', $accomplishmentReport->start_date)
+                ->where('status', 1)
                 ->get();
             $presidentSignatory = Officer::whereHas(
                     'positionTitle', function(Builder $query) use($organizationID) {
@@ -108,7 +109,9 @@ class AccomplishmentReportReviewService
                 ->with('positionTitle:position_title_id,position_title')
                 ->where('term_start', '<=', $accomplishmentReport->end_date)
                 ->where('term_end', '>=', $accomplishmentReport->start_date)
+                ->where('status', 1)
                 ->first();
+            
             // Get Organization Details including a single Logo
             $organization = Organization::with('logo')
                 ->where('organization_id', $organizationID)
