@@ -18,6 +18,7 @@ use App\Services\OrganizationDocumentServices\OrganizationDocumentTypeMaintenanc
 };
 use App\Services\PermissionServices\PermissionCheckingService;
 use App\Services\EventServices\EventGetOrganizationIDService;
+use App\Services\OrganizationDocumentServices\OfficerOrganizationIDService;
 use App\Services\DataLogServices\DataLogService;
 
 class OrganizationDocumentTypesController extends Controller
@@ -52,8 +53,23 @@ class OrganizationDocumentTypesController extends Controller
             ->withCount('organizationDocuments')
             ->where('organization_id', $organization->organization_id)
             ->get();
-        //dd($organizationDocumentTypes);
+
         return view($this->viewDirectory . 'index', compact('organization','organizationDocumentTypes','deletedOrganizationDocumentTypes'));
+    }
+
+    /**
+     * Function to redirect to Index Page from Sidebar/Home
+     * @return Redirect
+     */
+    public function indexRedirect()
+    {
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Organization_Document_Type'), 403);
+        
+        $organization = Organization::where('organization_id', (new OfficerOrganizationIDService)->getOrganizationID())
+            ->first();
+
+        return redirect()->action(
+            [OrganizationDocumentTypesController::class, 'index'], ['organizationSlug' => $organization->organization_slug]);
     }
     
     public function create($organizationSlug)
