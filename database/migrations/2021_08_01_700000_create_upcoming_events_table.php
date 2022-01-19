@@ -20,6 +20,7 @@ class CreateUpcomingEventsTable extends Migration
             $table->date('date');
             $table->string('title');
             $table->string('objectives');
+            $table->string('head_organization');
             $table->string('semester');
             $table->string('school_year');
             $table->string('participants');
@@ -35,7 +36,7 @@ class CreateUpcomingEventsTable extends Migration
             $table->string('completion_status')->default('upcoming'); //values = upcoming/accomplished
             $table->timestamps();
 
-            $table->foreign('organization_id')->references('organization_id')->on('organizations')->onDelete('cascade');
+            $table->foreign('organization_id')->references('organization_id')->on('organizations');
             $table->foreign('accomplished_event_id')->references('accomplished_event_id')->on('accomplished_events');
         });
     }
