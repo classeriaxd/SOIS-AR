@@ -46,8 +46,7 @@ class PermissionRoleSeeder extends Seeder
                 ['role_id' => 3, 'permission_id' => 26,],
                 ['role_id' => 3, 'permission_id' => 27,],
                 ['role_id' => 3, 'permission_id' => 29,],
-                ['role_id' => 8, 'permission_id' => 30,],
-                ['role_id' => 8, 'permission_id' => 31,],
+                ['role_id' => 3, 'permission_id' => 38,],
 
                 // AR President Permissions
                 ['role_id' => 4, 'permission_id' => 15,],
