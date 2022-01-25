@@ -8,7 +8,7 @@
             {{-- Title and Breadcrumbs --}}
             <div class="d-flex justify-content-between align-items-center mb-2">
                 {{-- Title --}}
-                <h2 class="display-7 text-left text-break">{{ $organization->organization_acronym }} Events</h2>
+                <h2 class="display-7 text-left text-break">{{ $organization->organization_acronym }} Activity Logs</h2>
 
                 {{-- Organization Logo --}}
                 <img src="/storage/{{ $organizationLogo }}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
@@ -20,7 +20,7 @@
                             <a href="{{route('admin.home')}}" class="text-decoration-none">Home</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            {{ $organization->organization_acronym }} Events
+                            {{ $organization->organization_acronym }} Activity Logs
                         </li>
                     </ol>
                 </nav>
@@ -106,8 +106,8 @@
                 perPage: 30,
                 searchable: true,
                 labels: {
-                    placeholder: "Search Events...",
-                    noRows: "No events to display in this page or try in the next page.",
+                    placeholder: "Search Logs...",
+                    noRows: "No logs to display in this page or try in the next page.",
                 },
             });
         });
