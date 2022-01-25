@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('suffix')->nullable()->default(NULL);
+            $table->tinyText('title')->nullable()->default(NULL);
             $table->date('date_of_birth');
             $table->string('mobile_number');
             $table->text('address');
@@ -36,7 +37,7 @@ class CreateUsersTable extends Migration
             $table->unsignedTinyInteger('status');
             $table->text('two_factor_secret')->default(NULL)->nullable();
             $table->text('two_factor_recovery_code')->default(NULL)->nullable();
-
+            $table->rememberToken();
             $table->foreign('gender_id')->references('gender_id')->on('genders');
             $table->foreign('course_id')->references('course_id')->on('courses');
         });
