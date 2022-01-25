@@ -88,6 +88,21 @@ class RoleUserSeeder extends Seeder
                 'organization_id' => $organization_id,
             ],
 
+            //Jones additional users
+            [  
+                // Membership BSA
+                'user_id' => 11,
+                'role_id' => 5,
+                'organization_id' => 4,
+            ],
+            [  
+                // GPOA BSA
+                'user_id' => 12,
+                'role_id' => 6,
+                'organization_id' => 4,
+            ],
+
+
             
         ];
         DB::table('role_user')->insert($data);

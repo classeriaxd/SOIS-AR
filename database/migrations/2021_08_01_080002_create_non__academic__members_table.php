@@ -22,8 +22,9 @@ class CreateNonAcademicMembersTable extends Migration
             $table->unsignedBigInteger('organization_id');
             $table->string('student_number');
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
+            $table->string('suffix')->nullable();
             $table->string('email');
             $table->string('gender');
             $table->string('course');
