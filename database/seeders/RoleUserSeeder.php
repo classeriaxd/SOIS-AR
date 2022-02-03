@@ -101,6 +101,18 @@ class RoleUserSeeder extends Seeder
                 'role_id' => 6,
                 'organization_id' => 4,
             ],
+            [  
+                // Membership ERG
+                'user_id' => 13,
+                'role_id' => 5,
+                'organization_id' => 11,
+            ],
+            [  
+                // MEMBERSHIP PUPUKAW
+                'user_id' => 14,
+                'role_id' => 5,
+                'organization_id' => 13,
+            ],
 
 
             

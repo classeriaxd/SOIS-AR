@@ -81,6 +81,47 @@ class OrganizationAssetSeeder extends Seeder
                 'updated_at' => $currentTime,
                 'status' => 1,
             ],
+            // ADDITIONAL DEFAULT LOGO from non acad orgs -jiones
+            [
+                'organization_id' => 9,
+                'asset_type_id' => 1,
+                'file' => 'organization_assets/logo/default_logo.png',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => 1,
+            ],
+            [
+                'organization_id' => 10,
+                'asset_type_id' => 1,
+                'file' => 'organization_assets/logo/default_logo.png',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => 1,
+            ],
+            [
+                'organization_id' => 11,
+                'asset_type_id' => 1,
+                'file' => 'organization_assets/logo/default_logo.png',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => 1,
+            ],
+            [
+                'organization_id' => 12,
+                'asset_type_id' => 1,
+                'file' => 'organization_assets/logo/default_logo.png',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => 1,
+            ],
+            [
+                'organization_id' => 13,
+                'asset_type_id' => 1,
+                'file' => 'organization_assets/logo/default_logo.png',
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+                'status' => 1,
+            ],
         ];
         DB::table('organization_assets')->insert($data);
     }

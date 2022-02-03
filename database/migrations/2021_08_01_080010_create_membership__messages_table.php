@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEventSignaturesTable extends Migration
+class CreateMembershipMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,17 @@ class CreateEventSignaturesTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_signatures', function (Blueprint $table) {
-            $table->id('signature_id');
-
+        Schema::create('membership_messages', function (Blueprint $table) {
+            $table->id('message_id');
             $table->foreignId('user_id');
-            $table->foreignId('organization_id')->nullable();
-            $table->foreignId('role_id');
-            $table->string('signature_path')->nullable();
+            $table->foreignId('organization_id');
+            $table->string('message');
+            $table->string('status')->default('unread');
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('organization_id')->references('organization_id')->on('organizations');
-            $table->foreign('role_id')->references('role_id')->on('roles');
-            
+
         });
     }
 
@@ -36,6 +34,6 @@ class CreateEventSignaturesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('event_signatures');
+        Schema::dropIfExists('membership__messages');
     }
 }

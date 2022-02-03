@@ -16,10 +16,12 @@ class CreateNonAcademicMembersTable extends Migration
         Schema::create('non_academic_members', function (Blueprint $table) {
             $table->id('non_academic_member_id');
             
-            $table->unsignedBigInteger('membership_id');
             $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('membership_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('organization_id');
+            
+            $table->integer('control_number');
             $table->string('student_number');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -27,12 +29,11 @@ class CreateNonAcademicMembersTable extends Migration
             $table->string('suffix')->nullable();
             $table->string('email');
             $table->string('gender');
-            $table->string('course');
             $table->string('year_and_section');
             $table->date('date_of_birth');
             $table->string('contact');
             $table->string('address');
-            $table->string('membership_status')->default('unpaid');
+            $table->string('membership_status')->default('paid');
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users');
