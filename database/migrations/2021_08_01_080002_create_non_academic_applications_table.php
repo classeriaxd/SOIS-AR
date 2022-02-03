@@ -20,6 +20,7 @@ class CreateNonAcademicApplicationsTable extends Migration
             $table->unsignedBigInteger('membership_id');
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('organization_id');
+            
             $table->string('student_number');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
