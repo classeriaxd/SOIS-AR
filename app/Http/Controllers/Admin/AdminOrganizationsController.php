@@ -32,9 +32,12 @@ class AdminOrganizationsController extends Controller
         $organizations = Organization::withCount(['events', 'accomplishmentReports','unreadAccomplishmentReports'])
             ->with('logos')
             ->get();
+        $academicOrganizations = $organizations->where('organization_type_id', 1);
+        $nonAcademicOrganizations = $organizations->where('organization_type_id', 2);
         return view($this->viewDirectory . 'index', 
             compact(
-                'organizations',
+                'academicOrganizations',
+                'nonAcademicOrganizations'
             ));
         
     }

@@ -22,35 +22,37 @@
                 </nav>
             </div>
 
-            {{-- Organizations --}}
-            <div class="row my-2">
+            {{-- Academic Organizations --}}
+            <div class="row mt-2 mb-3">
                 <div class="col d-flex justify-content-evenly">
-                    @if($organizations->count() > 0)
-
-                        @foreach($organizations as $organization)
+                    @if($academicOrganizations->count() > 0)
+                        @foreach($academicOrganizations as $organization)
                             <a href="{{ route('admin.organizations.show', ['organizationSlug' => $organization->organization_slug]) }}">
                                 <div class="card text-center">   
                                     <span class="position-absolute p-2 top-0 start-100 translate-middle badge rounded-pill bg-primary">
                                         {{ $organization->unread_accomplishment_reports_count ?? 0}}
                                         <span class="visually-hidden">unread notifications</span>
                                     </span>
-                                    <img class="card-img-top mx-auto" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    <img class="card-img-top mx-auto" 
+                                        @if($organization->logos->first()->file != NULL)
+                                        src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
+                                        @else
+                                        src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
+                                        @endif
+                                        >
                                     <div class="card-body text-center bg-maroon text-white fw-bold">
-                                        <h5 class="card-title d-flex align-items-center text-center">
+                                        <h5 class="text-center">
                                         {{ $organization->organization_acronym }}
                                         </h5>
                                         <h5 class="card-text d-flex align-items-center text-center">
-                                            <i class="fas fa-clipboard-list fs-2"></i>|{{ $organization->events_count ?? 0 }}
+                                            {{ $organization->events_count ?? 0 }} Events
                                         </h5>
                                         <h5 class="card-text d-flex align-items-center text-center">
-                                        <i class="fas fa-file-alt fs-2"></i>|{{ $organization->accomplishment_reports_count ?? 0 }}
+                                        {{ $organization->accomplishment_reports_count ?? 0 }} AR
                                         </h5>
                                     </div>
-                                    
-                                    
                                 </div>
                             </a>
-                            
                         @endforeach
                     @else
                     <p class="text-center">
@@ -60,6 +62,45 @@
                 </div>
             </div>
 
+            {{-- Non-Academic Organizations --}}
+            <div class="row my-3">
+                <div class="col d-flex justify-content-evenly">
+                    @if($nonAcademicOrganizations->count() > 0)
+                        @foreach($nonAcademicOrganizations as $organization)
+                            <a href="{{ route('admin.organizations.show', ['organizationSlug' => $organization->organization_slug]) }}">
+                                <div class="card text-center">   
+                                    <span class="position-absolute p-2 top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                        {{ $organization->unread_accomplishment_reports_count ?? 0}}
+                                        <span class="visually-hidden">unread notifications</span>
+                                    </span>
+                                    <img class="card-img-top mx-auto" 
+                                        @if($organization->logos->first()->file != NULL)
+                                        src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
+                                        @else
+                                        src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
+                                        @endif
+                                        >
+                                    <div class="card-body text-center bg-maroon text-white fw-bold">
+                                        <h5 class="text-center">
+                                        {{ $organization->organization_acronym }}
+                                        </h5>
+                                        <h5 class="card-text d-flex align-items-center text-center">
+                                            {{ $organization->events_count ?? 0 }} Events
+                                        </h5>
+                                        <h5 class="card-text d-flex align-items-center text-center">
+                                            {{ $organization->accomplishment_reports_count ?? 0 }} AR
+                                        </h5>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @else
+                    <p class="text-center">
+                        No Organization Found. :(
+                    </p>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 
