@@ -277,6 +277,24 @@ class UserSeeder extends Seeder
             'status' => $status,
             'year_and_section' => NULL,
         ],
+        [
+            //14 - Director
+            'course_id' => NULL,
+            'gender_id' => $gender,
+            'email' => 'director@email.com', 
+            'password' => Hash::make('director@email.com'),
+            'student_number' => NULL, 
+            'first_name' => 'I',
+            'middle_name' => 'Am',
+            'last_name' => 'Director',
+            'date_of_birth' => '2000-01-01',
+            'mobile_number' => '+639123457777',
+            'address' => 'Taguig',
+            'created_at' => $currentTime,
+            'updated_at' => $currentTime,
+            'status' => $status,
+            'year_and_section' => NULL,
+        ],
         ];
 
         DB::table('users')->insert($data);

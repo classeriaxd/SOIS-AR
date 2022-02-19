@@ -33,6 +33,8 @@ class RoleSeeder extends Seeder
             ['role' => 'User', 'description' => 'Members of the Organizations in PUP Taguig'],
             // 9
             ['role' => 'Adviser', 'description' => 'Adviser of an Organization in PUP Taguig'],
+            // 10
+            ['role' => 'Director', 'description' => 'Director of the PUP Taguig'],
         ];
         DB::table('roles')->insert($data);
     }
