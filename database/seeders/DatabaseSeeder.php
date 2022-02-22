@@ -14,24 +14,31 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            ArticleTypeSeeder::class,
             AssetTypeSeeder::class,
             GenderSeeder::class,
             OrganizationTypeSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
             AccomplishmentReportTypeSeeder::class,
+            PageTypeSeeder::class,
             
             OrganizationSeeder::class,
+            PageSeeder::class,
+            SocialMediaSeeder::class,
+            SoisLinkSeeder::class,
             
             CourseSeeder::class,
 
-            OrganizationAssetSeeder::class,
             OrganizationDocumentTypeSeeder::class,
+            OrgSocialSeeder::class,
             UserSeeder::class,
+            OrganizationAssetSeeder::class,
 
             PermissionRoleSeeder::class,
             PermissionUserSeeder::class,
             RoleUserSeeder::class,
+            SoisGateSeeder::class,
 
             PositionCategorySeeder::class,
             PositionTitleSeeder::class,

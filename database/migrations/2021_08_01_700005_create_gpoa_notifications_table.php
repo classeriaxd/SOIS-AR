@@ -15,13 +15,15 @@ class CreateGPOANotificationsTable extends Migration
     {
         Schema::create('gpoa_notifications', function (Blueprint $table) {
             $table->id('notification_id');
-            $table->foreignId('organization_id');
             $table->foreignId('event_id');
+            $table->foreignId('to');
+            $table->foreignId('from');
             $table->string('message');
             $table->timestamps();
 
             $table->foreign('event_id')->references('upcoming_event_id')->on('upcoming_events');
-            $table->foreign('organization_id')->references('organization_id')->on('organizations');
+            $table->foreign('to')->references('organization_id')->on('organizations');
+            $table->foreign('from')->references('organization_id')->on('organizations');
         });
     }
 

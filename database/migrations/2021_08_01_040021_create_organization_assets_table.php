@@ -19,8 +19,7 @@ class CreateOrganizationAssetsTable extends Migration
             $table->foreignId('asset_type_id');
             $table->string('file');
             $table->timestamps();
-
-            $table->string('asset_name')->nullable();
+            
             $table->integer('is_latest_logo')->nullable();
             $table->integer('is_latest_banner')->nullable();
             $table->boolean('is_latest_image')->nullable();
