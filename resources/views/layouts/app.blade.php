@@ -55,7 +55,7 @@
                                             <read-notification 
                                                 :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                                 title= "{{ $notification->title }}"
-                                                route="{{route('notification.markAsRead', ['notification_id' => $notification->notification_id])}}"
+                                                route="{{route('notification.markAsRead', ['notification_id' => $notification->ar_notification_id])}}"
                                                 description= "{{ $notification->description }}"
                                                 link= " 
                                                     @if($notification->type == 3)
@@ -250,7 +250,7 @@
                                                         <read-notification 
                                                             :read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                                             title= "{{ $notification->title }}"
-                                                            route="{{route('notification.markAsRead', ['notification_id' => $notification->notification_id])}}"
+                                                            route="{{route('notification.markAsRead', ['notification_id' => $notification->ar_notification_id])}}"
                                                             description= "{{ $notification->description }}"
                                                             link= " 
                                                                 @if($notification->type == 3)
