@@ -90,7 +90,7 @@ class AdminNotificationsController extends Controller
     public function markAsRead($notification_id)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
-        abort_if(($notification = Notification::where('notification_id', $notification_id)->first()) !== NULL ? false : true, 404);
+        abort_if(($notification = Notification::where('ar_notification_id', $notification_id)->first()) !== NULL ? false : true, 404);
         
         $data = ['read_at' => Carbon::now(),];
         $notification->update($data);

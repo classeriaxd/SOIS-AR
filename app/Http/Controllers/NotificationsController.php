@@ -62,9 +62,9 @@ class NotificationsController extends Controller
     public function markAsRead($notification_id)
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Read_Notification'), 403);
-        abort_if(! Notification::where('notification_id', $notification_id)->exists(), 404);
+        abort_if(! Notification::where('ar_notification_id', $notification_id)->exists(), 404);
 
-        $notification = Notification::where('notification_id', $notification_id)->first();
+        $notification = Notification::where('ar_notification_id', $notification_id)->first();
         $data = ['read_at' => Carbon::now(),];
         $notification->update($data);
 

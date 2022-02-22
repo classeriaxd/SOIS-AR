@@ -8,8 +8,8 @@ use Carbon\Carbon;
 class Notification extends Model
 {
     protected $guarded = [];
-    protected $primaryKey = 'notification_id';
-    protected $table = 'notifications';
+    protected $primaryKey = 'ar_notification_id';
+    protected $table = 'ar_notifications';
     /**
      * The accessors to append to the model's array form.
      *
