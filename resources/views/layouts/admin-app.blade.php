@@ -57,7 +57,7 @@
                                                 v-bind:read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                                 title= "{{ $notification->title }}"
                                                 description= "{{ $notification->description }}"
-                                                route= "{{route('admin.notifications.markAsRead', ['notification_id' => $notification->notification_id])}}"
+                                                route= "{{route('admin.notifications.markAsRead', ['notification_id' => $notification->ar_notification_id])}}"
                                                 link= " 
                                                     @if($notification->type == 4)
                                                         {{-- Accomplishment Reports --}}
@@ -88,6 +88,21 @@
                     <li>
                         <a href="{{route('admin.home')}}" class="dashboard">
                             <i class="material-icons">dashboard</i><span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.events.index')}}" class="dashboard">
+                            <i class="material-icons">description</i><span>Event Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.accomplishmentReports.index')}}" class="dashboard">
+                            <i class="material-icons">task</i><span>Accomplishment Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.organizations.index')}}" class="dashboard">
+                            <i class="material-icons">groups</i><span>Organizations</span>
                         </a>
                     </li>
 
@@ -192,7 +207,7 @@
                                                             v-bind:read= "{{ ($notification->read_at == NULL) ? 'false' : 'true' }}"
                                                             title= "{{ $notification->title }}"
                                                             description= "{{ $notification->description }}"
-                                                            route= "{{route('admin.notifications.markAsRead', ['notification_id' => $notification->notification_id])}}"
+                                                            route= "{{route('admin.notifications.markAsRead', ['notification_id' => $notification->ar_notification_id])}}"
                                                             link= " 
                                                                 @if($notification->type == 4)
                                                                     {{-- Accomplishment Reports --}}

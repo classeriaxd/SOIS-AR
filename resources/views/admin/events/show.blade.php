@@ -37,7 +37,11 @@
                             <div class="d-flex justify-content-center my-2">
                                 {{-- Organization Logo --}}
                                 <div class="my-auto">
-                                    <img src="/storage/{{$event->organization->logo->file}}" style="max-width: 5em; max-height: 5em; min-height: 5em; min-width: 5em;">
+                                    @if($event->organization->logo !== NULL)
+                                        <img src="/storage/{{$event->organization->logo->file}}" style="max-width: 5em; max-height: 5em; min-height: 5em; min-width: 5em;">
+                                    @else
+                                        <img src="/storage/organization_assets/logo/default_logo.png" style="max-width: 5em; max-height: 5em; min-height: 5em; min-width: 5em;">
+                                    @endif
                                 </div>
 
                                 {{-- Vertical Rule --}}

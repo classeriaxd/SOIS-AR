@@ -39,11 +39,14 @@ class AdminEventsController extends Controller
         $organizations = Organization::with('logos:organization_id,file')
             ->orderBy('organization_type_id', 'ASC')
             ->get();
-
+        $academicOrganizations = $organizations->where('organization_type_id', 1);
+        $nonAcademicOrganizations = $organizations->where('organization_type_id', 2);
+        
         return view($this->viewDirectory . 'index', 
             compact(
                 'events',
-                'organizations',
+                'academicOrganizations',
+                'nonAcademicOrganizations',
             ));
         
     }
@@ -51,7 +54,7 @@ class AdminEventsController extends Controller
     {
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         abort_if(($organization = Organization::where('organization_slug', $organizationSlug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
-        $organizationLogo = $organization->logo->file;
+        $organizationLogo = $organization->logo !== NULL ? $organization->logo->file:NULL;
         $events = Event::with(
                 'organization:organization_id,organization_acronym,organization_slug',
                 'eventRole:event_role_id,event_role,background_color,text_color',

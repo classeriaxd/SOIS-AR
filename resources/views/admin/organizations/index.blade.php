@@ -34,7 +34,7 @@
                                         <span class="visually-hidden">unread notifications</span>
                                     </span>
                                     <img class="card-img-top mx-auto" 
-                                        @if($organization->logos->first()->file != NULL)
+                                        @if($organization->logos->count() !== 0)
                                         src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
                                         @else
                                         src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
@@ -74,7 +74,7 @@
                                         <span class="visually-hidden">unread notifications</span>
                                     </span>
                                     <img class="card-img-top mx-auto" 
-                                        @if($organization->logos->first()->file != NULL)
+                                        @if($organization->logos->count() !== 0)
                                         src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"
                                         @else
                                         src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;"

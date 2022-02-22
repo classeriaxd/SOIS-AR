@@ -34,6 +34,7 @@ class AdminOrganizationsController extends Controller
             ->get();
         $academicOrganizations = $organizations->where('organization_type_id', 1);
         $nonAcademicOrganizations = $organizations->where('organization_type_id', 2);
+        //d($academicOrganizations[1]->logos !== NULL ? 'wala' : 'merno');
         return view($this->viewDirectory . 'index', 
             compact(
                 'academicOrganizations',
@@ -46,8 +47,8 @@ class AdminOrganizationsController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Organization'), 403);
         abort_if(($organization = Organization::with('logo')->where('organization_slug', $organizationSlug)->first()) !== NULL ? false : true, 404);
         
-        $organizationLogo = $organization->logo->file;
-
+        $organizationLogo = $organization->logo !== NULL ? $organization->logo->file:NULL;
+        
         $events = Event::with(
                 'eventRole:event_role_id,event_role,background_color,text_color',
                 'eventCategory:event_category_id,category,background_color,text_color',

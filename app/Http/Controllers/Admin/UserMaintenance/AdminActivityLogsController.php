@@ -39,10 +39,14 @@ class AdminActivityLogsController extends Controller
             ->orderBy('organization_type_id', 'ASC')
             ->get();
 
+        $academicOrganizations = $organizations->where('organization_type_id', 1);
+        $nonAcademicOrganizations = $organizations->where('organization_type_id', 2);
+
         return view($this->viewDirectory . 'index', 
             compact(
                 'activityLogs',
-                'organizations',
+                'academicOrganizations',
+                'nonAcademicOrganizations',
             ));
         
     }

@@ -93,14 +93,19 @@
             <div class="row">
                 <h2 class="display-7 text-center">View Events by Organization</h2>
             </div>
+            {{-- Acad --}}
             <div class="row my-2">
                 <div class="col d-flex justify-content-evenly">
-                    @if($organizations->count() > 0)
+                    @if($academicOrganizations->count() > 0)
 
-                        @foreach($organizations as $organization)
+                        @foreach($academicOrganizations as $organization)
                             <a href="{{ route('admin.events.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
                                 <div class="card">
-                                    <img class="card-img-top" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    @if($organization->logos->count() !== 0)
+                                        <img class="card-img-top" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    @else
+                                        <img class="card-img-top" src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    @endif
                                     <div class="card-body text-center bg-maroon text-white fw-bold">
                                         <p class="card-title">
                                            {{ $organization->organization_acronym }}
@@ -116,7 +121,34 @@
                     @endif
                 </div>
             </div>
+            {{-- Non Acad --}}
+            <div class="row my-2">
+                <div class="col d-flex justify-content-evenly">
+                    @if($nonAcademicOrganizations->count() > 0)
 
+                        @foreach($nonAcademicOrganizations as $organization)
+                            <a href="{{ route('admin.events.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
+                                <div class="card">
+                                    @if($organization->logos->count() !== 0)
+                                        <img class="card-img-top" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    @else
+                                        <img class="card-img-top" src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                                    @endif
+                                    <div class="card-body text-center bg-maroon text-white fw-bold">
+                                        <p class="card-title">
+                                           {{ $organization->organization_acronym }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @else
+                    <p class="text-center">
+                        No Organization Found. :(
+                    </p>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 

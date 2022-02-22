@@ -10,7 +10,11 @@
                 <h2 class="display-7 text-left text-break">Organization View</h2>
 
                 {{-- Organization Logo --}}
-                <img src="/storage/{{ $organization->logo->file }}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                @if($organization->logo !== NULL)
+                    <img src="/storage/{{ $organization->logo->file }}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                @else
+                    <img src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                @endif
 
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb align-items-center">

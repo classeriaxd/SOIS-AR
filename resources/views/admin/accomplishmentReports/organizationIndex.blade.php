@@ -11,7 +11,11 @@
                 <h2 class="display-7 text-left text-break">{{ $organization->organization_acronym }} Accomplishment Reports</h2>
 
                 {{-- Organization Logo --}}
-                <img src="/storage/{{ $organizationLogo }}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                @if($organizationLogo !== NULL)
+                    <img src="/storage/{{ $organizationLogo }}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                @else
+                    <img src="/storage/organization_assets/logo/default_logo.png" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
+                @endif
 
                 {{-- Breadcrumbs --}}
                 <nav aria-label="breadcrumb align-items-center">

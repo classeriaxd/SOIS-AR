@@ -40,11 +40,14 @@ class AdminAccomplishmentReportsController extends Controller
         $organizations = Organization::with('logos:organization_id,file')
             ->orderBy('organization_type_id', 'ASC')
             ->get();
+        $academicOrganizations = $organizations->where('organization_type_id', 1);
+        $nonAcademicOrganizations = $organizations->where('organization_type_id', 2);
 
         return view($this->viewDirectory . 'index', 
             compact(
                 'accomplishmentReports',
-                'organizations',
+                'academicOrganizations',
+                'nonAcademicOrganizations',
             ));
         
     }
@@ -53,7 +56,7 @@ class AdminAccomplishmentReportsController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         abort_if(($organization = Organization::where('organization_slug', $organizationSlug)->select('organization_id', 'organization_acronym')->first()) !== NULL ? false : true, 404);
 
-        $organizationLogo = $organization->logo->file;
+        $organizationLogo = $organization->logo !== NULL ? $organization->logo->file:NULL;
 
         $accomplishmentReports = AccomplishmentReport::with(
                 'accomplishmentReportType',
