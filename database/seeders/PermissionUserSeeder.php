@@ -63,6 +63,8 @@ class PermissionUserSeeder extends Seeder
                 ['user_id' => 8, 'permission_id' => 28,],
                 ['user_id' => 8, 'permission_id' => 30,],
                 ['user_id' => 8, 'permission_id' => 31,],
+                ['user_id' => 8, 'permission_id' => 18,],
+                ['user_id' => 8, 'permission_id' => 19,],
 
                 // Super Admin Initial Permissions
                 ['user_id' => 1, 'permission_id' => 32,],

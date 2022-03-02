@@ -54,12 +54,14 @@ class PermissionRoleSeeder extends Seeder
                 ['role_id' => 4, 'permission_id' => 17,],
                 ['role_id' => 4, 'permission_id' => 18,],
                 ['role_id' => 4, 'permission_id' => 19,],
-                ['role_id' => 8, 'permission_id' => 31,],
+                ['role_id' => 4, 'permission_id' => 31,],
 
                 // Member Permissions
                 ['role_id' => 8, 'permission_id' => 28,],
                 ['role_id' => 8, 'permission_id' => 30,],
                 ['role_id' => 8, 'permission_id' => 31,],
+                ['role_id' => 8, 'permission_id' => 18,],
+                ['role_id' => 8, 'permission_id' => 19,],
 
                 // Super Admin Permissions
                 ['role_id' => 1, 'permission_id' => 32,],
