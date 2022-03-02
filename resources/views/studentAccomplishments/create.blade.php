@@ -414,7 +414,6 @@
             var engine = new Bloodhound({
                 remote: {
                     url: '{{ route('event.find', ['event' => '%QUERY%']) }}',
-                    wildcard: '%QUERY%',
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace('event'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -434,7 +433,7 @@
                 // Key to Display
                 display: 'title',
                 // Number of suggestions to display
-                limit: 3,
+                limit: 10,
                 templates: 
                 {
                     empty: [
