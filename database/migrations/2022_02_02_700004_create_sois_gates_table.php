@@ -22,6 +22,7 @@ class CreateSoisGatesTable extends Migration
             $table->boolean('is_logged_in')->nullable();
             $table->string('gate_key');
 
+            $table->string('ip_address')->nullable();
 
             $table->timestamps();
         });
