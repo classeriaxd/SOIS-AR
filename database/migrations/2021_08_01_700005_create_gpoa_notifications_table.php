@@ -17,11 +17,13 @@ class CreateGPOANotificationsTable extends Migration
             $table->id('notification_id');
             $table->foreignId('event_id');
             $table->foreignId('to');
-            $table->foreignId('from');
+            $table->foreignId('from')->nullable()->default(NULL);
+            $table->foreignId('user_id')->nullable()->default(NULL);
             $table->string('message');
             $table->timestamps();
 
             $table->foreign('event_id')->references('upcoming_event_id')->on('upcoming_events');
+            $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('to')->references('organization_id')->on('organizations');
             $table->foreign('from')->references('organization_id')->on('organizations');
         });
