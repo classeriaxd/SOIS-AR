@@ -16,19 +16,19 @@ class OrganizationDocumentTypeSeeder extends Seeder
     {
         $data = [
             [
-                'organization_id' => 2,
+                'organization_id' => 3,
                 'type' => 'Constitution',
                 'slug' => 'constitutions',
             ],
 
             [
-                'organization_id' => 2,
+                'organization_id' => 3,
                 'type' => 'Resolution',
                 'slug' => 'resolutions',
             ],
 
             [
-                'organization_id' => 2,
+                'organization_id' => 3,
                 'type' => 'Memorandum Order',
                 'slug' => 'memorandum_orders',
             ],

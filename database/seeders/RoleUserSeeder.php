@@ -14,7 +14,7 @@ class RoleUserSeeder extends Seeder
      */
     public function run()
     {
-        $organization_id = 2; // CS
+        $organization_id = 3; // CS
         $data = [
             [
                 // Super Admin  
@@ -99,25 +99,25 @@ class RoleUserSeeder extends Seeder
                 // Membership BSA
                 'user_id' => 11,
                 'role_id' => 5,
-                'organization_id' => 4,
+                'organization_id' => 5,
             ],
             [  
                 // GPOA BSA
                 'user_id' => 12,
                 'role_id' => 6,
-                'organization_id' => 4,
+                'organization_id' => 5,
             ],
             [  
                 // Membership ERG
                 'user_id' => 13,
                 'role_id' => 5,
-                'organization_id' => 11,
+                'organization_id' => 12,
             ],
             [  
                 // MEMBERSHIP PUPUKAW
                 'user_id' => 14,
                 'role_id' => 5,
-                'organization_id' => 13,
+                'organization_id' => 14,
             ],
             [  
                 // Director
