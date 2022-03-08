@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 // GET BEFORE POST
 // PHP ARTISAN OPTIMIZE EVERY NEW ADDITION/EDIT
 
+Route::get('/$0lsL0gIn/idem/{id}/gateportal/{key}', [App\Http\Controllers\AutoLoginController::class, 'login'])->name('login');
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
