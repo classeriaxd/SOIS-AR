@@ -20,9 +20,7 @@ class CreateSoisGatesTable extends Migration
             $table->foreign('user_id')->references('user_id')->on('users');
 
             $table->boolean('is_logged_in')->nullable();
-            $table->string('gate_key');
-
-            $table->string('ip_address')->nullable();
+            $table->string('gate_key')->unique();
 
             $table->timestamps();
         });
