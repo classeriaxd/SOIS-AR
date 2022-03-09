@@ -39,7 +39,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Home'), 403);
         // Pluck all User Roles
         $userRoleCollection = Auth::user()->roles;
 
@@ -53,10 +52,12 @@ class HomeController extends Controller
         // Array to store variables to send to View
         $compactVariables = array();
 
-        // If User is Super Admin role then redirect
-        if ( ($userRoleKey = $this->hasRole($userRoles, 'Super Admin')) !== false ? true : false)
+        // If AR-related roles are lost in User-only Home
+        if ($this->naliligawSiguroYungAdmin($userRoles))
             return redirect()->action(
                 [Admin\HomeController::class, 'index']);
+
+        abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-View_Home'), 403);
 
         // If User has a User/Member role...
         if ( ($userRoleKey = $this->hasRole($userRoles, 'User')) !== false ? true : false)
@@ -148,6 +149,27 @@ class HomeController extends Controller
         array_push($compactVariables, 'loadHomeCSS');
                 
         return view('home', compact($compactVariables));
+    }
+
+    /**
+     * @param Collection $userRoles
+     * Function that checks if a Role is lost in User-only Home
+     * @return Boolean
+     */ 
+    private function naliligawSiguroYungAdmin($userRoles)
+    {
+        // If User is Super Admin role then redirect
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'Super Admin')) !== false ? true : false)
+            return true;
+
+        // If User is Head of Student Services role then redirect
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'Head of Student Services')) !== false ? true : false)
+            return true;
+
+        // If User is Director role then redirect
+        if ( ($userRoleKey = $this->hasRole($userRoles, 'Director')) !== false ? true : false)
+            return true;
+        return false;
     }
 
     /**

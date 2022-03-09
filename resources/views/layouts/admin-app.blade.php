@@ -137,6 +137,8 @@
                         </ul>
                     </li>
 
+                    {{-- If User is Super Admin... --}}
+                    @role('Super Admin')
                     {{-- User Maintenance --}}
                     <li class="dropdown">
                         <a href="#userMaintenanceSubMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -147,7 +149,8 @@
                             <li><a href="{{ route('admin.activityLogs.index') }}">Activity Logs</a></li>
                         </ul>
                     </li>
-                    
+                    @endrole
+
                     <!-- Hidden Menu -->
                     <div class="small-screen navbar-display">
                         <li  class="dropdown d-lg-none d-md-block d-xl-none d-sm-block">
@@ -280,9 +283,6 @@
                                         </li>
                                         <li>
                                             <a href="#"> How to</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"> Help</a>
                                         </li>
                                     </ul>
                                 </nav>
