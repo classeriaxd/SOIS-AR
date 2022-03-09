@@ -413,7 +413,8 @@
             // Set the Options for "Bloodhound" suggestion engine
             var engine = new Bloodhound({
                 remote: {
-                    url: '{{ route('event.find', ['event' => '%QUERY%']) }}',
+                    url: '/events/find?event=%QUERY%',
+                    wildcard: '%QUERY%',
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace('event'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -423,7 +424,7 @@
             $("#title").typeahead({
                 hint: true,
                 highlight: true,
-                minLength: 0,
+                minLength: 1,
             },
             {
                 source: engine.ttAdapter(),
@@ -431,7 +432,7 @@
                 // This will be appended to "tt-dataset-" to form the class name of the suggestion menu.
                 name: 'eventList',
                 // Key to Display
-                display: 'title',
+                //display: 'eventTitle',
                 // Number of suggestions to display
                 limit: 10,
                 templates: 
@@ -444,7 +445,7 @@
                     ],
                     suggestion: function (data) 
                     {
-                        return '<a class="list-group-item">' + data.title + ' ('+ data.start_date +')'+'</a>'
+                        return '<a class="list-group-item">' + data.eventTitle + ' ('+ data.start_date + ')' + '</a>'
                     }
                 }
             });

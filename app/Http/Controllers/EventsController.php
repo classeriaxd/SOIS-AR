@@ -255,9 +255,10 @@ class EventsController extends Controller
     public function findEvent(Request $request)
     {
         $events = Event::search($request->get('event'))
-            ->select('title',
+            ->select('title as eventTitle',
                 DB::raw('DATE_FORMAT(start_date, "%M %Y") as start_date'))
             ->orderby('start_date', 'DESC')
+            ->limit(50)
             ->get();
         if($events != NULL)
             return $events;
