@@ -37,43 +37,38 @@ class AutoLoginController extends Controller
         $userData = SOISGate::where('user_id' , $userID)
             ->where('gate_key' ,$gateKey)
             ->where('is_logged_in' ,'1')
-            ->first();
+            ->firstOrFail();
 
         // If the URL provided an existing ID, Key, and the user is logged-in in SOIS-Homepage... 
-        if ($userData->isNotEmpty()) 
+
+        // Login User using ID
+        Auth::loginUsingId($userData->user_id);
+
+        // Redirect Logic for SOIS-AR
+
+        // Redirect Super Admin Role
+        if ( (Auth::user()->roles->pluck('role'))->containsStrict('Super Admin'))
         {
-            // Login User using ID
-            Auth::loginUsingId($userData->user_id);
+            $this->dataLogger->log(Auth::user()->user_id, 'Super Admin logged in from SOIS-Homepage.');
+            $this->regenerateGateKey($userID, $gateKey);
+            return redirect()->route('admin.home');
+        } 
 
-            // Redirect Logic for SOIS-AR
+        // Redirect Head of Student Services Role
+        else if ( (Auth::user()->roles->pluck('role'))->containsStrict('Head of Student Affairs'))
+        {
+            $this->dataLogger->log(Auth::user()->user_id, 'Head of Student Affairs logged in from SOIS-Homepage.');
+            $this->regenerateGateKey($userID, $gateKey);
+            return redirect()->route('admin.home');
+        } 
 
-            // Redirect Super Admin Role
-            if ( (Auth::user()->roles->pluck('role'))->containsStrict('Super Admin'))
-            {
-                $this->dataLogger->log(Auth::user()->user_id, 'Super Admin logged in from SOIS-Homepage.');
-                $this->regenerateGateKey($userID, $gateKey);
-                return redirect()->route('admin.home');
-            } 
-
-            // Redirect Head of Student Services Role
-            else if ( (Auth::user()->roles->pluck('role'))->containsStrict('Head of Student Affairs'))
-            {
-                $this->dataLogger->log(Auth::user()->user_id, 'Head of Student Affairs logged in from SOIS-Homepage.');
-                $this->regenerateGateKey($userID, $gateKey);
-                return redirect()->route('admin.home');
-            } 
-    
-            // Redirect User|Officer|President|Other Admins
-            else
-            {
-                $this->dataLogger->log(Auth::user()->user_id, 'User logged in from SOIS-Homepage.');
-                $this->regenerateGateKey($userID, $gateKey);
-                return redirect()->route('home');   
-            }
+        // Redirect User|Officer|President|Other Admins
+        else
+        {
+            $this->dataLogger->log(Auth::user()->user_id, 'User logged in from SOIS-Homepage.');
+            $this->regenerateGateKey($userID, $gateKey);
+            return redirect()->route('home');   
         }
-
-        // If the key and user id is not found, abort connection
-        abort(404);
     }
 
     /**
@@ -83,7 +78,7 @@ class AutoLoginController extends Controller
     private function regenerateGateKey($userID, $gateKey)
     {   
         $newUUID = Str::uuid();
-        while (SOISGate::->where('gate_key' ,$newUUID)->exists()) {
+        while (SOISGate::where('gate_key' ,$newUUID)->exists()) {
             $newUUID = Str::uuid();
         }
 
