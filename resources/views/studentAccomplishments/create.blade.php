@@ -432,7 +432,7 @@
                 // This will be appended to "tt-dataset-" to form the class name of the suggestion menu.
                 name: 'eventList',
                 // Key to Display
-                //display: 'eventTitle',
+                display: 'eventTitle',
                 // Number of suggestions to display
                 limit: 10,
                 templates: 
