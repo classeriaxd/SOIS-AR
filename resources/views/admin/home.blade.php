@@ -119,7 +119,13 @@
                 document.getElementById('submitMessage').hidden=false;">
 
                 <div class="card w-100">
-                    <h5 class="card-header card-title text-center bg-maroon text-black fw-bold">Send an Announcement</h5>
+                    <div class="card-header align-middle" style="background-color:maroon !important;font-weight:bold;padding:10px !important">
+                        <div class="row align-middle">
+                            <h4 class="card-title text-center" style="color:white;font-weight:bold;">Send an Announcement</h4>
+                        </div>
+                        
+                    </div>
+                    
                     <div class="card-body">
                         {{-- Notification Title --}}
                         <div class="form-group row">
