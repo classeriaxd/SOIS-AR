@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+| NOTES 
+| PHP ARTISAN OPTIMIZE EVERY NEW ADDITION/EDIT
 */
-// NOTES 
-// GET BEFORE POST
-// PHP ARTISAN OPTIMIZE EVERY NEW ADDITION/EDIT
 
-Route::get('/$0lsL0gIn/idem/{id}/gateportal/{key}', [App\Http\Controllers\AutoLoginController::class, 'login'])->name('login');
+// Route for SOIS-Homepage Redirect
+Route::get('/$0lsL0gIn/idem/{id}/gateportal/{key}', [App\Http\Controllers\AutoLoginController::class, 'login']);
 
 Route::get('/', function () {
     return view('welcome');
