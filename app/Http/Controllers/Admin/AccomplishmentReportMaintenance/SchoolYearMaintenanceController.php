@@ -56,7 +56,7 @@ class SchoolYearMaintenanceController extends Controller
 
         $message = (new SchoolYearStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Added a School Year.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Added a School Year.');
 
         return redirect()->action(
             [SchoolYearMaintenanceController::class, 'index'])
@@ -78,7 +78,7 @@ class SchoolYearMaintenanceController extends Controller
 
         $message = (new SchoolYearUpdateService())->update($schoolYear, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated a School Year');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated a School Year');
 
         return redirect()->action(
             [SchoolYearMaintenanceController::class, 'index'])

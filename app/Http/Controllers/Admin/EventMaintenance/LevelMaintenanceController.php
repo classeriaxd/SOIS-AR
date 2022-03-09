@@ -60,7 +60,7 @@ class LevelMaintenanceController extends Controller
 
         $message = (new LevelStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Level');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])
@@ -82,7 +82,7 @@ class LevelMaintenanceController extends Controller
 
         $message = (new LevelUpdateService())->update($level, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Level');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])
@@ -105,7 +105,7 @@ class LevelMaintenanceController extends Controller
 
         $message = (new LevelDeleteService())->delete($level, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Level');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])
@@ -119,7 +119,7 @@ class LevelMaintenanceController extends Controller
 
         $message = (new LevelRestoreService())->restore($level);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Level');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Level');
 
         return redirect()->action(
             [LevelMaintenanceController::class, 'index'])

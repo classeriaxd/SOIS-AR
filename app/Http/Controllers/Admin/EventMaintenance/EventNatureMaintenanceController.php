@@ -60,7 +60,7 @@ class EventNatureMaintenanceController extends Controller
 
         $message = (new EventNatureStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Nature.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])
@@ -82,7 +82,7 @@ class EventNatureMaintenanceController extends Controller
 
         $message = (new EventNatureUpdateService())->update($eventNature, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Nature.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])
@@ -105,7 +105,7 @@ class EventNatureMaintenanceController extends Controller
 
         $message = (new EventNatureDeleteService())->delete($eventNature, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Nature.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])
@@ -119,7 +119,7 @@ class EventNatureMaintenanceController extends Controller
 
         $message = (new EventNatureRestoreService())->restore($eventNature);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Nature.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Nature.');
 
         return redirect()->action(
             [EventNatureMaintenanceController::class, 'index'])

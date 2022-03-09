@@ -60,7 +60,7 @@ class TabularTableMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Accomplishment_Report'), 403);
         $message = (new TabularTableStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created a Tabular AR Table.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created a Tabular AR Table.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
@@ -82,7 +82,7 @@ class TabularTableMaintenanceController extends Controller
 
         $message = (new TabularTableUpdateService())->update($tabularTable, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated a Tabular AR Table.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated a Tabular AR Table.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
@@ -108,7 +108,7 @@ class TabularTableMaintenanceController extends Controller
 
         $message = (new TabularTableDeleteService())->delete($tabularTable, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted a Tabular AR Table.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Admin Deleted a Tabular AR Table.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])
@@ -122,7 +122,7 @@ class TabularTableMaintenanceController extends Controller
 
         $message = (new TabularTableRestoreService())->restore($tabularTable);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored a Tabular AR Table.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored a Tabular AR Table.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'index'])

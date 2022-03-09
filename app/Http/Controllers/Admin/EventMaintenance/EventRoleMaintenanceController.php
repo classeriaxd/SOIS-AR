@@ -59,7 +59,7 @@ class EventRoleMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventRoleStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Role.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Role.');
 
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
@@ -81,7 +81,7 @@ class EventRoleMaintenanceController extends Controller
 
         $message = (new EventRoleUpdateService())->update($eventRole, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Role.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Role.');
 
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
@@ -104,7 +104,7 @@ class EventRoleMaintenanceController extends Controller
 
         $message = (new EventRoleDeleteService())->delete($eventRole, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Role.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Role.');
 
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])
@@ -118,7 +118,7 @@ class EventRoleMaintenanceController extends Controller
 
         $message = (new EventRoleRestoreService())->restore($eventRole);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Role.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Role.');
 
         return redirect()->action(
             [EventRoleMaintenanceController::class, 'index'])

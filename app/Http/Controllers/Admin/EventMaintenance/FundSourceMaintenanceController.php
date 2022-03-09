@@ -59,7 +59,7 @@ class FundSourceMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new FundSourceStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Fund Source.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Fund Source.');
 
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])
@@ -81,7 +81,7 @@ class FundSourceMaintenanceController extends Controller
 
         $message = (new FundSourceUpdateService())->update($fundSource, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Fund Source.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Fund Source.');
 
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])
@@ -104,7 +104,7 @@ class FundSourceMaintenanceController extends Controller
 
         $message = (new FundSourceDeleteService())->delete($fundSource, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Fund Source.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Fund Source.');
 
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])
@@ -118,7 +118,7 @@ class FundSourceMaintenanceController extends Controller
 
         $message = (new FundSourceRestoreService())->restore($fundSource);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Fund Source.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Fund Source.');
 
         return redirect()->action(
             [FundSourceMaintenanceController::class, 'index'])

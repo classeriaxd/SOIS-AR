@@ -59,7 +59,7 @@ class EventCategoryMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventCategoryStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Category.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Category.');
         
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
@@ -81,7 +81,7 @@ class EventCategoryMaintenanceController extends Controller
 
         $message = (new EventCategoryUpdateService())->update($eventCategory, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Category.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Category.');
 
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
@@ -104,7 +104,7 @@ class EventCategoryMaintenanceController extends Controller
 
         $message = (new EventCategoryDeleteService())->delete($eventCategory, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Category.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Category.');
 
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])
@@ -118,7 +118,7 @@ class EventCategoryMaintenanceController extends Controller
 
         $message = (new EventCategoryRestoreService())->restore($eventCategory);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Category.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Category.');
 
         return redirect()->action(
             [EventCategoryMaintenanceController::class, 'index'])

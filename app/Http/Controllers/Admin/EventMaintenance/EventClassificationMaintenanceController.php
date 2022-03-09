@@ -58,7 +58,7 @@ class EventClassificationMaintenanceController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Event'), 403);
         $message = (new EventClassificationStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Classification.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Classification.');
 
         return redirect()->action(
             [EventClassificationMaintenanceController::class, 'index'])
@@ -80,7 +80,7 @@ class EventClassificationMaintenanceController extends Controller
 
         $message = (new EventClassificationUpdateService())->update($eventClassification, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Classification.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Classification.');
 
         return redirect()->action(
             [EventClassificationMaintenanceController::class, 'index'])
@@ -103,7 +103,7 @@ class EventClassificationMaintenanceController extends Controller
 
         $message = (new EventClassificationDeleteService())->delete($eventClassification, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Classification.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Classification.');
 
         return redirect()->action(
             [EventClassificationMaintenanceController::class, 'index'])
@@ -117,7 +117,7 @@ class EventClassificationMaintenanceController extends Controller
 
         $message = (new EventClassificationRestoreService())->restore($eventClassification);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Classification.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Classification.');
 
         return redirect()->action(
             [EventClassificationMaintenanceController::class, 'index'])

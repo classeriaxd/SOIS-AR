@@ -55,7 +55,7 @@ class TabularColumnMaintenanceController extends Controller
 
         $message = (new TabularColumnStoreService())->store($tabularTable, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created a Tabular AR Column.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
@@ -79,7 +79,7 @@ class TabularColumnMaintenanceController extends Controller
 
         $message = (new TabularColumnUpdateService())->update($tabularTable, $tabularColumn, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated a Tabular AR Column.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
@@ -104,7 +104,7 @@ class TabularColumnMaintenanceController extends Controller
 
         $message = (new TabularColumnDeleteService())->delete($tabularTable, $tabularColumn, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted a Tabular AR Column.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])
@@ -118,7 +118,7 @@ class TabularColumnMaintenanceController extends Controller
 
         $message = (new TabularColumnRestoreService())->restore($tabularColumn);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored a Tabular AR Column.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored a Tabular AR Column.');
 
         return redirect()->action(
             [TabularTableMaintenanceController::class, 'show'], ['tabular_table_id' => $tabular_table_id])

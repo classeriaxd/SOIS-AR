@@ -60,7 +60,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
         $message = (new EventDocumentTypeStoreService())->store($request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Event Document Type.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Event Document Type.');
 
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])
@@ -82,7 +82,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
         $message = (new EventDocumentTypeUpdateService())->update($documentType, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Updated an Event Document Type.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Updated an Event Document Type.');
 
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])
@@ -104,7 +104,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
         $message = (new EventDocumentTypeDeleteService())->delete($documentType, $request);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Deleted an Event Document Type.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Deleted an Event Document Type.');
 
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])
@@ -118,7 +118,7 @@ class EventDocumentTypeMaintenanceController extends Controller
 
         $message = (new EventDocumentTypeRestoreService())->restore($documentType);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Restored an Event Document Type.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Restored an Event Document Type.');
 
         return redirect()->action(
             [EventDocumentTypeMaintenanceController::class, 'index'])

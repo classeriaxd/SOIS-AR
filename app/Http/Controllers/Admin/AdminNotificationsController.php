@@ -50,7 +50,7 @@ class AdminNotificationsController extends Controller
         abort_if(! $this->permissionChecker->checkIfPermissionAllows('AR-Super-Admin-Manage_Notification'), 403);
 
         $message = (new NotificationStoreService())->store($request);
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Created an Announcement.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Created an Announcement.');
 
         return redirect()->action(
             [AdminNotificationsController::class, 'index'])
@@ -80,7 +80,7 @@ class AdminNotificationsController extends Controller
             $notification->update($data);
         }
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Marked Notifications as Read.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Marked Notifications as Read.');
 
         return redirect()->action(
             [AdminNotificationsController::class, 'index']);
@@ -95,7 +95,7 @@ class AdminNotificationsController extends Controller
         $data = ['read_at' => Carbon::now(),];
         $notification->update($data);
 
-        $this->dataLogger->log(Auth::user()->user_id, 'Super Admin Marked a Notification as Read.');
+        $this->dataLogger->log(Auth::user()->user_id, Auth::user()->roles->first()->role . ' Marked a Notification as Read.');
     }
 
 }
