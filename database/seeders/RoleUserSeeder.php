@@ -126,6 +126,14 @@ class RoleUserSeeder extends Seeder
                 'organization_id' => NULL,
             ],
 
+            [  
+                // Bernadeth Canlas
+                // Head of Student Affairs Role
+                'user_id' => 16,
+                'role_id' => 11,
+                'organization_id' => NULL,
+            ],
+
 
             
         ];

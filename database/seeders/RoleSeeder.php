@@ -35,6 +35,8 @@ class RoleSeeder extends Seeder
             ['role' => 'Adviser', 'description' => 'Adviser of an Organization in PUP Taguig'],
             // 10
             ['role' => 'Director', 'description' => 'Director of the PUP Taguig'],
+            // 11 Ma'am Bernadeth Canlas Role
+            ['role' => 'Head of Student Services', 'description' => 'Head of the Student Services of PUP Taguig'],
         ];
         DB::table('roles')->insert($data);
     }
