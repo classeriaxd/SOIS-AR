@@ -14,16 +14,21 @@ use Illuminate\Support\Facades\Route;
 | NOTES 
 | PHP ARTISAN OPTIMIZE EVERY NEW ADDITION/EDIT
 */
+// Landing Page
+Route::get('/', function () { return view('welcome'); })->name('welcome');
+
+// About Us Page
+Route::get('/about-us', function () { return view('aboutUs'); })->name('aboutUs');
+
+// Authentication Routes...
+Route::get('login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 // Route for SOIS-Homepage Redirect
 Route::get('/$0lsL0gIn/idem/{id}/gateportal/{key}', [App\Http\Controllers\AutoLoginController::class, 'login']);
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-
-Auth::routes();
-
+// Routes below are protected by Auth, only users that are logged-in are allowed. 
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
