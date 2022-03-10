@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Welcome to SOIS - Accomplishment Report</title>
+    <title>{{ env('APP_NAME') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -27,46 +27,51 @@
 </head>
 <body>
     <div id="app">
-        <header class="header"> Student Organization Accomplishment Report</header>
+        <a href="{{route('aboutUs')}}">
+            <header class="header"> Student Organization Accomplishment Report</header>
+        </a>
         <div class="banner"> 
             <div class="banner-box">
-                <img src="/images/erg_logo.png" alt="ERG Logo">
-            </div>
-            <div class="banner-box">
-                <img src="/images/pupukaw_logo.png" alt="PUPUKAW Logo">
-            </div>
-            <div class="banner-box">
-                <img src="/images/mentors_logo.png" alt="Mentors Logo">
-            </div>
-            <div class="banner-box">
-                <img src="/images/jpmap_logo.png" alt="JPMAP Logo">
-            </div>
-            <div class="banner-box">
-                <img src="/images/jma_logo.png" alt="JMA Logo">
-            </div>
-           <div class="banner-box">
                 <img src="/images/aeces_logo.png" alt="AECES Logo">
-            </div>
-            <div class="banner-box">
-                <img src="/images/csc_logo.png" alt="CSC Logo">
             </div>
             <div class="banner-box">
                 <img src="/images/cs_logo.png" alt="CS Logo">
             </div>
             <div class="banner-box">
+                <img src="/images/jma_logo.png" alt="JMA Logo">
+            </div>
+            <div class="banner-box">
                 <img src="/images/jpia_logo.png" alt="JPIA Logo">
+            </div>
+            <div class="banner-box">
+                <img src="/images/jpmap_logo.png" alt="JPMAP Logo">
             </div>
             <div class="banner-box">
                 <img src="/images/jpsme_logo.png" alt="JPSME Logo">
             </div>
             <div class="banner-box">
+                <img src="/images/mentors_logo.png" alt="Mentors Logo">
+            </div>
+            <div class="banner-box">
                 <img src="/images/pasoa_logo.png" alt="PASOA Logo">
+            </div>
+            <div class="banner-box">
+                <img src="/images/csc_logo.png" alt="CSC Logo">
             </div>
             <div class="banner-box">
                 <img src="/images/rec_logo.png" alt="REC Logo">
             </div>
             <div class="banner-box">
+                <img src="/images/erg_logo.png" alt="ERG Logo">
+            </div>
+            <div class="banner-box">
                 <img src="/images/irock_logo.png" alt="iRock Logo">
+            </div>
+            <div class="banner-box">
+                <img src="/images/pupukaw_logo.png" alt="PUPUKAW Logo">
+            </div>
+            <div class="banner-box">
+                <img src="/images/chronicler_logo.png" alt="The Chronicler Logo">
             </div>
         </div>
         <div class="container">
@@ -77,7 +82,7 @@
                         <h1 class="welcome">PUPTIAN</h1>
                         <div class="tutorial">
                             <i class="fab fa-youtube"></i>
-                            <a href="#">Guide on how to use the Student Organization <br>Accomplishment Report System.</a>
+                            <a href="https://www.youtube.com/watch?v=FUymP8lITxw&list=PLdhOpkJbY7k_0yGtdI5-csnbLW6t-J88D" target="_blank">Guide on how to use the Student Organization <br>Accomplishment Report System.</a>
                         </div>
                     </div>
                 </div>
