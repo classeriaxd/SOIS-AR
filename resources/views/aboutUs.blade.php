@@ -82,8 +82,10 @@
             <div class="row justify-content-center">
                 <div >
                     <h2 style="color:white !important; text-align: center !important;padding: 10px 0px !important; ">About Us</h2>
-                    <p style="color:white !important; text-align: center !important; padding: 2em 20em; font-size:1.3em;">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse illum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <p style="color:white !important; text-align: center !important; padding: 2em 20em; font-size:1.4em;">
+
+                        When the university, PUP Taguig, started to operate during the Covid-19 pandemic, face-to-face transactions has been limited inside the university. The School Organizations had been affected by this implemented rule. With this situation, a group of BSIT students developed the Student Organization Information System – Accomplishment Module to help the PUP Taguig Student Organizations transpose their processes to an online platform. This system is an application that will maintain and manage the Accomplishment Reports submitted from each Student Organization.
+
                     </p>
                 </div>
                 
@@ -96,9 +98,9 @@
                         <figcaption>
                             <h2>Russel  <span> Claveria</span></h2>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="https://www.facebook.com/russel10032/"></a>
                     </figure>
-                    <h3 style="color:white !important; text-align: center !important; padding: 10px;">Programmer</h3>
+                    <h3 class="effect-shine" style="color:white !important; text-align: center !important; padding: 10px;">Programmer</h3>
                         
                 </div>
                 <div class="col">
@@ -107,9 +109,9 @@
                         <figcaption>
                             <h2>Juan Carlos  <span> Amaguin</span></h2>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="https://www.facebook.com/jc.amaguin"></a>
                     </figure>
-                    <h3 style="color:white !important; text-align: center !important; padding: 10px;">Web Designer / Document Analyst</h3>
+                    <h3 class="effect-shine" style="color:white !important; text-align: center !important; padding: 10px;">Web Designer / Document Analyst</h3>
                 </div>
                 <div class="col">
                     <figure class="BryanLaserna snip1104 red">
@@ -117,13 +119,13 @@
                         <figcaption>
                             <h2>Bryan  <span> Laserna</span></h2>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="https://www.facebook.com/brynlsrn"></a>
                     </figure>
-                    <h3 style="color:white !important; text-align: center !important; padding: 10px;">Document Analyst / Tester</h3>
+                    <h3 class="effect-shine" style="color:white !important; text-align: center !important; padding: 10px;">Document Analyst / Tester</h3>
                 </div>
             </div>
             <div class="row DavidsAndGoliath">
-                <h2 style="color:white !important; text-align: center !important;padding: 10px 0px !important; ">Davids and Goliath Development Team</h2>
+                <h2 class="effect-shine" style="color:white !important; text-align: center !important;padding: 10px 0px !important; ">Davids and Goliath Development Team</h2>
             </div>
 
 
