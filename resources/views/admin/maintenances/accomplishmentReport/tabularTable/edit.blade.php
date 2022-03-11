@@ -70,8 +70,7 @@
                     type="text" 
                     class="form-control @error('referenceTableNumber') is-invalid @enderror" 
                     name="referenceTableNumber" 
-                    value="{{ $tabularTable->reference_table_number }}" 
-                    required>
+                    value="{{ $tabularTable->reference_table_number }}">
                     @error('referenceTableNumber')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
