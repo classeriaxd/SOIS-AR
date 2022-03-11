@@ -68,7 +68,7 @@
             <div class="row">
                 <h2 class="display-7 text-center">View Activity Logs by Organization</h2>
             </div>
-            <
+            
             {{-- Acad Orgs --}}
             <div class="row my-2">
                 <div class="col d-flex justify-content-evenly">
