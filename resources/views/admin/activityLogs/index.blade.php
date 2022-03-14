@@ -75,7 +75,7 @@
                     @if($academicOrganizations->count() > 0)
 
                         @foreach($academicOrganizations as $organization)
-                            <a href="{{ route('admin.accomplishmentReports.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
+                            <a href="{{ route('admin.activityLogs.organizationIndex', ['organizationSlug' => $organization->organization_slug]) }}">
                                 <div class="card">
                                     @if($organization->logos->count() !== 0)
                                         <img class="card-img-top" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
@@ -103,7 +103,7 @@
                     @if($nonAcademicOrganizations->count() > 0)
 
                         @foreach($nonAcademicOrganizations as $organization)
-                            <a href="{{ route('admin.accomplishmentReports.organization.index', ['organizationSlug' => $organization->organization_slug]) }}">
+                            <a href="{{ route('admin.activityLogs.organizationIndex', ['organizationSlug' => $organization->organization_slug]) }}">
                                 <div class="card">
                                     @if($organization->logos->count() !== 0)
                                         <img class="card-img-top" src="/storage/{{$organization->logos->first()->file}}" style="max-width: 7em; max-height: 7em; min-height: 7em; min-width: 7em;">
