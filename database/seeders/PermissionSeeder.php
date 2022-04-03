@@ -234,6 +234,242 @@ class PermissionSeeder extends Seeder
                     'name' => 'AR-Manage_Officer_Signatures', 
                     'created_at' => $currentTime, 'updated_at' => $currentTime,
                 ],
+
+            // Homepage permissions
+                // HP create news
+                [
+                    // 39
+                    'name' => 'HP-Create_News_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit News
+                [
+                    // 40
+                    'name' => 'HP-Edit_News_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete News
+                [
+                    // 41
+                    'name' => 'HP-Delete_News_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read News
+                [
+                    // 42
+                    'name' => 'HP-View_News_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create Announcement
+                [
+                    // 43
+                    'name' => 'HP-Create_Announcement_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit Announcement
+                [
+                    // 44
+                    'name' => 'HP-Edit_Announcement_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete Announcement
+                [
+                    // 45
+                    'name' => 'HP-Delete_Announcement_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read Announcement
+                [
+                    // 46
+                    'name' => 'HP-View_Announcement_Article', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create Roles
+                [
+                    // 47
+                    'name' => 'HP-Create_Roles', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit Roles
+                [
+                    // 48
+                    'name' => 'HP-Edit_Roles', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete Roles
+                [
+                    // 49
+                    'name' => 'HP-Delete_Roles', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read Roles
+                [
+                    // 50
+                    'name' => 'HP-View_Roles', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create permission
+                [
+                    // 51
+                    'name' => 'HP-Create_Permission', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit permission
+                [
+                    // 52
+                    'name' => 'HP-Edit_Permission', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete permission
+                [
+                    // 53
+                    'name' => 'HP-Delete_Permission', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read permission
+                [
+                    // 54
+                    'name' => 'HP-View_Permission', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create ORganization Page
+                [
+                    // 55
+                    'name' => 'HP-Create_Organization_Page', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit ORganization Page
+                [
+                    // 56
+                    'name' => 'HP-Edit_Organization_Page', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete ORganization Page
+                [
+                    // 57
+                    'name' => 'HP-Delete_Organization_Page', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read ORganization Page
+                [
+                    // 58
+                    'name' => 'HP-View_Organization_Page', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create System Link
+                [
+                    // 59
+                    'name' => 'HP-Create_System_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit System Link
+                [
+                    // 60
+                    'name' => 'HP-Edit_System_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete System Link
+                [
+                    // 61
+                    'name' => 'HP-Delete_System_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read System Link
+                [
+                    // 62
+                    'name' => 'HP-View_System_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create System Asset types
+                [
+                    // 63
+                    'name' => 'HP-Create_System_Asset_Types', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit System Asset types
+                [
+                    // 64
+                    'name' => 'HP-Edit_System_Asset_Types', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete System Asset types
+                [
+                    //65
+                    'name' => 'HP-Delete_System_Asset_Types', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read System Asset types
+                [
+                    // 66
+                    'name' => 'HP-View_System_Asset_Types', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP create Web Page Type
+                [
+                    // 67
+                    'name' => 'HP-Create_WebPage_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit Web Page Type
+                [
+                    // 68
+                    'name' => 'HP-Edit_WebPage_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete Web Page Type
+                [
+                    // 69
+                    'name' => 'HP-Delete_WebPage_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read Web Page Type
+                [
+                    // 70
+                    'name' => 'HP-View_WebPage_Type', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read Academic Members
+                [
+                    // 71
+                    'name' => 'HP-View_Academic_Members', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ], 
+            // HP Read Non-Academic Members
+                [
+                    // 72
+                    'name' => 'HP-View_Non_Academic_Members', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Access Sois Links Button
+                [
+                    // 73
+                    'name' => 'HP-Access_Sois_General_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Access Financial Link
+                [
+                    // 74
+                    'name' => 'HP-Access_Sois_Financial_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Access AR Link
+                [
+                    // 75
+                    'name' => 'HP-Access_Sois_AR_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Access GPOA Link
+                [
+                    // 76
+                    'name' => 'HP-Access_Sois_GPOA_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Access Membership Link
+                [
+                    // 77
+                    'name' => 'HP-Access_Sois_Membership_Links', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],  
         ];
         DB::table('permissions')->insert($data);
     }

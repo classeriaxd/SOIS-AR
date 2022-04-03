@@ -17,8 +17,8 @@ class EventSignaturesSeeder extends Seeder
         $data = [
             [
                 //Super admin
-                'user_id' => '1',
-                'role_id' => '1',
+                'user_id' => '16',
+                'role_id' => '11',
                 'organization_id' => NULL,
                 'signature_path' => NULL
             ],
@@ -34,6 +34,13 @@ class EventSignaturesSeeder extends Seeder
                 //gpoa admin
                 'user_id' => '6',
                 'role_id' => '6',
+                'organization_id' => 3,
+                'signature_path' => NULL
+            ],
+            [
+                //Director
+                'user_id' => '15',
+                'role_id' => '10',
                 'organization_id' => 3,
                 'signature_path' => NULL
             ],

@@ -58,6 +58,7 @@ class DatabaseSeeder extends Seeder
             TabularColumnSeeder::class,
 
             EventSignaturesSeeder::class,
+            SoisSubGateSeeder::class,
         ]);
     }
 }
