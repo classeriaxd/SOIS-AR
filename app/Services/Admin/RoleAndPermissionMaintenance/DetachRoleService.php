@@ -41,7 +41,7 @@ class DetachRoleService
                     $user->email,
                     $user->full_name,
                     'A Role has been detached from your Account',
-                    'The role ' . $roleName . 'has been detached on your account by the System Admin.'
+                    'The role ' . $roleName . ' has been detached on your account by the System Admin.'
                 );
 
             $message = array('success' => 'Successfully detached role!');
