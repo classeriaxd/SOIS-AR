@@ -10,6 +10,14 @@
 
     <title>{{ env('APP_NAME') }}</title>
 
+    <!-- Meta Tags -->
+    <meta name="keywords" content="SOIS-AR, SOIS, SOIS PUP Taguig">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sois-ar.puptaguigcs.net/">
+    <meta property="og:title" content="SOIS|Accomplishment Report">
+    <meta property="og:image" content="https://sois-ar.puptaguigcs.net/images/og/og_image.png">
+    <meta property="og:description" content="When the university, PUP Taguig, started to operate during the Covid-19 pandemic, face-to-face transactions has been limited inside the university. The School Organizations had been affected by this implemented rule. With this situation, a group of BSIT students developed the Student Organization Information System – Accomplishment Module to help the PUP Taguig Student Organizations transpose their processes to an online platform. This system is an application that will maintain and manage the Accomplishment Reports submitted from each Student Organization.">
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -18,6 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Icons -->
+    <link rel="icon" href="{{ url('/images/favicon.ico') }}">
     <link href="{{ asset('fontawesome-free-5.15.4/css/all.min.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 
