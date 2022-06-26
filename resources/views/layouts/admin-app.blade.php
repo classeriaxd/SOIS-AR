@@ -26,7 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Icons -->
-    <link rel="icon" href="{{ url('/images/favicon.ico') }}">
+    <link rel="icon" href="{{ url('/images/favicon/favicon.ico') }}">
     <link href="{{ asset('fontawesome-free-5.15.4/css/all.min.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 

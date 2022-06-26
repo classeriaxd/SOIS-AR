@@ -23,7 +23,7 @@
     <script src="{{ asset('fontawesome-free-5.15.4/js/all.min.js') }}" defer></script>
     
     <!-- Icons -->
-    <link rel="icon" href="{{ url('/images/favicon.ico') }}">
+    <link rel="icon" href="{{ url('/images/favicon/favicon.ico') }}">
     <link href="{{ asset('fontawesome-free-5.15.4/css/all.min.css') }}" rel="stylesheet">
 
     <!-- Fonts -->
