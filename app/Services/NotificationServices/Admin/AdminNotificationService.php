@@ -100,7 +100,43 @@ class AdminNotificationService
                 }
             }
         }
-
-
     }
+
+    /**
+     * @param Integer $userID, String $userEmail, String $userFullName, String $notificationTitle, String $notificationDescription, Integer $type
+     * Function to Send a Notification to a Member/Officer that had been assigned a new role to their account
+     */
+    public function sendNotificationForRoleAssignment($userID, $userEmail, $userFullName, $notificationTitle, $notificationDescription, $type = 1)
+    {
+        Notification::create([
+            'user_id' => $userID,
+            'title' => $notificationTitle,
+            'description' => $notificationDescription,
+            'type' => $type,
+            'link' => NULL,
+        ]);
+
+        Mail::to($userEmail)
+            ->cc($userEmail)
+            ->send(new AdminAnnouncementMail($userFullName, $notificationTitle, $notificationDescription));
+    } 
+
+    /**
+     * @param Integer $userID, String $userEmail, String $userFullName, String $notificationTitle, String $notificationDescription, Integer $type
+     * Function to Send a Notification to a Member/Officer that had a role detached from their account
+     */
+    public function sendNotificationForRoleDetachment($userID, $userEmail, $userFullName, $notificationTitle, $notificationDescription, $type = 1)
+    {
+        Notification::create([
+            'user_id' => $userID,
+            'title' => $notificationTitle,
+            'description' => $notificationDescription,
+            'type' => $type,
+            'link' => NULL,
+        ]);
+
+        Mail::to($userEmail)
+            ->cc($userEmail)
+            ->send(new AdminAnnouncementMail($userFullName, $notificationTitle, $notificationDescription));
+    } 
 }

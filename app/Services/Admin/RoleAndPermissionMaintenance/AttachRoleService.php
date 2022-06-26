@@ -3,8 +3,11 @@
 namespace App\Services\Admin\RoleAndPermissionMaintenance;
 
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Organization;
 use App\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\NotificationServices\Admin\AdminNotificationService;
 
 class AttachRoleService
 {
@@ -27,7 +30,19 @@ class AttachRoleService
                 ->pluck('permission_id')
                 ->flatten()->toArray();
             $user->permissions()->attach($rolePermissions);
-            
+
+            // Send Notification to Member/Officer for the new Role
+            $roleName = Role::where('role_id', $request->role)->value('role');
+            $organizationName = Organization::where('organization_id', $request->organization)->value('organization_name');
+            $notification = (new AdminNotificationService())
+                ->sendNotificationForRoleAssignment(
+                    $userID,
+                    $user->email,
+                    $user->full_name,
+                    'A new Role has been assigned to your Account',
+                    'The role ' . $roleName . ' of the ' . $organizationName . ' Organization has been assigned to your account by the System Admin.'
+                );
+
             $message = array('success' => 'Successfully attached role!');
             return $message;
         } 
