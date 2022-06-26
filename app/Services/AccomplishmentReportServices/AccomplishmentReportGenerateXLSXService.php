@@ -46,12 +46,15 @@ class AccomplishmentReportGenerateXLSXService
             'end_date', 
             'eventLevel', 
             'total_beneficiary', 
+            'beneficiaries', 
             'eventDocuments']);
         
         // IX. STUDENTS TRAININGS AND SEMINARS
         $table3 = $events->where('event_category_id', 5);
         $table3 = $table3->map->only([
             'organization', 
+            'total_beneficiary', 
+            'beneficiaries', 
             'title', 
             'budget', 
             'eventFundSource', 
@@ -69,6 +72,8 @@ class AccomplishmentReportGenerateXLSXService
         $table4 = $events->whereIn('event_category_id', [1,2,3,4]);
         $table4 = $table4->map->only([
             'organization', 
+            'total_beneficiary', 
+            'beneficiaries', 
             'title', 
             'budget', 
             'eventFundSource', 

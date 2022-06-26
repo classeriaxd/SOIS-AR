@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
 </head>
+{{-- For Maintenance, you'd have to edit this thing almost entirely, goodluck :)))) --}}
+{{-- Some data are on Collection, some are on Array, please dd() to review --}}
 <body>
     <table>
         <tbody>
@@ -103,7 +105,11 @@
                 {{-- Level --}}
                 <td>{{ $communityOutreach['eventLevel']->level }}</td>
                 {{-- Number of Beneficiaries --}}
-                <td>{{ $communityOutreach['total_beneficiary'] }}</td>
+                <td>{{ 
+                        $communityOutreach['total_beneficiary'] . " " .
+                        $communityOutreach['beneficiaries'] 
+                    }}
+                </td>
                 {{-- Description of Supporting Documents Submitted --}}
                 <td>
                     @if($communityOutreach['eventDocuments']->count() > 0)
@@ -174,7 +180,11 @@
                 {{-- Department --}}
                 <td>{{ $trainingAndSeminar['organization']->organization_acronym }}</td>
                 {{-- Name of Student (Surname, First Name, Middle Initial) --}}
-                <td> - </td>
+                <td>{{ 
+                        $trainingAndSeminar['total_beneficiary'] . " " .
+                        $trainingAndSeminar['beneficiaries'] 
+                    }}
+                </td>
                 {{-- Title --}}
                 <td>{{ $trainingAndSeminar['title'] }}</td>
                 {{-- Classification --}}
@@ -273,7 +283,11 @@
                 {{-- Department --}}
                 <td>{{ $otherStudentActivity['organization']->organization_acronym }}</td>
                 {{-- Name of Student (Surname, First Name, Middle Initial) --}}
-                <td> - </td>
+                <td>{{ 
+                        $otherStudentActivity['total_beneficiary'] . " " .
+                        $otherStudentActivity['beneficiaries'] 
+                    }}
+                </td>
                 {{-- Title --}}
                 <td>{{ $otherStudentActivity['title'] }}</td>
                 {{-- Classification --}}
@@ -327,6 +341,3 @@
     </table>
 </body>
 </html>
-
-{{-- For Maintenance, you'd have to edit this thing almost entirely, goodluck :)))) --}}
-{{-- Some data are on Collection, some are on Array, please dd() to review --}}
