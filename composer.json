@@ -18,7 +18,7 @@
         "maatwebsite/excel": "^3.1",
         "nicolaslopezj/searchable": "1.*",
         "phpunit/phpunit": "^9.5",
-        "spatie/laravel-backup": "^6.16"
+        "spatie/laravel-backup": "6.*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
