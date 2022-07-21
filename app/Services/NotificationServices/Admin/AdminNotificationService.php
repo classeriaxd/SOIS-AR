@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminAnnouncementMail;
+use App\Jobs\SendEmail;
 use Illuminate\Database\Eloquent\Builder;
 
 class AdminNotificationService
@@ -93,6 +94,8 @@ class AdminNotificationService
                         'link' => NULL,
                     ]);
 
+                    // Send Email thru Jobs
+                    dispatch(new SendEmail($recievingOfficer->email, $recievingOfficer->full_name, $request->input('title'), $request->input('description')));
                 }
             }
         }
@@ -111,6 +114,9 @@ class AdminNotificationService
             'type' => $type,
             'link' => NULL,
         ]);
+        
+        // Send Email thru Jobs
+        dispatch(new SendEmail($userEmail, $userFullName, $notificationTitle, $notificationDescription));
     } 
 
     /**
@@ -127,6 +133,8 @@ class AdminNotificationService
             'link' => NULL,
         ]);
 
+        // Send Email thru Jobs
+        dispatch(new SendEmail($userEmail, $userFullName, $notificationTitle, $notificationDescription));
     } 
 
     /**
