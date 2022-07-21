@@ -470,6 +470,30 @@ class PermissionSeeder extends Seeder
                     'name' => 'HP-Access_Sois_Membership_Links', 
                     'created_at' => $currentTime, 'updated_at' => $currentTime,
                 ],  
+            // HP create user
+                [
+                    // 78
+                    'name' => 'HP-Create_User', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Edit user
+                [
+                    // 79
+                    'name' => 'HP-Edit_User', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Delete user
+                [
+                    // 80
+                    'name' => 'HP-Delete_User', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
+            // HP Read user
+                [
+                    // 81
+                    'name' => 'HP-View_User', 
+                    'created_at' => $currentTime, 'updated_at' => $currentTime,
+                ],
         ];
         DB::table('permissions')->insert($data);
     }

@@ -6,7 +6,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminAnnouncementMail;
-
+use App\Jobs\SendEmail;
 use Illuminate\Database\Eloquent\Builder;
 
 class AdminNotificationService
@@ -94,9 +94,8 @@ class AdminNotificationService
                         'link' => NULL,
                     ]);
 
-                    Mail::to($recievingOfficer->email)
-                        ->cc($recievingOfficer->email)
-                        ->send(new AdminAnnouncementMail($recievingOfficer->full_name, $request->input('title'), $request->input('description')));
+                    // Send Email thru Jobs
+                    dispatch(new SendEmail($recievingOfficer->email, $recievingOfficer->full_name, $request->input('title'), $request->input('description')));
                 }
             }
         }
@@ -115,10 +114,9 @@ class AdminNotificationService
             'type' => $type,
             'link' => NULL,
         ]);
-
-        Mail::to($userEmail)
-            ->cc($userEmail)
-            ->send(new AdminAnnouncementMail($userFullName, $notificationTitle, $notificationDescription));
+        
+        // Send Email thru Jobs
+        dispatch(new SendEmail($userEmail, $userFullName, $notificationTitle, $notificationDescription));
     } 
 
     /**
@@ -135,8 +133,50 @@ class AdminNotificationService
             'link' => NULL,
         ]);
 
-        Mail::to($userEmail)
-            ->cc($userEmail)
-            ->send(new AdminAnnouncementMail($userFullName, $notificationTitle, $notificationDescription));
+        // Send Email thru Jobs
+        dispatch(new SendEmail($userEmail, $userFullName, $notificationTitle, $notificationDescription));
     } 
+
+    /**
+     * @param Collection $schoolYear, Integer $type
+     * Function to Send Notification to all Officers about the Yearly Backup
+     */
+    public function sendNotificationForYearlyHousekeeping($schoolYear, $type = 1)
+    {
+        $notificationTitle = "SOIS-AR Yearly Backup (" . 
+        date_format(date_create($schoolYear->annual_start), 'Y') . '-' . 
+        date_format(date_create($schoolYear->annual_end), 'Y') . ")";
+
+        $notificationDescription = "
+            A SOIS-AR Backup has been initialized by the System Administrator. 
+            All data from Events, Student Accomplishments, Accomplishment Reports, and Organization Documents will be permanently deleted.
+            A Backup copy of all Accomplishment Reports and Organization Documents in that School Year will be available on request.";
+        
+        // Get all Users with Roles: Officer, President, and HSS
+        $recievingOfficers = User::whereHas(
+                'roles', function(Builder $query){
+                    $query->whereIn('role', ['AR Officer Admin', 'AR President Admin', 'Head of Student Services']);},)
+            ->get();
+        
+        // Collect Data to Insert in Notification Table
+        $notificationData = array();
+        foreach ($recievingOfficers as $recievingOfficer) 
+        {
+            array_push($notificationData,
+                [
+                    'user_id' => $recievingOfficer->user_id,
+                    'title' => $notificationTitle,
+                    'description' => $notificationDescription,
+                    'type' => $type,
+                    'link' => NULL,
+                ]
+            );
+
+            // Send Email thru Jobs
+            dispatch(new SendEmail($recievingOfficer->email, $recievingOfficer->first_name, $notificationTitle, $notificationDescription));
+        }
+
+        // Mass Insert of notifications
+        Notification::insert($notificationData);
+    }
 }

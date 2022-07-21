@@ -39,5 +39,6 @@ class everyTwoMinutes extends Command
     public function handle()
     {
         Artisan::call('queue:work --max-jobs=10 --stop-when-empty');
+        Artisan::call('queue:retry all');
     }
 }
