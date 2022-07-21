@@ -51,6 +51,17 @@ Route::group(['middleware' => 'auth'], function () {
                 'prefix' => '/maintenance',], 
             function () {
 
+            // System Maintenance 
+            Route::group([
+                'as' => 'system.',
+                'prefix' => '/system',], 
+                function () {
+                    Route::get('/housekeeping', [App\Http\Controllers\Admin\SystemMaintenance\HousekeepingController::class, 'index'])->name('housekeeping.index');
+                    Route::post('/housekeeping/create', [App\Http\Controllers\Admin\SystemMaintenance\HousekeepingController::class, 'create'])->name('housekeeping.create');
+                    Route::post('/housekeeping/download/{arBackupID}', [App\Http\Controllers\Admin\SystemMaintenance\HousekeepingController::class, 'download'])->name('housekeeping.downloadBackup');
+                    
+            }); 
+
             // Role Maintenance 
             Route::group([
                     'as' => 'roles.',

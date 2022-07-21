@@ -158,6 +158,15 @@
                             <li><a href="{{ route('admin.activityLogs.index') }}">Activity Logs</a></li>
                         </ul>
                     </li>
+                    {{-- System Backups --}}
+                    <li class="dropdown">
+                        <a href="#systemMaintenanceSubMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <i class="material-icons">settings</i><span>System</span>
+                        </a>
+                        <ul class="collapse list-unstyled menu" id="systemMaintenanceSubMenu">
+                            <li><a href="{{ route('admin.maintenance.system.housekeeping.index') }}">System Housekeeping</a></li>
+                        </ul>
+                    </li>
                     @endrole
 
                     <!-- Hidden Menu -->
